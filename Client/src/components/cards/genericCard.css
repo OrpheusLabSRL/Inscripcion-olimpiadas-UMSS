@@ -1,0 +1,44 @@
+.container-main-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.container-main-card > h1 {
+  text-align: center;
+}
+
+.container-card {
+  max-width: 300px;
+  height: 380px;
+  background: linear-gradient(#fba834, #333a73);
+  border-radius: 10px;
+  display: grid;
+  color: #fff;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  margin: 20px;
+}
+
+.container-card:hover {
+  transform: scale(1.05);
+}
+
+.container-card > p {
+  margin: 10px;
+}
+
+.image-card img {
+  width: 100%;
+}
+
+.link-card {
+  display: grid;
+  text-decoration: none;
+}
+
+.card-generic-btn {
+  justify-self: end;
+  background: transparent;
+  margin: 10px;
+  width: 100px;
+}

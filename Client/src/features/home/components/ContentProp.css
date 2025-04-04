@@ -1,0 +1,137 @@
+main {
+  width: 100vw; /* Full width of the container */
+  max-width: 100%; /* Prevent overflow */
+  margin: 80px 0 60px 0; /* Center the main content */
+  padding: 0; /* Remove padding */
+  flex: 1; /* Take up the full height */
+  box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+section {
+  width: 100%; /* Full width of the section */
+  max-width: 100%; /* Prevent overflow */
+  margin: 0; /* Center the section */
+  padding: 2rem; /* Padding around sections */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Styles for the event description section */
+.event-description {
+  height: 653px; /* Height for the event description */
+  background-color: #e2e2e2; /* Light background color */
+  padding: 20px; /* Padding */
+}
+
+.event-description h2 {
+  font-size: 4rem; /* Heading size */
+  color: #ffffff; /* Heading color */
+}
+
+.event-description p {
+  font-size: 2rem; /* Paragraph size */
+  color: #ffffff; /* Paragraph color */
+  line-height: 1.5; /* Line height for readability */
+  padding: 0 10px; /* Padding for paragraph */
+}
+
+.event-description p:last-child {
+  font-size: 18px; /* Size for the last paragraph */
+  width: 337px; /* Width for the last paragraph */
+  height: 52px; /* Height for the last paragraph */
+  background-color: #2563eb; /* Button background for "Inscribirse" */
+  color: #ffffff; /* Button text color */
+  padding: 0.5rem 1rem; /* Padding for button */
+  border-radius: 5px; /* Rounded corners for button */
+  display: inline-block; /* Inline block for button */
+}
+
+/* Styles for the areas of competence section */
+.areas-competence {
+  height: 980px; /* Height for areas of competence */
+  background-color: #ffffff; /* White background */
+  padding: 20px; /* Padding */
+}
+.areas-competence h2 {
+  font-size: 2rem; /* Heading size */
+  color: #333; /* Heading color */
+}
+
+/* Styles for the registration process section */
+.registration-process {
+  height: 293px; /* Height for registration process */
+  background-color: #e0e0e0; /* Light gray background */
+  padding: 20px; /* Padding */
+}
+
+/* Styles for the how to register section */
+.how-to-register {
+  height: 771px; /* Height for how to register */
+  background-color: #ffffff; /* White background */
+  padding: 20px; /* Padding */
+}
+
+/* Grid styles for areas of competence */
+.grid {
+  width: 100%; /* Full width of the grid */
+  max-width: 100%; /* Prevent overflow */
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(290px, 1fr)
+  ); /* Four columns */
+  gap: 20px; /* Space between grid items */
+  justify-items: center; /* Center items in the grid */
+  padding: 0 2rem; /* Padding around the grid */
+}
+
+.area {
+  background-color: #f9f9f9; /* Light background for area cards */
+  border: 1px solid #ddd; /* Light border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 20px; /* Padding inside area cards */
+  text-align: center; /* Center text */
+}
+
+.category-card {
+  width: 290px; /* Fixed width for category cards */
+  height: 400px; /* Height for category cards */
+  background-color: #ffffff; /* Light background for cards */
+  border: 1px solid #ffffff; /* Light border */
+  border-radius: 12px; /* Rounded corners */
+  padding: 1.5rem; /* Increased padding inside cards */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Enhanced shadow */
+  transition: transform 0.2s; /* Smooth transition for hover effect */
+  box-sizing: border-box; /* Include padding and border in height calculation */
+  margin: 1rem; /* Adding margin around cards */
+  box-shadow: 0px 0px 10px #000000; /* Shadow effect */
+}
+
+.category-card:hover {
+  transform: scale(1.05); /* Slightly enlarge card on hover */
+  box-shadow: 0px 0px 10px #000000; /* Shadow effect on hover */
+}
+
+.category-card h3 {
+  color: #2563eb; /* Heading color */
+  font-size: 1.5rem; /* Heading size */
+  margin-bottom: 1rem; /* Spacing below heading */
+  font-weight: bold; /* Bold heading */
+  text-align: center; /* Center heading text */
+}
+
+.category-card p {
+  font-size: 1rem; /* Tamaño del párrafo */
+  color: #2563eb; /* Color gris claro */
+  line-height: 1.5; /* Interlineado */
+  text-align: justify; /* Texto justificado */
+  padding: 0 10px; /* Padding horizontal */
+}
+
+.container-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}

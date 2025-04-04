@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&family=Alata&display=swap");
+
+:root {
+  /*-------------------Paleta de Colores--------------------*/
+  --primary-color: #205781;
+  --secondary-color: #4f959d;
+  --tertiary-color: #98d2c0;
+  --quaternary-color: #f6f8d5;
+
+  /*-------------------Padding botones----------------------*/
+  --high-button: 12px;
+  --broad-button: 24px;
+
+  /*----------------Tamaño de Tipografía--------------------*/
+  --h1-size: 28px; /* Títulos principales */
+  --h2-size: 24px; /* Subtítulos */
+  --h3-size: 20px; /* Labels destacados */
+  --h4-size: 18px; /* Labels de inputs */
+  --h5-size: 16px; /* Texto dentro de inputs */
+  --h6-size: 14px; /* Botones secundarios y detalles menores */
+
+  --pL-size: 16px; /* Párrafos grandes */
+  --pM-size: 14px; /* Texto normal */
+  --pS-size: 12px; /* Texto de ayuda */
+
+  --label: 16px;
+  --error-size: 14px; /* Tamaño de errores (ajustado) */
+  --principal-text: 60px; /* Para encabezados grandes */
+  --background: #f8fafc;
+}
+
+body {
+  font-family: "Alata", sans-serif;
+  background-color: var(--background);
+  margin: 0;
+}
+
+.main {
+  display: grid;
+  height: 90vh;
+  grid-template-columns: 90px auto;
+  transition: all 1s; /* <-- Añadir para transición suave */
+
+  &.active {
+    grid-template-columns: 260px auto;
+  }
+}

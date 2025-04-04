@@ -1,0 +1,32 @@
+.config-input {
+  display: grid;
+}
+
+.config-input,
+.config-input > label,
+.config-input > input,
+.config-input > textarea,
+.config-input > select {
+  font-size: var(--label);
+  margin-bottom: 5px;
+  padding: 5px 0px;
+}
+
+.config-input > input,
+.config-input > textarea,
+.config-input > select {
+  border-radius: 5px;
+  font-size: var(--pL-size);
+  padding: 10px;
+  resize: none;
+  border: 1px solid #000;
+}
+
+.error-validation {
+  font-size: var(--error-size);
+  color: rgb(171, 0, 0);
+}
+
+.mandatory {
+  color: red;
+}

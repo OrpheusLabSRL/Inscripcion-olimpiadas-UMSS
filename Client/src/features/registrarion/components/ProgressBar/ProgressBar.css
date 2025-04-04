@@ -1,0 +1,45 @@
+.progress-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 85%;
+  margin: 25px auto;
+}
+
+.step-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.step {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #d3d3d3;
+  color: #5a5a5a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  transition: all 0.3s;
+}
+
+/* Línea de conexión entre pasos */
+.line {
+  width: 200px;
+  height: 4px;
+  background: #d3d3d3;
+  transition: all 0.3s;
+}
+
+/* Estilo cuando el paso está activo */
+.step.active {
+  background: #2563eb; /* Azul */
+  color: white;
+}
+
+/* Estilo cuando la línea está activa */
+.line.active {
+  background: #2563eb;
+}
