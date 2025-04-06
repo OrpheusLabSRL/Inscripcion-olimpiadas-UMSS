@@ -52,11 +52,23 @@ export const TutorForm = () => {
     }
   };
 
+  const validateContinueForm = () => {
+    const newErrors = {};
+    
+    if (!formData.email.trim()) {
+      newErrors.email = "Email es requerido";
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = "Email no válido";
+    }
+    if (!formData.carnet.trim()) newErrors.carnet = "Carnet es requerido";
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleContinue = (e) => {
     e.preventDefault();
-    if (!formData.carnet.trim()) {
-      setErrors({ carnet: "Carnet es requerido" });
-    } else {
+    if (validateContinueForm()) {
       navigate('/register');
     }
   };
@@ -142,34 +154,47 @@ export const TutorForm = () => {
                 <label>Correo Electrónico <span className="required">*</span></label>
                 <input 
                   type="email" 
-                  name="email"
-                  placeholder="Ingrese su correo electrónico" 
-                  value={formData.email}
-                  onChange={handleInputChange}
-                />
-                {errors.email && <span className="error-message">{errors.email}</span>}
-              </div>
+                    name="email"
+                    placeholder="Ingrese su correo electrónico" 
+                    value={formData.email}
+                    onChange={handleInputChange}
+                  />
+                  {errors.email && <span className="error-message">{errors.email}</span>}
+                </div>
 
-              <button type="submit" className="submit-button">Iniciar Nueva Inscripción</button>
-            </form>
-          ) : (
-            <form onSubmit={handleContinue} className="form-section">
-              <div className="form-group">
-                <label>Ingrese su Carnet de Identidad <span className="required">*</span></label>
-                <input 
-                  type="text" 
-                  name="carnet"
-                  placeholder="Ingrese su carnet de identidad" 
-                  value={formData.carnet}
-                  onChange={handleInputChange}
-                />
-                {errors.carnet && <span className="error-message">{errors.carnet}</span>}
-              </div>
-              <button type="submit" className="submit-button">Continuar</button>
-            </form>
-          )}
+                <button type="submit" className="submit-button">Iniciar Nueva Inscripción</button>
+              </form>
+            ) : (
+              <form onSubmit={handleContinue} className="form-section">
+                <div className="form-group">
+                  <label>Correo Electrónico <span className="required">*</span></label>
+                  <input 
+                    type="email" 
+                    name="email"
+                    placeholder="Ingrese su correo electrónico" 
+                    value={formData.email}
+                    onChange={handleInputChange}
+                  />
+                  {errors.email && <span className="error-message">{errors.email}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label>Carnet de identidad <span className="required">*</span></label>
+                  <input 
+                    type="text" 
+                    name="carnet"
+                    placeholder="Ingrese su carnet de identidad" 
+                    value={formData.carnet}
+                    onChange={handleInputChange}
+                  />
+                  {errors.carnet && <span className="error-message">{errors.carnet}</span>}
+                </div>
+
+                <button type="submit" className="submit-button">Continuar Inscripción</button>
+              </form>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
