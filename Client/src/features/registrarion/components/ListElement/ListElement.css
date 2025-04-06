@@ -1,0 +1,48 @@
+.container-element-list {
+  border-bottom: 1px solid #0000004d;
+  width: 1280px;
+  padding-bottom: 20px;
+}
+
+.list-data-header {
+  display: grid;
+  /* grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); */
+  grid-template-columns: 20px 110px 110px 70px 80px 120px 60px 100px 80px 80px;
+  width: 1280px;
+  column-gap: 50px;
+  
+}
+
+.list-aditional-data-student{
+    display: flex;
+}
+
+.containter-registered-area{
+    margin-right: 50px;
+}
+
+.label-area {
+    background-color: #3b82f6;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 16px;
+    margin: 4px;
+    font-size: 0.85rem;
+  
+}
+
+.btn-add-area{
+    margin-top: 10px;
+}
+
+.btn-add-area button {
+  background: var(--primary-color);
+}
+
+.containter-registered-area > h5 {
+    margin-top: 0;
+}
+
+.list-data-header p {
+    font-size: 14px;
+}

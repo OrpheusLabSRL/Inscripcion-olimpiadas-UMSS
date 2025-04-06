@@ -7,6 +7,7 @@ import Sidebar from "./components/sidebar/Sidebar";
 import "./App.css";
 import { RegisterTutor } from "./features/registrarion/pages/RegisterTutor/RegisterTutor";
 import { MainHome } from "./features/home/pages/MainHome";
+import { ListRegistered } from "./features/registrarion/pages/ListRegistered/ListRegistered";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
@@ -24,9 +25,10 @@ function App() {
 
       <div style={{ gridColumnStart: 2 }}>
         <Routes>
+          <Route path="/" element={<MainHome />} />
           <Route path="register" element={<RegisterOlympian />} />
           <Route path="register/tutor" element={<RegisterTutor />} />
-          <Route path="/" element={<MainHome />} />
+          <Route path="register/listRegistered" element={<ListRegistered />} />
         </Routes>
       </div>
     </div>
