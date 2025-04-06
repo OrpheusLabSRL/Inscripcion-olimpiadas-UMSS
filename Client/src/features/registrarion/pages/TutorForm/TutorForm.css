@@ -172,6 +172,48 @@
   .submit-button:hover {
     background-color: var(--primary-hover);
   }
+  .valid-input {
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 1px #10b981;
+  }
+  
+  .invalid-input {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 1px #ef4444;
+  }
+  
+  .form-buttons {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  
+  .back-button {
+    flex: 1;
+    padding: var(--high-button) var(--broad-button);
+    background-color: var(--white);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    font-size: var(--h5-size);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .back-button:hover {
+    background-color: #f0f7ff;
+  }
+  
+  .submit-button {
+    flex: 2;
+  }
+  
+  /* Asegurar que los placeholders desaparezcan al escribir */
+  input:focus::placeholder,
+  select:focus::placeholder {
+    color: transparent;
+  }
   
   /* Responsive */
   @media (max-width: 768px) {
