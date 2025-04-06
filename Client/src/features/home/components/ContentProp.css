@@ -17,14 +17,25 @@ section {
 
 /* Styles for the event description section */
 .event-description {
-  height: 653px; /* Height for the event description */
-  background-color: #e2e2e2; /* Light background color */
-  padding: 20px; /* Padding */
+  height: 653px;
+  background-color: rgba(226, 226, 226, 0.7);
+  padding: 20px;
+  transition: all 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.event-description.active {
+  background-color: #2563eb;
 }
 
 .event-description h2 {
   font-size: 4rem; /* Heading size */
   color: #ffffff; /* Heading color */
+  margin-bottom: 2rem;
 }
 
 .event-description p {
@@ -32,17 +43,76 @@ section {
   color: #ffffff; /* Paragraph color */
   line-height: 1.5; /* Line height for readability */
   padding: 0 10px; /* Padding for paragraph */
+  margin-bottom: 3rem;
 }
 
-.event-description p:last-child {
-  font-size: 18px; /* Size for the last paragraph */
-  width: 337px; /* Width for the last paragraph */
-  height: 52px; /* Height for the last paragraph */
-  background-color: #2563eb; /* Button background for "Inscribirse" */
-  color: #ffffff; /* Button text color */
-  padding: 0.5rem 1rem; /* Padding for button */
-  border-radius: 5px; /* Rounded corners for button */
-  display: inline-block; /* Inline block for button */
+.start-adventure {
+  font-size: 18px;
+  width: 337px;
+  height: 52px;
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  display: inline-flex; /* Cambiado a flex para mejor alineación */
+  align-items: center; /* Centra verticalmente el texto */
+  justify-content: center; /* Centra horizontalmente el texto */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+  border: none; /* Elimina el borde por defecto de button */
+  font-family: inherit; /* Usa la misma fuente que el resto */
+  text-align: center; /* Asegura que el texto esté centrado */
+  white-space: normal; /* Permite que el texto se ajuste */
+  word-wrap: break-word; /* Rompe palabras largas si es necesario */
+}
+
+.start-adventure:hover {
+  background-color: #1d4ed8; /* Darker blue on hover */
+  transform: scale(1.05); /* Slight scale effect */
+}
+
+/* Styles for the action buttons that appear after click */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+  width: 100%;
+}
+
+.action-button {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 220px;
+}
+
+.start-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.start-button:hover {
+  background-color: #3e8e41;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.continue-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.continue-button:hover {
+  background-color: #0b7dda;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Styles for the areas of competence section */
@@ -51,6 +121,7 @@ section {
   background-color: #ffffff; /* White background */
   padding: 20px; /* Padding */
 }
+
 .areas-competence h2 {
   font-size: 2rem; /* Heading size */
   color: #333; /* Heading color */
@@ -125,13 +196,13 @@ section {
   color: #2563eb; /* Color gris claro */
   line-height: 1.5; /* Interlineado */
   text-align: justify; /* Texto justificado */
-  padding: 0 10px; /* Padding horizontal */
+  padding: 0 10px; /* Padding horizontal */
 }
 
-.container-content{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+.container-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }

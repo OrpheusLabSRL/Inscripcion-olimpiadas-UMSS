@@ -1,16 +1,51 @@
-import "./ContentProp.css"; // Importing styles for the content
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import "./ContentProp.css";
 
 function ContentProp() {
+  const [showButtons, setShowButtons] = useState(false);
+  const navigate = useNavigate();
+
+  const handleStartClick = () => {
+    setShowButtons(true);
+  };
+
+  const handleStartRegistration = () => {
+    navigate('/register/tutor-form'); // Redirige a tutor-form
+  };
+
+  const handleContinueRegistration = () => {
+    navigate('/register/tutor'); // Redirige a tutor
+  };
+
   return (
     <main className="container-content">
-      <section className="event-description">
+      <section className={`event-description ${showButtons ? 'active' : ''}`}>
         <h2>Olimpiadas Científicas Oh! SanSi</h2>
-        <p>
-          Descubre y desarrolla tu potencial científico en las áreas más
-          fascinantes de la ciencia
-        </p>
-        <p>Comienza tu Aventura Científica</p>
+        <p>Descubre y desarrolla tu potencial científico en las áreas más fascinantes de la ciencia</p>
+        
+        {!showButtons ? (
+          <button className="start-adventure" onClick={handleStartClick}>
+            Comienza tu Aventura Científica
+          </button>
+        ) : (
+          <div className="action-buttons">
+            <button 
+              className="action-button start-button" 
+              onClick={handleStartRegistration}
+            >
+              Empezar Inscripción
+            </button>
+            <button 
+              className="action-button continue-button"
+              onClick={handleContinueRegistration}
+            >
+              Continuar Inscripción
+            </button>
+          </div>
+        )}
       </section>
+
       <section className="areas-competence">
         <h2>Áreas de Competencia</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4">
