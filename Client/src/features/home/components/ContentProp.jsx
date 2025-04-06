@@ -11,11 +11,11 @@ function ContentProp() {
   };
 
   const handleStartRegistration = () => {
-    navigate('/register/tutor-form'); // Redirige a tutor-form
+    navigate('/register/tutor-form', { state: { formType: 'new' } });
   };
 
   const handleContinueRegistration = () => {
-    navigate('/register/tutor'); // Redirige a tutor
+    navigate('/register/tutor-form', { state: { formType: 'continue' } });
   };
 
   return (
@@ -48,7 +48,7 @@ function ContentProp() {
 
       <section className="areas-competence">
         <h2>Áreas de Competencia</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4">
+        <div className="competence-grid">
           <div className="category-card">
             <h3>Matemáticas</h3>
             <p>Descripción de la categoría 1.</p>

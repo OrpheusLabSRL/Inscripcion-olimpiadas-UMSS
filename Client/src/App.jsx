@@ -13,9 +13,12 @@ function App() {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
 
+  // Condición para mostrar el Sidebar
+  const showSidebar = location.pathname !== "/" && location.pathname !== "/register/tutor-form";
+
   return (
     <div className={location.pathname === "/" ? "" : isOpen ? "main active" : "main"}>
-      {location.pathname !== "/" && <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {showSidebar && <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />}
 
       <div style={{ gridColumnStart: 2 }}>
         <Routes>
