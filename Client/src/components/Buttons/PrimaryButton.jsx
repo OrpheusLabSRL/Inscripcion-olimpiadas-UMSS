@@ -7,6 +7,7 @@ export const PrimaryButton = ({
   label = "",
   id = "",
   type,
+  icon,
 }) => {
   return (
     <div className="config-btn-primary">

@@ -6,6 +6,7 @@ import "./App.css";
 import { RegisterTutor } from "./features/registrarion/pages/RegisterTutor/RegisterTutor";
 import { TutorForm } from "./features/registrarion/pages/TutorForm/TutorForm";
 import { MainHome } from "./features/home/pages/MainHome";
+import { ListRegistered } from "./features/registrarion/pages/ListRegistered/ListRegistered";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
@@ -21,8 +22,12 @@ function App() {
         <div className="content-area">
           <Routes>
             <Route path="/" element={<MainHome />} />
-            <Route path="/register" element={<RegisterOlympian />} />
-            <Route path="/register/tutor" element={<RegisterTutor />} />
+            <Route
+            path="listRegistered/register"
+            element={<RegisterOlympian />}
+          />
+          <Route path="listRegistered/tutor" element={<RegisterTutor />} />
+          <Route path="listRegistered" element={<ListRegistered />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
           </Routes>
         </div>

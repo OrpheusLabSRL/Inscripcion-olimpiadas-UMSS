@@ -1,0 +1,17 @@
+.container-modal {
+  background-color: #fff;
+  color: #000;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  max-width: 600px;
+  border-radius: 10px;
+  column-gap: 20px;
+}
+
+.input-1c {
+  grid-column: span 1;
+}
+
+.input-2c {
+  grid-column: span 2;
+}

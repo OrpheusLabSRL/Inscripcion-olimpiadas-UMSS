@@ -11,15 +11,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
 import { useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 
 //utils
 import { Validator } from "./ValidationRules";
-import {
-  cursosBolivia,
-  departamentosBolivia,
-  areasDeInteres,
-  categorias,
-} from "./DataOptions";
+import { cursosBolivia, departamentosBolivia } from "./DataOptions";
+
+//api
+import { registerDataOlympian } from "../../../../api/inscription.api";
 
 export const RegisterOlympian = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -35,7 +34,15 @@ export const RegisterOlympian = () => {
   } = useForm({});
 
   const onSubmit = async (data) => {
-    navigation("/register/tutor", data);
+    console.log(data);
+    try {
+      await registerDataOlympian(data);
+      swal("Datos registrados correctamente");
+      navigation("/listRegistered", data);
+    } catch (error) {
+      console.log(error);
+      swal("Error al registrar los datos");
+    }
   };
 
   return (
@@ -159,52 +166,8 @@ export const RegisterOlympian = () => {
           />
         </div>
 
-        <div className="input-2c">
-          <h2>Areas y categorias de interes</h2>
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"Area de Interes"}
-            placeholder="Seleccione un area"
-            mandatory="true"
-            name="Area"
-            options={areasDeInteres}
-            register={register}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"Categoria de Interes"}
-            placeholder="Seleccione una categoria"
-            mandatory="true"
-            name="Categoria"
-            options={categorias}
-            register={register}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"Segunda Area de Interes"}
-            placeholder="Seleccione un area"
-            options={areasDeInteres}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"Categoria de Interes"}
-            placeholder="Seleccione una categoria"
-            options={categorias}
-          />
-        </div>
-
         <div className="container-btn-next">
-          <PrimaryButton type="submit" value="Siguiente" />
+          <PrimaryButton type="submit" value="Registrar" />
         </div>
       </form>
     </div>
