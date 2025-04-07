@@ -5,7 +5,6 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   max-width: 600px;
   border-radius: 10px;
-  box-shadow: 0px 5px 10px #00000014;
   column-gap: 20px;
 }
 

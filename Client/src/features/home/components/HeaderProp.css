@@ -39,7 +39,9 @@ nav ul li {
   color: #2563eb; /* Updated navigation text color to blue */
 }
 
-nav ul li:last-child {
-  color: #ffffff; /* Button text color */
-  border-radius: 5px; /* Rounded corners for button */
+nav ul li:last-child a .btn-next-page {
+  background-color: #2563eb; /* Azul */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
 }
