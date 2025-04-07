@@ -10,29 +10,27 @@
   grid-template-columns: 20px 110px 110px 70px 80px 120px 60px 100px 80px 80px;
   width: 1280px;
   column-gap: 50px;
-  
 }
 
-.list-aditional-data-student{
-    display: flex;
+.list-aditional-data-student {
+  display: flex;
 }
 
-.containter-registered-area{
-    margin-right: 50px;
+.containter-registered-area {
+  margin-right: 50px;
 }
 
 .label-area {
-    background-color: #3b82f6;
-    color: white;
-    padding: 4px 12px;
-    border-radius: 16px;
-    margin: 4px;
-    font-size: 0.85rem;
-  
+  background-color: #3b82f6;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  margin: 4px;
+  font-size: 0.85rem;
 }
 
-.btn-add-area{
-    margin-top: 10px;
+.btn-add-area {
+  margin-top: 10px;
 }
 
 .btn-add-area button {
@@ -40,9 +38,19 @@
 }
 
 .containter-registered-area > h5 {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .list-data-header p {
-    font-size: 14px;
+  font-size: 14px;
+}
+
+.container-btn-modal-area {
+  grid-column-start: 2;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-modal-area{
+  width: 130px;
 }

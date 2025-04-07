@@ -4,6 +4,7 @@ import "./ListRegistered.css";
 //Components
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
 import { ListElement } from "../../components/ListElement/ListElement";
+import { NextPage } from "../../../../components/Buttons/NextPage";
 
 const estudiantes = [
   {
@@ -68,7 +69,11 @@ export const ListRegistered = () => {
     <div className="container-list-registered">
       <div className="list-header">
         <h1>Estudiantes Registrados</h1>
-        <PrimaryButton value="Agregar Estudiante" />
+        <NextPage
+          value="+ Agregar Estudiante"
+          className="btn-add-student"
+          to="register"
+        />
       </div>
       <div className="container-list">
         {estudiantes.map((estudiante) => (

@@ -20,3 +20,7 @@
   overflow: auto;
   max-height: 500px;
 }
+
+.btn-add-student {
+  width: 170px;
+}

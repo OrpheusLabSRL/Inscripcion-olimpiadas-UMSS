@@ -1,9 +1,0 @@
-.container-modal-likes-choose {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  overflow: auto;
-  height: 80%;
-  background-color: rgba(0, 0, 0, 0.099);
-  border-radius: 10px;
-}

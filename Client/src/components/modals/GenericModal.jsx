@@ -4,20 +4,15 @@ import ReactModal from "react-modal";
 import { Tag } from "../Buttons/Tag";
 
 //css
-import "./likesModal.css";
+import "./GenericModal.css";
 
 ReactModal.setAppElement("#root");
 
-export const LikesModal = ({
-  closeModal,
-  modalIsOpen,
-  likes = [],
-  onSelectedLike,
-}) => {
+export const GenericModal = ({ closeModal, modalIsOpen, children }) => {
   const modalStyle = {
     content: {
       position: "fixed",
-      maxWidth: "500px",
+      maxWidth: "600px",
       maxHeight: "300px",
       margin: "auto",
       overflow: "none",
@@ -37,19 +32,7 @@ export const LikesModal = ({
         contentLabel="Ejemplo de Modal"
         style={modalStyle}
       >
-        <h2>Elige tus gustos!</h2>
-
-        <div className="container-modal-likes-choose">
-          {likes.map((like) => {
-            return (
-              <Tag
-                value={like}
-                key={like}
-                onClick={() => onSelectedLike(like)}
-              />
-            );
-          })}
-        </div>
+        <div className="container-modal">{children}</div>
       </ReactModal>
     </>
   );

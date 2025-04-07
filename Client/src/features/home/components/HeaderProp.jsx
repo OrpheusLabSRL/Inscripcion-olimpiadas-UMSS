@@ -16,7 +16,7 @@ function HeaderProp() {
           <li>Acerca de</li>
           <li>Olimpiadas Anteriores</li>
           <li>Contacto</li>
-          <li>{<NextPage value="Incribirse" to="/register" />}</li>
+          <li>{<NextPage value="Incribirse" to="/listRegistered" />}</li>
         </ul>
       </nav>
     </header>

@@ -26,9 +26,12 @@ function App() {
       <div style={{ gridColumnStart: 2 }}>
         <Routes>
           <Route path="/" element={<MainHome />} />
-          <Route path="register" element={<RegisterOlympian />} />
-          <Route path="register/tutor" element={<RegisterTutor />} />
-          <Route path="register/listRegistered" element={<ListRegistered />} />
+          <Route
+            path="listRegistered/register"
+            element={<RegisterOlympian />}
+          />
+          <Route path="listRegistered/tutor" element={<RegisterTutor />} />
+          <Route path="listRegistered" element={<ListRegistered />} />
         </Routes>
       </div>
     </div>

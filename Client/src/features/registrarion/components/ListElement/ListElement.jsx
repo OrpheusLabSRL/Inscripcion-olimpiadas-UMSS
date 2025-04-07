@@ -3,12 +3,38 @@ import "./ListElement.css";
 
 //components
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
+import { GenericModal } from "../../../../components/modals/GenericModal";
+import { Select } from "../../../../components/inputs/Select";
 
 //React
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+//utils
+import { areasDeInteres, categorias } from "./DataOptions";
+import { Validator } from "./ValidationRules";
 
 export const ListElement = ({ data }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+  } = useForm({});
+
+  const openModal = (e) => {
+    e.preventDefault();
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
   return (
     <div className="container-element-list">
       <div className="list-data-header" key={data.id}>
@@ -50,8 +76,10 @@ export const ListElement = ({ data }) => {
         </div>
         <div>
           <p>Acciones</p>
-          <MdEdit style={{fontSize: "25px", color: "orange", marginRight: "10px"}}/>
-          <MdDelete style={{fontSize: "25px", color: "red"}}/>
+          <MdEdit
+            style={{ fontSize: "25px", color: "orange", marginRight: "10px" }}
+          />
+          <MdDelete style={{ fontSize: "25px", color: "red" }} />
         </div>
       </div>
 
@@ -63,7 +91,7 @@ export const ListElement = ({ data }) => {
             <span className="label-area">Lenguaje</span>
           </div>
           <div className="btn-add-area">
-            <PrimaryButton value="Registrar Area" />
+            <PrimaryButton value="Registrar Area" onClick={openModal} />
           </div>
         </div>
 
@@ -78,6 +106,64 @@ export const ListElement = ({ data }) => {
           </div>
         </div>
       </div>
+      <GenericModal modalIsOpen={modalIsOpen} closeModal={closeModal}>
+        <div className="input-2c">
+          <h2>Areas y categorias de interes</h2>
+        </div>
+
+        <div className="input-1c">
+          <Select
+            label={"Area de Interes"}
+            placeholder="Seleccione un area"
+            mandatory="true"
+            name="Area"
+            options={areasDeInteres}
+            register={register}
+            errors={errors}
+          />
+        </div>
+
+        <div className="input-1c">
+          <Select
+            label={"Categoria de Interes"}
+            placeholder="Seleccione una categoria"
+            mandatory="true"
+            name="Categoria"
+            options={categorias}
+            register={register}
+            errors={errors}
+          />
+        </div>
+
+        <div className="input-1c">
+          <Select
+            label={"Segunda Area de Interes"}
+            placeholder="Seleccione un area"
+            options={areasDeInteres}
+          />
+        </div>
+
+        <div className="input-1c">
+          <Select
+            label={"Categoria de Interes"}
+            placeholder="Seleccione una categoria"
+            options={categorias}
+          />
+        </div>
+        <div className="container-btn-modal-area">
+          <PrimaryButton
+            type="submit"
+            value="Cancelar"
+            className="btn-modal-area"
+            onClick={closeModal}
+          />
+          <PrimaryButton
+            type="submit"
+            value="Registrar"
+            className="btn-modal-area"
+          />
+        </div>
+      </GenericModal>
     </div>
   );
 };
