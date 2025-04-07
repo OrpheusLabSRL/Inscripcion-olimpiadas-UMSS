@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./TutorForm.css";
 import HeaderProp from "../../../../features/home/components/HeaderProp";
 
 export const TutorForm = () => {
-  const [formType, setFormType] = useState("new");
+  const location = useLocation();
+  const initialFormType = location.state?.formType || "new";
+  const [formType, setFormType] = useState(initialFormType);
   const [formData, setFormData] = useState({
     nombre: "",
     apellido: "",
