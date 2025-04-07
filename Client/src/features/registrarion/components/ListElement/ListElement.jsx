@@ -108,12 +108,12 @@ export const ListElement = ({ data }) => {
       </div>
       <GenericModal modalIsOpen={modalIsOpen} closeModal={closeModal}>
         <div className="input-2c">
-          <h2>Areas y categorias de interes</h2>
+          <h2>Áreas y Categorías de interés</h2>
         </div>
 
         <div className="input-1c">
           <Select
-            label={"Area de Interes"}
+            label={"Área de interés"}
             placeholder="Seleccione un area"
             mandatory="true"
             name="Area"
@@ -125,7 +125,7 @@ export const ListElement = ({ data }) => {
 
         <div className="input-1c">
           <Select
-            label={"Categoria de Interes"}
+            label={"Categoría de interés"}
             placeholder="Seleccione una categoria"
             mandatory="true"
             name="Categoria"
@@ -137,7 +137,7 @@ export const ListElement = ({ data }) => {
 
         <div className="input-1c">
           <Select
-            label={"Segunda Area de Interes"}
+            label={"Segunda Área de interés"}
             placeholder="Seleccione un area"
             options={areasDeInteres}
           />
@@ -145,7 +145,7 @@ export const ListElement = ({ data }) => {
 
         <div className="input-1c">
           <Select
-            label={"Categoria de Interes"}
+            label={"Categoría de interés"}
             placeholder="Seleccione una categoria"
             options={categorias}
           />

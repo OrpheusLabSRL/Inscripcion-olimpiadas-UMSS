@@ -24,3 +24,10 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.btn-back {
+  font-size: 50px;
+  position: absolute;
+  top: 20px;
+  margin-left: 20px;
+}

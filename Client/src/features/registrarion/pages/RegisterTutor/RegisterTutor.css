@@ -28,3 +28,10 @@
 .container-btn-next button {
   background-color: var(--tertiary-color);
 }
+
+.btn-back {
+  font-size: 50px;
+  position: absolute;
+  top: 20px;
+  margin-left: 20px;
+}
