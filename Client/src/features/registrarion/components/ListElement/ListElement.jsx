@@ -28,7 +28,7 @@ export const ListElement = ({ data, catalogo }) => {
   const [areaInteres, setAreaInteres] = useState([]);
   const [categoriasInteres, setCategoriasInteres] = useState(null);
   const [areasOlimpista, setAreasOlimpista] = useState([]);
-  const [areasTemporales, setAreasTemporales] = useState([]);
+  // const [areasTemporales, setAreasTemporales] = useState([]);
   const [categoriasInteresOpcional, setCategoriasInteresOpcional] =
     useState(null);
   const {
@@ -49,7 +49,7 @@ export const ListElement = ({ data, catalogo }) => {
       const res = await getAreasOlimpista(data.id_olimpista);
       console.log(res);
       setAreasOlimpista(res.data.data.areas);
-      setAreasTemporales(res.data.data.areas.nombreArea);
+      // setAreasTemporales(res.data.data.areas.nombreArea);
     };
     areasOlimpistas();
   }, []);
@@ -156,7 +156,7 @@ export const ListElement = ({ data, catalogo }) => {
           <div className="registered-area">
             {areasOlimpista.map((area, index) => (
               <span key={index} className="label-area">
-                {area.nombreArea || areasTemporales}
+                {area.nombreArea}
               </span>
             ))}
           </div>
