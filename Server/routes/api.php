@@ -8,24 +8,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OlimpiadaController;
 use App\Http\Controllers\TutorController;
 
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::get('/hola', [OlimpiadaController::class, 'mostrarOlimpiada']);
 Route::post('/register', [OlimpistaController::class, 'store']);
 Route::get('/tutor/{id_tutor}/estudiantes', [TutorController::class, 'getEstudiantes']);
 Route::get('/catalogoCompleto', [AreaController::class, 'getProgramaCompleto']);
 Route::post('/newInscription', [InscripcionController::class, 'store']);
 Route::get('/olimpista/{id}/areas', [InscripcionController::class, 'getAreaByOlimpista']);
+
+// New Tutor Routes
+Route::post('/tutores', [TutorController::class, 'store']);
+Route::get('/tutores/verificar', [TutorController::class, 'checkExistingTutor']);

@@ -5,23 +5,130 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tutor;
 use App\Models\Olimpista;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class TutorController extends Controller
 {
-
     public function getEstudiantes($id_tutor)
     {
-        // Verificar si el tutor existe
         $tutor = Tutor::find($id_tutor);
 
         if (!$tutor) {
             return response()->json(['error' => 'Tutor no encontrado'], 404);
         }
 
-
         $estudiantes = $tutor->olimpistas; 
-
-        // Devolver los estudiantes en formato JSON
         return response()->json($estudiantes);
+    }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nombresTutor' => 'required|string|max:50',
+            'apellidosTutor' => 'required|string|max:50',
+            'tipoTutor' => 'required|string|max:15',
+            'carnetdeidentidad' => [
+                'required',
+                'string',
+                'max:15',
+                Rule::unique('tutores', 'carnetIdentidad')
+            ],
+            'telefono' => 'required|string|max:15',
+            'emailTutor' => [
+                'required',
+                'email',
+                'max:50',
+                Rule::unique('tutores', 'correo')
+            ]
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            
+            if ($errors->has('carnetdeidentidad')) {
+                return response()->json([
+                    'success' => false,
+                    'error_code' => 'duplicate_ci',
+                    'message' => 'El carnet de identidad ya está registrado'
+                ], 422);
+            }
+            
+            if ($errors->has('emailTutor')) {
+                return response()->json([
+                    'success' => false,
+                    'error_code' => 'duplicate_email',
+                    'message' => 'El correo electrónico ya está registrado'
+                ], 422);
+            }
+
+            return response()->json([
+                'success' => false,
+                'errors' => $errors
+            ], 422);
+        }
+
+        try {
+            $tutor = Tutor::create([
+                'nombre' => $request->nombresTutor,
+                'apellido' => $request->apellidosTutor,
+                'tipoTutor' => $request->tipoTutor,
+                'carnetIdentidad' => $request->carnetdeidentidad,
+                'numeroCelular' => $request->telefono,
+                'correo' => $request->emailTutor
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Tutor registrado exitosamente',
+                'tutorId' => $tutor->id_tutor,
+                'tutorData' => $tutor
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al registrar el tutor: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function checkExistingTutor(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'carnet' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $tutor = Tutor::where('correo', $request->email)
+                     ->where('carnetIdentidad', $request->carnet)
+                     ->first();
+
+        if ($tutor) {
+            return response()->json([
+                'exists' => true,
+                'tutorId' => $tutor->id_tutor,
+                'data' => [
+                    'nombresTutor' => $tutor->nombre,
+                    'apellidosTutor' => $tutor->apellido,
+                    'tipoTutor' => $tutor->tipoTutor,
+                    'carnetdeidentidad' => $tutor->carnetIdentidad,
+                    'telefono' => $tutor->numeroCelular,
+                    'emailTutor' => $tutor->correo
+                ]
+            ]);
+        }
+
+        return response()->json([
+            'exists' => false,
+            'message' => 'No se encontró un tutor con esos datos'
+        ]);
     }
 }

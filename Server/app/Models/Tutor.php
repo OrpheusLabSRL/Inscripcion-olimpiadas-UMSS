@@ -10,7 +10,6 @@ class Tutor extends Model
     use HasFactory;
 
     protected $table = 'tutores';
-
     protected $primaryKey = 'id_tutor';
 
     protected $fillable = [
@@ -22,10 +21,17 @@ class Tutor extends Model
         'carnetIdentidad'
     ];
 
+    protected $casts = [
+        'nombre' => 'string',
+        'apellido' => 'string',
+        'tipoTutor' => 'string',
+        'correo' => 'string',
+        'numeroCelular' => 'string',
+        'carnetIdentidad' => 'string'
+    ];
 
     public function olimpistas()
-{
-    return $this->belongsToMany(Olimpista::class, 'olimpista_tutor', 'id_tutor', 'id_olimpista');
-}
-
+    {
+        return $this->belongsToMany(Olimpista::class, 'olimpista_tutor', 'id_tutor', 'id_olimpista');
+    }
 }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./TutorForm.css";
 import HeaderProp from "../../../../features/home/components/HeaderProp";
+import { registerTutor, checkExistingTutor } from "../../../../api/TutorForm.api";
 
 export const TutorForm = () => {
   const location = useLocation();
@@ -12,16 +13,19 @@ export const TutorForm = () => {
     apellido: "",
     tipoTutor: "",
     carnet: "",
+    telefono: "",
     email: ""
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
-    // Validación en tiempo real
     let filteredValue = value;
     if (name === "nombre" || name === "apellido") {
       filteredValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
@@ -29,7 +33,10 @@ export const TutorForm = () => {
       if (name === "apellido" && filteredValue.length > 30) return;
     } else if (name === "carnet") {
       filteredValue = value.replace(/[^a-zA-Z0-9]/g, "");
-      if (filteredValue.length > 12) return;
+      if (filteredValue.length > 15) return;
+    } else if (name === "telefono") {
+      filteredValue = value.replace(/[^0-9]/g, "");
+      if (filteredValue.length > 15) return;
     }
     
     setFormData({
@@ -37,7 +44,6 @@ export const TutorForm = () => {
       [name]: filteredValue
     });
 
-    // Validación en tiempo real
     if (touched[name]) {
       validateField(name, filteredValue);
     }
@@ -72,6 +78,11 @@ export const TutorForm = () => {
             error = "Solo se permiten caracteres alfanuméricos";
           }
           break;
+        case "telefono":
+          if (!/^[0-9]+$/.test(value)) {
+            error = "Solo se permiten números";
+          }
+          break;
         default:
           break;
       }
@@ -87,7 +98,7 @@ export const TutorForm = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    const fieldsToValidate = ["nombre", "apellido", "tipoTutor", "carnet", "email"];
+    const fieldsToValidate = ["nombre", "apellido", "tipoTutor", "carnet", "telefono", "email"];
     
     fieldsToValidate.forEach(field => {
       if (!formData[field].trim()) {
@@ -103,10 +114,53 @@ export const TutorForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      navigate('/register');
+    setSubmitError("");
+    setSubmitSuccess("");
+    
+    if (!validateForm()) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      const response = await registerTutor({
+        nombresTutor: formData.nombre,
+        apellidosTutor: formData.apellido,
+        tipoTutor: formData.tipoTutor,
+        carnetdeidentidad: formData.carnet,
+        telefono: formData.telefono,
+        emailTutor: formData.email
+      });
+      
+      if (response.data.success) {
+        setSubmitSuccess("Registro exitoso! Redirigiendo...");
+        setTimeout(() => {
+          navigate('/listRegistered/register', { 
+            state: { 
+              tutorId: response.data.tutorId,
+              tutorData: formData 
+            } 
+          });
+        }, 2000);
+      } else {
+        setSubmitError(response.data.message || "Error al registrar el tutor");
+      }
+    } catch (error) {
+      console.error("Error al registrar tutor:", error);
+      if (error.response) {
+        if (error.response.data.error_code === 'duplicate_ci') {
+          setSubmitError("Usuario ya registrado, continue su inscripción");
+        } else {
+          setSubmitError(error.response.data.message || `Error ${error.response.status}`);
+        }
+      } else if (error.request) {
+        setSubmitError("No se pudo conectar con el servidor. Verifica tu conexión.");
+      } else {
+        setSubmitError("Error al configurar la solicitud");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -124,10 +178,49 @@ export const TutorForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleContinue = (e) => {
+  const handleContinue = async (e) => {
     e.preventDefault();
-    if (validateContinueForm()) {
-      navigate('/register');
+    setSubmitError("");
+    setSubmitSuccess("");
+    
+    if (!validateContinueForm()) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      const response = await checkExistingTutor(formData.email, formData.carnet);
+      
+      if (response.data.exists) {
+        setSubmitSuccess("Datos verificados! Redirigiendo...");
+        setTimeout(() => {
+          navigate('/register', { 
+            state: { 
+              tutorId: response.data.tutorId,
+              tutorData: {
+                nombre: response.data.data.nombresTutor,
+                apellido: response.data.data.apellidosTutor,
+                tipoTutor: response.data.data.tipoTutor,
+                carnet: response.data.data.carnetdeidentidad,
+                telefono: response.data.data.telefono,
+                email: response.data.data.emailTutor
+              }
+            } 
+          });
+        }, 2000);
+      } else {
+        setSubmitError("No se encontró una inscripción con esos datos. Por favor, inicie una nueva inscripción.");
+      }
+    } catch (error) {
+      console.error("Error al verificar tutor:", error);
+      if (error.response) {
+        setSubmitError(error.response.data.message || `Error ${error.response.status}`);
+      } else if (error.request) {
+        setSubmitError("No se pudo conectar con el servidor. Verifica tu conexión.");
+      } else {
+        setSubmitError("Error al configurar la solicitud");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -158,6 +251,9 @@ export const TutorForm = () => {
               Continuar inscripción
             </button>
           </div>
+
+          {submitError && <div className="error-message">{submitError}</div>}
+          {submitSuccess && <div className="success-message">{submitSuccess}</div>}
 
           {formType === 'new' ? (
             <form onSubmit={handleSubmit} className="form-section">
@@ -210,19 +306,35 @@ export const TutorForm = () => {
                 {errors.tipoTutor && <span className="error-message">{errors.tipoTutor}</span>}
               </div>
 
-              <div className="form-group">
-                <label>Carnet de identidad <span className="required">*</span></label>
-                <input 
-                  type="text" 
-                  name="carnet"
-                  placeholder="Ingrese su carnet de identidad" 
-                  value={formData.carnet}
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
-                  className={getInputClass("carnet")}
-                  maxLength={12}
-                />
-                {errors.carnet && <span className="error-message">{errors.carnet}</span>}
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Carnet de identidad <span className="required">*</span></label>
+                  <input 
+                    type="text" 
+                    name="carnet"
+                    placeholder="Ingrese su carnet de identidad" 
+                    value={formData.carnet}
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                    className={getInputClass("carnet")}
+                    maxLength={15}
+                  />
+                  {errors.carnet && <span className="error-message">{errors.carnet}</span>}
+                </div>
+                <div className="form-group">
+                  <label>Teléfono <span className="required">*</span></label>
+                  <input 
+                    type="text" 
+                    name="telefono"
+                    placeholder="Ingrese su teléfono" 
+                    value={formData.telefono}
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                    className={getInputClass("telefono")}
+                    maxLength={15}
+                  />
+                  {errors.telefono && <span className="error-message">{errors.telefono}</span>}
+                </div>
               </div>
 
               <div className="form-group">
@@ -243,8 +355,8 @@ export const TutorForm = () => {
                 <button type="button" className="back-button" onClick={() => navigate(-1)}>
                   Atrás
                 </button>
-                <button type="submit" className="submit-button">
-                  Siguiente
+                <button type="submit" className="submit-button" disabled={isSubmitting}>
+                  {isSubmitting ? "Enviando..." : "Siguiente"}
                 </button>
               </div>
             </form>
@@ -274,7 +386,7 @@ export const TutorForm = () => {
                   onChange={handleInputChange}
                   onBlur={handleBlur}
                   className={getInputClass("carnet")}
-                  maxLength={12}
+                  maxLength={15}
                 />
                 {errors.carnet && <span className="error-message">{errors.carnet}</span>}
               </div>
@@ -283,8 +395,8 @@ export const TutorForm = () => {
                 <button type="button" className="back-button" onClick={() => navigate(-1)}>
                   Atrás
                 </button>
-                <button type="submit" className="submit-button">
-                  Continuar
+                <button type="submit" className="submit-button" disabled={isSubmitting}>
+                  {isSubmitting ? "Verificando..." : "Continuar"}
                 </button>
               </div>
             </form>
