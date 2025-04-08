@@ -11,6 +11,8 @@ class Categoria extends Model
 
     protected $table = 'categorias';
 
+    protected $primaryKey = 'idCategoria';
+
     protected $fillable = [
         'nombreCategoria',
         'estadoCategoria'
@@ -25,9 +27,8 @@ class Categoria extends Model
     }
 
     public function grados()
-    {
-        return $this->belongsToMany(Grados::class, 'categoria_grados', 'categoria_id', 'grado_id')
-                    ->withPivot('estadoCategoriaGrado') 
-                    ->withTimestamps(); 
-    }
+{
+    return $this->belongsToMany(Grados::class, 'categoria_grados', 'categoria_id', 'grado_id')
+                ->withPivot('estadoCategoriaGrado')->withTimestamps();
+}
 }

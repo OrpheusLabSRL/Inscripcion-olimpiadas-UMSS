@@ -11,6 +11,8 @@ class Area extends Model
 
     protected $table = 'areas';
 
+    protected $primaryKey = 'idArea';
+
     protected $fillable = [
         'idOlimpiada',
         'nombreArea',
@@ -26,9 +28,8 @@ class Area extends Model
     }
 
     public function categorias()
-    {
-        return $this->belongsToMany(Categoria::class, 'area_categoria', 'area_id', 'categoria_id')
-                    ->withPivot('estadoAreaCategoria')
-                    ->withTimestamps(); 
-    }
+{
+    return $this->belongsToMany(Categoria::class, 'area_categoria', 'area_id', 'categoria_id')
+                ->withPivot('estadoAreaCategoria')->withTimestamps();
+}
 }
