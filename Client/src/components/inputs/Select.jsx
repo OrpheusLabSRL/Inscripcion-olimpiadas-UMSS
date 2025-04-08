@@ -34,9 +34,7 @@ export const Select = ({
         value={value}
         onChange={onChange}
       >
-        <option value={""} disabled hidden>
-          {placeholder}
-        </option>
+        {placeholder && <option value={""}>{placeholder}</option>}
 
         {options &&
           options.map((optionElement, index) => {

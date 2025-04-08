@@ -1,16 +1,16 @@
 export const cursosBolivia = [
-  { value: "primaria_1", label: "1° de Primaria" },
-  { value: "primaria_2", label: "2° de Primaria" },
-  { value: "primaria_3", label: "3° de Primaria" },
-  { value: "primaria_4", label: "4° de Primaria" },
-  { value: "primaria_5", label: "5° de Primaria" },
-  { value: "primaria_6", label: "6° de Primaria" },
-  { value: "secundaria_1", label: "1° de Secundaria" },
-  { value: "secundaria_2", label: "2° de Secundaria" },
-  { value: "secundaria_3", label: "3° de Secundaria" },
-  { value: "secundaria_4", label: "4° de Secundaria" },
-  { value: "secundaria_5", label: "5° de Secundaria" },
-  { value: "secundaria_6", label: "6° de Secundaria" },
+  { value: "1° primaria", label: "1° de Primaria" },
+  { value: "2° primaria", label: "2° de Primaria" },
+  { value: "3° primaria", label: "3° de Primaria" },
+  { value: "4° primaria", label: "4° de Primaria" },
+  { value: "5° primaria", label: "5° de Primaria" },
+  { value: "6° primaria", label: "6° de Primaria" },
+  { value: "1° secundaria", label: "1° de Secundaria" },
+  { value: "2° secundaria", label: "2° de Secundaria" },
+  { value: "3° secundaria", label: "3° de Secundaria" },
+  { value: "4° secundaria", label: "4° de Secundaria" },
+  { value: "5° secundaria", label: "5° de Secundaria" },
+  { value: "6° secundaria", label: "6° de Secundaria" },
 ];
 
 export const departamentosBolivia = [

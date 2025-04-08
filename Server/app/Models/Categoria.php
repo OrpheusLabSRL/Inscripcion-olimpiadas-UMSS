@@ -10,6 +10,7 @@ class Categoria extends Model
     protected $primaryKey = 'idCategoria';
     public $timestamps = false;
 
+
     protected $fillable = [
         'nombreCategoria',
         'estadoCategoria',
@@ -30,14 +31,8 @@ class Categoria extends Model
 
     // 🔁 Relación con grados (tabla intermedia: categoria_grados)
     public function grados()
-    {
-        return $this->belongsToMany(
-            Grados::class,
-            'categoria_grados',
-            'categoria_id',
-            'grado_id',
-            'idCategoria',
-            'idGrado'
-        )->withPivot('estadoCategoriaGrado');
-    }
+{
+    return $this->belongsToMany(Grados::class, 'categoria_grados', 'categoria_id', 'grado_id')
+                ->withPivot('estadoCategoriaGrado')->withTimestamps();
+}
 }
