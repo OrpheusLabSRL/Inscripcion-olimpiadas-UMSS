@@ -35,6 +35,7 @@
 
 .btn-add-area button {
   background: var(--primary-color);
+  color: #fff;
 }
 
 .containter-registered-area > h5 {

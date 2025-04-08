@@ -3,6 +3,7 @@ import "./ListElement.css";
 
 //components
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
+import { NextPage } from "../../../../components/Buttons/NextPage";
 import { GenericModal } from "../../../../components/modals/GenericModal";
 import { Select } from "../../../../components/inputs/Select";
 
@@ -42,7 +43,7 @@ export const ListElement = ({ data, catalogo }) => {
   useEffect(() => {
     const areasFiltradas = filtrarAreasPorCurso(data.curso, catalogo);
     setAreaInteres(areasFiltradas);
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     const areasOlimpistas = async () => {
@@ -173,7 +174,7 @@ export const ListElement = ({ data, catalogo }) => {
             <span className="label-area">Maria Angel Serrano de la monte</span>
           </div>
           <div className="btn-add-area">
-            <PrimaryButton value="Registrar Tutor" />
+            <NextPage value="Registrar Tutor" to="/listRegistered/tutor" />
           </div>
         </div>
       </div>
