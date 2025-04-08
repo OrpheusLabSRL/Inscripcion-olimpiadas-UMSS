@@ -43,16 +43,18 @@ class OlimpistaController extends Controller
 
     // Crear el nuevo Olimpista
     $olimpista = Olimpista::create([
-        'correoComp' => $request->Email,
-        'apellidosComp' => $request->Apellido,
-        'NombresComp' => $request->Nombre,
-        'carnetComp' => $request->CarnetIdentidad,
+        'correo' => $request->Email,
+        'apellido' => $request->Apellido,
+        'Nombre' => $request->Nombre,
+        'carnetIdentidad' => $request->CarnetIdentidad,
+        'curso' => $request->Curso,
         'fechaNacimiento' => $request->FechaNacimiento,
         'colegio' => $request->Colegio,
         'departamento' => $request->Departamento,
         'provincia' => $request->Provincia,
     ]);
     
+    $olimpista->tutores()->attach($request->id_tutor);
 
     // Retornar respuesta (puede ser JSON o redirección)
     return response()->json([

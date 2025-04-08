@@ -12,14 +12,14 @@ class Inscripcion extends Model
     protected $table = 'inscripcion';
 
     protected $fillable = [
-        'estadoInscripcion',
-        'fechaInicioInsc',
-        'fechaFinInsc',
+        'estado',
+        'fechaInicio',
+        'fechaFin',
     ];
 
     public function olimpista()
 {
-    return $this->belongsTo(Olimpista::class, 'idOlimpista', 'idOlimpista');
+    return $this->belongsTo(Olimpista::class, 'id_olimpista', 'id_olimpista');
 }
 
 }

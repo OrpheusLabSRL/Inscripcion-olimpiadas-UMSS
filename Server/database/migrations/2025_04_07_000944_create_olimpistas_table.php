@@ -14,15 +14,16 @@ class CreateOlimpistasTable extends Migration
     public function up()
     {
         Schema::create('olimpistas', function (Blueprint $table) {
-            $table->id('idOlimpista'); // Primary Key
-            $table->string('correoComp', 30);
-            $table->string('apellidosComp', 30);
-            $table->string('NombresComp', 30);
-            $table->string('carnetComp', 15);
+            $table->id('id_olimpista'); // Primary Key
+            $table->string('correo', 50);
+            $table->string('apellido', 50);
+            $table->string('nombre', 50);
+            $table->string('carnetIdentidad', 15);
+            $table->string('curso', 30);
             $table->date('fechaNacimiento');
             $table->string('colegio', 50);
             $table->string('departamento', 12);
-            $table->string('provincia', 30);
+            $table->string('provincia', 50);
             $table->timestamps();
         });
     }
