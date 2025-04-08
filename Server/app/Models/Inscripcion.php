@@ -9,12 +9,16 @@ class Inscripcion extends Model
 {
     use HasFactory;
 
-    protected $table = 'inscripcion';
+    protected $table = 'inscripciones';
+
+    protected $primaryKey = 'id_inscripcion';
 
     protected $fillable = [
         'estado',
         'fechaInicio',
         'fechaFin',
+        'id_olimpista',
+        'id_AreaCategoria'
     ];
 
     public function olimpista()

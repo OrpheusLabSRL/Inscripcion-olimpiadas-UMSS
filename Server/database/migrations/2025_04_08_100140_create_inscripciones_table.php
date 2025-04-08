@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInscripcionsTable extends Migration
+class CreateInscripcionesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateInscripcionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('inscripcions', function (Blueprint $table) {
+        Schema::create('inscripciones', function (Blueprint $table) {
             $table->id('id_inscripcion'); // Clave primaria
             $table->boolean('estado')->default(false);
             $table->date('fechaInicio');
@@ -22,6 +22,10 @@ class CreateInscripcionsTable extends Migration
 
             $table->unsignedBigInteger('id_olimpista'); // FK
              $table->foreign('id_olimpista')->references('id_olimpista')->on('olimpistas')->onDelete('cascade');
+
+             $table->unsignedBigInteger('id_AreaCategoria'); // Nueva FK
+             $table->foreign('id_AreaCategoria')->references('id_AreaCategoria')->on('area_categoria')->onDelete('cascade');
+              
         });
     }
 
@@ -32,6 +36,6 @@ class CreateInscripcionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inscripcions');
+        Schema::dropIfExists('inscripciones');
     }
 }

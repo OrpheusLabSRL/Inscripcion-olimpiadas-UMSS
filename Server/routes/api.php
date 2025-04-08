@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\OlimpistaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,3 +27,4 @@ Route::get('/hola', [OlimpiadaController::class, 'mostrarOlimpiada']);
 Route::post('/register', [OlimpistaController::class, 'store']);
 Route::get('/tutor/{id_tutor}/estudiantes', [TutorController::class, 'getEstudiantes']);
 Route::get('/catalogoCompleto', [AreaController::class, 'getProgramaCompleto']);
+Route::post('/newInscription', [InscripcionController::class, 'store']);
