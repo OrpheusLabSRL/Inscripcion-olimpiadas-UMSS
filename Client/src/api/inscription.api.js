@@ -11,3 +11,18 @@ const inscriptionApi = axios.create({
 export const registerDataOlympian = (olimpistaData) => {
   return inscriptionApi.post("/api/register", olimpistaData);
 };
+export const getAreas = async () => {
+  const response = await axios.get(baseURL + "/api/areas");
+  return response.data;
+};
+export const createArea = async (data) => {
+  return await axios.post(baseURL + "/api/registerAreas", data);
+};
+export const getOlimpiadas = async () => {
+  const response = await axios.get(baseURL + "/api/hola");
+  console.log("Respuesta cruda de la API:", response.data);
+  return response.data;
+};
+export const createOlympiad = async (data) => {
+  return await axios.post(baseURL + "/api/registrarOlimpiadas", data);
+};

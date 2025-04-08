@@ -1,61 +1,64 @@
 // src/features/administration/components/OlympiadsTable.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getOlimpiadas } from "../../../api/inscription.api"; // asegúrate que la ruta es correcta
+import "../styles/General.css";
 
-const olympiads = [
-  {
-    nombre: "Olimpiada Oh SanSi 2023",
-    inicio: "2023-08-01",
-    fin: "2023-12-15",
-    estado: "Finalizado",
-  },
-  {
-    nombre: "Olimpiada Oh! SanSi 2024",
-    inicio: "2024-09-15",
-    fin: "2024-11-30",
-    estado: "Finalizado",
-  },
-  {
-    nombre: "Olimpiada Oh! SanSi 2025",
-    inicio: "2025-03-01",
-    fin: "2025-06-30",
-    estado: "Activo",
-  },
-];
+const OlympiadsTable = () => {
+  const [olympiads, setOlympiads] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-const OlympiadsTable = () => (
-  <table className="data-table">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Fecha inicio</th>
-        <th>Fecha fin</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {olympiads.map((item, i) => (
-        <tr key={i}>
-          <td>{item.nombre}</td>
-          <td>{item.inicio}</td>
-          <td>{item.fin}</td>
-          <td>
-            <span
-              className={`badge badge-${
-                item.estado === "Activo" ? "success" : "danger"
-              }`}
-            >
-              {item.estado}
-            </span>
-          </td>
-          <td>
-            <button>✏️</button>
-            <button>🗑️</button>
-          </td>
+  useEffect(() => {
+    const fetchOlimpiads = async () => {
+      try {
+        const data = await getOlimpiadas();
+        setOlympiads(data.data);
+      } catch (error) {
+        setOlympiads([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOlimpiads();
+  }, []);
+
+  if (loading) return <p>Cargando olimpiadas...</p>;
+
+  return (
+    <table className="data-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Fecha inicio</th>
+          <th>Fecha fin</th>
+          <th>Estado</th>
+          <th>Acciones</th>
         </tr>
-      ))}
-    </tbody>
-  </table>
-);
+      </thead>
+      <tbody>
+        {olympiads.map((item) => (
+          <tr key={item.idOlimpiada}>
+            <td>{item.nombreOlimpiada}</td>
+            <td>{item.fechaInicioOlimp}</td>
+            <td>{item.fechaFinOlimp}</td>
+            <td>
+              <span
+                className={`badge badge-${
+                  item.estadoOlimpiada ? "success" : "danger"
+                }`}
+              >
+                {item.estadoOlimpiada ? "Activo" : "Finalizado"}
+              </span>
+            </td>
+            <td>
+              <button>✏️</button>
+              <button>🗑️</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
 export default OlympiadsTable;
