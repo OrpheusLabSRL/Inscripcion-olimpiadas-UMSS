@@ -24,6 +24,10 @@ const OlympiadsModal = ({ isOpen, onClose, onSave }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const confirmacion = window.confirm(
+      "¿Estás seguro de registrar esta olimpiada?"
+    );
+    if (!confirmacion) return;
     try {
       const payload = {
         ...formData,

@@ -42,8 +42,15 @@ const ModalAgregarCategoria = ({ isOpen, onClose, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validar nombre con solo letras y espacios
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(formData.nombreCategoria.trim())) {
+      alert("El nombre solo debe contener letras y espacios.");
+      return;
+    }
+
     const data = {
-      nombreCategoria: formData.nombreCategoria,
+      nombreCategoria: formData.nombreCategoria.trim(),
       estado: formData.estado,
       idArea: parseInt(formData.area),
       idGrado: parseInt(formData.grado),
@@ -52,6 +59,7 @@ const ModalAgregarCategoria = ({ isOpen, onClose, onSubmit }) => {
     try {
       console.log(data);
       await createCategoria(data);
+      alert("Categoría registrada exitosamente.");
       setErrors(null);
       onSubmit();
       onClose();
@@ -74,7 +82,9 @@ const ModalAgregarCategoria = ({ isOpen, onClose, onSubmit }) => {
         <h2 className="modal-title">Agregar categoría</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Nombre de la categoría</label>
+            <label>
+              Nombre de la categoría <span style={{ color: "red" }}>*</span>
+            </label>
             <input
               type="text"
               name="nombreCategoria"
@@ -88,7 +98,9 @@ const ModalAgregarCategoria = ({ isOpen, onClose, onSubmit }) => {
           </div>
 
           <div className="form-group">
-            <label>Área</label>
+            <label>
+              Área <span style={{ color: "red" }}>*</span>
+            </label>
             <select
               name="area"
               value={formData.area}
@@ -108,7 +120,9 @@ const ModalAgregarCategoria = ({ isOpen, onClose, onSubmit }) => {
           </div>
 
           <div className="form-group">
-            <label>Grado</label>
+            <label>
+              Grado <span style={{ color: "red" }}>*</span>
+            </label>
             <select
               name="grado"
               value={formData.grado}

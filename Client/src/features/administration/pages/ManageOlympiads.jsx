@@ -1,8 +1,6 @@
-// src/features/administration/pages/ManageOlympiads.jsx
-
 import React, { useState } from "react";
 import OlympiadsTable from "../components/OlympiadsTable";
-import OlympiadsModal from "../components/OlympiadsModal"; // Importa el modal
+import OlympiadsModal from "../components/OlympiadsModal";
 import "../styles/General.css";
 import "../styles/ModalGeneral.css";
 
@@ -17,21 +15,9 @@ const ManageOlympiads = () => {
     setModalOpen(false);
   };
 
-  const handleSaveOlympiad = (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(event.target);
-    const nuevaOlimpiada = {
-      nombreOlimpiada: formData.get("nombreOlimpiada"),
-      fechaInicioOlimp: formData.get("fechaInicioOlimp"),
-      fechaFinOlimp: formData.get("fechaFinOlimp"),
-      estadoOlimpiada: formData.get("estadoOlimpiada"),
-    };
-
-    console.log("➡️ Datos de la nueva olimpiada:", nuevaOlimpiada);
-    // Aquí puedes enviar los datos a la API
-
-    setModalOpen(false); // Cierra el modal
+  // Solo se usa para refrescar la tabla o cerrar modal después del guardado
+  const handleSaveOlympiad = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -55,7 +41,6 @@ const ManageOlympiads = () => {
 
       <OlympiadsTable />
 
-      {/* Modal */}
       <OlympiadsModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}

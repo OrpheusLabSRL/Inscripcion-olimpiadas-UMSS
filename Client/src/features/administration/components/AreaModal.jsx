@@ -3,7 +3,7 @@ import "../styles/ModalGeneral.css";
 import "../styles/General.css";
 import { createArea } from "../../../api/inscription.api"; // Ajustá ruta si es necesario
 
-const AreaModal = ({ isOpen, onClose, onSave }) => {
+const AreaModal = ({ isOpen, onClose, onSave, areas = [] }) => {
   const [formData, setFormData] = useState({
     nombreArea: "",
     descripcionArea: "",
@@ -16,6 +16,12 @@ const AreaModal = ({ isOpen, onClose, onSave }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    if (name === "descripcionArea" && value.length > 200) {
+      alert("La descripción solo deben ser 200 caracteres");
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -24,16 +30,46 @@ const AreaModal = ({ isOpen, onClose, onSave }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validar campos obligatorios
+    if (
+      !formData.nombreArea.trim() ||
+      !formData.descripcionArea.trim() ||
+      formData.costoArea === ""
+    ) {
+      alert("Se deben llenar todos los campos obligatorios");
+      return;
+    }
+
+    // Validar costo no negativo
+    const costo = parseFloat(formData.costoArea);
+    if (isNaN(costo) || costo < 0) {
+      alert("El costo no puede ser menor a 0 Bs.");
+      return;
+    }
+
+    // Validar nombre único en la misma olimpiada
+    const nombreExiste = areas.some(
+      (a) =>
+        a.nombreArea.trim().toLowerCase() ===
+          formData.nombreArea.trim().toLowerCase() &&
+        a.idOlimpiada.toString() === formData.idOlimpiada.toString()
+    );
+    if (nombreExiste) {
+      alert("El nombre del área ya existe en esta olimpiada.");
+      return;
+    }
+
     try {
       const payload = {
         ...formData,
-        costoArea: parseFloat(formData.costoArea),
+        costoArea: costo,
         estadoArea: formData.estadoArea ? 1 : 0,
-        idOlimpiada: formData.idOlimpiada,
       };
-      console.log(formData);
+
+      console.log("Registrando área:", payload);
       await createArea(payload);
-      alert("Área guardada correctamente.");
+      alert("Área registrada exitosamente.");
       onClose();
       onSave && onSave();
     } catch (err) {
@@ -53,7 +89,9 @@ const AreaModal = ({ isOpen, onClose, onSave }) => {
           <h2 className="modal-title">Agregar área</h2>
 
           <div className="form-group">
-            <label>Nombre *</label>
+            <label>
+              Nombre <span style={{ color: "red" }}>*</span>
+            </label>
             <input
               type="text"
               name="nombreArea"
@@ -65,18 +103,25 @@ const AreaModal = ({ isOpen, onClose, onSave }) => {
           </div>
 
           <div className="form-group">
-            <label>Descripción</label>
+            <label>
+              Descripción <span style={{ color: "red" }}>*</span>
+            </label>
             <input
               type="text"
               name="descripcionArea"
               placeholder="Describe los detalles del área"
               value={formData.descripcionArea}
               onChange={handleChange}
+              maxLength={200}
+              required
             />
+            <small>{formData.descripcionArea.length}/200</small>
           </div>
 
           <div className="form-group">
-            <label>Costo (Bs) *</label>
+            <label>
+              Costo (Bs) <span style={{ color: "red" }}>*</span>
+            </label>
             <input
               type="number"
               name="costoArea"
@@ -101,6 +146,7 @@ const AreaModal = ({ isOpen, onClose, onSave }) => {
               />
             </label>
           </div>
+
           <div className="modal-actions">
             <button type="button" className="cancel-button" onClick={onClose}>
               Cancelar
