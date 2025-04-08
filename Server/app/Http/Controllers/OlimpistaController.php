@@ -28,18 +28,6 @@ class OlimpistaController extends Controller
     public function store(Request $request)
 {
     Log::info('Datos del Request:', $request->all());
-    
-    // Validar los datos
-    // $request->validate([
-    //     'correoComp' => 'required|email|max:30',
-    //     'apellidosComp' => 'required|string|max:30',
-    //     'NombresComp' => 'required|string|max:30',
-    //     'carnetComp' => 'required|string|max:15',
-    //     'fechaNacimiento' => 'required|date',
-    //     'colegio' => 'required|string|max:50',
-    //     'departamento' => 'required|string|max:12',
-    //     'provincia' => 'required|string|max:30',
-    // ]);
 
     // Crear el nuevo Olimpista
     $olimpista = Olimpista::create([

@@ -28,3 +28,4 @@ Route::post('/register', [OlimpistaController::class, 'store']);
 Route::get('/tutor/{id_tutor}/estudiantes', [TutorController::class, 'getEstudiantes']);
 Route::get('/catalogoCompleto', [AreaController::class, 'getProgramaCompleto']);
 Route::post('/newInscription', [InscripcionController::class, 'store']);
+Route::get('/olimpista/{id}/areas', [InscripcionController::class, 'getAreaByOlimpista']);

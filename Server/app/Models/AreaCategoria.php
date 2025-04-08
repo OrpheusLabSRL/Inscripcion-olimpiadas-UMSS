@@ -17,4 +17,11 @@ class AreaCategoria extends Model
         'categoria_id',
         'estadoAreaCategoria'
     ];
+
+    public function area()
+{
+    return $this->belongsTo(Area::class, 'area_id', 'idArea');
+}
+
+
 }

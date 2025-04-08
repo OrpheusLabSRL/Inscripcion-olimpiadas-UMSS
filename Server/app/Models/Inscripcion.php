@@ -26,4 +26,22 @@ class Inscripcion extends Model
     return $this->belongsTo(Olimpista::class, 'id_olimpista', 'id_olimpista');
 }
 
+public function areaCategoria()
+{
+    return $this->belongsTo(AreaCategoria::class, 'id_AreaCategoria');
+}
+
+public function area()
+{
+    return $this->hasOneThrough(
+        Area::class,
+        AreaCategoria::class,
+        'id_AreaCategoria', // FK en AreaCategoria hacia Inscripcion
+        'idArea',            // PK en Area
+        'id_AreaCategoria',  // FK en Inscripcion
+        'area_id'            // FK en AreaCategoria hacia Area
+    );
+}
+
+
 }
