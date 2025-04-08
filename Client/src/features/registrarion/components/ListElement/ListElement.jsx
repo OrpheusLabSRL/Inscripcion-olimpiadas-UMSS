@@ -17,10 +17,18 @@ import swal from "sweetalert";
 //utils
 import { filtrarAreasPorCurso, filtrarCategoriasPorCursoYArea } from "./util";
 
+//api
+import {
+  setNewInscription,
+  getAreasOlimpista,
+} from "../../../../api/inscription.api";
+
 export const ListElement = ({ data, catalogo }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [areaInteres, setAreaInteres] = useState([]);
   const [categoriasInteres, setCategoriasInteres] = useState(null);
+  const [areasOlimpista, setAreasOlimpista] = useState([]);
+  const [areasTemporales, setAreasTemporales] = useState([]);
   const [categoriasInteresOpcional, setCategoriasInteresOpcional] =
     useState(null);
   const {
@@ -34,7 +42,17 @@ export const ListElement = ({ data, catalogo }) => {
   useEffect(() => {
     const areasFiltradas = filtrarAreasPorCurso(data.curso, catalogo);
     setAreaInteres(areasFiltradas);
-  }, [data]);
+  }, []);
+
+  useEffect(() => {
+    const areasOlimpistas = async () => {
+      const res = await getAreasOlimpista(data.id_olimpista);
+      console.log(res);
+      setAreasOlimpista(res.data.data.areas);
+      setAreasTemporales(res.data.data.areas.nombreArea);
+    };
+    areasOlimpistas();
+  }, []);
 
   const openModal = (e) => {
     e.preventDefault();
@@ -72,8 +90,12 @@ export const ListElement = ({ data, catalogo }) => {
 
   const onSubmit = async (dataAreas) => {
     try {
-      console.log(data);
+      dataAreas.id_olimpista = data.id_olimpista;
+      dataAreas.estado = false;
+
       console.log(dataAreas);
+      const res = await setNewInscription(dataAreas);
+      setModalIsOpen(false);
     } catch (error) {
       console.log(error);
       swal("Error al registrar los datos");
@@ -132,9 +154,13 @@ export const ListElement = ({ data, catalogo }) => {
         <div className="containter-registered-area">
           <h5>Areas registradas</h5>
           <div className="registered-area">
-            <span className="label-area">Matematicas</span>
-            <span className="label-area">Lenguaje</span>
+            {areasOlimpista.map((area, index) => (
+              <span key={index} className="label-area">
+                {area.nombreArea || areasTemporales}
+              </span>
+            ))}
           </div>
+
           <div className="btn-add-area">
             <PrimaryButton value="Registrar Area" onClick={openModal} />
           </div>

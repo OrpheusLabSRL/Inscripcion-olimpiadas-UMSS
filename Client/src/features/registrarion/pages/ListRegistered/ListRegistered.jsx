@@ -94,7 +94,6 @@ export const ListRegistered = () => {
     const allCatalogo = async () => {
       try {
         const catalogo = await getCatalogoCompleto();
-        console.log(catalogo.data);
         setCatalogoCompleto(catalogo.data);
       } catch (error) {
         console.log("Ocurrio un error");

@@ -1,11 +1,13 @@
 import axios from "axios";
 
-let baseURL = " http://127.0.0.1:8000/api";
+let baseURL = "http://127.0.0.1:8000/api";
 
 const inscriptionApi = axios.create({
   baseURL: baseURL,
   responseType: "json",
-  //   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 export const registerDataOlympian = (olimpistaData) => {
@@ -16,3 +18,7 @@ export const getDataOlympian = (id_tutor) => {
 };
 export const getCatalogoCompleto = () =>
   inscriptionApi.get("/catalogoCompleto");
+export const getAreasOlimpista = (id) =>
+  inscriptionApi.get(`/olimpista/${id}/areas`);
+export const setNewInscription = (data) =>
+  inscriptionApi.post("/newInscription", data);
