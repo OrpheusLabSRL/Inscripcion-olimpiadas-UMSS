@@ -33,4 +33,23 @@ class OlimpiadaController extends Controller
         Olimpiada::create($request->all());
         return redirect()->route('olimpiada.mostrar')->with('success', 'Olimpiada creada con éxito');
     }
+
+    public function store(Request $request)
+{
+    $validated = $request->validate([
+        'nombreOlimpiada' => 'required|string|max:100|unique:olimpiadas,nombreOlimpiada',
+        'version' => 'required|integer|min:1',
+        'fechaInicioOlimp' => 'required|date',
+        'fechaFinOlimp' => 'required|date|after:fechaInicioOlimp',
+    ]);
+
+    $validated['estadoOlimpiada'] = 1;
+
+    $olimpiada = Olimpiada::create($validated);
+
+    return response()->json([
+        'message' => 'Olimpiada creada exitosamente',
+        'data' => $olimpiada
+    ], 201);
+}
 }

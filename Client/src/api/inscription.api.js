@@ -13,6 +13,32 @@ const inscriptionApi = axios.create({
 export const registerDataOlympian = (olimpistaData) => {
   return inscriptionApi.post("/register", olimpistaData);
 };
+export const getAreas = async () => {
+  const response = await axios.get(baseURL + "/areas");
+  return response.data;
+};
+export const createArea = async (data) => {
+  return await axios.post(baseURL + "/registerAreas", data);
+};
+export const getOlimpiadas = async () => {
+  const response = await axios.get(baseURL + "/hola");
+  console.log("Respuesta cruda de la API:", response.data);
+  return response.data;
+};
+export const createOlympiad = async (data) => {
+  return await axios.post(baseURL + "/registrarOlimpiadas", data);
+};
+export const getGrados = async () => {
+  const response = await axios.get(baseURL + "/grados");
+  return response.data;
+};
+export const createCategoria = async (data) => {
+  return await axios.post(baseURL + "/categorias", data);
+};
+export const getCategorias = async () => {
+  const response = await axios.get(baseURL + "/categorias");
+  return response.data;
+};
 export const getDataOlympian = (id_tutor) => {
   return inscriptionApi.get(`/tutor/${id_tutor}/estudiantes`);
 };
