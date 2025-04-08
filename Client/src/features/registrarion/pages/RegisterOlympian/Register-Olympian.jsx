@@ -38,6 +38,8 @@ export const RegisterOlympian = () => {
   const onSubmit = async (data) => {
     console.log(data);
     try {
+      data.id_tutor = 1;
+      console.log(data);
       await registerDataOlympian(data);
       swal("Datos registrados correctamente");
       navigation("/listRegistered", data);

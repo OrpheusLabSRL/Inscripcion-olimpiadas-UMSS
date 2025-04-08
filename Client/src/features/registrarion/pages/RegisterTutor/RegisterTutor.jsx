@@ -46,66 +46,16 @@ export const RegisterTutor = () => {
       </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
-          <h1>Datos de contacto y tutor legal</h1>
+          <h1>Registro de datos de tutor legal</h1>
         </div>
 
-        <div className="input-2c">
+        {/* <div className="input-2c">
           <h2>Información de contacto</h2>
-        </div>
+        </div> */}
 
-        <div className="input-1c">
-          <Input
-            label={"Correo electrónico de contacto"}
-            placeholder="ejemplo@correo.com"
-            mandatory="true"
-            name="Email_contacto"
-            register={register}
-            validationRules={Validator.email}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"¿A quién pertenece el correo?"}
-            placeholder="Seleccione una opción"
-            mandatory="true"
-            options={tipoTutor}
-            name="Pertenece_Email"
-            register={register}
-            validationRules={Validator.pertenece_correo}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Input
-            label={"Número de celular de contacto"}
-            placeholder="Ingrese número de celular"
-            mandatory="true"
-            name="Numero_contacto"
-            register={register}
-            validationRules={Validator.numero}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"¿A quién pertenece el número?"}
-            placeholder="Seleccione una opción"
-            mandatory="true"
-            options={tipoTutor}
-            name="Pertenece_Numero"
-            register={register}
-            validationRules={Validator.pertenece_numero}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-2c">
+        {/* <div className="input-2c">
           <h2>Datos de tutor legal</h2>
-        </div>
+        </div> */}
 
         <div className="input-1c">
           <Input
@@ -176,6 +126,56 @@ export const RegisterTutor = () => {
             name="Ci"
             register={register}
             validationRules={Validator.ci}
+            errors={errors}
+          />
+        </div>
+
+        <div className="input-1c">
+          <Input
+            label={"Correo electrónico de contacto"}
+            placeholder="ejemplo@correo.com"
+            mandatory="true"
+            name="Email_contacto"
+            register={register}
+            validationRules={Validator.email}
+            errors={errors}
+          />
+        </div>
+
+        <div className="input-1c">
+          <Select
+            label={"¿A quién pertenece el correo?"}
+            placeholder="Seleccione una opción"
+            mandatory="true"
+            options={tipoTutor}
+            name="Pertenece_Email"
+            register={register}
+            validationRules={Validator.pertenece_correo}
+            errors={errors}
+          />
+        </div>
+
+        <div className="input-1c">
+          <Input
+            label={"Número de celular de contacto"}
+            placeholder="Ingrese número de celular"
+            mandatory="true"
+            name="Numero_contacto"
+            register={register}
+            validationRules={Validator.numero}
+            errors={errors}
+          />
+        </div>
+
+        <div className="input-1c">
+          <Select
+            label={"¿A quién pertenece el número?"}
+            placeholder="Seleccione una opción"
+            mandatory="true"
+            options={tipoTutor}
+            name="Pertenece_Numero"
+            register={register}
+            validationRules={Validator.pertenece_numero}
             errors={errors}
           />
         </div>

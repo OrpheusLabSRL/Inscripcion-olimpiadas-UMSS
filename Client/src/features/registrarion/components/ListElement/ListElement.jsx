@@ -11,13 +11,18 @@ import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import swal from "sweetalert";
 
 //utils
-import { areasDeInteres, categorias } from "./DataOptions";
-import { Validator } from "./ValidationRules";
+import { filtrarAreasPorCurso, filtrarCategoriasPorCursoYArea } from "./util";
 
-export const ListElement = ({ data }) => {
+export const ListElement = ({ data, catalogo }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [areaInteres, setAreaInteres] = useState([]);
+  const [categoriasInteres, setCategoriasInteres] = useState(null);
+  const [categoriasInteresOpcional, setCategoriasInteresOpcional] =
+    useState(null);
   const {
     register,
     handleSubmit,
@@ -25,6 +30,11 @@ export const ListElement = ({ data }) => {
     watch,
     setValue,
   } = useForm({});
+
+  useEffect(() => {
+    const areasFiltradas = filtrarAreasPorCurso(data.curso, catalogo);
+    setAreaInteres(areasFiltradas);
+  }, [data]);
 
   const openModal = (e) => {
     e.preventDefault();
@@ -35,12 +45,47 @@ export const ListElement = ({ data }) => {
     setModalIsOpen(false);
   };
 
+  const onChooseArea = (e) => {
+    if (e.target.value !== "") {
+      const categoriasFiltradas = filtrarCategoriasPorCursoYArea(
+        data.curso,
+        e.target.value,
+        catalogo
+      );
+      setCategoriasInteres(categoriasFiltradas);
+    } else {
+      setCategoriasInteres(null);
+    }
+  };
+  const onChooseAreaOptional = (e) => {
+    if (e.target.value !== "") {
+      const categoriasFiltradas = filtrarCategoriasPorCursoYArea(
+        data.curso,
+        e.target.value,
+        catalogo
+      );
+      setCategoriasInteresOpcional(categoriasFiltradas);
+    } else {
+      setCategoriasInteresOpcional(null);
+    }
+  };
+
+  const onSubmit = async (dataAreas) => {
+    try {
+      console.log(data);
+      console.log(dataAreas);
+    } catch (error) {
+      console.log(error);
+      swal("Error al registrar los datos");
+    }
+  };
+
   return (
     <div className="container-element-list">
-      <div className="list-data-header" key={data.id}>
+      <div className="list-data-header" key={data.id_olimpista}>
         <div>
           <p>#</p>
-          <p>{data.id}</p>
+          <p>{data.id_olimpista}</p>
         </div>
         <div>
           <p>Nombre</p>
@@ -48,11 +93,11 @@ export const ListElement = ({ data }) => {
         </div>
         <div>
           <p>Apellidos</p>
-          <p>{data.apellidos}</p>
+          <p>{data.apellido}</p>
         </div>
         <div>
           <p>CI</p>
-          <p>{data.ci}</p>
+          <p>{data.carnetIdentidad}</p>
         </div>
         <div>
           <p>Fecha nacimiento</p>
@@ -107,62 +152,75 @@ export const ListElement = ({ data }) => {
         </div>
       </div>
       <GenericModal modalIsOpen={modalIsOpen} closeModal={closeModal}>
-        <div className="input-2c">
-          <h2>Áreas y Categorías de interés</h2>
-        </div>
+        <form
+          className="container-form-areas"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="input-2c">
+            <h2>Áreas y Categorías de interés</h2>
+          </div>
 
-        <div className="input-1c">
-          <Select
-            label={"Área de interés"}
-            placeholder="Seleccione un area"
-            mandatory="true"
-            name="Area"
-            options={areasDeInteres}
-            register={register}
-            errors={errors}
-          />
-        </div>
+          <div className="input-1c">
+            <Select
+              label={"Área de interés"}
+              placeholder="Seleccione un area"
+              mandatory="true"
+              name="Area"
+              onChange={onChooseArea}
+              options={areaInteres}
+              register={register}
+              errors={errors}
+            />
+          </div>
 
-        <div className="input-1c">
-          <Select
-            label={"Categoría de interés"}
-            placeholder="Seleccione una categoria"
-            mandatory="true"
-            name="Categoria"
-            options={categorias}
-            register={register}
-            errors={errors}
-          />
-        </div>
+          <div className="input-1c">
+            <Select
+              label="Categoría de interés"
+              placeholder={categoriasInteres ? "Seleccione una categoría" : ""}
+              mandatory="true"
+              name="Categoria"
+              options={categoriasInteres}
+              register={register}
+              errors={errors}
+            />
+          </div>
 
-        <div className="input-1c">
-          <Select
-            label={"Segunda Área de interés"}
-            placeholder="Seleccione un area"
-            options={areasDeInteres}
-          />
-        </div>
+          <div className="input-1c">
+            <Select
+              label={"Segunda Área de interés"}
+              placeholder="Seleccione un area"
+              onChange={onChooseAreaOptional}
+              options={areaInteres}
+              name="AreaOpcional"
+              register={register}
+            />
+          </div>
 
-        <div className="input-1c">
-          <Select
-            label={"Categoría de interés"}
-            placeholder="Seleccione una categoria"
-            options={categorias}
-          />
-        </div>
-        <div className="container-btn-modal-area">
-          <PrimaryButton
-            type="submit"
-            value="Cancelar"
-            className="btn-modal-area"
-            onClick={closeModal}
-          />
-          <PrimaryButton
-            type="submit"
-            value="Registrar"
-            className="btn-modal-area"
-          />
-        </div>
+          <div className="input-1c">
+            <Select
+              label={"Categoría de interés"}
+              placeholder={
+                categoriasInteresOpcional ? "Seleccione una categoría" : ""
+              }
+              options={categoriasInteresOpcional}
+              name="CategoriaOpcional"
+              register={register}
+              errors={errors}
+            />
+          </div>
+          <div className="container-btn-modal-area">
+            <PrimaryButton
+              value="Cancelar"
+              className="btn-modal-area"
+              onClick={closeModal}
+            />
+            <PrimaryButton
+              type="submit"
+              value="Registrar"
+              className="btn-modal-area"
+            />
+          </div>
+        </form>
       </GenericModal>
     </div>
   );
