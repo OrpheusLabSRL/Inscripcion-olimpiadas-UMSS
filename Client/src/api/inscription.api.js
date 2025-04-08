@@ -26,3 +26,14 @@ export const getOlimpiadas = async () => {
 export const createOlympiad = async (data) => {
   return await axios.post(baseURL + "/api/registrarOlimpiadas", data);
 };
+export const getGrados = async () => {
+  const response = await axios.get(baseURL + "/api/grados");
+  return response.data;
+};
+export const createCategoria = async (data) => {
+  return await axios.post(baseURL + "/api/categorias", data);
+};
+export const getCategorias = async () => {
+  const response = await axios.get(baseURL + "/api/categorias");
+  return response.data;
+};

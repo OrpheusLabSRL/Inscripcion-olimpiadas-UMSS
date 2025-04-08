@@ -1,50 +1,62 @@
-// src/features/categories/components/CategoriesTable.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getCategorias } from "../../../api/inscription.api";
 import "../styles/General.css";
 
-const mockData = [
-  {
-    nombre: "4S",
-    areas: "Astronomía-Astrofísica, Biología, Física, Química",
-    grado: "4to Secundaria",
-    estado: "Activo",
-  },
-  {
-    nombre: "5S",
-    areas: "Astronomía-Astrofísica, Biología, Física, Química",
-    grado: "5to Secundaria",
-    estado: "Activo",
-  },
-];
+const CategoriesTable = () => {
+  const [categorias, setCategorias] = useState([]);
 
-const CategoriesTable = () => (
-  <table className="data-table">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Áreas</th>
-        <th>Grado</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {mockData.map((cat, i) => (
-        <tr key={i}>
-          <td>{cat.nombre}</td>
-          <td>{cat.areas}</td>
-          <td>{cat.grado}</td>
-          <td>
-            <span className="badge badge-success">{cat.estado}</span>
-          </td>
-          <td>
-            <button>✏️</button>
-            <button>🗑️</button>
-          </td>
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const response = await getCategorias();
+        setCategorias(response);
+      } catch (error) {
+        console.error("Error al obtener categorías:", error);
+      }
+    };
+
+    fetchCategorias();
+  }, []);
+
+  return (
+    <table className="data-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Áreas</th>
+          <th>Grados</th>
+          <th>Estado</th>
+          <th>Acciones</th>
         </tr>
-      ))}
-    </tbody>
-  </table>
-);
+      </thead>
+      <tbody>
+        {categorias.map((cat) => (
+          <tr key={cat.idCategoria}>
+            <td>{cat.nombreCategoria}</td>
+            <td>{cat.areas.map((a) => a.nombreArea).join(", ")}</td>
+            <td>
+              {cat.grados
+                .map((g) => `${g.numeroGrado}° de ${g.nivel}`)
+                .join(", ")}
+            </td>
+            <td>
+              <span
+                className={`badge ${
+                  cat.estadoCategoria ? "badge-success" : "badge-danger"
+                }`}
+              >
+                {cat.estadoCategoria ? "Activo" : "Inactivo"}
+              </span>
+            </td>
+            <td>
+              <button>✏️</button>
+              <button>🗑️</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
 export default CategoriesTable;

@@ -108,3 +108,9 @@
   transform: scale(1.2); /* o el tamaño que quieras */
   cursor: pointer;
 }
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}

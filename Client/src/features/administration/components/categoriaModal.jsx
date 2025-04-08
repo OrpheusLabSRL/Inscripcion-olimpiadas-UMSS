@@ -1,29 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  getAreas,
+  getGrados,
+  createCategoria,
+} from "../../../api/inscription.api";
 import "../styles/ModalGeneral.css";
 
 const ModalAgregarCategoria = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
     nombreCategoria: "",
-    grado: "",
     area: "",
+    grado: "",
     estado: true,
   });
 
-  // Aquí podrías reemplazar con los datos reales que vengan de la API
-  const areas = ["Matemáticas", "Lenguaje", "Ciencias"];
-  const grados = ["Primero", "Segundo", "Tercero"];
+  const [areas, setAreas] = useState([]);
+  const [grados, setGrados] = useState([]);
+  const [errors, setErrors] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const areasFromAPI = await getAreas();
+        const gradosFromAPI = await getGrados();
+        setAreas(areasFromAPI);
+        setGrados(gradosFromAPI);
+      } catch (err) {
+        console.error("Error al obtener áreas o grados:", err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    const data = {
+      nombreCategoria: formData.nombreCategoria,
+      estado: formData.estado,
+      idArea: parseInt(formData.area),
+      idGrado: parseInt(formData.grado),
+    };
+
+    try {
+      console.log(data);
+      await createCategoria(data);
+      setErrors(null);
+      onSubmit();
+      onClose();
+    } catch (error) {
+      console.error("Error al registrar categoría:", error);
+      if (error.response?.data?.errors) {
+        setErrors(error.response.data.errors);
+      }
+    }
   };
 
   if (!isOpen) return null;
@@ -45,6 +82,9 @@ const ModalAgregarCategoria = ({ isOpen, onClose, onSubmit }) => {
               onChange={handleChange}
               required
             />
+            {errors?.nombreCategoria && (
+              <span className="error-message">{errors.nombreCategoria[0]}</span>
+            )}
           </div>
 
           <div className="form-group">
@@ -56,12 +96,15 @@ const ModalAgregarCategoria = ({ isOpen, onClose, onSubmit }) => {
               required
             >
               <option value="">Selecciona un área</option>
-              {areas.map((area, index) => (
-                <option key={index} value={area}>
-                  {area}
+              {areas.map((area) => (
+                <option key={area.idArea} value={area.idArea}>
+                  {area.nombreArea}
                 </option>
               ))}
             </select>
+            {errors?.areas && (
+              <span className="error-message">{errors.areas[0]}</span>
+            )}
           </div>
 
           <div className="form-group">
@@ -73,12 +116,15 @@ const ModalAgregarCategoria = ({ isOpen, onClose, onSubmit }) => {
               required
             >
               <option value="">Selecciona un grado</option>
-              {grados.map((grado, index) => (
-                <option key={index} value={grado}>
-                  {grado}
+              {grados.map((grado) => (
+                <option key={grado.idGrado} value={grado.idGrado}>
+                  {grado.numeroGrado}° de {grado.nivel}
                 </option>
               ))}
             </select>
+            {errors?.grados && (
+              <span className="error-message">{errors.grados[0]}</span>
+            )}
           </div>
 
           <div className="checkbox-row">
@@ -93,6 +139,7 @@ const ModalAgregarCategoria = ({ isOpen, onClose, onSubmit }) => {
               />
             </label>
           </div>
+
           <div className="modal-actions">
             <button type="button" className="cancel-button" onClick={onClose}>
               Cancelar
