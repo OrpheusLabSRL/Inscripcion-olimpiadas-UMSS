@@ -28,9 +28,9 @@ export const Select = ({
         name={name}
         defaultValue={placeholder}
         {...(register &&
-          register(name, {
-            required: `${label} es requerido`,
-          }))}
+          (mandatory
+            ? register(name, { required: `${label} es requerido` })
+            : register(name, { required: false })))}
         value={value}
         onChange={onChange}
       >

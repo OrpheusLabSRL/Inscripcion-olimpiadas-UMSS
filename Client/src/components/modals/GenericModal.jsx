@@ -13,7 +13,7 @@ export const GenericModal = ({ closeModal, modalIsOpen, children }) => {
     content: {
       position: "fixed",
       maxWidth: "600px",
-      maxHeight: "300px",
+      maxHeight: "320px",
       margin: "auto",
       overflow: "none",
       border: "1px solid black",

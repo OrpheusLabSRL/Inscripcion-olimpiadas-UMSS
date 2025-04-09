@@ -12,13 +12,12 @@ class CreateTutoresTable extends Migration
             $table->id('id_tutor');
             $table->string('nombre', 50);
             $table->string('apellido', 50);
-            $table->string('tipoTutor', 15);
+            $table->enum('tipoTutor', ['Profesor', 'Padre/Madre', 'Tutor Legal']);
             $table->string('correo', 50)->unique();
-            $table->string('numeroCelular', 15);
-            $table->string('carnetIdentidad', 15)->unique();
+            $table->string('numeroCelular', 8);
+            $table->string('carnetIdentidad', 12)->unique();
             $table->timestamps();
             
-            // Índices adicionales para mejorar búsquedas
             $table->index('carnetIdentidad');
             $table->index('correo');
         });

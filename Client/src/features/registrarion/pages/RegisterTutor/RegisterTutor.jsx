@@ -12,30 +12,67 @@ import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
 //react
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
+import swal from "sweetalert";
 
 //utils
 import { tipoTutor } from "./DataOptions";
 
+//api
+import { setTutor, setContacto } from "../../../../api/inscription.api";
+
 export const RegisterTutor = () => {
-  const [currentStep, setCurrentStep] = useState(2);
-  const totalSteps = 4;
+  // const [currentStep, setCurrentStep] = useState(2);
+  // const totalSteps = 4;
   const navigation = useNavigate();
+  const location = useLocation();
+  const { id_olimpista } = location.state || {};
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
     setValue,
-  } = useForm({});
+  } = useForm({
+    mode: "onChange",
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const onSubmit = async (data) => {
-    navigation("/register/tutor", data);
+    console.log(data);
+    const dataContacto = {
+      correo_contacto: data.Email_contacto,
+      pertenece_correo: data.Pertenece_Email,
+      numero_contacto: data.Numero_contacto,
+      pertenece_numero: data.Pertenece_Numero,
+      id_olimpista,
+    };
+
+    const dataTutor = {
+      nombresTutor: data.Nombre,
+      apellidosTutor: data.Apellido,
+      tipoTutor: data.Tipo_Tutor,
+      emailTutor: data.Email,
+      telefono: data.Numero_Celular,
+      carnetdeidentidad: data.Ci,
+      id_olimpista,
+    };
+
+    console.log("el data contacto es", dataContacto);
+
+    try {
+      const resTutor = await setTutor(dataTutor);
+      const resContacto = await setContacto(dataContacto);
+      swal("Datos registrados correctamente");
+      navigation("/listRegistered", data);
+    } catch (error) {
+      console.log(error);
+      swal("Error al registrar los datos");
+    }
   };
 
   return (
@@ -59,7 +96,7 @@ export const RegisterTutor = () => {
 
         <div className="input-1c">
           <Input
-            label={"Nombre"}
+            label={"Nombre(s)"}
             placeholder="Ingrese nombre(s) del tutor"
             mandatory="true"
             name="Nombre"
@@ -71,7 +108,7 @@ export const RegisterTutor = () => {
 
         <div className="input-1c">
           <Input
-            label={"Apellido"}
+            label={"Apellido(s)"}
             placeholder="Ingrese apellido(s) del tutor"
             mandatory="true"
             name="Apellido"
@@ -185,7 +222,7 @@ export const RegisterTutor = () => {
         </div> */}
 
         <div className="container-btn-next">
-          <PrimaryButton type="submit" value="Siguiente" />
+          <PrimaryButton type="submit" value="Registrar" />
         </div>
       </form>
     </div>

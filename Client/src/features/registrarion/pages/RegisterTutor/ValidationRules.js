@@ -48,15 +48,15 @@ export const Validator = {
   },
 
   email: {
-    required: "Él email es requerido",
+    required: "Él correo electronico es requerido",
     maxLength: {
-      value: 255,
-      message: "El título no debe ser mayor a 255 caracteres",
+      value: 50,
+      message: "El correo electronico no debe ser mayor a 50 caracteres",
     },
-    minLength: {
-      value: 2,
-      message: "El título debe tener al menos 2 caracteres",
-    },
+    // minLength: {
+    //   value: 4,
+    //   message: "El correo electronico debe tener al menos 4 caracteres",
+    // },
     pattern: {
       value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
       message: "Formato de email inválido",
@@ -173,8 +173,8 @@ export const Validator = {
       message: "Solo se permiten caracteres alfanumericos",
     },
     maxLength: {
-      value: 15,
-      message: "El carnet de identidad no debe ser mayor a 15 caracteres",
+      value: 12,
+      message: "El carnet de identidad no debe ser mayor a 12 caracteres",
     },
     minLength: {
       value: 8,
