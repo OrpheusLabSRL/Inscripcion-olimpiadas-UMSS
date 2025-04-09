@@ -66,7 +66,7 @@ export const RegisterOlympian = () => {
 
         <div className="input-1c">
           <Input
-            label={"Nombre"}
+            label={"Nombre(s)"}
             placeholder="Ingrese nombre(s) del olimpista"
             mandatory="true"
             name="Nombre"
@@ -78,7 +78,7 @@ export const RegisterOlympian = () => {
 
         <div className="input-1c">
           <Input
-            label={"Apellidos"}
+            label={"Apellido(s)"}
             placeholder="Ingrese apellido(s) del olimpista"
             mandatory="true"
             name="Apellido"

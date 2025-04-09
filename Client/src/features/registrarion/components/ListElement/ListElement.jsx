@@ -29,7 +29,6 @@ export const ListElement = ({ data, catalogo }) => {
   const [areaInteres, setAreaInteres] = useState([]);
   const [categoriasInteres, setCategoriasInteres] = useState(null);
   const [areasOlimpista, setAreasOlimpista] = useState([]);
-  // const [areasTemporales, setAreasTemporales] = useState([]);
   const [categoriasInteresOpcional, setCategoriasInteresOpcional] =
     useState(null);
   const {
@@ -48,9 +47,8 @@ export const ListElement = ({ data, catalogo }) => {
   useEffect(() => {
     const areasOlimpistas = async () => {
       const res = await getAreasOlimpista(data.id_olimpista);
-      console.log(res);
+      console.log(res.data);
       setAreasOlimpista(res.data.data.areas);
-      // setAreasTemporales(res.data.data.areas.nombreArea);
     };
     areasOlimpistas();
   }, []);
@@ -94,9 +92,32 @@ export const ListElement = ({ data, catalogo }) => {
       dataAreas.id_olimpista = data.id_olimpista;
       dataAreas.estado = false;
 
-      console.log(dataAreas);
+      if (dataAreas.AreaOpcional == "" || dataAreas.CategoriaOpcional == "") {
+        delete dataAreas.AreaOpcional;
+        delete dataAreas.CategoriaOpcional;
+      }
+
+      if (dataAreas.Area == dataAreas.AreaOpcional && dataAreas.Area !== "4") {
+        swal("No se puede seleccionar la misma area", "", "alert");
+        return;
+      }
+
+      if (
+        dataAreas.Area == 4 &&
+        dataAreas.AreaOpcional == 4 &&
+        dataAreas.Categoria == dataAreas.CategoriaOpcional
+      ) {
+        swal("No se puede seleccionar la misma categoria", "", "alert");
+        return;
+      }
+
       const res = await setNewInscription(dataAreas);
+
+      const updatedAreas = await getAreasOlimpista(data.id_olimpista);
+      setAreasOlimpista(updatedAreas.data.data.areas);
+
       setModalIsOpen(false);
+      swal("Inscripción registrada correctamente", "", "success");
     } catch (error) {
       console.log(error);
       swal("Error al registrar los datos");
@@ -163,7 +184,7 @@ export const ListElement = ({ data, catalogo }) => {
           </div>
 
           <div className="btn-add-area">
-            <PrimaryButton value="Registrar Area" onClick={openModal} />
+            <PrimaryButton value="Registrar Areas" onClick={openModal} />
           </div>
         </div>
 
@@ -189,7 +210,7 @@ export const ListElement = ({ data, catalogo }) => {
 
           <div className="input-1c">
             <Select
-              label={"Área de interés"}
+              label={"Área de interés principal"}
               placeholder="Seleccione un area"
               mandatory="true"
               name="Area"
@@ -202,7 +223,7 @@ export const ListElement = ({ data, catalogo }) => {
 
           <div className="input-1c">
             <Select
-              label="Categoría de interés"
+              label="Categoría de interés principal"
               placeholder={categoriasInteres ? "Seleccione una categoría" : ""}
               mandatory="true"
               name="Categoria"
@@ -214,27 +235,29 @@ export const ListElement = ({ data, catalogo }) => {
 
           <div className="input-1c">
             <Select
-              label={"Segunda Área de interés"}
+              label={"Área de interés secundaria"}
               placeholder="Seleccione un area"
               onChange={onChooseAreaOptional}
               options={areaInteres}
               name="AreaOpcional"
               register={register}
-            />
-          </div>
-
-          <div className="input-1c">
-            <Select
-              label={"Categoría de interés"}
-              placeholder={
-                categoriasInteresOpcional ? "Seleccione una categoría" : ""
-              }
-              options={categoriasInteresOpcional}
-              name="CategoriaOpcional"
-              register={register}
+              mandatory={false}
               errors={errors}
             />
           </div>
+
+          <Select
+            label={"Categoría de interés secundaria"}
+            placeholder={
+              categoriasInteresOpcional ? "Seleccione una categoría" : ""
+            }
+            options={categoriasInteresOpcional}
+            name="CategoriaOpcional"
+            {...(categoriasInteresOpcional && {
+              register: register,
+              errors: errors,
+            })}
+          />
           <div className="container-btn-modal-area">
             <PrimaryButton
               value="Cancelar"

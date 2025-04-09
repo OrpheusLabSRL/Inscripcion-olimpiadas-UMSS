@@ -59,7 +59,7 @@ export const RegisterTutor = () => {
 
         <div className="input-1c">
           <Input
-            label={"Nombre"}
+            label={"Nombre(s)"}
             placeholder="Ingrese nombre(s) del tutor"
             mandatory="true"
             name="Nombre"
@@ -71,7 +71,7 @@ export const RegisterTutor = () => {
 
         <div className="input-1c">
           <Input
-            label={"Apellido"}
+            label={"Apellido(s)"}
             placeholder="Ingrese apellido(s) del tutor"
             mandatory="true"
             name="Apellido"
