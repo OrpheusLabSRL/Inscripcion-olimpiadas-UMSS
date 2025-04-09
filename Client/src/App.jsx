@@ -12,13 +12,16 @@ import ManageCategoria from "./features/administration/pages/ManageCategoria";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageBaseData from "./features/administration/pages/ManageBaseData";
 import PrivateRoute from "./components/auth/PrivateRoute";
+import AdminLayout from "./layouts/AdminLayout";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
 
   const showSidebar =
-    location.pathname !== "/" && location.pathname !== "/register/tutor-form";
+    location.pathname !== "/" &&
+    location.pathname !== "/register/tutor-form" &&
+    !location.pathname.startsWith("/admin");
 
   // Simular usuario logueado
   const user = {
@@ -46,47 +49,49 @@ function App() {
             <Route path="listRegistered" element={<ListRegistered />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
 
-            {/* Rutas protegidas (solo admin) */}
-            <Route
-              path="/admin/areas"
-              element={
-                <PrivateRoute
-                  element={<ManageArea />}
-                  allowedRoles={["admin"]}
-                  userRole={user.role}
-                />
-              }
-            />
-            <Route
-              path="/admin/categorias"
-              element={
-                <PrivateRoute
-                  element={<ManageCategoria />}
-                  allowedRoles={["admin"]}
-                  userRole={user.role}
-                />
-              }
-            />
-            <Route
-              path="/admin/olimpiadas"
-              element={
-                <PrivateRoute
-                  element={<ManageOlympiads />}
-                  allowedRoles={["admin"]}
-                  userRole={user.role}
-                />
-              }
-            />
-            <Route
-              path="/admin/base-data"
-              element={
-                <PrivateRoute
-                  element={<ManageBaseData />}
-                  allowedRoles={["admin"]}
-                  userRole={user.role}
-                />
-              }
-            />
+            {/* Rutas bajo AdminLayout */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route
+                path="areas"
+                element={
+                  <PrivateRoute
+                    element={<ManageArea />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
+              <Route
+                path="categorias"
+                element={
+                  <PrivateRoute
+                    element={<ManageCategoria />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
+              <Route
+                path="olimpiadas"
+                element={
+                  <PrivateRoute
+                    element={<ManageOlympiads />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
+              <Route
+                path="base-data"
+                element={
+                  <PrivateRoute
+                    element={<ManageBaseData />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
+            </Route>
           </Routes>
         </div>
       </div>
