@@ -29,14 +29,15 @@ export const TutorForm = () => {
     let filteredValue = value;
     if (name === "nombre" || name === "apellido") {
       filteredValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
-      if (name === "nombre" && filteredValue.length > 30) return;
-      if (name === "apellido" && filteredValue.length > 30) return;
+      if (filteredValue.length > 50) {
+        setErrors({...errors, [name]: "Máximo 50 caracteres permitidos"});
+        setFormData({...formData, [name]: filteredValue.slice(0, 50)});
+        return;
+      }
     } else if (name === "carnet") {
       filteredValue = value.replace(/[^a-zA-Z0-9]/g, "");
-      if (filteredValue.length > 15) return;
     } else if (name === "telefono") {
       filteredValue = value.replace(/[^0-9]/g, "");
-      if (filteredValue.length > 15) return;
     }
     
     setFormData({
@@ -66,6 +67,8 @@ export const TutorForm = () => {
         case "apellido":
           if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
             error = "Solo se permiten caracteres alfabéticos";
+          } else if (value.length > 50) {
+            error = "Máximo 50 caracteres permitidos";
           }
           break;
         case "email":
@@ -76,11 +79,22 @@ export const TutorForm = () => {
         case "carnet":
           if (!/^[a-zA-Z0-9]+$/.test(value)) {
             error = "Solo se permiten caracteres alfanuméricos";
+          } else if (value.length > 12) {
+            error = "Máximo 12 caracteres permitidos";
+          } else if (value.length < 6) {
+            error = "Mínimo 6 caracteres requeridos";
           }
           break;
         case "telefono":
           if (!/^[0-9]+$/.test(value)) {
             error = "Solo se permiten números";
+          } else if (value.length !== 8) {
+            error = "Debe tener exactamente 8 dígitos";
+          }
+          break;
+        case "tipoTutor":
+          if (!value) {
+            error = "Seleccione un tipo de tutor";
           }
           break;
         default:
@@ -101,14 +115,11 @@ export const TutorForm = () => {
     const fieldsToValidate = ["nombre", "apellido", "tipoTutor", "carnet", "telefono", "email"];
     
     fieldsToValidate.forEach(field => {
-      if (!formData[field].trim()) {
-        newErrors[field] = "Este campo es requerido";
+      validateField(field, formData[field]);
+      if (!formData[field].trim() || errors[field]) {
+        newErrors[field] = errors[field] || "Este campo es requerido";
       }
     });
-    
-    if (!validateEmail(formData.email) && formData.email.trim()) {
-      newErrors.email = "Email no válido";
-    }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -119,7 +130,27 @@ export const TutorForm = () => {
     setSubmitError("");
     setSubmitSuccess("");
     
-    if (!validateForm()) return;
+    // Validación explícita antes de enviar
+    if (formData.telefono.length !== 8 || formData.carnet.length < 6 || formData.carnet.length > 12) {
+      setErrors({
+        ...errors,
+        telefono: formData.telefono.length !== 8 ? "Debe tener exactamente 8 dígitos" : errors.telefono,
+        carnet: formData.carnet.length < 6 ? "Mínimo 6 caracteres requeridos" : 
+               formData.carnet.length > 12 ? "Máximo 12 caracteres permitidos" : errors.carnet
+      });
+      return;
+    }
+    
+    if (!validateForm()) {
+      const firstErrorField = Object.keys(errors).find(field => errors[field]);
+      if (firstErrorField) {
+        document.querySelector(`[name="${firstErrorField}"]`)?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+      return;
+    }
     
     setIsSubmitting(true);
     
@@ -150,7 +181,9 @@ export const TutorForm = () => {
       console.error("Error al registrar tutor:", error);
       if (error.response) {
         if (error.response.data.error_code === 'duplicate_ci') {
-          setSubmitError("Usuario ya registrado, continue su inscripción");
+          setSubmitError("Ya existe un registro con este carnet de identidad. Por favor, continúe su inscripción.");
+        } else if (error.response.data.error_code === 'duplicate_email') {
+          setSubmitError("Ya existe un registro con este correo electrónico. Por favor, continúe su inscripción.");
         } else {
           setSubmitError(error.response.data.message || `Error ${error.response.status}`);
         }
@@ -172,7 +205,15 @@ export const TutorForm = () => {
     } else if (!validateEmail(formData.email)) {
       newErrors.email = "Email no válido";
     }
-    if (!formData.carnet.trim()) newErrors.carnet = "Carnet es requerido";
+    if (!formData.carnet.trim()) {
+      newErrors.carnet = "Carnet es requerido";
+    } else if (!/^[a-zA-Z0-9]+$/.test(formData.carnet)) {
+      newErrors.carnet = "Solo se permiten caracteres alfanuméricos";
+    } else if (formData.carnet.length > 12) {
+      newErrors.carnet = "Máximo 12 caracteres permitidos";
+    } else if (formData.carnet.length < 6) {
+      newErrors.carnet = "Mínimo 6 caracteres requeridos";
+    }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -183,7 +224,16 @@ export const TutorForm = () => {
     setSubmitError("");
     setSubmitSuccess("");
     
-    if (!validateContinueForm()) return;
+    if (!validateContinueForm()) {
+      const firstErrorField = Object.keys(errors).find(field => errors[field]);
+      if (firstErrorField) {
+        document.querySelector(`[name="${firstErrorField}"]`)?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+      return;
+    }
     
     setIsSubmitting(true);
     
@@ -226,7 +276,7 @@ export const TutorForm = () => {
 
   const getInputClass = (name) => {
     if (!touched[name]) return "";
-    return errors[name] ? "invalid-input" : "valid-input";
+    return errors[name] ? "invalid-input" : formData[name] ? "valid-input" : "";
   };
 
   return (
@@ -235,16 +285,20 @@ export const TutorForm = () => {
       <div className="tutor-form-content">
         <div className="tutor-form-container">
           <h1>Proceso de Inscripción</h1>
-          <p className="form-description">Inicia una nueva inscripción o continua si ya empezaste una</p>
+          <p className="form-description">
+            Inicia una nueva inscripción o continua si ya empezaste una
+          </p>
           
           <div className="form-options-container">
             <button 
+              type="button"
               className={`form-option ${formType === 'new' ? 'active' : ''}`}
               onClick={() => setFormType('new')}
             >
               Nueva inscripción
             </button>
             <button 
+              type="button"
               className={`form-option ${formType === 'continue' ? 'active' : ''}`}
               onClick={() => setFormType('continue')}
             >
@@ -259,38 +313,45 @@ export const TutorForm = () => {
             <form onSubmit={handleSubmit} className="form-section">
               <div className="form-grid">
                 <div className="form-group">
-                  <label>Nombre(s) <span className="required">*</span></label>
+                  <label htmlFor="nombre">Nombre(s) <span className="required">*</span></label>
                   <input 
                     type="text" 
+                    id="nombre"
                     name="nombre"
                     placeholder="Ingrese su(s) nombre(s)" 
                     value={formData.nombre}
                     onChange={handleInputChange}
                     onBlur={handleBlur}
                     className={getInputClass("nombre")}
-                    maxLength={30}
+                    maxLength={50}
                   />
-                  {errors.nombre && <span className="error-message">{errors.nombre}</span>}
+                  {touched.nombre && errors.nombre && (
+                    <span className="error-message">{errors.nombre}</span>
+                  )}
                 </div>
                 <div className="form-group">
-                  <label>Apellido(s) <span className="required">*</span></label>
+                  <label htmlFor="apellido">Apellido(s) <span className="required">*</span></label>
                   <input 
                     type="text" 
+                    id="apellido"
                     name="apellido"
                     placeholder="Ingrese su(s) apellido(s)" 
                     value={formData.apellido}
                     onChange={handleInputChange}
                     onBlur={handleBlur}
                     className={getInputClass("apellido")}
-                    maxLength={30}
+                    maxLength={50}
                   />
-                  {errors.apellido && <span className="error-message">{errors.apellido}</span>}
+                  {touched.apellido && errors.apellido && (
+                    <span className="error-message">{errors.apellido}</span>
+                  )}
                 </div>
               </div>
 
               <div className="form-group">
-                <label>Tipo de Tutor <span className="required">*</span></label>
+                <label htmlFor="tipoTutor">Tipo de Tutor <span className="required">*</span></label>
                 <select 
+                  id="tipoTutor"
                   name="tipoTutor"
                   value={formData.tipoTutor}
                   onChange={handleInputChange}
@@ -299,48 +360,54 @@ export const TutorForm = () => {
                 >
                   <option value="">Seleccione tipo de tutor</option>
                   <option value="Profesor">Profesor</option>
-                  <option value="Madre">Madre</option>
-                  <option value="Padre">Padre</option>
+                  <option value="Padre/Madre">Padre/Madre</option>
                   <option value="Tutor Legal">Tutor Legal</option>
                 </select>
-                {errors.tipoTutor && <span className="error-message">{errors.tipoTutor}</span>}
+                {touched.tipoTutor && errors.tipoTutor && (
+                  <span className="error-message">{errors.tipoTutor}</span>
+                )}
               </div>
 
               <div className="form-grid">
                 <div className="form-group">
-                  <label>Carnet de identidad <span className="required">*</span></label>
+                  <label htmlFor="carnet">Carnet de identidad <span className="required">*</span></label>
                   <input 
                     type="text" 
+                    id="carnet"
                     name="carnet"
-                    placeholder="Ingrese su carnet de identidad" 
+                    placeholder="Ingrese su carnet" 
                     value={formData.carnet}
                     onChange={handleInputChange}
                     onBlur={handleBlur}
                     className={getInputClass("carnet")}
-                    maxLength={15}
                   />
-                  {errors.carnet && <span className="error-message">{errors.carnet}</span>}
+                  {touched.carnet && errors.carnet && (
+                    <span className="error-message">{errors.carnet}</span>
+                  )}
                 </div>
                 <div className="form-group">
-                  <label>Teléfono <span className="required">*</span></label>
+                  <label htmlFor="telefono">Teléfono <span className="required">*</span></label>
                   <input 
                     type="text" 
+                    id="telefono"
                     name="telefono"
-                    placeholder="Ingrese su teléfono" 
+                    placeholder="Ingrese su teléfono (8 dígitos)" 
                     value={formData.telefono}
                     onChange={handleInputChange}
                     onBlur={handleBlur}
                     className={getInputClass("telefono")}
-                    maxLength={15}
                   />
-                  {errors.telefono && <span className="error-message">{errors.telefono}</span>}
+                  {touched.telefono && errors.telefono && (
+                    <span className="error-message">{errors.telefono}</span>
+                  )}
                 </div>
               </div>
 
               <div className="form-group">
-                <label>Correo Electrónico <span className="required">*</span></label>
+                <label htmlFor="email">Correo Electrónico <span className="required">*</span></label>
                 <input 
                   type="email" 
+                  id="email"
                   name="email"
                   placeholder="Ingrese su correo electrónico" 
                   value={formData.email}
@@ -348,14 +415,25 @@ export const TutorForm = () => {
                   onBlur={handleBlur}
                   className={getInputClass("email")}
                 />
-                {errors.email && <span className="error-message">{errors.email}</span>}
+                {touched.email && errors.email && (
+                  <span className="error-message">{errors.email}</span>
+                )}
               </div>
 
               <div className="form-buttons">
-                <button type="button" className="back-button" onClick={() => navigate(-1)}>
+                <button 
+                  type="button" 
+                  className="back-button" 
+                  onClick={() => navigate(-1)}
+                  disabled={isSubmitting}
+                >
                   Atrás
                 </button>
-                <button type="submit" className="submit-button" disabled={isSubmitting}>
+                <button 
+                  type="submit" 
+                  className="submit-button" 
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? "Enviando..." : "Siguiente"}
                 </button>
               </div>
@@ -363,9 +441,10 @@ export const TutorForm = () => {
           ) : (
             <form onSubmit={handleContinue} className="form-section">
               <div className="form-group">
-                <label>Correo Electrónico <span className="required">*</span></label>
+                <label htmlFor="continue-email">Correo Electrónico <span className="required">*</span></label>
                 <input 
                   type="email" 
+                  id="continue-email"
                   name="email"
                   placeholder="Ingrese su correo electrónico" 
                   value={formData.email}
@@ -373,29 +452,42 @@ export const TutorForm = () => {
                   onBlur={handleBlur}
                   className={getInputClass("email")}
                 />
-                {errors.email && <span className="error-message">{errors.email}</span>}
+                {touched.email && errors.email && (
+                  <span className="error-message">{errors.email}</span>
+                )}
               </div>
 
               <div className="form-group">
-                <label>Carnet de identidad <span className="required">*</span></label>
+                <label htmlFor="continue-carnet">Carnet de identidad <span className="required">*</span></label>
                 <input 
                   type="text" 
+                  id="continue-carnet"
                   name="carnet"
-                  placeholder="Ingrese su carnet de identidad" 
+                  placeholder="Ingrese su carnet " 
                   value={formData.carnet}
                   onChange={handleInputChange}
                   onBlur={handleBlur}
                   className={getInputClass("carnet")}
-                  maxLength={15}
                 />
-                {errors.carnet && <span className="error-message">{errors.carnet}</span>}
+                {touched.carnet && errors.carnet && (
+                  <span className="error-message">{errors.carnet}</span>
+                )}
               </div>
 
               <div className="form-buttons">
-                <button type="button" className="back-button" onClick={() => navigate(-1)}>
+                <button 
+                  type="button" 
+                  className="back-button" 
+                  onClick={() => navigate(-1)}
+                  disabled={isSubmitting}
+                >
                   Atrás
                 </button>
-                <button type="submit" className="submit-button" disabled={isSubmitting}>
+                <button 
+                  type="submit" 
+                  className="submit-button" 
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? "Verificando..." : "Continuar"}
                 </button>
               </div>

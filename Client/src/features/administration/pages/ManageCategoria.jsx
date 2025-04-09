@@ -2,12 +2,18 @@ import React, { useState } from "react";
 import CategoriesTable from "../components/CategoriesTable";
 import ModalAgregarCategoria from "../components/categoriaModal"; // Importa el modal
 import "../styles/General.css";
+import { useNavigate } from "react-router-dom";
 
 const CategoryList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate("/admin/base-data");
+  };
 
   const handleSubmitCategoria = (formData) => {
     console.log("Categoría enviada:", formData);
@@ -26,6 +32,9 @@ const CategoryList = () => {
         }}
       >
         <div>
+          <button onClick={goBack} className="back-button">
+            🔙 Volver
+          </button>
           <h1>Categorías</h1>
           <p>Gestiona las categorías que asociarás a las diferentes áreas</p>
         </div>

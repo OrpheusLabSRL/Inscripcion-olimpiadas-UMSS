@@ -26,22 +26,29 @@ class TutorController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nombresTutor' => 'required|string|max:50',
-            'apellidosTutor' => 'required|string|max:50',
-            'tipoTutor' => 'required|string|max:15',
+            'nombresTutor' => 'required|string|max:50|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/',
+            'apellidosTutor' => 'required|string|max:50|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/',
+            'tipoTutor' => 'required|string|in:Profesor,Padre/Madre,Tutor Legal',
             'carnetdeidentidad' => [
                 'required',
                 'string',
-                'max:15',
+                'max:12',
+                'regex:/^[a-zA-Z0-9]+$/',
                 Rule::unique('tutores', 'carnetIdentidad')
             ],
-            'telefono' => 'required|string|max:15',
+            'telefono' => 'required|string|max:8|regex:/^[0-9]+$/',
             'emailTutor' => [
                 'required',
                 'email',
                 'max:50',
                 Rule::unique('tutores', 'correo')
-            ],
+            ]
+        ], [
+            'carnetdeidentidad.regex' => 'El carnet solo debe contener letras y números',
+            'telefono.regex' => 'El teléfono solo debe contener números',
+            'nombresTutor.regex' => 'El nombre solo debe contener letras',
+            'apellidosTutor.regex' => 'El apellido solo debe contener letras',
+            'tipoTutor.in' => 'Seleccione un tipo de tutor válido'
         ]);
 
         if ($validator->fails()) {
@@ -105,7 +112,9 @@ class TutorController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'carnet' => 'required|string'
+            'carnet' => 'required|string|regex:/^[a-zA-Z0-9]+$/'
+        ], [
+            'carnet.regex' => 'El carnet solo debe contener letras y números'
         ]);
 
         if ($validator->fails()) {

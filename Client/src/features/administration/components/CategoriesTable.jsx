@@ -48,10 +48,10 @@ const CategoriesTable = () => {
                 {cat.estadoCategoria ? "Activo" : "Inactivo"}
               </span>
             </td>
-            <td>
+            {/*<td>
               <button>✏️</button>
               <button>🗑️</button>
-            </td>
+            </td>*/}
           </tr>
         ))}
       </tbody>

@@ -50,10 +50,10 @@ const AreasTable = () => {
                 {area.estadoArea ? "Activo" : "Inactivo"}
               </span>
             </td>
-            <td>
+            {/*<td>
               <button>✏️</button>
               <button>🗑️</button>
-            </td>
+            </td>*/}
           </tr>
         ))}
       </tbody>

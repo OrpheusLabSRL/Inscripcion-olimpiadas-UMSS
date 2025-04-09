@@ -22,10 +22,10 @@ class Categoria extends Model
         return $this->belongsToMany(
             Area::class,
             'area_categoria',
-            'categoria_id', // foreignKey en tabla intermedia que apunta a esta tabla
-            'area_id',      // foreignKey que apunta a la tabla 'areas'
-            'idCategoria',  // clave primaria local
-            'idArea'        // clave primaria del modelo relacionado
+            'categoria_id', 
+            'area_id',      
+            'idCategoria', 
+            'idArea'     
         )->withPivot('estadoAreaCategoria');
     }
 
