@@ -48,3 +48,7 @@ export const getAreasOlimpista = (id) =>
   inscriptionApi.get(`/olimpista/${id}/areas`);
 export const setNewInscription = (data) =>
   inscriptionApi.post("/newInscription", data);
+export const setTutor = (data) => inscriptionApi.post("/tutores", data);
+export const setContacto = (data) => inscriptionApi.post("/contacto", data);
+export const getTutoresOlimpista = (id) =>
+  inscriptionApi.get(`/olimpista/${id}/tutores`);

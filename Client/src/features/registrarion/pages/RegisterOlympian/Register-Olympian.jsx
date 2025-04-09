@@ -23,8 +23,8 @@ import { cursosBolivia, departamentosBolivia } from "./DataOptions";
 import { registerDataOlympian } from "../../../../api/inscription.api";
 
 export const RegisterOlympian = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4;
+  // const [currentStep, setCurrentStep] = useState(1);
+  // const totalSteps = 4;
   const navigation = useNavigate();
 
   const {
@@ -33,13 +33,13 @@ export const RegisterOlympian = () => {
     formState: { errors },
     watch,
     setValue,
-  } = useForm({});
+  } = useForm({
+    mode: "onChange", // Esto valida cada vez que cambias algo
+  });
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       data.id_tutor = 1;
-      console.log(data);
       await registerDataOlympian(data);
       swal("Datos registrados correctamente");
       navigation("/listRegistered", data);
