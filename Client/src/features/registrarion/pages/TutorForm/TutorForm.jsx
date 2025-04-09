@@ -29,13 +29,15 @@ export const TutorForm = () => {
     let filteredValue = value;
     if (name === "nombre" || name === "apellido") {
       filteredValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
-      if (filteredValue.length > 50) return;
+      if (filteredValue.length > 50) {
+        setErrors({...errors, [name]: "Máximo 50 caracteres permitidos"});
+        setFormData({...formData, [name]: filteredValue.slice(0, 50)});
+        return;
+      }
     } else if (name === "carnet") {
       filteredValue = value.replace(/[^a-zA-Z0-9]/g, "");
-      if (filteredValue.length > 12) return;
     } else if (name === "telefono") {
       filteredValue = value.replace(/[^0-9]/g, "");
-      if (filteredValue.length > 8) return;
     }
     
     setFormData({
@@ -79,13 +81,15 @@ export const TutorForm = () => {
             error = "Solo se permiten caracteres alfanuméricos";
           } else if (value.length > 12) {
             error = "Máximo 12 caracteres permitidos";
+          } else if (value.length < 6) {
+            error = "Mínimo 6 caracteres requeridos";
           }
           break;
         case "telefono":
           if (!/^[0-9]+$/.test(value)) {
             error = "Solo se permiten números";
-          } else if (value.length > 8) {
-            error = "Máximo 8 caracteres permitidos";
+          } else if (value.length !== 8) {
+            error = "Debe tener exactamente 8 dígitos";
           }
           break;
         case "tipoTutor":
@@ -112,7 +116,7 @@ export const TutorForm = () => {
     
     fieldsToValidate.forEach(field => {
       validateField(field, formData[field]);
-      if (!formData[field].trim()) {
+      if (!formData[field].trim() || errors[field]) {
         newErrors[field] = errors[field] || "Este campo es requerido";
       }
     });
@@ -125,6 +129,17 @@ export const TutorForm = () => {
     e.preventDefault();
     setSubmitError("");
     setSubmitSuccess("");
+    
+    // Validación explícita antes de enviar
+    if (formData.telefono.length !== 8 || formData.carnet.length < 6 || formData.carnet.length > 12) {
+      setErrors({
+        ...errors,
+        telefono: formData.telefono.length !== 8 ? "Debe tener exactamente 8 dígitos" : errors.telefono,
+        carnet: formData.carnet.length < 6 ? "Mínimo 6 caracteres requeridos" : 
+               formData.carnet.length > 12 ? "Máximo 12 caracteres permitidos" : errors.carnet
+      });
+      return;
+    }
     
     if (!validateForm()) {
       const firstErrorField = Object.keys(errors).find(field => errors[field]);
@@ -166,7 +181,9 @@ export const TutorForm = () => {
       console.error("Error al registrar tutor:", error);
       if (error.response) {
         if (error.response.data.error_code === 'duplicate_ci') {
-          setSubmitError("Usuario ya registrado, continue su inscripción");
+          setSubmitError("Ya existe un registro con este carnet de identidad. Por favor, continúe su inscripción.");
+        } else if (error.response.data.error_code === 'duplicate_email') {
+          setSubmitError("Ya existe un registro con este correo electrónico. Por favor, continúe su inscripción.");
         } else {
           setSubmitError(error.response.data.message || `Error ${error.response.status}`);
         }
@@ -194,6 +211,8 @@ export const TutorForm = () => {
       newErrors.carnet = "Solo se permiten caracteres alfanuméricos";
     } else if (formData.carnet.length > 12) {
       newErrors.carnet = "Máximo 12 caracteres permitidos";
+    } else if (formData.carnet.length < 6) {
+      newErrors.carnet = "Mínimo 6 caracteres requeridos";
     }
     
     setErrors(newErrors);
@@ -341,8 +360,7 @@ export const TutorForm = () => {
                 >
                   <option value="">Seleccione tipo de tutor</option>
                   <option value="Profesor">Profesor</option>
-                  <option value="Madre">Madre</option>
-                  <option value="Padre">Padre</option>
+                  <option value="Padre/Madre">Padre/Madre</option>
                   <option value="Tutor Legal">Tutor Legal</option>
                 </select>
                 {touched.tipoTutor && errors.tipoTutor && (
@@ -357,12 +375,11 @@ export const TutorForm = () => {
                     type="text" 
                     id="carnet"
                     name="carnet"
-                    placeholder="Ingrese su carnet de identidad" 
+                    placeholder="Ingrese su carnet" 
                     value={formData.carnet}
                     onChange={handleInputChange}
                     onBlur={handleBlur}
                     className={getInputClass("carnet")}
-                    maxLength={12}
                   />
                   {touched.carnet && errors.carnet && (
                     <span className="error-message">{errors.carnet}</span>
@@ -374,12 +391,11 @@ export const TutorForm = () => {
                     type="text" 
                     id="telefono"
                     name="telefono"
-                    placeholder="Ingrese su teléfono" 
+                    placeholder="Ingrese su teléfono (8 dígitos)" 
                     value={formData.telefono}
                     onChange={handleInputChange}
                     onBlur={handleBlur}
                     className={getInputClass("telefono")}
-                    maxLength={8}
                   />
                   {touched.telefono && errors.telefono && (
                     <span className="error-message">{errors.telefono}</span>
@@ -447,12 +463,11 @@ export const TutorForm = () => {
                   type="text" 
                   id="continue-carnet"
                   name="carnet"
-                  placeholder="Ingrese su carnet de identidad" 
+                  placeholder="Ingrese su carnet " 
                   value={formData.carnet}
                   onChange={handleInputChange}
                   onBlur={handleBlur}
                   className={getInputClass("carnet")}
-                  maxLength={12}
                 />
                 {touched.carnet && errors.carnet && (
                   <span className="error-message">{errors.carnet}</span>
