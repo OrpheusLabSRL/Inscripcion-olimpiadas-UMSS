@@ -50,10 +50,10 @@ const OlympiadsTable = () => {
                 {item.estadoOlimpiada ? "Activo" : "Finalizado"}
               </span>
             </td>
-            <td>
+            {/*<td>
               <button>✏️</button>
               <button>🗑️</button>
-            </td>
+            </td>*/}
           </tr>
         ))}
       </tbody>

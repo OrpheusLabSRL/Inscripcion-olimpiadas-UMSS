@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/ModalGeneral.css";
 import "../styles/General.css";
-import { createArea } from "../../../api/inscription.api"; // Ajustá ruta si es necesario
+import { createArea, getOlimpiadas } from "../../../api/inscription.api";
 
 const AreaModal = ({ isOpen, onClose, onSave, areas = [] }) => {
   const [formData, setFormData] = useState({
@@ -9,8 +9,24 @@ const AreaModal = ({ isOpen, onClose, onSave, areas = [] }) => {
     descripcionArea: "",
     costoArea: "",
     estadoArea: true,
-    idOlimpiada: "1",
+    idOlimpiada: "",
   });
+
+  const [olimpiadas, setOlimpiadas] = useState([]);
+
+  useEffect(() => {
+    const fetchOlimpiadas = async () => {
+      try {
+        const data = await getOlimpiadas();
+        setOlimpiadas(data.data);
+      } catch (error) {
+        console.error("Error al cargar olimpiadas:", error);
+        alert("No se pudieron cargar las versiones de olimpiadas.");
+      }
+    };
+
+    fetchOlimpiadas();
+  }, []);
 
   if (!isOpen) return null;
 
@@ -35,7 +51,8 @@ const AreaModal = ({ isOpen, onClose, onSave, areas = [] }) => {
     if (
       !formData.nombreArea.trim() ||
       !formData.descripcionArea.trim() ||
-      formData.costoArea === ""
+      formData.costoArea === "" ||
+      !formData.idOlimpiada
     ) {
       alert("Se deben llenar todos los campos obligatorios");
       return;
@@ -65,6 +82,7 @@ const AreaModal = ({ isOpen, onClose, onSave, areas = [] }) => {
         ...formData,
         costoArea: costo,
         estadoArea: formData.estadoArea ? 1 : 0,
+        idOlimpiada: parseInt(formData.idOlimpiada),
       };
 
       console.log("Registrando área:", payload);
@@ -130,6 +148,26 @@ const AreaModal = ({ isOpen, onClose, onSave, areas = [] }) => {
               onChange={handleChange}
               required
             />
+          </div>
+
+          {/* Desplegable de versiones de olimpiada */}
+          <div className="form-group">
+            <label>
+              Versión de Olimpiada <span style={{ color: "red" }}>*</span>
+            </label>
+            <select
+              name="idOlimpiada"
+              value={formData.idOlimpiada}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Selecciona una versión</option>
+              {olimpiadas.map((olimp) => (
+                <option key={olimp.idOlimpiada} value={olimp.idOlimpiada}>
+                  {`${olimp.version} - ${olimp.nombreOlimpiada}`}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="form-group">
