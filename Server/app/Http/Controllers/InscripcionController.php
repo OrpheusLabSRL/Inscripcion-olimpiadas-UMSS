@@ -8,35 +8,73 @@ use App\Models\Inscripcion;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Olimpista;
+use Illuminate\Support\Facades\DB;
 
 class InscripcionController extends Controller
 {
     public function store(Request $request)
-    {
+{
+    DB::beginTransaction();
+    try {
+        $inscripciones = [];
 
+        // Combinación principal
         $areaCategoria = AreaCategoria::where('area_id', $request->Area)
-        ->where('categoria_id', $request->Categoria)
-        ->first();
+            ->where('categoria_id', $request->Categoria)
+            ->first();
 
-    if (!$areaCategoria) {
-        return response()->json([
-            'message' => 'No se encontró una combinación válida de área y categoría.'
-        ], 404);
-    }
-        $inscripcion = Inscripcion::create([
+        if (!$areaCategoria) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'No se encontró una combinación válida de Área y Categoría principal.'
+            ], 404);
+        }
+
+        $inscripciones[] = Inscripcion::create([
             'estado' => $request->estado,
-            'fechaInicio' => Carbon::now()->toDateString(), // fecha actual
+            'fechaInicio' => Carbon::now()->toDateString(),
             'fechaFin' => Carbon::now()->addDays(5),
             'id_olimpista' => $request->id_olimpista,
-            'id_AreaCategoria' =>$areaCategoria->id_AreaCategoria,
+            'id_AreaCategoria' => $areaCategoria->id_AreaCategoria,
         ]);
 
-        return response()->json([
-            'message' => 'Inscripción creada exitosamente.',
-            'data' => $inscripcion
-        ], 201);
-    }
+        // Combinación opcional, solo si se envió
+        if (!empty($request->AreaOpcional) && !empty($request->CategoriaOpcional)) {
+            $areaCategoriaOpcional = AreaCategoria::where('area_id', $request->AreaOpcional)
+                ->where('categoria_id', $request->CategoriaOpcional)
+                ->first();
 
+            if (!$areaCategoriaOpcional) {
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'No se encontró una combinación válida de Área y Categoría opcional.'
+                ], 404);
+            }
+
+            $inscripciones[] = Inscripcion::create([
+                'estado' => $request->estado,
+                'fechaInicio' => Carbon::now()->toDateString(),
+                'fechaFin' => Carbon::now()->addDays(5),
+                'id_olimpista' => $request->id_olimpista,
+                'id_AreaCategoria' => $areaCategoriaOpcional->id_AreaCategoria,
+            ]);
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'message' => 'Inscripción(es) creada(s) exitosamente.',
+            'data' => $inscripciones
+        ], 201);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json([
+            'message' => 'Error al crear las inscripciones.',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
     public function getAreaByOlimpista($id_olimpista)
     {
         // Verificar si el olimpista existe

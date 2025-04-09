@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\InformacionContactoController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\OlimpistaController;
 use Illuminate\Http\Request;
@@ -45,7 +46,9 @@ Route::get('/tutor/{id_tutor}/estudiantes', [TutorController::class, 'getEstudia
 Route::get('/catalogoCompleto', [AreaController::class, 'getProgramaCompleto']);
 Route::post('/newInscription', [InscripcionController::class, 'store']);
 Route::get('/olimpista/{id}/areas', [InscripcionController::class, 'getAreaByOlimpista']);
+Route::get('/olimpista/{id}/tutores', [TutorController::class, 'getTutoresByOlimpista']);
 
 // New Tutor Routes
 Route::post('/tutores', [TutorController::class, 'store']);
+Route::post('/contacto', [InformacionContactoController::class, 'store']);
 Route::get('/tutores/verificar', [TutorController::class, 'checkExistingTutor']);
