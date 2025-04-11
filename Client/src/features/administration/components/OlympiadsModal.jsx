@@ -121,7 +121,7 @@ const OlympiadsModal = ({ isOpen, onClose, onSave }) => {
 
           <div className="form-group">
             <label>
-              Gestión <span style={{ color: "red" }}>*</span>
+              Versión <span style={{ color: "red" }}>*</span>
             </label>
             <input
               type="number"
