@@ -8,7 +8,6 @@ const AdminLayout = () => {
   return (
     <div className="admin-layout">
       <AdminSidebar isOpen={isOpen} setIsOpen={setIsOpen} />{" "}
-      {/* ✅ se pasan las props */}
       <main className="admin-content">
         <Outlet />
       </main>

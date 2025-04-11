@@ -33,12 +33,13 @@ body {
 
 .close-button {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 1.5rem;
+  top: 0.8rem;
+  right: 0.8rem;
+  font-size: 1.3rem;
   background: none;
   border: none;
   cursor: pointer;
+  color: #333;
 }
 
 .modal-title {
@@ -47,11 +48,19 @@ body {
   margin-bottom: 1.5rem;
 }
 
+/* MODIFICADO: Eliminar font-size pequeño que afectaba los labels */
 .form-group {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
-  font-size: 1rem;
+}
+
+/* NUEVO: Estilo para todos los labels dentro del modal */
+.modal-content label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 0.3rem;
 }
 
 .form-group input {
@@ -59,11 +68,14 @@ body {
   border-radius: 6px;
   border: 1px solid #ccc;
 }
-.modal-label {
+
+/* Eliminar esta clase si no la usás directamente en JSX */
+.label {
   font-size: 0.85rem;
   font-weight: 500;
   color: #444;
 }
+
 .form-row {
   display: flex;
   justify-content: space-between;
@@ -75,6 +87,7 @@ body {
   display: flex;
   flex-direction: column;
 }
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -100,16 +113,6 @@ body {
   background: #2563eb;
   color: white;
 }
-.close-button {
-  position: absolute;
-  top: 0.8rem;
-  right: 0.8rem;
-  font-size: 1.3rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #333;
-}
 
 .checkbox-row label {
   display: flex;
@@ -126,5 +129,79 @@ body {
 .error-message {
   color: #dc2626;
   font-size: 0.85rem;
-  margin-top: 0.2rem;
+  margin-top: 0.25rem;
+  background: #ffecec;
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+.input-error {
+  border: 2px solid #dc2626;
+  background-color: #ffecec;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.checkbox-list {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 50%;
+  margin-left: auto;
+}
+
+.checkbox-list-item {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.checkbox-list-item:last-child {
+  margin-bottom: 0;
+}
+
+.checkbox-list-item label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.checkbox-list-item label:hover {
+  background-color: #f3f4f6;
+}
+
+.checkbox-list-item input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+.toggle-button {
+  background-color: #f3f4f6;
+  color: #333;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-bottom: 0.6rem;
+  transition: background 0.2s ease;
+}
+
+.toggle-button:hover {
+  background-color: #e5e7eb;
 }

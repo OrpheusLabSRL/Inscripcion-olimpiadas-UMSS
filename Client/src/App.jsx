@@ -18,15 +18,15 @@ function App() {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
 
-  const showSidebar =
-    location.pathname !== "/" &&
-    location.pathname !== "/register/tutor-form" &&
-    !location.pathname.startsWith("/admin");
-
-  // Simular usuario logueado
   const user = {
     role: "admin", // Cambia a "user" para probar restricciones
   };
+
+  const showSidebar =
+    user.role !== "admin" &&
+    location.pathname !== "/" &&
+    location.pathname !== "/register/tutor-form";
+  !location.pathname.startsWith("/admin");
 
   return (
     <div className="app-container">
