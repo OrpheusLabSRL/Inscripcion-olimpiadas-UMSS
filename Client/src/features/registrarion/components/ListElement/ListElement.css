@@ -7,7 +7,7 @@
 .list-data-header {
   display: grid;
   /* grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); */
-  grid-template-columns: 20px 110px 110px 70px 80px 120px 60px 100px 80px 80px;
+  grid-template-columns: 20px 110px 110px 70px 100px 100px 60px 100px 80px 80px;
   width: 1280px;
   column-gap: 50px;
 }
@@ -21,8 +21,8 @@
 }
 
 .label-area {
-  background-color: #3b82f6;
-  color: white;
+  background-color: var(--tertiary-color);
+  color: rgb(0, 0, 0);
   padding: 4px 12px;
   border-radius: 16px;
   margin: 4px;
@@ -35,6 +35,7 @@
 
 .btn-add-area button {
   background: var(--primary-color);
+  color: #fff;
 }
 
 .containter-registered-area > h5 {
@@ -51,6 +52,16 @@
   justify-content: space-between;
 }
 
-.btn-modal-area{
+.btn-modal-area {
   width: 130px;
+}
+
+.container-form-areas {
+  background-color: #fff;
+  color: #000;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  max-width: 600px;
+  border-radius: 10px;
+  column-gap: 20px;
 }

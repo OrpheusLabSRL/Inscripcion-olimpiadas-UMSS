@@ -12,96 +12,92 @@ import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
 //react
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink, useLocation } from "react-router-dom";
+import { IoArrowBackCircle } from "react-icons/io5";
+import swal from "sweetalert";
+
+//utils
+import { tipoTutor } from "./DataOptions";
+
+//api
+import { setTutor, setContacto } from "../../../../api/inscription.api";
 
 export const RegisterTutor = () => {
-  const [currentStep, setCurrentStep] = useState(2);
-  const totalSteps = 4;
+  // const [currentStep, setCurrentStep] = useState(2);
+  // const totalSteps = 4;
   const navigation = useNavigate();
+  const location = useLocation();
+  const { id_olimpista } = location.state || {};
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
     setValue,
-  } = useForm({});
+  } = useForm({
+    mode: "onChange",
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const onSubmit = async (data) => {
-    navigation("/register/tutor", data);
+    console.log(data);
+    const dataContacto = {
+      correo_contacto: data.Email_contacto,
+      pertenece_correo: data.Pertenece_Email,
+      numero_contacto: data.Numero_contacto,
+      pertenece_numero: data.Pertenece_Numero,
+      id_olimpista,
+    };
+
+    const dataTutor = {
+      nombresTutor: data.Nombre,
+      apellidosTutor: data.Apellido,
+      tipoTutor: data.Tipo_Tutor,
+      emailTutor: data.Email,
+      telefono: data.Numero_Celular,
+      carnetdeidentidad: data.Ci,
+      id_olimpista,
+    };
+
+    console.log("el data contacto es", dataContacto);
+
+    try {
+      const resTutor = await setTutor(dataTutor);
+      const resContacto = await setContacto(dataContacto);
+      swal("Datos registrados correctamente");
+      navigation("/listRegistered", data);
+    } catch (error) {
+      console.log(error);
+      swal("Error al registrar los datos");
+    }
   };
 
   return (
     <div className="container-form">
-      <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
+      {/* <ProgressBar currentStep={currentStep} totalSteps={totalSteps} /> */}
+      <NavLink to={"/listRegistered"}>
+        <IoArrowBackCircle className="btn-back" />
+      </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
-          <h1>Datos de contacto y tutores</h1>
+          <h1>Registro de datos de tutor legal</h1>
         </div>
 
-        <div className="input-2c">
+        {/* <div className="input-2c">
           <h2>Información de contacto</h2>
-        </div>
+        </div> */}
+
+        {/* <div className="input-2c">
+          <h2>Datos de tutor legal</h2>
+        </div> */}
 
         <div className="input-1c">
           <Input
-            label={"Correo electrónico de contacto"}
-            placeholder="ejemplo@correo.com"
-            mandatory="true"
-            name="Email_contacto"
-            register={register}
-            validationRules={Validator.email}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"¿A quién pertenece el correo?"}
-            placeholder="Seleccione una opción"
-            mandatory="true"
-            name="Pertenece_Email"
-            register={register}
-            validationRules={Validator.pertenece_correo}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Input
-            label={"Número de celular de contacto"}
-            placeholder="Ingrese número de celular"
-            mandatory="true"
-            name="Numero_contacto"
-            register={register}
-            validationRules={Validator.numero}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"¿A quién pertenece el número?"}
-            placeholder="Seleccione una opción"
-            mandatory="true"
-            name="Pertenece_Numero"
-            register={register}
-            validationRules={Validator.pertenece_numero}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-2c">
-          <h2>Datos del tutor</h2>
-        </div>
-
-        <div className="input-1c">
-          <Input
-            label={"Nombre"}
-            placeholder="Ingrese nombre"
+            label={"Nombre(s)"}
+            placeholder="Ingrese nombre(s) del tutor"
             mandatory="true"
             name="Nombre"
             register={register}
@@ -112,8 +108,8 @@ export const RegisterTutor = () => {
 
         <div className="input-1c">
           <Input
-            label={"Apellido"}
-            placeholder="Ingrese apellido"
+            label={"Apellido(s)"}
+            placeholder="Ingrese apellido(s) del tutor"
             mandatory="true"
             name="Apellido"
             register={register}
@@ -127,6 +123,7 @@ export const RegisterTutor = () => {
             label={"Tipo de tutor"}
             placeholder="Seleccione tipo"
             mandatory="true"
+            options={tipoTutor}
             name="Tipo_Tutor"
             register={register}
             validationRules={Validator.tipo_tutor}
@@ -161,7 +158,7 @@ export const RegisterTutor = () => {
         <div className="input-1c">
           <Input
             label={"Carnet de identidad"}
-            placeholder="Ingrese CI"
+            placeholder="Ingrese número de CI del tutor"
             mandatory="true"
             name="Ci"
             register={register}
@@ -170,12 +167,62 @@ export const RegisterTutor = () => {
           />
         </div>
 
-        <div>
-          <NextPage value="Atrás" to="/register" />
+        <div className="input-1c">
+          <Input
+            label={"Correo electrónico de contacto"}
+            placeholder="ejemplo@correo.com"
+            mandatory="true"
+            name="Email_contacto"
+            register={register}
+            validationRules={Validator.email}
+            errors={errors}
+          />
         </div>
 
+        <div className="input-1c">
+          <Select
+            label={"¿A quién pertenece el correo?"}
+            placeholder="Seleccione una opción"
+            mandatory="true"
+            options={tipoTutor}
+            name="Pertenece_Email"
+            register={register}
+            validationRules={Validator.pertenece_correo}
+            errors={errors}
+          />
+        </div>
+
+        <div className="input-1c">
+          <Input
+            label={"Número de celular de contacto"}
+            placeholder="Ingrese número de celular"
+            mandatory="true"
+            name="Numero_contacto"
+            register={register}
+            validationRules={Validator.numero}
+            errors={errors}
+          />
+        </div>
+
+        <div className="input-1c">
+          <Select
+            label={"¿A quién pertenece el número?"}
+            placeholder="Seleccione una opción"
+            mandatory="true"
+            options={tipoTutor}
+            name="Pertenece_Numero"
+            register={register}
+            validationRules={Validator.pertenece_numero}
+            errors={errors}
+          />
+        </div>
+
+        {/* <div>
+          <NextPage value="Atrás" to="/register" />
+        </div> */}
+
         <div className="container-btn-next">
-          <PrimaryButton type="submit" value="Siguiente" />
+          <PrimaryButton type="submit" value="Registrar" />
         </div>
       </form>
     </div>

@@ -2,32 +2,37 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Categoria extends Model
 {
-    use HasFactory;
-
     protected $table = 'categorias';
+    protected $primaryKey = 'idCategoria';
+    public $timestamps = false;
+
 
     protected $fillable = [
         'nombreCategoria',
-        'estadoCategoria'
+        'estadoCategoria',
     ];
 
-    // Relacion Muchos a Muchos con Areas
+    // 🔁 Relación con áreas (tabla intermedia: area_categoria)
     public function areas()
     {
-        return $this->belongsToMany(Area::class, 'area_categoria', 'categoria_id', 'area_id')
-                    ->withPivot('estadoAreaCategoria') 
-                    ->withTimestamps(); 
+        return $this->belongsToMany(
+            Area::class,
+            'area_categoria',
+            'categoria_id', 
+            'area_id',      
+            'idCategoria', 
+            'idArea'     
+        )->withPivot('estadoAreaCategoria');
     }
 
+    // 🔁 Relación con grados (tabla intermedia: categoria_grados)
     public function grados()
-    {
-        return $this->belongsToMany(Grados::class, 'categoria_grados', 'categoria_id', 'grado_id')
-                    ->withPivot('estadoCategoriaGrado') 
-                    ->withTimestamps(); 
-    }
+{
+    return $this->belongsToMany(Grados::class, 'categoria_grados', 'categoria_id', 'grado_id')
+                ->withPivot('estadoCategoriaGrado')->withTimestamps();
+}
 }

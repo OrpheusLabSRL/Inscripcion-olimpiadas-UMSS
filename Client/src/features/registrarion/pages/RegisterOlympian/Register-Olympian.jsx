@@ -5,13 +5,15 @@ import "./RegisterOlympian.css";
 import { Input } from "../../../../components/inputs/Input";
 import { Select } from "../../../../components/inputs/Select";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
+import { NextPage } from "../../../../components/Buttons/NextPage";
 
 //react
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import swal from "sweetalert";
+import { IoArrowBackCircle } from "react-icons/io5";
 
 //utils
 import { Validator } from "./ValidationRules";
@@ -21,8 +23,8 @@ import { cursosBolivia, departamentosBolivia } from "./DataOptions";
 import { registerDataOlympian } from "../../../../api/inscription.api";
 
 export const RegisterOlympian = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4;
+  // const [currentStep, setCurrentStep] = useState(1);
+  // const totalSteps = 4;
   const navigation = useNavigate();
 
   const {
@@ -31,11 +33,13 @@ export const RegisterOlympian = () => {
     formState: { errors },
     watch,
     setValue,
-  } = useForm({});
+  } = useForm({
+    mode: "onChange", // Esto valida cada vez que cambias algo
+  });
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
+      data.id_tutor = 1;
       await registerDataOlympian(data);
       swal("Datos registrados correctamente");
       navigation("/listRegistered", data);
@@ -47,20 +51,23 @@ export const RegisterOlympian = () => {
 
   return (
     <div className="container-form">
-      <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
+      {/* <ProgressBar currentStep={currentStep} totalSteps={totalSteps} /> */}
+      <NavLink to={"/listRegistered"}>
+        <IoArrowBackCircle className="btn-back" />
+      </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
-          <h1>Inscripción Olimpiada Oh! SanSi</h1>
+          <h1>Registro de datos del Olimpista</h1>
         </div>
 
-        <div className="input-2c">
+        {/* <div className="input-2c">
           <h2>Datos del postulante</h2>
-        </div>
+        </div> */}
 
         <div className="input-1c">
           <Input
-            label={"Nombre"}
-            placeholder="Ingrese sus nombres"
+            label={"Nombre(s)"}
+            placeholder="Ingrese nombre(s) del olimpista"
             mandatory="true"
             name="Nombre"
             register={register}
@@ -71,8 +78,8 @@ export const RegisterOlympian = () => {
 
         <div className="input-1c">
           <Input
-            label={"Apellidos"}
-            placeholder="Ingrese sus apellidos"
+            label={"Apellido(s)"}
+            placeholder="Ingrese apellido(s) del olimpista"
             mandatory="true"
             name="Apellido"
             register={register}
@@ -84,7 +91,7 @@ export const RegisterOlympian = () => {
         <div className="input-1c">
           <Input
             label={"Fecha de nacimiento"}
-            placeholder="Ingrese sus apellidos"
+            placeholder="Ingrese la fecha de nacimiento del olimpista"
             type="date"
             mandatory="true"
             name="FechaNacimiento"
@@ -97,7 +104,7 @@ export const RegisterOlympian = () => {
         <div className="input-1c">
           <Input
             label={"Carnet de identidad"}
-            placeholder="Ingrese su CI"
+            placeholder="Ingrese número de CI del olimpista"
             mandatory="true"
             name="CarnetIdentidad"
             register={register}
@@ -145,7 +152,7 @@ export const RegisterOlympian = () => {
         <div className="input-1c">
           <Input
             label={"Provincia"}
-            placeholder="Ingrese su provincia"
+            placeholder="Ingrese la provincia"
             mandatory="true"
             name="Provincia"
             register={register}

@@ -12,11 +12,14 @@ class Olimpista extends Model
 
     protected $table = 'olimpistas';
 
+    protected $primaryKey = 'id_olimpista';
+
     protected $fillable = [
-        'correoComp',
-        'apellidosComp',
-        'NombresComp',
-        'carnetComp',
+        'correo',
+        'apellido',
+        'Nombre',
+        'carnetIdentidad',
+        'curso',
         'fechaNacimiento',
         'colegio',
         'departamento',
@@ -26,7 +29,13 @@ class Olimpista extends Model
 
     public function inscripciones()
 {
-    return $this->hasMany(Inscripcion::class, 'idOlimpista', 'idOlimpista');
+    return $this->hasMany(Inscripcion::class, 'id_olimpista', 'id_olimpista');
 }
+
+public function tutores()
+{
+    return $this->belongsToMany(Tutor::class, 'olimpista_tutor', 'id_olimpista', 'id_tutor');
+}
+
 
 }
