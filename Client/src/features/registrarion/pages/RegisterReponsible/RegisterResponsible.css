@@ -19,13 +19,14 @@
   grid-column: span 2;
 }
 
-.container-btn-next-olympian {
+.container-btn-next {
   grid-column-start: 2;
-}
-
-.container-btn-back-olympian{
   display: flex;
   justify-content: flex-end;
+}
+
+.container-btn-next button {
+  background-color: var(--tertiary-color);
 }
 
 .btn-back {

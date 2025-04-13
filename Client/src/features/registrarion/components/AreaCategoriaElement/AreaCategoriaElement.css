@@ -1,0 +1,8 @@
+.option-add-tutor > p {
+  text-decoration: underline;
+  color: var(--primary-color);
+}
+
+.option-add-tutor > p:hover {
+  color: #000;
+}

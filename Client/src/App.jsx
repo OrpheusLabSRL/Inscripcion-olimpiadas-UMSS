@@ -13,6 +13,8 @@ import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageBaseData from "./features/administration/pages/ManageBaseData";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
+import { RegisterResponsible } from "./features/registrarion/pages/RegisterReponsible/RegisterResponsible";
+import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea/RegisterOlympianArea";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
@@ -41,13 +43,18 @@ function App() {
           <Routes>
             {/* Rutas públicas */}
             <Route path="/" element={<MainHome />} />
-            <Route
-              path="listRegistered/register"
-              element={<RegisterOlympian />}
-            />
-            <Route path="listRegistered/tutor" element={<RegisterTutor />} />
+            <Route path="register/olympian" element={<RegisterOlympian />} />
+            <Route path="register/tutor-legal" element={<RegisterTutor />} />
             <Route path="listRegistered" element={<ListRegistered />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
+            <Route
+              path="/register/responsible"
+              element={<RegisterResponsible />}
+            />
+            <Route
+              path="/Register/OlympianArea"
+              element={<RegisterOlympianArea />}
+            />
 
             {/* Rutas bajo AdminLayout */}
             <Route path="/admin" element={<AdminLayout />}>

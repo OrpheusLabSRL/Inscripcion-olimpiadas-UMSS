@@ -39,9 +39,9 @@ export const RegisterOlympian = () => {
 
   const onSubmit = async (data) => {
     try {
-      data.id_tutor = 1;
-      await registerDataOlympian(data);
-      swal("Datos registrados correctamente");
+      // data.id_tutor = 1;
+      // await registerDataOlympian(data);
+      // swal("Datos registrados correctamente");
       navigation("/listRegistered", data);
     } catch (error) {
       console.log(error);
@@ -172,9 +172,12 @@ export const RegisterOlympian = () => {
             errors={errors}
           />
         </div>
+        <div className="container-btn-back-olympian input-1c">
+          <NextPage to={"/"} value="Cancelar" />
+        </div>
 
-        <div className="container-btn-next">
-          <PrimaryButton type="submit" value="Registrar" />
+        <div className="container-btn-next-olympian input-1c">
+          <PrimaryButton type="submit" value="Siguiente" />
         </div>
       </form>
     </div>

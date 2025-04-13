@@ -34,7 +34,6 @@ export const ListElement = ({ data, catalogo }) => {
   const [categoriasInteresOpcional, setCategoriasInteresOpcional] =
     useState(null);
 
-  const [areaElegida, setAreaElegida] = useState("");
 
   const {
     register,
