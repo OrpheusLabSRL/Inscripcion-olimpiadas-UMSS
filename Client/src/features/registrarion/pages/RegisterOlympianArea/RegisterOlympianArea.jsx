@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import swal from "sweetalert";
 import { useForm } from "react-hook-form";
+import { IoArrowBackCircle } from "react-icons/io5";
+import { NavLink, useNavigate } from "react-router-dom";
 
 //api
 import { getCatalogoCompleto } from "../../../../api/inscription.api";
@@ -21,15 +23,36 @@ import { filtrarAreasPorCurso, filtrarCategoriasPorCursoYArea } from "./util";
 export const RegisterOlympianArea = () => {
   const [catalogo, setCatalogo] = useState([]);
   const [areaInteres, setAreaInteres] = useState([]);
-  const [categoriasInteres, setCategoriasInteres] = useState(null);
-  const [areaElements, setAreaElements] = useState([0]); // Estado para controlar cuántos elementos hay
+  const [categoriasInteres, setCategoriasInteres] = useState(
+    JSON.parse(localStorage.getItem("CategoriasFiltradas")) || null
+  );
+  const [areaElements, setAreaElements] = useState([0]);
+  const navigation = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
     setValue,
-  } = useForm({});
+  } = useForm({
+    defaultValues: {
+      Area: localStorage.getItem("Area") || "",
+      Categoria: localStorage.getItem("Categoria") || "",
+    },
+    mode: "onChange",
+  });
+
+  const watchedArea = watch("Area");
+  const watchedCategoria = watch("Categoria");
+
+  useEffect(() => {
+    localStorage.setItem("Area", watchedArea);
+  }, [watchedArea]);
+
+  useEffect(() => {
+    localStorage.setItem("Categoria", watchedCategoria);
+  }, [watchedCategoria]);
 
   useEffect(() => {
     const allCatalogo = async () => {
@@ -55,32 +78,31 @@ export const RegisterOlympianArea = () => {
         e.target.value,
         catalogo
       );
-
-      // Si quieres manejar múltiples selecciones de categorías, necesitarás
-      // un estado más complejo, como un objeto con índices
+      localStorage.setItem(
+        "CategoriasFiltradas",
+        JSON.stringify(categoriasFiltradas)
+      );
       setCategoriasInteres(categoriasFiltradas);
+      setValue("Area", e.target.value);
     } else {
       setCategoriasInteres(null);
     }
   };
 
-  // Función para agregar un nuevo elemento AreaCategoriaElement
   const addArea = () => {
-    // Añade un nuevo índice al array de elementos
     setAreaElements([...areaElements, areaElements.length]);
   };
 
-  const onSubmit = async (dataAreas) => {
+  const onSubmit = async (data) => {
     try {
-      // dataAreas.id_olimpista = data.id_olimpista;
-      dataAreas.estado = false;
+      data.estado = false;
 
-      if (dataAreas.AreaOpcional == "" || dataAreas.CategoriaOpcional == "") {
-        delete dataAreas.AreaOpcional;
-        delete dataAreas.CategoriaOpcional;
+      if (data.AreaOpcional == "" || data.CategoriaOpcional == "") {
+        delete data.AreaOpcional;
+        delete data.CategoriaOpcional;
       }
 
-      if (dataAreas.Area == dataAreas.AreaOpcional && dataAreas.Area !== "4") {
+      if (data.Area == data.AreaOpcional && data.Area !== "4") {
         swal(
           "No se puede seleccionar la misma área",
           "No es posible registrarse en la misma area, a menos que se trate de el área de INFORMÁTICA ",
@@ -90,9 +112,9 @@ export const RegisterOlympianArea = () => {
       }
 
       if (
-        dataAreas.Area == 4 &&
-        dataAreas.AreaOpcional == 4 &&
-        dataAreas.Categoria == dataAreas.CategoriaOpcional
+        data.Area == 4 &&
+        data.AreaOpcional == 4 &&
+        data.Categoria == data.CategoriaOpcional
       ) {
         swal(
           "No se puede seleccionar la misma categoría",
@@ -115,7 +137,7 @@ export const RegisterOlympianArea = () => {
       // const updatedAreas = await getAreasOlimpista(data.id_olimpista);
       // setAreasOlimpista(updatedAreas.data.data.areas);
 
-      swal("Inscripción registrada correctamente", "", "success");
+      navigation("/register/tutor-legal", data);
     } catch (error) {
       console.log(error);
       swal("Error al registrar los datos");
@@ -123,35 +145,43 @@ export const RegisterOlympianArea = () => {
   };
 
   return (
-    <form
-      className="container-area-form-register"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="input-2c">
-        <h1>Datos de competición</h1>
-      </div>
-      {areaElements.map((index) => (
-        <AreaCategoriaElement
-          key={index}
-          areas={areaInteres}
-          categorias={categoriasInteres}
-          onChooseArea={onChooseArea(index)}
-          register={register}
-          errors={errors}
-        />
-      ))}
-      <div className="input-2c add-new-area-olympian">
-        <IoIosAddCircleOutline style={{ fontSize: "30px" }} />
-        <p onClick={addArea}>Agregar una nueva Area de Competencia</p>
-      </div>
+    <>
+      <NavLink to={"/register/olympian"}>
+        <IoArrowBackCircle className="btn-back" />
+      </NavLink>
+      <form
+        className="container-area-form-register"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="input-2c">
+          <h1>Datos de competición</h1>
+        </div>
+        {areaElements.map((index) => (
+          <AreaCategoriaElement
+            key={index}
+            areas={areaInteres}
+            categorias={categoriasInteres}
+            onChooseArea={onChooseArea(index)}
+            setValue={setValue}
+            watchedArea={watchedArea}
+            watchedCategoria={watchedCategoria}
+            register={register}
+            errors={errors}
+          />
+        ))}
+        <div className="input-2c add-new-area-olympian">
+          <IoIosAddCircleOutline style={{ fontSize: "30px" }} />
+          <p onClick={addArea}>Agregar una nueva Area de Competencia</p>
+        </div>
 
-      <div className="container-btn-back-olympian input-1c">
-        <NextPage to={"/"} value="Cancelar" />
-      </div>
+        <div className="container-btn-back-olympian input-1c">
+          <NextPage to={"/"} value="Cancelar" />
+        </div>
 
-      <div className="container-btn-next-olympian input-1c">
-        <PrimaryButton type="submit" value="Siguiente" />
-      </div>
-    </form>
+        <div className="container-btn-next-olympian input-1c">
+          <PrimaryButton type="submit" value="Siguiente" />
+        </div>
+      </form>
+    </>
   );
 };

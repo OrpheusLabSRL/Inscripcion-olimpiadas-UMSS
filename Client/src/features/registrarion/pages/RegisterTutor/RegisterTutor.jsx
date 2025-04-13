@@ -4,13 +4,11 @@ import "./RegisterTutor.css";
 //components
 import { Input } from "../../../../components/inputs/Input";
 import { Select } from "../../../../components/inputs/Select";
-import { NextPage } from "../../../../components/Buttons/NextPage";
-import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import { Validator } from "./ValidationRules";
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
 
 //react
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
@@ -19,12 +17,7 @@ import swal from "sweetalert";
 //utils
 import { tipoTutor } from "./DataOptions";
 
-//api
-import { setTutor, setContacto } from "../../../../api/inscription.api";
-
 export const RegisterTutor = () => {
-  // const [currentStep, setCurrentStep] = useState(2);
-  // const totalSteps = 4;
   const navigation = useNavigate();
   const location = useLocation();
   const { id_olimpista } = location.state || {};
@@ -35,23 +28,57 @@ export const RegisterTutor = () => {
     watch,
     setValue,
   } = useForm({
+    defaultValues: {
+      Nombre: localStorage.getItem("NombreLegal") || "",
+      Apellido: localStorage.getItem("ApellidoLegal") || "",
+      Tipo_Tutor: localStorage.getItem("TipoTutorLegal") || "",
+      Numero_Celular: localStorage.getItem("NumeroLegal") || "",
+      Email: localStorage.getItem("EmailLegal") || "",
+      Ci: localStorage.getItem("CiLegal") || "",
+    },
     mode: "onChange",
   });
+
+  const watchedNombre = watch("Nombre");
+  const watchedApellido = watch("Apellido");
+  const watchedTipoTutor = watch("Tipo_Tutor");
+  const watchedEmail = watch("Email");
+  const watchedTelefono = watch("Numero_Celular");
+  const watchedCarnetIdentidad = watch("Ci");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("NombreLegal", watchedNombre);
+  }, [watchedNombre]);
+
+  useEffect(() => {
+    localStorage.setItem("ApellidoLegal", watchedApellido);
+  }, [watchedApellido]);
+
+  useEffect(() => {
+    localStorage.setItem("TipoTutorLegal", watchedTipoTutor);
+  }, [watchedTipoTutor]);
+
+  useEffect(() => {
+    localStorage.setItem("EmailLegal", watchedEmail);
+  }, [watchedEmail]);
+
+  useEffect(() => {
+    localStorage.setItem("NumeroLegal", watchedTelefono);
+  }, [watchedTelefono]);
+
+  useEffect(() => {
+    localStorage.setItem("CiLegal", watchedCarnetIdentidad);
+  }, [watchedCarnetIdentidad]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const onSubmit = async (data) => {
-    console.log(data);
-    const dataContacto = {
-      correo_contacto: data.Email_contacto,
-      pertenece_correo: data.Pertenece_Email,
-      numero_contacto: data.Numero_contacto,
-      pertenece_numero: data.Pertenece_Numero,
-      id_olimpista,
-    };
-
     const dataTutor = {
       nombresTutor: data.Nombre,
       apellidosTutor: data.Apellido,
@@ -62,11 +89,7 @@ export const RegisterTutor = () => {
       id_olimpista,
     };
 
-    console.log("el data contacto es", dataContacto);
-
     try {
-      const resTutor = await setTutor(dataTutor);
-      const resContacto = await setContacto(dataContacto);
       swal("Datos registrados correctamente");
       navigation("/listRegistered", data);
     } catch (error) {
@@ -77,8 +100,7 @@ export const RegisterTutor = () => {
 
   return (
     <div className="container-form">
-      {/* <ProgressBar currentStep={currentStep} totalSteps={totalSteps} /> */}
-      <NavLink to={"/listRegistered"}>
+      <NavLink to={"/register/OlympianArea"}>
         <IoArrowBackCircle className="btn-back" />
       </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
@@ -86,13 +108,19 @@ export const RegisterTutor = () => {
           <h1>Registro de datos de tutor legal</h1>
         </div>
 
-        {/* <div className="input-2c">
-          <h2>Información de contacto</h2>
-        </div> */}
-
-        {/* <div className="input-2c">
-          <h2>Datos de tutor legal</h2>
-        </div> */}
+        <div className="input-1c">
+          <Input
+            label={"Carnet de identidad"}
+            placeholder="Ingrese número de CI del tutor"
+            mandatory="true"
+            name="Ci"
+            value={watchedCarnetIdentidad}
+            onChange={(e) => setValue("Ci", e.target.value)}
+            register={register}
+            validationRules={Validator.ci}
+            errors={errors}
+          />
+        </div>
 
         <div className="input-1c">
           <Input
@@ -100,6 +128,8 @@ export const RegisterTutor = () => {
             placeholder="Ingrese nombre(s) del tutor"
             mandatory="true"
             name="Nombre"
+            value={watchedNombre}
+            onChange={(e) => setValue("Nombre", e.target.value)}
             register={register}
             validationRules={Validator.nombre}
             errors={errors}
@@ -112,6 +142,8 @@ export const RegisterTutor = () => {
             placeholder="Ingrese apellido(s) del tutor"
             mandatory="true"
             name="Apellido"
+            value={watchedApellido}
+            onChange={(e) => setValue("Apellido", e.target.value)}
             register={register}
             validationRules={Validator.apellido}
             errors={errors}
@@ -125,6 +157,8 @@ export const RegisterTutor = () => {
             mandatory="true"
             options={tipoTutor}
             name="Tipo_Tutor"
+            value={watchedTipoTutor}
+            onChange={(e) => setValue("Tipo_Tutor", e.target.value)}
             register={register}
             validationRules={Validator.tipo_tutor}
             errors={errors}
@@ -137,6 +171,8 @@ export const RegisterTutor = () => {
             placeholder="Ingrese número de celular"
             mandatory="true"
             name="Numero_Celular"
+            value={watchedTelefono}
+            onChange={(e) => setValue("Numero_Celular", e.target.value)}
             register={register}
             validationRules={Validator.numero}
             errors={errors}
@@ -149,77 +185,13 @@ export const RegisterTutor = () => {
             placeholder="ejemplo@correo.com"
             mandatory="true"
             name="Email"
+            value={watchedEmail}
+            onChange={(e) => setValue("Email", e.target.value)}
             register={register}
             validationRules={Validator.email}
             errors={errors}
           />
         </div>
-
-        <div className="input-1c">
-          <Input
-            label={"Carnet de identidad"}
-            placeholder="Ingrese número de CI del tutor"
-            mandatory="true"
-            name="Ci"
-            register={register}
-            validationRules={Validator.ci}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Input
-            label={"Correo electrónico de contacto"}
-            placeholder="ejemplo@correo.com"
-            mandatory="true"
-            name="Email_contacto"
-            register={register}
-            validationRules={Validator.email}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"¿A quién pertenece el correo?"}
-            placeholder="Seleccione una opción"
-            mandatory="true"
-            options={tipoTutor}
-            name="Pertenece_Email"
-            register={register}
-            validationRules={Validator.pertenece_correo}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Input
-            label={"Número de celular de contacto"}
-            placeholder="Ingrese número de celular"
-            mandatory="true"
-            name="Numero_contacto"
-            register={register}
-            validationRules={Validator.numero}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"¿A quién pertenece el número?"}
-            placeholder="Seleccione una opción"
-            mandatory="true"
-            options={tipoTutor}
-            name="Pertenece_Numero"
-            register={register}
-            validationRules={Validator.pertenece_numero}
-            errors={errors}
-          />
-        </div>
-
-        {/* <div>
-          <NextPage value="Atrás" to="/register" />
-        </div> */}
 
         <div className="container-btn-next">
           <PrimaryButton type="submit" value="Registrar" />

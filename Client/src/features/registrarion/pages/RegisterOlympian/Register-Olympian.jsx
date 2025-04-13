@@ -4,28 +4,24 @@ import "./RegisterOlympian.css";
 //components
 import { Input } from "../../../../components/inputs/Input";
 import { Select } from "../../../../components/inputs/Select";
-import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import { NextPage } from "../../../../components/Buttons/NextPage";
 
 //react
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import { IoArrowBackCircle } from "react-icons/io5";
+import { useEffect } from "react";
 
 //utils
 import { Validator } from "./ValidationRules";
 import { cursosBolivia, departamentosBolivia } from "./DataOptions";
 
-//api
-import { registerDataOlympian } from "../../../../api/inscription.api";
-
 export const RegisterOlympian = () => {
-  // const [currentStep, setCurrentStep] = useState(1);
-  // const totalSteps = 4;
   const navigation = useNavigate();
+  const location = useLocation();
+  const previousPath = location.state?.from;
 
   const {
     register,
@@ -34,15 +30,69 @@ export const RegisterOlympian = () => {
     watch,
     setValue,
   } = useForm({
-    mode: "onChange", // Esto valida cada vez que cambias algo
+    defaultValues: {
+      Nombre: localStorage.getItem("NombreOlympian") || "",
+      Apellido: localStorage.getItem("ApellidoOlympian") || "",
+      FechaNacimiento: localStorage.getItem("FechaNacimientoOlympian") || "",
+      CarnetIdentidad: localStorage.getItem("CarnetIdentidadOlympian") || "",
+      Colegio: localStorage.getItem("ColegioOlympian") || "",
+      Curso: localStorage.getItem("CursoOlympian") || "",
+      Departamento: localStorage.getItem("DepartamentoOlympian") || "",
+      Provincia: localStorage.getItem("ProvinciaOlympian") || "",
+      Email: localStorage.getItem("EmailOlympian") || "",
+    },
+    mode: "onChange",
   });
+
+  const watchedNombre = watch("Nombre");
+  const watchedApellido = watch("Apellido");
+  const watchedFechaNacimiento = watch("FechaNacimiento");
+  const watchedCarnetIdentidad = watch("CarnetIdentidad");
+  const watchedColegio = watch("Colegio");
+  const watchedCurso = watch("Curso");
+  const watchedDepartamento = watch("Departamento");
+  const watchedProvincia = watch("Provincia");
+  const watchedEmail = watch("Email");
+
+  useEffect(() => {
+    localStorage.setItem("NombreOlympian", watchedNombre);
+  }, [watchedNombre]);
+
+  useEffect(() => {
+    localStorage.setItem("ApellidoOlympian", watchedApellido);
+  }, [watchedApellido]);
+
+  useEffect(() => {
+    localStorage.setItem("FechaNacimientoOlympian", watchedFechaNacimiento);
+  }, [watchedFechaNacimiento]);
+
+  useEffect(() => {
+    localStorage.setItem("CarnetIdentidadOlympian", watchedCarnetIdentidad);
+  }, [watchedCarnetIdentidad]);
+
+  useEffect(() => {
+    localStorage.setItem("ColegioOlympian", watchedColegio);
+  }, [watchedColegio]);
+
+  useEffect(() => {
+    localStorage.setItem("CursoOlympian", watchedCurso);
+  }, [watchedCurso]);
+
+  useEffect(() => {
+    localStorage.setItem("DepartamentoOlympian", watchedDepartamento);
+  }, [watchedDepartamento]);
+
+  useEffect(() => {
+    localStorage.setItem("ProvinciaOlympian", watchedProvincia);
+  }, [watchedProvincia]);
+
+  useEffect(() => {
+    localStorage.setItem("EmailOlympian", watchedEmail);
+  }, [watchedEmail]);
 
   const onSubmit = async (data) => {
     try {
-      // data.id_tutor = 1;
-      // await registerDataOlympian(data);
-      // swal("Datos registrados correctamente");
-      navigation("/listRegistered", data);
+      navigation("/Register/OlympianArea", data);
     } catch (error) {
       console.log(error);
       swal("Error al registrar los datos");
@@ -51,8 +101,7 @@ export const RegisterOlympian = () => {
 
   return (
     <div className="container-form">
-      {/* <ProgressBar currentStep={currentStep} totalSteps={totalSteps} /> */}
-      <NavLink to={"/listRegistered"}>
+      <NavLink to={previousPath}>
         <IoArrowBackCircle className="btn-back" />
       </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
@@ -60,16 +109,14 @@ export const RegisterOlympian = () => {
           <h1>Registro de datos del Olimpista</h1>
         </div>
 
-        {/* <div className="input-2c">
-          <h2>Datos del postulante</h2>
-        </div> */}
-
         <div className="input-1c">
           <Input
             label={"Nombre(s)"}
             placeholder="Ingrese nombre(s) del olimpista"
             mandatory="true"
             name="Nombre"
+            value={watchedNombre}
+            onChange={(e) => setValue("Nombre", e.target.value)}
             register={register}
             validationRules={Validator.nombre}
             errors={errors}
@@ -82,6 +129,8 @@ export const RegisterOlympian = () => {
             placeholder="Ingrese apellido(s) del olimpista"
             mandatory="true"
             name="Apellido"
+            value={watchedApellido}
+            onChange={(e) => setValue("Apellido", e.target.value)}
             register={register}
             validationRules={Validator.apellido}
             errors={errors}
@@ -95,6 +144,8 @@ export const RegisterOlympian = () => {
             type="date"
             mandatory="true"
             name="FechaNacimiento"
+            value={watchedFechaNacimiento}
+            onChange={(e) => setValue("FechaNacimiento", e.target.value)}
             register={register}
             validationRules={Validator.fechaNacimiento}
             errors={errors}
@@ -107,6 +158,8 @@ export const RegisterOlympian = () => {
             placeholder="Ingrese número de CI del olimpista"
             mandatory="true"
             name="CarnetIdentidad"
+            value={watchedCarnetIdentidad}
+            onChange={(e) => setValue("CarnetIdentidad", e.target.value)}
             register={register}
             validationRules={Validator.ci}
             errors={errors}
@@ -119,6 +172,8 @@ export const RegisterOlympian = () => {
             placeholder="Nombre del Colegio"
             mandatory="true"
             name="Colegio"
+            value={watchedColegio}
+            onChange={(e) => setValue("Colegio", e.target.value)}
             register={register}
             validationRules={Validator.colegio}
             errors={errors}
@@ -131,6 +186,8 @@ export const RegisterOlympian = () => {
             placeholder="Seleccione un curso"
             mandatory="true"
             name="Curso"
+            value={watchedCurso}
+            onChange={(e) => setValue("Curso", e.target.value)}
             options={cursosBolivia}
             register={register}
             errors={errors}
@@ -143,6 +200,8 @@ export const RegisterOlympian = () => {
             placeholder="Seleccione un departamento"
             mandatory="true"
             name="Departamento"
+            value={watchedDepartamento}
+            onChange={(e) => setValue("Departamento", e.target.value)}
             options={departamentosBolivia}
             register={register}
             errors={errors}
@@ -155,6 +214,8 @@ export const RegisterOlympian = () => {
             placeholder="Ingrese la provincia"
             mandatory="true"
             name="Provincia"
+            value={watchedProvincia}
+            onChange={(e) => setValue("Provincia", e.target.value)}
             register={register}
             validationRules={Validator.provincia}
             errors={errors}
@@ -167,6 +228,8 @@ export const RegisterOlympian = () => {
             placeholder="ejemplo@correo.com"
             mandatory="true"
             name="Email"
+            value={watchedEmail}
+            onChange={(e) => setValue("Email", e.target.value)}
             register={register}
             validationRules={Validator.email}
             errors={errors}

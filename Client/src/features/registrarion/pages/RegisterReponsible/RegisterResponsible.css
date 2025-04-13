@@ -35,3 +35,8 @@
   top: 20px;
   margin-left: 20px;
 }
+
+.container-btn-back-responsible {
+  display: flex;
+  justify-content: flex-end;
+}

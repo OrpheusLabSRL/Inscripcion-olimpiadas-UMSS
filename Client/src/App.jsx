@@ -15,6 +15,7 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterReponsible/RegisterResponsible";
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea/RegisterOlympianArea";
+import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional/RegisterTutorOptional";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
@@ -54,6 +55,10 @@ function App() {
             <Route
               path="/Register/OlympianArea"
               element={<RegisterOlympianArea />}
+            />
+            <Route
+              path="/Register/OlympianArea/tutorOptional"
+              element={<RegisterTutorOptional />}
             />
 
             {/* Rutas bajo AdminLayout */}

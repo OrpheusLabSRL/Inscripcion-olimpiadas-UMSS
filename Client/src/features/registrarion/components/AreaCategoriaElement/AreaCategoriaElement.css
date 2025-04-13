@@ -6,3 +6,13 @@
 .option-add-tutor > p:hover {
   color: #000;
 }
+
+.container-btn-modal-tutor {
+  grid-column-start: 2;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-modal-tutor {
+  width: 130px;
+}

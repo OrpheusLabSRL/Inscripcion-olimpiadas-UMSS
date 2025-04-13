@@ -4,27 +4,20 @@ import "./RegisterResponsible.css";
 //components
 import { Input } from "../../../../components/inputs/Input";
 import { Select } from "../../../../components/inputs/Select";
-import { NextPage } from "../../../../components/Buttons/NextPage";
-import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import { Validator } from "./ValidationRules";
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
+import { NextPage } from "../../../../components/Buttons/NextPage";
 
 //react
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, NavLink, useLocation } from "react-router-dom";
-import { IoArrowBackCircle } from "react-icons/io5";
+import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 
 //utils
 import { tipoTutor } from "./DataOptions";
 
-//api
-import { setTutor, setContacto } from "../../../../api/inscription.api";
-
 export const RegisterResponsible = () => {
-  // const [currentStep, setCurrentStep] = useState(2);
-  // const totalSteps = 4;
   const navigation = useNavigate();
   const location = useLocation();
   const { id_olimpista } = location.state || {};
@@ -35,12 +28,51 @@ export const RegisterResponsible = () => {
     watch,
     setValue,
   } = useForm({
+    defaultValues: {
+      Nombre: localStorage.getItem("NombreResponsible") || "",
+      Apellido: localStorage.getItem("ApellidoResponsible") || "",
+      Tipo_Tutor: localStorage.getItem("TipoTutorResponsible") || "",
+      Numero_Celular: localStorage.getItem("NumeroResponsible") || "",
+      Email: localStorage.getItem("EmailResponsible") || "",
+      Ci: localStorage.getItem("CiResponsible") || "",
+    },
     mode: "onChange",
   });
+
+  const watchedNombre = watch("Nombre");
+  const watchedApellido = watch("Apellido");
+  const watchedTipoTutor = watch("Tipo_Tutor");
+  const watchedEmail = watch("Email");
+  const watchedTelefono = watch("Numero_Celular");
+  const watchedCarnetIdentidad = watch("Ci");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("NombreResponsible", watchedNombre);
+  }, [watchedNombre]);
+
+  useEffect(() => {
+    localStorage.setItem("ApellidoResponsible", watchedApellido);
+  }, [watchedApellido]);
+
+  useEffect(() => {
+    localStorage.setItem("TipoTutorResponsible", watchedTipoTutor);
+  }, [watchedTipoTutor]);
+
+  useEffect(() => {
+    localStorage.setItem("EmailResponsible", watchedEmail);
+  }, [watchedEmail]);
+
+  useEffect(() => {
+    localStorage.setItem("NumeroResponsible", watchedTelefono);
+  }, [watchedTelefono]);
+
+  useEffect(() => {
+    localStorage.setItem("CiResponsible", watchedCarnetIdentidad);
+  }, [watchedCarnetIdentidad]);
 
   const onSubmit = async (data) => {
     const dataResponsible = {
@@ -53,8 +85,14 @@ export const RegisterResponsible = () => {
       id_olimpista,
     };
 
+    console.log(dataResponsible);
+    console.log("Los datos son", data);
+
     try {
-      navigation("/register/olympian", data);
+      navigation("/register/olympian", {
+        state: { from: location.pathname },
+        data,
+      });
     } catch (error) {
       console.log(error);
       swal("Error al registrar los datos");
@@ -64,9 +102,6 @@ export const RegisterResponsible = () => {
   return (
     <div className="container-form">
       {/* <ProgressBar currentStep={currentStep} totalSteps={totalSteps} /> */}
-      <NavLink to={"/listRegistered"}>
-        <IoArrowBackCircle className="btn-back" />
-      </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
           <h1>Datos de responsable de inscripción</h1>
@@ -78,6 +113,8 @@ export const RegisterResponsible = () => {
             placeholder="Ingrese número de CI del tutor"
             mandatory="true"
             name="Ci"
+            value={watchedCarnetIdentidad}
+            onChange={(e) => setValue("Ci", e.target.value)}
             register={register}
             validationRules={Validator.ci}
             errors={errors}
@@ -90,6 +127,8 @@ export const RegisterResponsible = () => {
             placeholder="Ingrese nombre(s) del tutor"
             mandatory="true"
             name="Nombre"
+            value={watchedNombre}
+            onChange={(e) => setValue("Nombre", e.target.value)}
             register={register}
             validationRules={Validator.nombre}
             errors={errors}
@@ -102,6 +141,8 @@ export const RegisterResponsible = () => {
             placeholder="Ingrese apellido(s) del tutor"
             mandatory="true"
             name="Apellido"
+            value={watchedApellido}
+            onChange={(e) => setValue("Apellido", e.target.value)}
             register={register}
             validationRules={Validator.apellido}
             errors={errors}
@@ -115,6 +156,8 @@ export const RegisterResponsible = () => {
             mandatory="true"
             options={tipoTutor}
             name="Tipo_Tutor"
+            value={watchedTipoTutor}
+            onChange={(e) => setValue("Tipo_Tutor", e.target.value)}
             register={register}
             validationRules={Validator.tipo_tutor}
             errors={errors}
@@ -127,6 +170,8 @@ export const RegisterResponsible = () => {
             placeholder="Ingrese número de celular"
             mandatory="true"
             name="Numero_Celular"
+            value={watchedTelefono}
+            onChange={(e) => setValue("Numero_Celular", e.target.value)}
             register={register}
             validationRules={Validator.numero}
             errors={errors}
@@ -139,17 +184,18 @@ export const RegisterResponsible = () => {
             placeholder="ejemplo@correo.com"
             mandatory="true"
             name="Email"
+            value={watchedEmail}
+            onChange={(e) => setValue("Email", e.target.value)}
             register={register}
             validationRules={Validator.email}
             errors={errors}
           />
         </div>
 
-        {/* <div>
-          <NextPage value="Atrás" to="/register" />
-        </div> */}
-
-        <div className="container-btn-next">
+        <div className="container-btn-back-responsible input-1c">
+          <NextPage to={"/"} value="Cancelar" />
+        </div>
+        <div>
           <PrimaryButton type="submit" value="Siguiente" />
         </div>
       </form>
