@@ -1,0 +1,38 @@
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    background-color: #e2e8f0;
+    border-radius: 34px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    padding: 0;
+  }
+  
+  .toggle.active {
+    background-color: #2563eb;
+  }
+  
+  .slider {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+  }
+  
+  .toggle.active .slider {
+    transform: translateX(26px);
+  }
+  
+  .toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #bfdbfe;
+  }
+  
