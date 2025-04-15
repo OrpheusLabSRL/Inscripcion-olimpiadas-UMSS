@@ -20,8 +20,11 @@ class CreateInscripcionesTable extends Migration
             $table->date('fechaFin');
             $table->timestamps(); // created_at y updated_at
 
-            $table->unsignedBigInteger('id_olimpista'); // FK
+             $table->unsignedBigInteger('id_olimpista'); // FK
              $table->foreign('id_olimpista')->references('id_olimpista')->on('olimpistas')->onDelete('cascade');
+             
+             $table->unsignedBigInteger('id_tutor')->nullable(); // FK
+             $table->foreign('id_tutor')->references('id_tutor')->on('tutores')->onDelete('cascade');
 
              $table->unsignedBigInteger('id_AreaCategoria'); // Nueva FK
              $table->foreign('id_AreaCategoria')->references('id_AreaCategoria')->on('area_categoria')->onDelete('cascade');

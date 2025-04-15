@@ -16,6 +16,12 @@ class CreateOlimpistaTutorTable extends Migration
         Schema::create('olimpista_tutor', function (Blueprint $table) {
             $table->unsignedBigInteger('id_tutor');
             $table->unsignedBigInteger('id_olimpista');
+            $table->enum('rol', [
+                'responsable inscripcion',
+                'tutor area1',
+                'tutor area2',
+                'tutor legal'
+            ]);
 
             $table->boolean('estado')->default(true); 
 
@@ -23,8 +29,8 @@ class CreateOlimpistaTutorTable extends Migration
             $table->foreign('id_tutor')->references('id_tutor')->on('tutores')->onDelete('cascade');
             $table->foreign('id_olimpista')->references('id_olimpista')->on('olimpistas')->onDelete('cascade');
 
-            // Clave primaria compuesta
-            $table->primary(['id_tutor', 'id_olimpista']);
+            // Clave primaria compuesta (incluye ahora el campo 'rol')
+            $table->primary(['id_tutor', 'id_olimpista', 'rol']);
         });
     }
 

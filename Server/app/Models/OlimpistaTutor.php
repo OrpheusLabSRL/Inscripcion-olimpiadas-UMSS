@@ -8,12 +8,13 @@ class OlimpistaTutor extends Pivot
 {
     protected $table = 'olimpista_tutor';
     public $incrementing = false;
-    protected $primaryKey = ['id_tutor', 'id_olimpista'];
+    protected $primaryKey = ['id_tutor', 'id_olimpista', 'rol'];
 
     public $timestamps = false;
     protected $fillable = [
         'id_tutor',
         'id_olimpista',
         'estado',
+        'rol',
     ];
 }

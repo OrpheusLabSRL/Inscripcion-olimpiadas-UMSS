@@ -30,15 +30,23 @@ class InscripcionController extends Controller
             ], 404);
         }
 
-        $inscripciones[] = Inscripcion::create([
+        // Armar los datos de inscripción principal
+        $dataPrincipal = [
             'estado' => $request->estado,
             'fechaInicio' => Carbon::now()->toDateString(),
             'fechaFin' => Carbon::now()->addDays(5),
             'id_olimpista' => $request->id_olimpista,
             'id_AreaCategoria' => $areaCategoria->id_AreaCategoria,
-        ]);
+        ];
 
-        // Combinación opcional, solo si se envió
+        // Agregar id_tutor si está presente
+        if ($request->filled('id_tutor1')) {
+            $dataPrincipal['id_tutor'] = $request->id_tutor1;
+        }
+
+        $inscripciones[] = Inscripcion::create($dataPrincipal);
+
+        // Combinación opcional
         if (!empty($request->AreaOpcional) && !empty($request->CategoriaOpcional)) {
             $areaCategoriaOpcional = AreaCategoria::where('area_id', $request->AreaOpcional)
                 ->where('categoria_id', $request->CategoriaOpcional)
@@ -51,13 +59,20 @@ class InscripcionController extends Controller
                 ], 404);
             }
 
-            $inscripciones[] = Inscripcion::create([
+            $dataOpcional = [
                 'estado' => $request->estado,
                 'fechaInicio' => Carbon::now()->toDateString(),
                 'fechaFin' => Carbon::now()->addDays(5),
                 'id_olimpista' => $request->id_olimpista,
                 'id_AreaCategoria' => $areaCategoriaOpcional->id_AreaCategoria,
-            ]);
+            ];
+
+            // También incluir id_tutor si está presente
+            if ($request->filled('id_tutor2')) {
+                $dataOpcional['id_tutor'] = $request->id_tutor2;
+            }
+
+            $inscripciones[] = Inscripcion::create($dataOpcional);
         }
 
         DB::commit();
@@ -75,6 +90,7 @@ class InscripcionController extends Controller
         ], 500);
     }
 }
+
     public function getAreaByOlimpista($id_olimpista)
     {
         // Verificar si el olimpista existe

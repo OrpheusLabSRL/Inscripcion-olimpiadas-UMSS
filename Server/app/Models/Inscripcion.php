@@ -18,12 +18,18 @@ class Inscripcion extends Model
         'fechaInicio',
         'fechaFin',
         'id_olimpista',
-        'id_AreaCategoria'
+        'id_AreaCategoria',
+        'id_tutor',
     ];
 
     public function olimpista()
 {
     return $this->belongsTo(Olimpista::class, 'id_olimpista', 'id_olimpista');
+}
+
+public function tutor()
+{
+    return $this->belongsTo(Tutor::class, 'id_tutor', 'id_tutor');
 }
 
 public function areaCategoria()
