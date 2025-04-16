@@ -9,6 +9,8 @@ const Dropdown = ({
   size = "small",
   value,
   name = "dropdown",
+  error = false,
+  errorMessage = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -28,12 +30,24 @@ const Dropdown = ({
 
   return (
     <div className={`dropdown-container ${size}`}>
-      {label && <label className={`dropdown-label ${size}`}>{label}</label>}
+      {label && (
+        <label
+          className={`dropdown-label ${size}`}
+          style={error ? { color: "#dc2626" } : {}}
+        >
+          {label}
+        </label>
+      )}
 
-      <div className={`dropdown-wrapper ${size}`}>
+      <div
+        className={`dropdown-wrapper ${size} ${error ? "error-border" : ""}`}
+        onClick={() => setIsOpen((prev) => !prev)}
+      >
         <div
           className="dropdown-display"
-          onClick={() => setIsOpen((prev) => !prev)}
+          style={{
+            color: !value && error ? "#dc2626" : undefined,
+          }}
         >
           {value ? selectedLabel : placeholder}
           <span className="dropdown-arrow">{isOpen ? "▲" : "▼"}</span>
@@ -57,6 +71,8 @@ const Dropdown = ({
           </div>
         )}
       </div>
+
+      {error && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 };

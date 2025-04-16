@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use App\Models\Olimpiada;
+use App\Models\OlimpiadaAreaCategoria;
 use Illuminate\Http\Request;
 
 class AreaController extends Controller
@@ -26,8 +27,7 @@ class AreaController extends Controller
     public function agregarArea(Request $request)
     {
         $request->validate([
-            'idOlimpiada' => 'required|exists:olimpiadas,idOlimpiada',
-            'nombreArea' => 'required|string|max:30|unique:areas,nombreArea',
+            'nombreArea' => 'required|string|max:30|unique:area,nombreArea',
             'descripcionArea' => 'nullable|string|max:300',
             'costoArea' => 'required|integer|min:1',
             'estadoArea' => 'sometimes|boolean'
@@ -45,8 +45,7 @@ class AreaController extends Controller
             'nombreArea' => 'required|string',
             'descripcionArea' => 'nullable|string',
             'costoArea' => 'required|numeric',
-            'estadoArea' => 'required|boolean',
-            'idOlimpiada' => 'required|exists:olimpiadas,idOlimpiada'
+            'estadoArea' => 'required|boolean'
         ]);
 
         Area::create($request->all());
@@ -54,57 +53,62 @@ class AreaController extends Controller
         return response()->json(['message' => 'Área registrada correctamente']);
     }
 
+    // Obtener estructura completa del programa (área + categoría + grados) desde la nueva tabla pivote
+    public function getProgramaCompleto()
+    {
+        $programa = [];
+
+        $combinaciones = OlimpiadaAreaCategoria::with([
+            'area' => function ($q) {
+                $q->where('estadoArea', true);
+            },
+            'categoria' => function ($q) {
+                $q->where('estadoCategoria', true)
+                    ->with(['grados' => function ($g) {
+                        $g->where('estadoGrado', true);
+                    }]);
+            }
+        ])->get();
+
+        foreach ($combinaciones as $combo) {
+            $area = $combo->area;
+            $categoria = $combo->categoria;
+            $grados = $categoria->grados ?? collect();
+
+            if ($grados->count() > 0) {
+                $gradosOrdenados = $grados->sortBy('numeroGrado')->values();
+                $primero = $gradosOrdenados->first();
+                $ultimo = $gradosOrdenados->last();
+                $mismoNivel = $gradosOrdenados->every(fn($g) => $g->nivel === $primero->nivel);
+
+                if ($gradosOrdenados->count() === 1) {
+                    $gradoFormateado = $this->formatearGrado($primero->numeroGrado, $primero->nivel);
+                } elseif ($mismoNivel) {
+                    $gradoFormateado = "{$primero->numeroGrado}° a {$ultimo->numeroGrado}° {$primero->nivel}";
+                } else {
+                    $gradoFormateado = $gradosOrdenados->map(function ($g) {
+                        return $this->formatearGrado($g->numeroGrado, $g->nivel);
+                    })->implode(' / ');
+                }
+
+                $programa[] = [
+                    'area' => $area->nombreArea,
+                    'nivel' => $categoria->nombreCategoria,
+                    'grados' => $gradoFormateado,
+                    'area_id' => $area->idArea,
+                    'categoria_id' => $categoria->idCategoria,
+                    'olimpiada_id' => $combo->idOlimpiada,
+                ];
+            }
+        }
+
+        return response()->json($programa);
+    }
+
     // Formato visual del grado
     private function formatearGrado($numero, $nivel)
     {
         $simbolo = is_numeric($numero) ? "{$numero}°" : $numero;
         return "{$simbolo} {$nivel}";
-    }
-
-    // Obtener estructura completa de programa (área + categoría + grados)
-    public function getProgramaCompleto()
-    {
-        $programa = [];
-
-        $areas = Area::where('estadoArea', true)
-            ->with(['categorias' => function ($query) {
-                $query->where('estadoCategoria', true)
-                    ->with(['grados' => function ($q) {
-                        $q->where('estadoGrado', true);
-                    }]);
-            }])->get();
-
-        foreach ($areas as $area) {
-            foreach ($area->categorias as $categoria) {
-                $grados = $categoria->grados;
-
-                if ($grados->count() > 0) {
-                    $gradosOrdenados = $grados->sortBy('numeroGrado')->values();
-                    $primero = $gradosOrdenados->first();
-                    $ultimo = $gradosOrdenados->last();
-                    $mismoNivel = $gradosOrdenados->every(fn($g) => $g->nivel === $primero->nivel);
-
-                    if ($gradosOrdenados->count() === 1) {
-                        $gradoFormateado = $this->formatearGrado($primero->numeroGrado, $primero->nivel);
-                    } elseif ($mismoNivel) {
-                        $gradoFormateado = "{$primero->numeroGrado}° a {$ultimo->numeroGrado}° {$primero->nivel}";
-                    } else {
-                        $gradoFormateado = $gradosOrdenados->map(function ($g) {
-                            return $this->formatearGrado($g->numeroGrado, $g->nivel);
-                        })->implode(' / ');
-                    }
-
-                    $programa[] = [
-                        'area' => $area->nombreArea,
-                        'nivel' => $categoria->nombreCategoria,
-                        'grados' => $gradoFormateado,
-                        'area_id' => $area->idArea,
-                        'categoria_id' => $categoria->idCategoria,
-                    ];
-                }
-            }
-        }
-
-        return response()->json($programa);
     }
 }

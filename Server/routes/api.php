@@ -12,8 +12,7 @@ use App\Http\Controllers\OlimpiadaController;
 use App\Http\Controllers\OlimpistaController;
 use App\Http\Controllers\TutorController;
 use App\Http\Controllers\OlimpiadaAreaController;
-use App\Http\Controllers\AreaCategoriaController;
-use App\Http\Controllers\CategoriaGradoController;
+
 
 // Ruta protegida para obtener el usuario autenticado
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -37,6 +36,8 @@ Route::post('/contacto', [InformacionContactoController::class, 'store']);
 Route::get('/hola', [OlimpiadaController::class, 'mostrarOlimpiada']);
 Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
 Route::post('/asignar-olimpiada', [OlimpiadaController::class, 'asignarAreasYCategorias']);
+Route::get('/olimpiada/{id}/areas-categorias', [OlimpiadaController::class, 'obtenerAreasYCategorias']);
+
 
 // Áreas
 Route::get('/areas', [AreaController::class, 'index']);
@@ -68,15 +69,10 @@ Route::put('/olimpiada-area/{id}', [OlimpiadaAreaController::class, 'update']);
 Route::delete('/olimpiada-area/{id}', [OlimpiadaAreaController::class, 'destroy']);
 
 // Tabla intermedia: Area-Categoria
-Route::get('/area-categoria', [AreaCategoriaController::class, 'index']);
-Route::get('/area-categoria/{id}', [AreaCategoriaController::class, 'show']);
-Route::post('/area-categoria', [AreaCategoriaController::class, 'store']);
-Route::put('/area-categoria/{id}', [AreaCategoriaController::class, 'update']);
-Route::delete('/area-categoria/{id}', [AreaCategoriaController::class, 'destroy']);
-
-// Tabla intermedia: Categoria-Grado
-Route::get('/categoria-grado', [CategoriaGradoController::class, 'index']);
-Route::get('/categoria-grado/{id}', [CategoriaGradoController::class, 'show']);
-Route::post('/categoria-grado', [CategoriaGradoController::class, 'store']);
-Route::put('/categoria-grado/{id}', [CategoriaGradoController::class, 'update']);
-Route::delete('/categoria-grado/{id}', [CategoriaGradoController::class, 'destroy']);
+Route::get('/combinaciones', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'index']);
+Route::get('/combinaciones/{id}', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'show']);
+Route::post('/combinaciones', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'store']);
+Route::put('/combinaciones/{id}', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'update']);
+Route::patch('/combinaciones/{id}', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'update']); // opcional
+Route::delete('/combinaciones/{id}', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'destroy']);
+Route::get('/combinaciones/olimpiada/{idOlimpiada}', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OlimpiadaAreaCategoria;
 
 class Olimpiada extends Model
 {
@@ -33,14 +34,9 @@ class Olimpiada extends Model
         });
     }
 
-    // Relación con áreas mediante la tabla pivote olimpiada_area
-    public function areas()
+    // ✅ Nueva relación: olimpiada ↔ combinaciones (área + categoría)
+    public function combinaciones()
     {
-        return $this->belongsToMany(
-            Area::class,
-            'olimpiada_area',
-            'idOlimpiada',
-            'idArea'
-        )->withPivot('estadoOlimpArea');
+        return $this->hasMany(OlimpiadaAreaCategoria::class, 'idOlimpiada');
     }
 }

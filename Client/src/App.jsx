@@ -8,6 +8,10 @@ import { TutorForm } from "./features/registrarion/pages/TutorForm/TutorForm";
 import { MainHome } from "./features/home/pages/MainHome";
 import { ListRegistered } from "./features/registrarion/pages/ListRegistered/ListRegistered";
 import ManageBaseData from "./features/administration/pages/ManageBaseData";
+import ManageArea from "./features/administration/pages/ManageArea";
+import ManageCategoria from "./features/administration/pages/ManageCategoria";
+import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
+import ManageBaseGeneral from "./features/administration/pages/ManageBaseDataGeneral";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
 
@@ -45,10 +49,50 @@ function App() {
             {/* Rutas bajo AdminLayout */}
             <Route path="/admin">
               <Route
-                path="base-data"
+                path="register-base"
                 element={
                   <PrivateRoute
                     element={<ManageBaseData />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
+              <Route
+                path="areas"
+                element={
+                  <PrivateRoute
+                    element={<ManageArea />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
+              <Route
+                path="categorias"
+                element={
+                  <PrivateRoute
+                    element={<ManageCategoria />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
+              <Route
+                path="olimpiadas"
+                element={
+                  <PrivateRoute
+                    element={<ManageOlympiads />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
+              <Route
+                path="base-data"
+                element={
+                  <PrivateRoute
+                    element={<ManageBaseGeneral />}
                     allowedRoles={["admin"]}
                     userRole={user.role}
                   />

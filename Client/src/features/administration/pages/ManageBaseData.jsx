@@ -17,6 +17,7 @@ const ManageBaseData = () => {
   const [olimpiadas, setOlimpiadas] = useState([]);
   const [areas, setAreas] = useState([]);
   const [categorias, setCategorias] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,27 +42,67 @@ const ManageBaseData = () => {
       ...prev,
       [areaId]: values,
     }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [`categorias-${areaId}`]: "",
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!version || selectedAreas.length === 0) {
-      alert("Seleccione una versión y al menos una área.");
-      return;
+    const newErrors = {};
+
+    if (!version) {
+      newErrors.version = "Debe seleccionar una versión";
     }
 
-    const payload = {
-      idOlimpiada: version,
-      areas: selectedAreas.map((idArea) => ({
-        idArea,
-        categorias: selectedCategorias[idArea] || [],
-      })),
-    };
+    if (selectedAreas.length === 0) {
+      newErrors.areas = "Debe seleccionar al menos una área";
+    }
+
+    selectedAreas.forEach((areaId) => {
+      if (
+        !selectedCategorias[areaId] ||
+        selectedCategorias[areaId].length === 0
+      ) {
+        newErrors[`categorias-${areaId}`] =
+          "Debe seleccionar al menos una categoría";
+      }
+    });
+
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+
+    const confirmacion = window.confirm(
+      "¿Está seguro de finalizar esta configuración?"
+    );
+    if (!confirmacion) return;
+
+    // 🔄 Generar combinaciones planas
+    const combinaciones = [];
+
+    selectedAreas.forEach((idArea) => {
+      const categorias = selectedCategorias[idArea] || [];
+      categorias.forEach((idCategoria) => {
+        combinaciones.push({
+          idOlimpiada: parseInt(version),
+          idArea,
+          idCategoria,
+        });
+      });
+    });
+
+    console.log("📦 Combinaciones a enviar:", combinaciones);
 
     try {
-      await asignarAreasYCategorias(payload);
-      alert("Datos guardados exitosamente.");
+      await asignarAreasYCategorias(combinaciones);
+      alert("¡Configuración guardada exitosamente!");
+      // Reset de estado
+      setVersion("");
+      setSelectedAreas([]);
+      setSelectedCategorias({});
     } catch (error) {
       console.error("Error al guardar los datos:", error);
       alert("Ocurrió un error al guardar los datos.");
@@ -81,6 +122,7 @@ const ManageBaseData = () => {
           <h3 className="section-title">
             Seleccionar la Versión de la Olimpiada
           </h3>
+
           <Dropdown
             size="large"
             name="version"
@@ -90,7 +132,12 @@ const ManageBaseData = () => {
               label: `Versión ${o.version}`,
             }))}
             value={version}
-            onChange={(e) => setVersion(e.target.value)}
+            onChange={(e) => {
+              setVersion(e.target.value);
+              setErrors((prev) => ({ ...prev, version: "" }));
+            }}
+            error={!!errors.version}
+            errorMessage={errors.version}
           />
 
           <p className="note">
@@ -99,6 +146,7 @@ const ManageBaseData = () => {
           </p>
 
           <h3 className="section-title">Áreas de la Olimpiada</h3>
+
           <MultiSelectDropdown
             label="Seleccione las Áreas"
             name="areas"
@@ -108,10 +156,16 @@ const ManageBaseData = () => {
               label: a.nombreArea,
             }))}
             selectedValues={selectedAreas}
-            onChange={setSelectedAreas}
+            onChange={(values) => {
+              setSelectedAreas(values);
+              setErrors((prev) => ({ ...prev, areas: "" }));
+            }}
+            error={!!errors.areas}
+            errorMessage={errors.areas}
           />
 
           <h3 className="section-title">Categorías por Área</h3>
+
           {selectedAreas.map((areaId) => {
             const area = areas.find((a) => a.idArea === areaId);
             const categoriasOptions = categorias.map((c) => ({
@@ -129,11 +183,13 @@ const ManageBaseData = () => {
                 <div className="categoria-dropdown">
                   <MultiSelectDropdown
                     label=""
-                    name={`categorias-area-${areaId}`}
+                    name={`categorias-${areaId}`}
                     placeholder="Seleccione Categorías"
                     options={categoriasOptions}
                     selectedValues={selectedCategorias[areaId] || []}
                     onChange={(values) => handleCategoriaChange(areaId, values)}
+                    error={!!errors[`categorias-${areaId}`]}
+                    errorMessage={errors[`categorias-${areaId}`]}
                   />
                 </div>
               </div>
@@ -142,7 +198,7 @@ const ManageBaseData = () => {
 
           <div className="btn-container align-right">
             <button type="submit" className="btn-registrar">
-              REGISTRAR
+              FINALIZAR
             </button>
           </div>
         </form>

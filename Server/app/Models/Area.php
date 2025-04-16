@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OlimpiadaAreaCategoria;
 
 class Area extends Model
 {
@@ -11,6 +12,7 @@ class Area extends Model
 
     protected $table = 'area';
     protected $primaryKey = 'idArea';
+    public $timestamps = false;
 
     protected $fillable = [
         'nombreArea',
@@ -19,25 +21,9 @@ class Area extends Model
         'estadoArea',
     ];
 
-    // Relación: un área pertenece a muchas olimpiadas (pivot: olimpiada_area)
-    public function olimpiadas()
+    // Nueva relación: combinaciones (olimpiada + área + categoría)
+    public function combinaciones()
     {
-        return $this->belongsToMany(
-            Olimpiada::class,
-            'olimpiada_area',
-            'idArea',
-            'idOlimpiada'
-        )->withPivot('estadoOlimpArea');
-    }
-
-    // Relación: un área tiene muchas categorías (pivot: area_categoria)
-    public function categorias()
-    {
-        return $this->belongsToMany(
-            Categoria::class,
-            'area_categoria',
-            'idArea',
-            'idCategoria'
-        )->withPivot('estadoAreaCategoria');
+        return $this->hasMany(OlimpiadaAreaCategoria::class, 'idArea');
     }
 }

@@ -8,6 +8,8 @@ const MultiSelectDropdown = ({
   selectedValues = [],
   onChange,
   placeholder = "Seleccione una opción",
+  error = false,
+  errorMessage = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -38,9 +40,22 @@ const MultiSelectDropdown = ({
 
   return (
     <div className="multi-dropdown-container" ref={dropdownRef}>
-      {label && <label className="multi-dropdown-label">{label}</label>}
+      {label && (
+        <label
+          className="multi-dropdown-label"
+          style={error ? { color: "#dc2626" } : {}}
+        >
+          {label}
+        </label>
+      )}
 
-      <div className="multi-dropdown-header" onClick={() => setIsOpen(!isOpen)}>
+      <div
+        className={`multi-dropdown-header ${error ? "error-border" : ""}`}
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          color: selectedLabels ? "inherit" : error ? "#dc2626" : "#666",
+        }}
+      >
         {selectedLabels || placeholder}
         <span className="dropdown-arrow">{isOpen ? "▲" : "▼"}</span>
       </div>
@@ -63,6 +78,8 @@ const MultiSelectDropdown = ({
           ))}
         </div>
       )}
+
+      {error && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 };

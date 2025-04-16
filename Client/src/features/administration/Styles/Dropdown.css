@@ -67,3 +67,18 @@
 .dropdown-option:hover {
   background-color: #ccc;
 }
+
+.error-border {
+  border: 2px solid #dc2626 !important;
+  background-color: #ffecec !important;
+  border-radius: 6px;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  background: #ffecec;
+  padding: 0.4rem 0.75rem;
+  border-radius: 5px;
+}

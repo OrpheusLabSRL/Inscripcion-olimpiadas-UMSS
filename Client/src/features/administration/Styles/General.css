@@ -7,17 +7,21 @@
   --shadow: rgba(0, 0, 0, 0.1);
 }
 
+/* === BASE === */
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", "Alata", sans-serif;
   background-color: var(--background);
   margin: 0;
   padding: 0;
   color: #000;
   font-size: 16px;
   line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* Tipografía global */
+/* === TIPOGRAFÍA === */
 h1,
 h2,
 h3,
@@ -42,88 +46,49 @@ button {
   line-height: 1.5;
 }
 
-/* Contenedor general de la página (excluyendo sidebar) */
-.page-content {
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
-}
-
-/* Contenedor del formulario */
-.form-container {
-  width: 60%;
-  max-height: 450px;
-  background-color: var(--card-bg);
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 0 10px var(--shadow);
-  overflow-y: auto;
-}
-
-/* Scroll personalizado */
-.form-container::-webkit-scrollbar {
-  width: 8px;
-}
-.form-container::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
-/* Botón volver atrás */
-.back-button {
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: var(--text);
-  margin-bottom: 1rem;
-}
-
-/* Nota informativa */
-.note {
-  color: var(--primary);
-  font-size: 0.85rem;
-  margin-bottom: 1.5rem;
-}
-
-/* Agrupación etiqueta + campo */
-.field-group {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-/* Etiquetas alineadas */
-.field-label {
-  width: 130px;
-  font-weight: 500;
-  color: var(--text);
-}
-
-.field-label.required::after {
-  content: " *";
-  color: red;
-}
-
-/* Dropdowns */
-select {
+/* === TABLAS === */
+.data-table {
   width: 100%;
-  padding: 0.6rem;
-  border: none;
-  border-radius: 8px;
-  background-color: #e2e2e2;
-  font-family: "Inter", sans-serif;
-  font-size: 1rem;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,<svg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'><path d='M1.41.59L6 5.17l4.59-4.58L12 2l-6 6-6-6z' fill='%23333'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 12px 8px;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  color: black;
 }
 
-/* Contenedor del botón */
+.data-table th,
+.data-table td {
+  border-bottom: 1px solid #ebebeb;
+  padding: 0.75rem;
+  text-align: left;
+  color: black;
+}
+
+/* === ETIQUETAS / BADGES === */
+.badge-success {
+  background-color: #d4f8d4;
+  color: #1a7f1a;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.badge-danger {
+  background-color: #ffe0e0;
+  color: #e63946;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+}
+
+/* === BOTONES === */
+.add-button {
+  background-color: var(--primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
 .btn-container {
   display: flex;
   justify-content: flex-end;
@@ -141,7 +106,99 @@ select {
   cursor: pointer;
 }
 
-/* Tamaños de dropdowns */
+/* === BOTÓN VOLVER === */
+.back-button {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text);
+  margin-bottom: 1rem;
+  padding: 5px 10px;
+  transition: color 0.3s ease;
+}
+.back-button:hover {
+  color: #007bff;
+}
+
+/* === FORMULARIO === */
+.page-content {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.form-container {
+  width: 70%;
+  max-height: 500px; /* altura máxima */
+  overflow-y: auto; /* scroll vertical */
+  overflow-x: hidden; /* opcional, evita scroll horizontal */
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px var(--shadow);
+  display: flex;
+  flex-direction: column; /* Asegura comportamiento de apilado */
+}
+
+.form-container::-webkit-scrollbar {
+  width: 8px;
+}
+.form-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* === NOTAS === */
+.note {
+  color: var(--primary);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+/* === GRUPOS DE CAMPOS === */
+.field-group {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.field-group.inline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.field-label {
+  width: 130px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.field-label.required::after {
+  content: " *";
+  color: red;
+}
+
+/* === SELECT (DROPDOWNS) === */
+select {
+  width: 100%;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #e2e2e2;
+  font-size: 1rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,<svg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'><path d='M1.41.59L6 5.17l4.59-4.58L12 2l-6 6-6-6z' fill='%23333'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 12px 8px;
+}
+
 .select-large {
   height: 44px;
   font-size: 1rem;
@@ -156,14 +213,6 @@ select {
   max-width: 100%;
 }
 
-.field-group.inline {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
 .area-dropdown,
 .categoria-dropdown {
   flex: 1;
@@ -173,5 +222,12 @@ select {
 
 .multi-dropdown-container {
   width: 100%;
-  max-width: 500px; /* Igual que .select-large */
+  max-width: 500px;
+}
+
+/* === CONTENEDORES === */
+.manage-container,
+.area-container,
+.category-container {
+  padding: 20px;
 }
