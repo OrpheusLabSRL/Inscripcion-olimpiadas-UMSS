@@ -60,15 +60,7 @@ const normalizarTexto = (texto) => {
     .replace(/6°|6º/g, "6to");
 };
 
-const obtenerValue = (area) => {
-  return normalizarTexto(area.split(" - ")[0]);
-};
 
-const obtenerValueNivel = (nivel) => {
-  return normalizarTexto(nivel).replace(/ /g, "_");
-};
-
-// 🔍 Filtra las áreas disponibles según el curso actual
 export const filtrarAreasPorCurso = (curso, programaCompleto) => {
   const cursoNormalizado = normalizarTexto(curso.replace("_", " "));
 

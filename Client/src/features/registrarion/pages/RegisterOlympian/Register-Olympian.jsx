@@ -12,13 +12,20 @@ import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import { IoArrowBackCircle } from "react-icons/io5";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 //utils
 import { Validator } from "./ValidationRules";
-import { cursosBolivia, departamentosBolivia } from "./DataOptions";
+import {
+  cursosBolivia,
+  departamentosBolivia,
+  provinciasPorDepartamento,
+} from "./DataOptions";
 
 export const RegisterOlympian = () => {
+  const [provinciasFiltradas, setProvinciasFiltradas] = useState(
+    JSON.parse(localStorage.getItem("provinciasFiltradas")) || null
+  );
   const navigation = useNavigate();
   const location = useLocation();
   const previousPath = location.state?.from;
@@ -89,6 +96,37 @@ export const RegisterOlympian = () => {
   useEffect(() => {
     localStorage.setItem("EmailOlympian", watchedEmail);
   }, [watchedEmail]);
+
+  useEffect(() => {
+    const handleUnload = () => {
+      localStorage.removeItem("NombreOlympian");
+      localStorage.removeItem("ApellidoOlympian");
+      localStorage.removeItem("FechaNacimientoOlympian");
+      localStorage.removeItem("CarnetIdentidadOlympian");
+      localStorage.removeItem("ColegioOlympian");
+      localStorage.removeItem("CursoOlympian");
+      localStorage.removeItem("DepartamentoOlympian");
+      localStorage.removeItem("ProvinciaOlympian");
+      localStorage.removeItem("EmailOlympian");
+    };
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, []);
+
+  const onSelectDepartamento = (e) => {
+    const select = e.target;
+    const selectedOption = select.options[select.selectedIndex];
+
+    const label = selectedOption.text;
+
+    setValue("Departamento", e.target.value);
+
+    const provincias = provinciasPorDepartamento[label] || [];
+    setProvinciasFiltradas(provincias);
+    localStorage.setItem("provinciasFiltradas", JSON.stringify(provincias));
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -201,7 +239,7 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="Departamento"
             value={watchedDepartamento}
-            onChange={(e) => setValue("Departamento", e.target.value)}
+            onChange={onSelectDepartamento}
             options={departamentosBolivia}
             register={register}
             errors={errors}
@@ -209,13 +247,14 @@ export const RegisterOlympian = () => {
         </div>
 
         <div className="input-1c">
-          <Input
+          <Select
             label={"Provincia"}
             placeholder="Ingrese la provincia"
             mandatory="true"
             name="Provincia"
             value={watchedProvincia}
             onChange={(e) => setValue("Provincia", e.target.value)}
+            options={provinciasFiltradas}
             register={register}
             validationRules={Validator.provincia}
             errors={errors}

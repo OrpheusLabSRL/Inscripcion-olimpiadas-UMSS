@@ -4,10 +4,19 @@ import "./AreaCategoriaElement.css";
 //Components
 import { Select } from "../../../../components/inputs/Select";
 
+//react
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export const AreaCategoriaElement = ({
+  labelArea,
+  labelCategoria,
+  placeholderArea,
+  placeholderCategoria,
+  nameArea,
+  nameCategoria,
   areas,
+  mandatory,
   categorias,
   onChooseArea,
   setValue,
@@ -17,19 +26,24 @@ export const AreaCategoriaElement = ({
   errors,
 }) => {
   const navigation = useNavigate();
+  const [tutorArea, setTutorArea] = useState(
+    nameArea == "AreaPrincipal"
+      ? localStorage.getItem("TutorArea1")
+      : localStorage.getItem("TutorArea2")
+  );
 
   const addTutor = () => {
-    navigation("tutorOptional");
+    navigation("tutorOptional", { state: { area: nameArea } });
   };
 
   return (
     <>
       <div className="input-1c">
         <Select
-          label={"Área de interés principal"}
-          placeholder="Seleccione un area"
-          mandatory="true"
-          name="Area"
+          label={labelArea}
+          placeholder={placeholderArea}
+          mandatory={mandatory}
+          name={nameArea}
           value={watchedArea}
           onChange={onChooseArea}
           options={areas}
@@ -37,25 +51,33 @@ export const AreaCategoriaElement = ({
           errors={errors}
         />
       </div>
-
       <div className="input-1c">
         <Select
-          label="Categoría de interés principal"
-          placeholder={"Seleccione una categoría"}
-          mandatory="true"
-          name="Categoria"
+          label={labelCategoria}
+          placeholder={categorias ? placeholderCategoria : ""}
+          mandatory={mandatory}
+          name={nameCategoria}
           value={watchedCategoria}
-          onChange={(e) => setValue("Categoria", e.target.value)}
+          onChange={(e) => setValue(nameCategoria, e.target.value)}
           options={categorias}
           register={register}
           errors={errors}
         />
       </div>
-
+      {tutorArea && (
+        <div className="nombre-tutor">
+          <span>Tutor: </span>
+          {nameArea === "AreaPrincipal"
+            ? `${localStorage.getItem("NombrePrincipal") || ""} ${
+                localStorage.getItem("ApellidoPrincipal") || ""
+              }`
+            : `${localStorage.getItem("NombreSecundaria") || ""} ${
+                localStorage.getItem("ApellidoSecundaria") || ""
+              }`}
+        </div>
+      )}
       <div className="input-2c option-add-tutor">
-        <p onClick={addTutor}>
-          Elegir un tutor para el area principal(Opcional)
-        </p>
+        <p onClick={addTutor}>Elegir un tutor para el area (Opcional)</p>
       </div>
     </>
   );

@@ -8,7 +8,6 @@ import { NextPage } from "../../../../components/Buttons/NextPage";
 
 //react
 import { useEffect, useState } from "react";
-import { IoIosAddCircleOutline } from "react-icons/io";
 import swal from "sweetalert";
 import { useForm } from "react-hook-form";
 import { IoArrowBackCircle } from "react-icons/io5";
@@ -26,7 +25,10 @@ export const RegisterOlympianArea = () => {
   const [categoriasInteres, setCategoriasInteres] = useState(
     JSON.parse(localStorage.getItem("CategoriasFiltradas")) || null
   );
-  const [areaElements, setAreaElements] = useState([0]);
+  const [categoriasInteresSecundaria, setCategoriasInteresSecundaria] =
+    useState(
+      JSON.parse(localStorage.getItem("CategoriasFiltradasSecundaria")) || null
+    );
   const navigation = useNavigate();
 
   const {
@@ -37,22 +39,50 @@ export const RegisterOlympianArea = () => {
     setValue,
   } = useForm({
     defaultValues: {
-      Area: localStorage.getItem("Area") || "",
-      Categoria: localStorage.getItem("Categoria") || "",
+      AreaPrincipal: localStorage.getItem("AreaPrincipal") || "",
+      CategoriaPrincipal: localStorage.getItem("CategoriaPrincipal") || "",
+      AreaSecundaria: localStorage.getItem("AreaSecundaria") || "",
+      CategoriaSecundaria: localStorage.getItem("CategoriaSecundaria") || "",
     },
     mode: "onChange",
   });
 
-  const watchedArea = watch("Area");
-  const watchedCategoria = watch("Categoria");
+  const watchedAreaPrincipal = watch("AreaPrincipal");
+  const watchedCategoriaPrincipal = watch("CategoriaPrincipal");
+  const watchedAreaSecundaria = watch("AreaSecundaria");
+  const watchedCategoriaSecundaria = watch("CategoriaSecundaria");
 
   useEffect(() => {
-    localStorage.setItem("Area", watchedArea);
-  }, [watchedArea]);
+    localStorage.setItem("AreaPrincipal", watchedAreaPrincipal);
+  }, [watchedAreaPrincipal]);
 
   useEffect(() => {
-    localStorage.setItem("Categoria", watchedCategoria);
-  }, [watchedCategoria]);
+    localStorage.setItem("CategoriaPrincipal", watchedCategoriaPrincipal);
+  }, [watchedCategoriaPrincipal]);
+  useEffect(() => {
+    localStorage.setItem("AreaSecundaria", watchedAreaSecundaria);
+  }, [watchedAreaSecundaria]);
+
+  useEffect(() => {
+    localStorage.setItem("CategoriaSecundaria", watchedCategoriaSecundaria);
+  }, [watchedCategoriaSecundaria]);
+
+  useEffect(() => {
+    const handleUnload = () => {
+      localStorage.removeItem("AreaPrincipal");
+      localStorage.removeItem("CategoriaPrincipal");
+      localStorage.removeItem("AreaSecundaria");
+      localStorage.removeItem("CategoriaSecundaria");
+      localStorage.removeItem("CategoriasFiltradas");
+      localStorage.removeItem("CategoriasFiltradasSecundaria");
+      localStorage.removeItem("TutorArea1");
+      localStorage.removeItem("TutorArea2");
+    };
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, []);
 
   useEffect(() => {
     const allCatalogo = async () => {
@@ -67,42 +97,54 @@ export const RegisterOlympianArea = () => {
   }, []);
 
   useEffect(() => {
-    const areasFiltradas = filtrarAreasPorCurso("2° Secundaria", catalogo);
+    const areasFiltradas = filtrarAreasPorCurso(
+      localStorage.getItem("CursoOlympian"),
+      catalogo
+    );
     setAreaInteres(areasFiltradas);
   }, [catalogo]);
 
-  const onChooseArea = (index) => (e) => {
+  const onChooseArea = () => (e) => {
     if (e.target.value !== "") {
       const categoriasFiltradas = filtrarCategoriasPorCursoYArea(
-        "2° Secundaria",
+        localStorage.getItem("CursoOlympian"),
         e.target.value,
         catalogo
       );
-      localStorage.setItem(
-        "CategoriasFiltradas",
-        JSON.stringify(categoriasFiltradas)
-      );
-      setCategoriasInteres(categoriasFiltradas);
-      setValue("Area", e.target.value);
+
+      if (e.target.name == "AreaPrincipal") {
+        localStorage.setItem(
+          "CategoriasFiltradas",
+          JSON.stringify(categoriasFiltradas)
+        );
+        setCategoriasInteres(categoriasFiltradas);
+      } else {
+        localStorage.setItem(
+          "CategoriasFiltradasSecundaria",
+          JSON.stringify(categoriasFiltradas)
+        );
+        setCategoriasInteresSecundaria(categoriasFiltradas);
+      }
+
+      setValue(e.target.name, e.target.value);
     } else {
       setCategoriasInteres(null);
     }
-  };
-
-  const addArea = () => {
-    setAreaElements([...areaElements, areaElements.length]);
   };
 
   const onSubmit = async (data) => {
     try {
       data.estado = false;
 
-      if (data.AreaOpcional == "" || data.CategoriaOpcional == "") {
-        delete data.AreaOpcional;
-        delete data.CategoriaOpcional;
+      if (data.AreaSecundaria == "" || data.CategoriaSecundaria == "") {
+        delete data.AreaSecundaria;
+        delete data.CategoriaSecundaria;
       }
 
-      if (data.Area == data.AreaOpcional && data.Area !== "4") {
+      if (
+        data.AreaPrincipal == data.AreaSecundaria &&
+        data.AreaPrincipal !== "4"
+      ) {
         swal(
           "No se puede seleccionar la misma área",
           "No es posible registrarse en la misma area, a menos que se trate de el área de INFORMÁTICA ",
@@ -112,9 +154,9 @@ export const RegisterOlympianArea = () => {
       }
 
       if (
-        data.Area == 4 &&
-        data.AreaOpcional == 4 &&
-        data.Categoria == data.CategoriaOpcional
+        data.AreaPrincipal == 4 &&
+        data.AreaSecundaria == 4 &&
+        data.CategoriaPrincipal == data.CategoriaSecundaria
       ) {
         swal(
           "No se puede seleccionar la misma categoría",
@@ -156,23 +198,40 @@ export const RegisterOlympianArea = () => {
         <div className="input-2c">
           <h1>Datos de competición</h1>
         </div>
-        {areaElements.map((index) => (
-          <AreaCategoriaElement
-            key={index}
-            areas={areaInteres}
-            categorias={categoriasInteres}
-            onChooseArea={onChooseArea(index)}
-            setValue={setValue}
-            watchedArea={watchedArea}
-            watchedCategoria={watchedCategoria}
-            register={register}
-            errors={errors}
-          />
-        ))}
-        <div className="input-2c add-new-area-olympian">
-          <IoIosAddCircleOutline style={{ fontSize: "30px" }} />
-          <p onClick={addArea}>Agregar una nueva Area de Competencia</p>
-        </div>
+
+        <AreaCategoriaElement
+          labelArea={"Área de interés principal"}
+          placeholderArea={"Seleccione un área"}
+          labelCategoria={"Categoria de interés principal"}
+          placeholderCategoria={"Seleccione una categoria"}
+          nameArea={"AreaPrincipal"}
+          nameCategoria={"CategoriaPrincipal"}
+          areas={areaInteres}
+          mandatory={true}
+          categorias={categoriasInteres}
+          onChooseArea={onChooseArea()}
+          setValue={setValue}
+          watchedArea={watchedAreaPrincipal}
+          watchedCategoria={watchedCategoriaPrincipal}
+          register={register}
+          errors={errors}
+        />
+        <AreaCategoriaElement
+          labelArea={"Área de interés secundaria"}
+          placeholderArea={"Seleccione un secundaria"}
+          labelCategoria={"Categoria de interés secundaria"}
+          placeholderCategoria={"Seleccione una categoria"}
+          nameArea={"AreaSecundaria"}
+          nameCategoria={"CategoriaSecundaria"}
+          areas={areaInteres}
+          categorias={categoriasInteresSecundaria}
+          onChooseArea={onChooseArea()}
+          setValue={setValue}
+          watchedArea={watchedAreaSecundaria}
+          watchedCategoria={watchedCategoriaSecundaria}
+          register={register}
+          errors={errors}
+        />
 
         <div className="container-btn-back-olympian input-1c">
           <NextPage to={"/"} value="Cancelar" />

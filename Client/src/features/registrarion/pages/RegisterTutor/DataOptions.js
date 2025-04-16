@@ -1,5 +1,4 @@
 export const tipoTutor = [
-  { value: "profesor", label: "Profesor" },
-  { value: "papa/mama", label: "Papá/Mamá" },
-  { value: "estudiante", label: "Estudiante" },
+  { value: "Profesor", label: "Profesor" },
+  { value: "Padre/Madre", label: "Papá/Mamá" },
 ];

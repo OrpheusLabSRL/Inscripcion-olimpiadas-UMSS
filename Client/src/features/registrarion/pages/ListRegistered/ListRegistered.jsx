@@ -7,17 +7,23 @@ import { NextPage } from "../../../../components/Buttons/NextPage";
 
 //react
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 //api
 import { getDataOlympian } from "../../../../api/inscription.api";
 
 export const ListRegistered = () => {
   const [dataOlympians, setDataOlympians] = useState([]);
+  const location = useLocation();
+  const tutorId =
+    localStorage.getItem("tutorInscripcionId") ??
+    location.state?.tutorId ??
+    null;
 
   useEffect(() => {
     const getStudents = async () => {
       try {
-        const res = await getDataOlympian(1);
+        const res = await getDataOlympian(tutorId);
         setDataOlympians(res.data);
       } catch (error) {
         console.log("Error en la peticion", error);

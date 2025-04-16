@@ -277,9 +277,10 @@ export const TutorForm = () => {
       );
 
       if (response.data.exists) {
+        localStorage.setItem("tutorInscripcionId", response.data.tutorId);
         setSubmitSuccess("Datos verificados! Redirigiendo...");
         setTimeout(() => {
-          navigate("/register", {
+          navigate("/listRegistered", {
             state: {
               tutorId: response.data.tutorId,
               tutorData: {

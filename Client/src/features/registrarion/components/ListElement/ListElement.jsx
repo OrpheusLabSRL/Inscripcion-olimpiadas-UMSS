@@ -2,10 +2,12 @@
 import "./ListElement.css";
 
 //React
-import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { useState } from "react";
 import { useEffect } from "react";
+import { FaInfoCircle } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
+
 
 //api
 import {
@@ -13,9 +15,13 @@ import {
   getTutoresOlimpista,
 } from "../../../../api/inscription.api";
 
+//component
+import { GenericModal } from "../../../../components/modals/GenericModal";
+
 export const ListElement = ({ data }) => {
   const [areasOlimpista, setAreasOlimpista] = useState([]);
   const [tutoresOlimpista, setTutoresOlimpista] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
     const areasOlimpistas = async () => {
@@ -32,77 +38,184 @@ export const ListElement = ({ data }) => {
     tutoresOlimpistas();
   }, []);
 
+  const openModal = (e) => {
+    e.preventDefault();
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const chooseTitleTutor = (rol) => {
+    if (rol == "responsable inscripcion") return "Responsable de Inscripción";
+
+    if (rol == "tutor area1") return "Tutor de área 1";
+    if (rol == "tutor area2") return "Tutor de área 2";
+    if (rol == "tutor legal") return "Tutor Legal";
+  };
+
   return (
     <div className="container-element-list">
       <div className="list-data-header" key={data.id_olimpista}>
-        <div>
-          <p>#</p>
-          <p>{data.id_olimpista}</p>
-        </div>
-        <div>
-          <p>Nombre</p>
-          <p>{data.nombre}</p>
-        </div>
-        <div>
-          <p>Apellidos</p>
-          <p>{data.apellido}</p>
-        </div>
-        <div>
-          <p>CI</p>
-          <p>{data.carnetIdentidad}</p>
-        </div>
-        <div>
-          <p>Fecha nacimiento</p>
-          <p>{data.fechaNacimiento}</p>
-        </div>
-        <div>
-          <p>Colegio</p>
-          <p>{data.colegio}</p>
-        </div>
-        <div>
-          <p>Curso</p>
-          <p>{data.curso}</p>
-        </div>
-        <div>
-          <p>Departamento</p>
-          <p>{data.departamento}</p>
-        </div>
-        <div>
-          <p>Provincia</p>
-          <p>{data.provincia}</p>
-        </div>
-        <div>
-          <p>Acciones</p>
-          <MdEdit
-            style={{ fontSize: "25px", color: "orange", marginRight: "10px" }}
-          />
-          <MdDelete style={{ fontSize: "25px", color: "red" }} />
-        </div>
+        <table className="container-table-list">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>CI</th>
+              <th>Fecha Nacimiento</th>
+              <th>Colegio</th>
+              <th>Curso</th>
+              <th>Departamento</th>
+              <th>Provincia</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{data.nombre}</td>
+              <td>{data.apellido}</td>
+              <td>{data.carnetIdentidad}</td>
+              <td>{data.fechaNacimiento}</td>
+              <td>{data.colegio}</td>
+              <td>{data.curso}</td>
+              <td>{data.departamento}</td>
+              <td>{data.provincia}</td>
+              <td>
+                <div>
+                  <FaEdit
+                    style={{
+                      fontSize: "25px",
+                      color: "orange",
+                      marginRight: "8px",
+                      cursor: "pointer",
+                    }}
+                  />
+                  <MdDelete
+                    style={{
+                      fontSize: "25px",
+                      color: "red",
+                      marginRight: "8px",
+                      cursor: "pointer",
+                    }}
+                  />
+                  <FaInfoCircle
+                    style={{
+                      fontSize: "25px",
+                      color: "blue",
+                      cursor: "pointer",
+                    }}
+                    onClick={openModal}
+                  />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <div className="list-aditional-data-student">
-        <div className="containter-registered-area">
-          <h5>Areas registradas</h5>
-          <div className="registered-area">
-            {areasOlimpista.map((area, index) => (
-              <span key={index} className="label-area">
-                {area.nombreArea}
-              </span>
-            ))}
+      <GenericModal modalIsOpen={modalIsOpen} closeModal={closeModal}>
+        <div className="olimpista-modal">
+          <div className="data-section">
+            <div className="section-header">
+              <h3>Datos de olimpista</h3>
+            </div>
+            <div className="data-grid">
+              <div className="data-item">
+                <span className="data-label">Nombre:</span>
+                <span className="data-value">{data.nombre}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Apellido:</span>
+                <span className="data-value">{data.apellido}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Fecha de Nacimiento:</span>
+                <span className="data-value">{data.fechaNacimiento}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Carnet de Identidad:</span>
+                <span className="data-value">{data.carnetIdentidad}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Colegio:</span>
+                <span className="data-value">{data.colegio}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Curso:</span>
+                <span className="data-value">{data.curso}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Departamento:</span>
+                <span className="data-value">{data.departamento}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Provincia:</span>
+                <span className="data-value">{data.provincia}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Correo Electrónico:</span>
+                <span className="data-value">{data.correo}</span>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="containter-registered-area">
-          <h5>Tutores registrados</h5>
-          <div className="registered-area">
-            {tutoresOlimpista.map((tutor, index) => (
-              <span key={index} className="label-area">
-                {tutor.nombre} {tutor.apellido}
-              </span>
-            ))}
-          </div>
+          {tutoresOlimpista.map((tutor, index) => (
+            <div className="data-section" key={`tutor-${index}`}>
+              <div className="section-header">
+                <h3>{chooseTitleTutor(tutor.rol)}</h3>
+              </div>
+              <div className="data-grid">
+                <div className="data-item">
+                  <span className="data-label">Nombre:</span>
+                  <span className="data-value">{tutor.nombre}</span>
+                </div>
+                <div className="data-item">
+                  <span className="data-label">Apellido:</span>
+                  <span className="data-value">{tutor.apellido}</span>
+                </div>
+                <div className="data-item">
+                  <span className="data-label">Carnet de Identidad:</span>
+                  <span className="data-value">{tutor.carnetIdentidad}</span>
+                </div>
+                <div className="data-item">
+                  <span className="data-label">Tipo de tutor:</span>
+                  <span className="data-value">{tutor.tipoTutor}</span>
+                </div>
+                <div className="data-item">
+                  <span className="data-label">Número de celular:</span>
+                  <span className="data-value">{tutor.numeroCelular}</span>
+                </div>
+                <div className="data-item">
+                  <span className="data-label">Correo Electrónico:</span>
+                  <span className="data-value">{tutor.correo}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {areasOlimpista.map((area, index) => (
+            <div className="data-section" key={`area-${index}`}>
+              <div className="section-header">
+                <h3>Área {index + 1}</h3>
+              </div>
+              <div className="data-grid">
+                <div className="data-item">
+                  <span className="data-label">Nombre área:</span>
+                  <span className="data-value">{area.nombreArea}</span>
+                </div>
+                <div className="data-item">
+                  <span className="data-label">Categoría:</span>
+                  <span className="data-value">
+                    {area.categorias[0].nombreCategoria}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
+      </GenericModal>
     </div>
   );
 };

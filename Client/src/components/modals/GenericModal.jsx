@@ -9,14 +9,13 @@ import "./GenericModal.css";
 ReactModal.setAppElement("#root");
 
 export const GenericModal = ({ closeModal, modalIsOpen, children, errors }) => {
-
   const modalStyle = {
     content: {
       position: "fixed",
-      maxWidth: "600px",
-      maxHeight: Object.entries(errors).length === 0 ? "400px" : "470px",
+      maxWidth: "705px",
+      maxHeight: "400px",
       margin: "auto",
-      overflow: "none",
+      overflow: "auto",
       border: "1px solid black",
     },
 

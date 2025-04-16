@@ -74,6 +74,21 @@ export const RegisterResponsible = () => {
     localStorage.setItem("CiResponsible", watchedCarnetIdentidad);
   }, [watchedCarnetIdentidad]);
 
+  useEffect(() => {
+    const handleUnload = () => {
+      localStorage.removeItem("NombreResponsible");
+      localStorage.removeItem("ApellidoResponsible");
+      localStorage.removeItem("TipoTutorResponsible");
+      localStorage.removeItem("NumeroResponsible");
+      localStorage.removeItem("EmailResponsible");
+      localStorage.removeItem("CiResponsible");
+    };
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, []);
+
   const onSubmit = async (data) => {
     const dataResponsible = {
       nombresTutor: data.Nombre,

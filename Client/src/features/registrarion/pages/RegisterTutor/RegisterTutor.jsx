@@ -10,17 +10,22 @@ import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
 //react
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, NavLink, useLocation } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
 import swal from "sweetalert";
 
 //utils
 import { tipoTutor } from "./DataOptions";
 
+//api
+import {
+  registerDataOlympian,
+  setTutor,
+  setNewInscription,
+} from "../../../../api/inscription.api";
+
 export const RegisterTutor = () => {
   const navigation = useNavigate();
-  const location = useLocation();
-  const { id_olimpista } = location.state || {};
   const {
     register,
     handleSubmit,
@@ -75,27 +80,184 @@ export const RegisterTutor = () => {
   }, [watchedCarnetIdentidad]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const handleUnload = () => {
+      localStorage.removeItem("NombreLegal");
+      localStorage.removeItem("ApellidoLegal");
+      localStorage.removeItem("TipoTutorLegal");
+      localStorage.removeItem("NumeroLegal");
+      localStorage.removeItem("EmailLegal");
+      localStorage.removeItem("CiLegal");
+    };
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
   }, []);
 
   const onSubmit = async (data) => {
-    const dataTutor = {
-      nombresTutor: data.Nombre,
-      apellidosTutor: data.Apellido,
-      tipoTutor: data.Tipo_Tutor,
-      emailTutor: data.Email,
-      telefono: data.Numero_Celular,
-      carnetdeidentidad: data.Ci,
-      id_olimpista,
+    const idTutorInscriptor = localStorage.getItem("tutorInscripcionId");
+
+    const dataTutorResponsible = {
+      nombresTutor: localStorage.getItem("NombreResponsible"),
+      apellidosTutor: localStorage.getItem("ApellidoResponsible"),
+      tipoTutor: localStorage.getItem("TipoTutorResponsible"),
+      emailTutor: localStorage.getItem("EmailResponsible"),
+      telefono: localStorage.getItem("NumeroResponsible"),
+      carnetdeidentidad: localStorage.getItem("NumeroResponsible"),
+      rol: "responsable inscripcion",
+    };
+    const dataTutorLegal = {
+      nombresTutor: localStorage.getItem("NombreLegal"),
+      apellidosTutor: localStorage.getItem("ApellidoLegal"),
+      tipoTutor: localStorage.getItem("TipoTutorLegal"),
+      emailTutor: localStorage.getItem("EmailLegal"),
+      telefono: localStorage.getItem("NumeroLegal"),
+      carnetdeidentidad: localStorage.getItem("NumeroLegal"),
+      rol: "tutor legal",
+    };
+
+    const dataTutorArea1 = {
+      nombresTutor: localStorage.getItem("NombrePrincipal"),
+      apellidosTutor: localStorage.getItem("ApellidoPrincipal"),
+      tipoTutor: localStorage.getItem("TipoTutorPrincipal"),
+      emailTutor: localStorage.getItem("EmailPrincipal"),
+      telefono: localStorage.getItem("NumeroPrincipal"),
+      carnetdeidentidad: localStorage.getItem("NumeroPrincipal"),
+      rol: "tutor area1",
+    };
+
+    const dataTutorArea2 = {
+      nombresTutor: localStorage.getItem("NombreSecundaria"),
+      apellidosTutor: localStorage.getItem("ApellidoSecundaria"),
+      tipoTutor: localStorage.getItem("TipoTutorSecundaria"),
+      emailTutor: localStorage.getItem("EmailSecundaria"),
+      telefono: localStorage.getItem("NumeroSecundaria"),
+      carnetdeidentidad: localStorage.getItem("NumeroSecundaria"),
+      rol: "tutor area2",
+    };
+
+    const dataOlimpista = {
+      Nombre: localStorage.getItem("NombreOlympian"),
+      Apellido: localStorage.getItem("ApellidoOlympian"),
+      Email: localStorage.getItem("EmailOlympian"),
+      CarnetIdentidad: localStorage.getItem("CarnetIdentidadOlympian"),
+      Curso: localStorage.getItem("CursoOlympian"),
+      FechaNacimiento: localStorage.getItem("FechaNacimientoOlympian"),
+      Colegio: localStorage.getItem("ColegioOlympian"),
+      Departamento: localStorage.getItem("DepartamentoOlympian"),
+      Provincia: localStorage.getItem("ProvinciaOlympian"),
+    };
+
+    const inscripcion = {
+      Area: localStorage.getItem("AreaPrincipal"),
+      Categoria: localStorage.getItem("CategoriaPrincipal"),
+      AreaOpcional: localStorage.getItem("AreaSecundaria"),
+      CategoriaOpcional: localStorage.getItem("CategoriaSecundaria"),
+      estado: false,
     };
 
     try {
+      if (idTutorInscriptor !== null)
+        dataOlimpista.id_tutor = idTutorInscriptor;
+      const resOlympian = await registerDataOlympian(dataOlimpista);
+      const idOlimpista = resOlympian.data.data.id_olimpista;
+      dataTutorResponsible.id_olimpista = idOlimpista;
+      dataTutorLegal.id_olimpista = idOlimpista;
+      inscripcion.id_olimpista = idOlimpista;
+      let resTutorResponsible = null;
+
+      if (idTutorInscriptor == null)
+        resTutorResponsible = await setTutor(dataTutorResponsible);
+
+      await setTutor(dataTutorLegal);
+      let idTutorArea1 = null,
+        idTutorArea2 = null;
+
+      if (
+        Object.values(dataTutorArea1).every(
+          (valor) => valor !== null && valor !== ""
+        )
+      ) {
+        dataTutorArea1.id_olimpista = idOlimpista;
+        const res = await setTutor(dataTutorArea1);
+        idTutorArea1 = res.data.tutorId;
+      }
+      if (
+        Object.values(dataTutorArea2).every(
+          (valor) => valor !== null && valor !== ""
+        )
+      ) {
+        dataTutorArea2.id_olimpista = idOlimpista;
+        const res = await setTutor(dataTutorArea2);
+        idTutorArea2 = res.data.tutorId;
+      }
+
+      if (idTutorArea1) inscripcion.id_tutor1 = idTutorArea1;
+      if (idTutorArea2) inscripcion.id_tutor2 = idTutorArea2;
+
+      await setNewInscription(inscripcion);
+
+      limpiarCamposLocalStorage();
+
       swal("Datos registrados correctamente");
-      navigation("/listRegistered", data);
+      navigation("/listRegistered", {
+        state: {
+          tutorId: idTutorInscriptor
+            ? idTutorInscriptor
+            : resTutorResponsible.data.tutorId,
+        },
+      });
     } catch (error) {
       console.log(error);
       swal("Error al registrar los datos");
     }
+  };
+
+  const limpiarCamposLocalStorage = () => {
+    const keysToRemove = [
+      "DepartamentoOlympian",
+      "EmailLegal",
+      "EmailOlympian",
+      "EmailPrincipal",
+      "EmailResponsible",
+      "EmailSecundaria",
+      "FechaNacimientoOlympian",
+      "NombreLegal",
+      "NombreOlympian",
+      "NombrePrincipal",
+      "NombreResponsible",
+      "NombreSecundaria",
+      "NumeroLegal",
+      "NumeroPrincipal",
+      "NumeroResponsible",
+      "NumeroSecundaria",
+      "ProvinciaOlympian",
+      "TipoTutorLegal",
+      "TipoTutorPrincipal",
+      "TipoTutorResponsible",
+      "TipoTutorSecundaria",
+      "AreaSecundaria",
+      "ApellidoLegal",
+      "ApellidoOlympian",
+      "ApellidoPrincipal",
+      "ApellidoSecundaria",
+      "AreaPrincipal",
+      "CarnetIdentidadOlympian",
+      "CategoriaPrincipal",
+      "CategoriaSecundaria",
+      "CategoriasFiltradas",
+      "CategoriasFiltradasSecundaria",
+      "CiLegal",
+      "CiPrincipal",
+      "CiResponsible",
+      "CiSecundaria",
+      "ColegioOlympian",
+      "CursoOlympian",
+      "TutorArea1",
+      "TutorArea2",
+    ];
+
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
   };
 
   return (
