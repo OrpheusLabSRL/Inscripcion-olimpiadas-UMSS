@@ -9,19 +9,23 @@ class AreaCategoria extends Model
 {
     use HasFactory;
 
-    protected $table = 'area_categoria'; // Nombre de la tabla exacto
-    protected $primaryKey = 'id_AreaCategoria'; // PK personalizada
+    protected $table = 'area_categoria';
+    protected $primaryKey = 'id_AreaCategoria';
+    public $timestamps = false;
 
     protected $fillable = [
-        'area_id',
-        'categoria_id',
+        'idArea',
+        'idCategoria',
         'estadoAreaCategoria'
     ];
 
     public function area()
-{
-    return $this->belongsTo(Area::class, 'area_id', 'idArea');
-}
+    {
+        return $this->belongsTo(Area::class, 'idArea', 'idArea');
+    }
 
-
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class, 'idCategoria', 'idCategoria');
+    }
 }

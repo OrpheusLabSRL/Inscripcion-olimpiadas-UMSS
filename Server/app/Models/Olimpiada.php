@@ -9,7 +9,9 @@ class Olimpiada extends Model
 {
     use HasFactory;
 
-    protected $table = 'olimpiadas';
+    protected $table = 'olimpiada';
+    protected $primaryKey = 'idOlimpiada';
+    public $timestamps = false;
 
     protected $fillable = [
         'nombreOlimpiada',
@@ -19,6 +21,7 @@ class Olimpiada extends Model
         'fechaFinOlimp',
     ];
 
+    // Validación de fechas antes de guardar
     public static function boot()
     {
         parent::boot();
@@ -30,8 +33,14 @@ class Olimpiada extends Model
         });
     }
 
+    // Relación con áreas mediante la tabla pivote olimpiada_area
     public function areas()
     {
-        return $this->hasMany(Area::class, 'idOlimpiada', 'idOlimpiada');
+        return $this->belongsToMany(
+            Area::class,
+            'olimpiada_area',
+            'idOlimpiada',
+            'idArea'
+        )->withPivot('estadoOlimpArea');
     }
 }

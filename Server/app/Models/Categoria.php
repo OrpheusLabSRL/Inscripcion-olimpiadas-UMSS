@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categoria extends Model
 {
-    protected $table = 'categorias';
+    protected $table = 'categoria';
     protected $primaryKey = 'idCategoria';
     public $timestamps = false;
-
 
     protected $fillable = [
         'nombreCategoria',
@@ -22,17 +21,19 @@ class Categoria extends Model
         return $this->belongsToMany(
             Area::class,
             'area_categoria',
-            'categoria_id', 
-            'area_id',      
-            'idCategoria', 
-            'idArea'     
+            'idCategoria',
+            'idArea'
         )->withPivot('estadoAreaCategoria');
     }
 
-    // 🔁 Relación con grados (tabla intermedia: categoria_grados)
+    // 🔁 Relación con grados (tabla intermedia: categoria_grado)
     public function grados()
-{
-    return $this->belongsToMany(Grados::class, 'categoria_grados', 'categoria_id', 'grado_id')
-                ->withPivot('estadoCategoriaGrado')->withTimestamps();
-}
+    {
+        return $this->belongsToMany(
+            Grado::class,
+            'categoria_grado',
+            'idCategoria',
+            'idGrado'
+        )->withPivot('estadoCategoriaGrado');
+    }
 }

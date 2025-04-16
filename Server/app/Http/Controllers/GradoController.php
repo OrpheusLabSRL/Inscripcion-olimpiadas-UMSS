@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 
 class GradoController extends Controller
 {
-    // Listar todos los grados
+    // Obtener todos los grados
     public function index()
     {
         $grados = Grados::all();
         return response()->json($grados);
     }
 
-    // Obtener un grado por ID
+    // Obtener un grado por su ID
     public function show($idGrado)
     {
         $grado = Grados::find($idGrado);
@@ -30,11 +30,15 @@ class GradoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombreGrado' => 'required|string|max:255',
+            'numeroGrado' => 'required|integer',
+            'nivel' => 'required|string|max:10',
+            'estadoGrado' => 'required|boolean'
         ]);
 
         $grado = Grados::create([
-            'nombreGrado' => $request->nombreGrado,
+            'numeroGrado' => $request->numeroGrado,
+            'nivel' => $request->nivel,
+            'estadoGrado' => $request->estadoGrado
         ]);
 
         return response()->json(['message' => 'Grado creado correctamente', 'data' => $grado], 201);
@@ -50,11 +54,15 @@ class GradoController extends Controller
         }
 
         $request->validate([
-            'nombreGrado' => 'required|string|max:255',
+            'numeroGrado' => 'required|integer',
+            'nivel' => 'required|string|max:10',
+            'estadoGrado' => 'required|boolean'
         ]);
 
         $grado->update([
-            'nombreGrado' => $request->nombreGrado,
+            'numeroGrado' => $request->numeroGrado,
+            'nivel' => $request->nivel,
+            'estadoGrado' => $request->estadoGrado
         ]);
 
         return response()->json(['message' => 'Grado actualizado correctamente', 'data' => $grado]);

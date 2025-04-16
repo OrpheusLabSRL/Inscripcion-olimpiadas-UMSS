@@ -8,18 +8,21 @@ use Illuminate\Support\Facades\DB;
 
 class CategoriaController extends Controller
 {
+    // Obtener todas las categorías con sus relaciones
     public function index()
     {
         $categorias = Categoria::with(['areas', 'grados'])->get();
         return response()->json($categorias);
     }
 
+    // Obtener una sola categoría con sus relaciones
     public function show($id)
     {
         $categoria = Categoria::with(['areas', 'grados'])->findOrFail($id);
         return response()->json($categoria);
     }
 
+    // Guardar una nueva categoría y sus relaciones
     public function store(Request $request)
     {
         $request->validate([
@@ -30,16 +33,14 @@ class CategoriaController extends Controller
         ]);
 
         DB::transaction(function () use ($request) {
-            // ⚠ Usa el modelo y asegúrate de guardar
             $categoria = new Categoria();
             $categoria->nombreCategoria = $request->nombreCategoria;
             $categoria->estadoCategoria = $request->estado;
-            $categoria->save(); // 💥 Aquí se genera el ID correctamente
+            $categoria->save();
 
-            // ✅ Inserta en tablas intermedias después del save
             DB::table('area_categoria')->insert([
                 'area_id' => $request->idArea,
-                'categoria_id' => $categoria->idCategoria, // Ahora tiene valor
+                'categoria_id' => $categoria->idCategoria,
                 'estadoAreaCategoria' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -56,6 +57,8 @@ class CategoriaController extends Controller
 
         return response()->json(['message' => 'Categoría creada con éxito']);
     }
+
+    // Actualizar una categoría y sus relaciones
     public function update(Request $request, $id)
     {
         $categoria = Categoria::findOrFail($id);
@@ -73,11 +76,9 @@ class CategoriaController extends Controller
                 'estadoCategoria' => $request->estado,
             ]);
 
-            // Borrar relaciones anteriores
             DB::table('area_categoria')->where('categoria_id', $categoria->idCategoria)->delete();
             DB::table('categoria_grados')->where('categoria_id', $categoria->idCategoria)->delete();
 
-            // Insertar nuevas relaciones
             DB::table('area_categoria')->insert([
                 'area_id' => $request->idArea,
                 'categoria_id' => $categoria->idCategoria,
@@ -98,12 +99,12 @@ class CategoriaController extends Controller
         return response()->json(['message' => 'Categoría actualizada con éxito']);
     }
 
+    // Eliminar una categoría y sus relaciones
     public function destroy($id)
     {
         $categoria = Categoria::findOrFail($id);
         $categoria->delete();
 
-        // También puedes limpiar sus relaciones si lo deseas
         DB::table('area_categoria')->where('categoria_id', $id)->delete();
         DB::table('categoria_grados')->where('categoria_id', $id)->delete();
 

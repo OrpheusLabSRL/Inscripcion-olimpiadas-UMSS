@@ -9,33 +9,35 @@ class Area extends Model
 {
     use HasFactory;
 
-    protected $table = 'areas';
-
+    protected $table = 'area';
     protected $primaryKey = 'idArea';
 
     protected $fillable = [
-        'idOlimpiada',
         'nombreArea',
         'descripcionArea',
         'costoArea',
         'estadoArea',
     ];
 
-    // Relacion: Un área pertenece a una Olimpiada
-    public function olimpiada()
+    // Relación: un área pertenece a muchas olimpiadas (pivot: olimpiada_area)
+    public function olimpiadas()
     {
-        return $this->belongsTo(Olimpiada::class, 'idOlimpiada', 'idOlimpiada');
+        return $this->belongsToMany(
+            Olimpiada::class,
+            'olimpiada_area',
+            'idArea',
+            'idOlimpiada'
+        )->withPivot('estadoOlimpArea');
     }
 
+    // Relación: un área tiene muchas categorías (pivot: area_categoria)
     public function categorias()
-{
-    return $this->belongsToMany(
-        Categoria::class,
-        'area_categoria',
-        'area_id',       // FK en la tabla pivot a este modelo (Area)
-        'categoria_id',  // FK en la tabla pivot a Categoria
-        'idArea',        // PK en el modelo Area
-        'idCategoria'    // PK en el modelo Categoria
-    )->withPivot('estadoAreaCategoria')->withTimestamps();
-}
+    {
+        return $this->belongsToMany(
+            Categoria::class,
+            'area_categoria',
+            'idArea',
+            'idCategoria'
+        )->withPivot('estadoAreaCategoria');
+    }
 }
