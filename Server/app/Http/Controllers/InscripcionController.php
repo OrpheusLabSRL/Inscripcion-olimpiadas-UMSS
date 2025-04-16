@@ -91,41 +91,58 @@ class InscripcionController extends Controller
     }
 }
 
-    public function getAreaByOlimpista($id_olimpista)
-    {
-        // Verificar si el olimpista existe
-        $olimpista = Olimpista::find($id_olimpista);
-        
-        if (!$olimpista) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Olimpista no encontrado'
-            ], 404);
-        }
-        
-        // Obtener las inscripciones del olimpista
-        $inscripciones = Inscripcion::where('id_olimpista', $id_olimpista)->get();
-        
-        // Obtener los id_AreaCategoria únicos
-        $areaCategoriaIds = $inscripciones->pluck('id_AreaCategoria')->unique();
-        
-        // Obtener las áreas categorías
-        $areaCategorias = AreaCategoria::whereIn('id_AreaCategoria', $areaCategoriaIds)->get();
-        
-        // Obtener los id_area (ojo con los nombres personalizados)
-        $areaIds = $areaCategorias->pluck('area_id')->unique();
-        
-        // Obtener las áreas correspondientes
-        $areas = Area::whereIn('idArea', $areaIds)->get();
-        
+public function getAreaByOlimpista($id_olimpista)
+{
+    // Verificar si el olimpista existe
+    $olimpista = Olimpista::find($id_olimpista);
+    
+    if (!$olimpista) {
         return response()->json([
-            'success' => true,
-            'data' => [
-                'olimpista' => $olimpista,
-                'areas' => $areas
-            ]
-        ], 200);
+            'success' => false,
+            'message' => 'Olimpista no encontrado'
+        ], 404);
     }
+
+    // Obtener las inscripciones del olimpista
+    $inscripciones = Inscripcion::where('id_olimpista', $id_olimpista)->get();
+
+    // Obtener los id_AreaCategoria únicos
+    $areaCategoriaIds = $inscripciones->pluck('id_AreaCategoria')->unique();
+
+    // Obtener las áreas-categorías involucradas
+    $areaCategorias = AreaCategoria::with('area', 'categoria') // Asegúrate de tener estas relaciones
+        ->whereIn('id_AreaCategoria', $areaCategoriaIds)
+        ->get();
+
+    // Agrupar por área
+    $areasConCategorias = $areaCategorias->groupBy('area_id')->map(function ($items, $areaId) {
+        $area = $items->first()->area;
+
+        return [
+            'idArea' => $area->idArea,
+            'nombreArea' => $area->nombreArea,
+            'descripcionArea' => $area->descripcionArea,
+            'costoArea' => $area->costoArea,
+            'estadoArea' => $area->estadoArea,
+            'categorias' => $items->map(function ($item) {
+                return [
+                    'idCategoria' => $item->categoria->idCategoria ?? null,
+                    'nombreCategoria' => $item->categoria->nombreCategoria ?? null,
+                    'estadoCategoria' => $item->categoria->descripcionCategoria ?? null,
+                ];
+            })->values()
+        ];
+    })->values();
+
+    return response()->json([
+        'success' => true,
+        'data' => [
+            'olimpista' => $olimpista,
+            'areas' => $areasConCategorias
+        ]
+    ], 200);
+}
+
     
 
 }

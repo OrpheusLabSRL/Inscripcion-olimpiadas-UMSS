@@ -17,4 +17,9 @@ class OlimpistaTutor extends Pivot
         'estado',
         'rol',
     ];
+
+    public function tutor()
+{
+    return $this->belongsTo(Tutor::class, 'id_tutor');
+}
 }

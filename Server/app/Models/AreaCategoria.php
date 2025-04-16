@@ -22,6 +22,10 @@ class AreaCategoria extends Model
 {
     return $this->belongsTo(Area::class, 'area_id', 'idArea');
 }
+    public function categoria()
+{
+    return $this->belongsTo(Categoria::class, 'categoria_id', 'idCategoria');
+}
 
 
 }
