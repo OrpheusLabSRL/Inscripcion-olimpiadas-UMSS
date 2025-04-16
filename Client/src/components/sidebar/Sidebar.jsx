@@ -36,39 +36,54 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
           {isOpen && <h2 className="sidebar-title">Oh! SanSi</h2>}
         </div>
         <ul>
-          <li>
-            <Link>
-              {<FaHome className="sidebar-icons" />}{" "}
-              {isOpen ? "Olimpiadas" : ""}
-            </Link>
-          </li>
-          <li>
-            <Link>
-              {<IoDocumentTextOutline className="sidebar-icons" />}{" "}
-              {isOpen ? "Datos base" : ""}
-            </Link>
-          </li>
-          <li>
-            <Link>
-              {" "}
-              {
-                <HiOutlineClipboardDocumentList className="sidebar-icons" />
-              }{" "}
-              {isOpen ? "Exámenes" : ""}
-            </Link>
-          </li>
-          <li>
-            <Link>
-              {<HiOutlineClipboardDocument className="sidebar-icons" />}{" "}
-              {isOpen ? "Reportes" : ""}
-            </Link>
-          </li>
-          <li>
-            <Link>
-              {<FaRegCalendarAlt className="sidebar-icons" />}{" "}
-              {isOpen ? "Calendario" : ""}
-            </Link>
-          </li>
+          {admin ? (
+            <>
+              <li>
+                <Link to="/admin/olimpiadas">
+                  <FaHome className="sidebar-icons" />{" "}
+                  {isOpen ? "Olimpiadas" : ""}
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/base-data">
+                  <IoDocumentTextOutline className="sidebar-icons" />{" "}
+                  {isOpen ? "Datos base" : ""}
+                </Link>
+              </li>
+              <li>
+                <Link>
+                  <HiOutlineClipboardDocumentList className="sidebar-icons" />{" "}
+                  {isOpen ? "Exámenes" : ""}
+                </Link>
+              </li>
+              <li>
+                <Link>
+                  <HiOutlineClipboardDocument className="sidebar-icons" />{" "}
+                  {isOpen ? "Reportes" : ""}
+                </Link>
+              </li>
+              <li>
+                <Link>
+                  <FaRegCalendarAlt className="sidebar-icons" />{" "}
+                  {isOpen ? "Calendario" : ""}
+                </Link>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <Link>
+                  <FaHome className="sidebar-icons" /> {isOpen ? "Inicio" : ""}
+                </Link>
+              </li>
+              <li>
+                <Link>
+                  <IoDocumentTextOutline className="sidebar-icons" />{" "}
+                  {isOpen ? "Contacto" : ""}
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
 
         <div className="btn-logout">

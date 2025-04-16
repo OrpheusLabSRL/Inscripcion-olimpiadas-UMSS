@@ -22,9 +22,7 @@ function App() {
   const location = useLocation();
 
   const showSidebar =
-    location.pathname !== "/" &&
-    location.pathname !== "/register/tutor-form" &&
-    !location.pathname.startsWith("/admin");
+    location.pathname !== "/" && location.pathname !== "/register/tutor-form";
 
   // Simular usuario logueado
   const user = {
@@ -43,7 +41,13 @@ function App() {
             : "main"
         }
       >
-        {showSidebar && <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />}
+        {showSidebar && (
+          <Sidebar
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            admin={!location.pathname.startsWith("/admin") ? false : true}
+          />
+        )}
 
         <div className="content-area">
           <Routes>
