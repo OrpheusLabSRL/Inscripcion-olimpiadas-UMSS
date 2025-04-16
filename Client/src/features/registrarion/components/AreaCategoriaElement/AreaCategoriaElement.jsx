@@ -17,6 +17,7 @@ export const AreaCategoriaElement = ({
   nameCategoria,
   areas,
   mandatory,
+  asterisk,
   categorias,
   onChooseArea,
   setValue,
@@ -45,6 +46,7 @@ export const AreaCategoriaElement = ({
           mandatory={mandatory}
           name={nameArea}
           value={watchedArea}
+          asterisk = {asterisk}
           onChange={onChooseArea}
           options={areas}
           register={register}
@@ -58,6 +60,7 @@ export const AreaCategoriaElement = ({
           mandatory={mandatory}
           name={nameCategoria}
           value={watchedCategoria}
+          asterisk = {asterisk}
           onChange={(e) => setValue(nameCategoria, e.target.value)}
           options={categorias}
           register={register}
@@ -76,9 +79,11 @@ export const AreaCategoriaElement = ({
               }`}
         </div>
       )}
-      <div className="input-2c option-add-tutor">
-        <p onClick={addTutor}>Elegir un tutor para el area (Opcional)</p>
-      </div>
+      {watchedArea && watchedCategoria && (
+        <div className="input-2c option-add-tutor">
+          <p onClick={addTutor}>Elegir un tutor para el area (Opcional)</p>
+        </div>
+      )}
     </>
   );
 };

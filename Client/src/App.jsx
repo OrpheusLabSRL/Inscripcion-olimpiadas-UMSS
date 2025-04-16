@@ -35,7 +35,12 @@ function App() {
     <div className="app-container">
       <div
         className={
-          location.pathname === "/" ? "" : isOpen ? "main active" : "main"
+          location.pathname === "/" ||
+          location.pathname == "/register/tutor-form"
+            ? ""
+            : isOpen
+            ? "main active"
+            : "main"
         }
       >
         {showSidebar && <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />}

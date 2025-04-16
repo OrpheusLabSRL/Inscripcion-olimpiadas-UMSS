@@ -19,12 +19,6 @@
   grid-column: span 2;
 }
 
-.container-btn-next {
-  grid-column-start: 2;
-  display: flex;
-  justify-content: flex-end;
-}
-
 .container-btn-next button {
   background-color: var(--tertiary-color);
 }

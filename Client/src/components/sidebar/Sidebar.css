@@ -72,8 +72,12 @@
   left: 28px;
 }
 
+.btn-logout a {
+  display: flex;
+}
+
 .sidebar-title {
-  font-size: var(--h1-size);
+  font-size: var(--h2-size);
 }
 
 .sidebar-icons {

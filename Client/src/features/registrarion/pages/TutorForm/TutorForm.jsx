@@ -6,6 +6,8 @@ import {
   registerTutor,
   checkExistingTutor,
 } from "../../../../api/TutorForm.api";
+import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
+import { NextPage } from "../../../../components/Buttons/NextPage";
 
 export const TutorForm = () => {
   const location = useLocation();
@@ -357,8 +359,14 @@ export const TutorForm = () => {
           )}
 
           {formType === "new" ? (
-            <form onSubmit={handleSubmit} className="form-section">
-              <div className="form-grid">
+            <form
+              onSubmit={handleSubmit}
+              className="form-section"
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <NextPage value="Nueva Inscripción" to="/register/responsible" />
+
+              {/* <div className="form-grid">
                 <div className="form-group">
                   <label htmlFor="nombre">
                     Nombre(s) <span className="required">*</span>
@@ -495,7 +503,7 @@ export const TutorForm = () => {
                 >
                   {isSubmitting ? "Enviando..." : "Siguiente"}
                 </button>
-              </div>
+              </div> */}
             </form>
           ) : (
             <form onSubmit={handleContinue} className="form-section">

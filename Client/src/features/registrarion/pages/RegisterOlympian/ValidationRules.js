@@ -63,8 +63,8 @@ export const Validator = {
       message: "Solo se permiten caracteres alfanumericos",
     },
     maxLength: {
-      value: 15,
-      message: "El carnet de identidad no debe ser mayor a 15 caracteres",
+      value: 12,
+      message: "El carnet de identidad no debe ser mayor a 12 caracteres",
     },
     minLength: {
       value: 8,

@@ -7,6 +7,7 @@ export const Select = ({
   className = "",
   value,
   onChange,
+  asterisk = true,
   id,
   placeholder = "",
   register,
@@ -18,7 +19,8 @@ export const Select = ({
     <div className="config-input">
       {label && (
         <label htmlFor={id}>
-          {label} {mandatory ? <span className="mandatory">*</span> : ""}{" "}
+          {label}{" "}
+          {mandatory && asterisk ? <span className="mandatory">*</span> : ""}{" "}
         </label>
       )}
 

@@ -1,3 +1,7 @@
+.option-add-tutor {
+  width: 280px;
+}
+
 .option-add-tutor > p {
   text-decoration: underline;
   color: var(--primary-color);

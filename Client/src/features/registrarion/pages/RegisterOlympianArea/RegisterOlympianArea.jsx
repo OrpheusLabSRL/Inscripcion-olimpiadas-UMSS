@@ -225,6 +225,8 @@ export const RegisterOlympianArea = () => {
           nameCategoria={"CategoriaSecundaria"}
           areas={areaInteres}
           categorias={categoriasInteresSecundaria}
+          mandatory={categoriasInteresSecundaria ? true : false}
+          asterisk={false}
           onChooseArea={onChooseArea()}
           setValue={setValue}
           watchedArea={watchedAreaSecundaria}

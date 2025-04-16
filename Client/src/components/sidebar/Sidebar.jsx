@@ -12,11 +12,15 @@ import { FaArrowRightArrowLeft } from "react-icons/fa6";
 
 //css
 import "./Sidebar.css";
+import { useNavigate } from "react-router-dom";
 
-//assets
-import logoOlab from "../../assets/images/logo-olab.png";
+export default function Sidebar({ isOpen, setIsOpen, admin }) {
+  const navigation = useNavigate();
 
-export default function Sidebar({ isOpen, setIsOpen }) {
+  const cerrarSesion = () => {
+    navigation("/");
+  };
+
   return (
     <>
       <div className={` sidebar ${isOpen ? "active" : ""}`}>
@@ -25,7 +29,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             isOpen ? "" : "sidebar-header-contrain"
           }`}
         >
-          <img src={logoOlab} />
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/7330cc38170480eadf5800dd915ae76c4a5737cb"
+            alt="LOGO O SANSI"
+          />
           {isOpen && <h2 className="sidebar-title">Oh! SanSi</h2>}
         </div>
         <ul>
@@ -66,14 +73,22 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
         <div className="btn-logout">
           <a>
-            {<IoLogInOutline className="sidebar-icons" />}{" "}
-            {isOpen ? "Cerrar Sesion" : ""}
+            {
+              <IoLogInOutline
+                style={{ fontSize: "25px" }}
+                className="sidebar-icons"
+                onClick={cerrarSesion}
+              />
+            }{" "}
+            {isOpen ? <span onClick={cerrarSesion}>Cerrar Sesion</span> : ""}
           </a>
         </div>
       </div>
 
       <button className="toggle-btn" onClick={() => setIsOpen(!isOpen)}>
-        <FaArrowRightArrowLeft />
+        <FaArrowRightArrowLeft style={{ fontSize: "18px" }} />
+
+        {isOpen ? <span style={{ margin: "10px" }}>Contraer menú</span> : ""}
       </button>
     </>
   );

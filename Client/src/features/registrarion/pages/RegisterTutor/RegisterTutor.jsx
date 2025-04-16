@@ -6,6 +6,7 @@ import { Input } from "../../../../components/inputs/Input";
 import { Select } from "../../../../components/inputs/Select";
 import { Validator } from "./ValidationRules";
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
+import { NextPage } from "../../../../components/Buttons/NextPage";
 
 //react
 import { useEffect } from "react";
@@ -355,7 +356,11 @@ export const RegisterTutor = () => {
           />
         </div>
 
-        <div className="container-btn-next">
+        <div className="container-btn-back-olympian input-1c">
+          <NextPage to={"/"} value="Cancelar" />
+        </div>
+
+        <div>
           <PrimaryButton type="submit" value="Registrar" />
         </div>
       </form>
