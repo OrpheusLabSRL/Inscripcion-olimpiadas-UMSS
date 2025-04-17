@@ -23,9 +23,11 @@ import {
 } from "./DataOptions";
 
 export const RegisterOlympian = () => {
-  const [provinciasFiltradas, setProvinciasFiltradas] = useState(
-    JSON.parse(localStorage.getItem("provinciasFiltradas")) || null
-  );
+  const [provinciasFiltradas, setProvinciasFiltradas] = useState(() => {
+    const stored = localStorage.getItem("provinciasFiltradas");
+    return stored ? JSON.parse(stored) : null;
+  });
+
   const navigation = useNavigate();
   const location = useLocation();
   const previousPath = location.state?.from;

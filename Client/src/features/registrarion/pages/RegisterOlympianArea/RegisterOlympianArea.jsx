@@ -22,13 +22,17 @@ import { filtrarAreasPorCurso, filtrarCategoriasPorCursoYArea } from "./util";
 export const RegisterOlympianArea = () => {
   const [catalogo, setCatalogo] = useState([]);
   const [areaInteres, setAreaInteres] = useState([]);
-  const [categoriasInteres, setCategoriasInteres] = useState(
-    JSON.parse(localStorage.getItem("CategoriasFiltradas")) || null
-  );
+  const [categoriasInteres, setCategoriasInteres] = useState(() => {
+    const stored = localStorage.getItem("CategoriasFiltradas");
+    return stored ? JSON.parse(stored) : null;
+  });
+
   const [categoriasInteresSecundaria, setCategoriasInteresSecundaria] =
-    useState(
-      JSON.parse(localStorage.getItem("CategoriasFiltradasSecundaria")) || null
-    );
+    useState(() => {
+      const stored = localStorage.getItem("CategoriasFiltradasSecundaria");
+      return stored ? JSON.parse(stored) : null;
+    });
+
   const navigation = useNavigate();
 
   const {
