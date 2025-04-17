@@ -100,9 +100,6 @@ export const RegisterResponsible = () => {
       id_olimpista,
     };
 
-    console.log(dataResponsible);
-    console.log("Los datos son", data);
-
     try {
       navigation("/register/olympian", {
         state: { from: location.pathname },

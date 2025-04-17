@@ -167,7 +167,7 @@ export const RegisterTutor = () => {
       inscripcion.id_olimpista = idOlimpista;
       let resTutorResponsible = null;
 
-      if (idTutorInscriptor == null)
+      if (idTutorInscriptor == null || idTutorInscriptor == "")
         resTutorResponsible = await setTutor(dataTutorResponsible);
 
       await setTutor(dataTutorLegal);
@@ -199,15 +199,15 @@ export const RegisterTutor = () => {
       await setNewInscription(inscripcion);
 
       limpiarCamposLocalStorage();
+      if (resTutorResponsible?.data?.tutorId != null) {
+        localStorage.setItem(
+          "tutorInscripcionId",
+          resTutorResponsible.data.tutorId
+        );
+      }
 
       swal("Datos registrados correctamente");
-      navigation("/listRegistered", {
-        state: {
-          tutorId: idTutorInscriptor
-            ? idTutorInscriptor
-            : resTutorResponsible.data.tutorId,
-        },
-      });
+      navigation("/listRegistered");
     } catch (error) {
       console.log(error);
       swal("Error al registrar los datos");
@@ -242,6 +242,7 @@ export const RegisterTutor = () => {
       "ApellidoOlympian",
       "ApellidoPrincipal",
       "ApellidoSecundaria",
+      "ApellidoResponsible",
       "AreaPrincipal",
       "CarnetIdentidadOlympian",
       "CategoriaPrincipal",
@@ -256,6 +257,7 @@ export const RegisterTutor = () => {
       "CursoOlympian",
       "TutorArea1",
       "TutorArea2",
+      "provinciasFiltradas",
     ];
 
     keysToRemove.forEach((key) => localStorage.removeItem(key));

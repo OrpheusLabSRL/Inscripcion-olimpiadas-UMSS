@@ -15,10 +15,7 @@ import { getDataOlympian } from "../../../../api/inscription.api";
 export const ListRegistered = () => {
   const [dataOlympians, setDataOlympians] = useState([]);
   const location = useLocation();
-  const tutorId =
-    localStorage.getItem("tutorInscripcionId") ??
-    location.state?.tutorId ??
-    null;
+  const tutorId = localStorage.getItem("tutorInscripcionId");
 
   useEffect(() => {
     const getStudents = async () => {

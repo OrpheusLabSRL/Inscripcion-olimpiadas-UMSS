@@ -23,17 +23,14 @@ const CategoriesTable = () => {
       <thead>
         <tr>
           <th>Nombre</th>
-          <th>Áreas</th>
           <th>Grados</th>
           <th>Estado</th>
-          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         {categorias.map((cat) => (
           <tr key={cat.idCategoria}>
             <td>{cat.nombreCategoria}</td>
-            <td>{cat.areas.map((a) => a.nombreArea).join(", ")}</td>
             <td>
               {cat.grados
                 .map((g) => `${g.numeroGrado}° de ${g.nivel}`)
@@ -48,10 +45,6 @@ const CategoriesTable = () => {
                 {cat.estadoCategoria ? "Activo" : "Inactivo"}
               </span>
             </td>
-            {/*<td>
-              <button>✏️</button>
-              <button>🗑️</button>
-            </td>*/}
           </tr>
         ))}
       </tbody>

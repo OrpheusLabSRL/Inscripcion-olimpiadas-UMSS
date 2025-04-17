@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OlimpiadaAreaCategoria;
 
 class Categoria extends Model
 {
@@ -10,29 +11,22 @@ class Categoria extends Model
     protected $primaryKey = 'idCategoria';
     public $timestamps = false;
 
-
     protected $fillable = [
         'nombreCategoria',
         'estadoCategoria',
     ];
 
-    // 🔁 Relación con áreas (tabla intermedia: area_categoria)
-    public function areas()
+    // 🔁 Relación con grados (tabla intermedia: categoria_grado)
+    public function grados()
     {
-        return $this->belongsToMany(
-            Area::class,
-            'area_categoria',
-            'categoria_id', 
-            'area_id',      
-            'idCategoria', 
-            'idArea'     
-        )->withPivot('estadoAreaCategoria');
+        return $this->belongsToMany(Grado::class, 'categoria_grados', 'categoria_id', 'grado_id')
+            ->withPivot('estadoCategoriaGrado');
+
     }
 
-    // 🔁 Relación con grados (tabla intermedia: categoria_grados)
-    public function grados()
-{
-    return $this->belongsToMany(Grados::class, 'categoria_grados', 'categoria_id', 'grado_id')
-                ->withPivot('estadoCategoriaGrado')->withTimestamps();
-}
+    // 🔁 Relación con combinaciones (olimpiada + área + categoría)
+    public function combinaciones()
+    {
+        return $this->hasMany(OlimpiadaAreaCategoria::class, 'idCategoria');
+    }
 }

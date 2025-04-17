@@ -1,124 +1,90 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/ModalGeneral.css";
-import "../styles/General.css";
-import { createOlympiad } from "../../../api/inscription.api";
+import { getAreasCategoriasPorOlimpiada } from "../../../api/Administration.api";
 
-const OlympiadsModal = ({ isOpen, onClose, onSave }) => {
-  const [formData, setFormData] = useState({
-    nombreOlimpiada: "",
-    version: "",
-    //descripcion: "",
-    fechaInicioOlimp: "",
-    fechaFinOlimp: "",
-  });
+const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
+  const [agrupado, setAgrupado] = useState({});
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    const fetchRelacionadas = async () => {
+      if (olimpiada?.idOlimpiada) {
+        try {
+          const response = await getAreasCategoriasPorOlimpiada(
+            olimpiada.idOlimpiada
+          );
+          const data = Array.isArray(response) ? response : response.data || [];
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+          console.log("📦 Datos procesados:", data);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const confirmacion = window.confirm(
-      "¿Estás seguro de registrar esta olimpiada?"
-    );
-    if (!confirmacion) return;
-    try {
-      const payload = {
-        ...formData,
-        version: parseInt(formData.version),
-        estadoOlimpiada: 1,
-      };
-      console.log("Enviando datos:", formData);
-      await createOlympiad(payload);
-      alert("¡Olimpiada guardada exitosamente!");
-      onClose();
-      onSave && onSave(); // Si se pasa una función onSave, la ejecutamos (ej: para refrescar tabla)
-    } catch (error) {
-      console.error("Error al crear la olimpiada:", error);
-      alert("Error al guardar la olimpiada.");
-    }
-  };
+          const agrupadoPorArea = Object.fromEntries(
+            data.map((area) => [
+              area.idArea,
+              {
+                nombreArea: area.nombreArea,
+                categorias: area.categorias,
+              },
+            ])
+          );
+
+          setAgrupado(agrupadoPorArea);
+        } catch (error) {
+          console.error("❌ Error al cargar áreas y categorías:", error);
+        }
+      }
+    };
+
+    fetchRelacionadas();
+  }, [olimpiada]);
+
+  if (!isOpen || !olimpiada) return null;
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
+      <div className="modal-content" style={{ maxWidth: "800px" }}>
         <button type="button" className="close-button" onClick={onClose}>
           ✖
         </button>
 
-        <form onSubmit={handleSubmit}>
-          <h2 className="modal-title">Nueva Olimpiada</h2>
+        <h2 className="modal-title">Datos generales de la Olimpiada</h2>
 
-          <div className="form-group">
-            <label>Nombre de la Olimpiada *</label>
-            <input
-              type="text"
-              name="nombreOlimpiada"
-              value={formData.nombreOlimpiada}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        <div className="form-group">
+          <p>
+            <strong>Nombre:</strong> {olimpiada.nombreOlimpiada}
+          </p>
+          <p>
+            <strong>Versión:</strong> {olimpiada.version}
+          </p>
+          <p>
+            <strong>Fecha de Inicio:</strong> {olimpiada.fechaInicioOlimp}
+          </p>
+          <p>
+            <strong>Fecha de Fin:</strong> {olimpiada.fechaFinOlimp}
+          </p>
+          <p>
+            <strong>Estado:</strong>{" "}
+            {olimpiada.estadoOlimpiada ? "Activo" : "Finalizado"}
+          </p>
+        </div>
 
-          <div className="form-group">
-            <label>Gestión *</label>
-            <input
-              type="number"
-              name="version"
-              value={formData.version}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        <h3 style={{ marginTop: "2rem", marginBottom: "1rem" }}>
+          Áreas y Categorías
+        </h3>
 
-          <div className="form-group">
-            <label>Descripción</label>
-            <input
-              type="text"
-              name="descripcion"
-              value={formData.descripcion}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label>Fecha de Inicio *</label>
-              <input
-                type="date"
-                name="fechaInicioOlimp"
-                value={formData.fechaInicioOlimp}
-                onChange={handleChange}
-                required
-              />
+        {Object.entries(agrupado).map(([areaId, area]) => (
+          <div className="area-relacionada" key={areaId}>
+            <div className="area-box">
+              <strong>Área:</strong> {area.nombreArea}
             </div>
-            <div className="form-group">
-              <label>Fecha de Fin *</label>
-              <input
-                type="date"
-                name="fechaFinOlimp"
-                value={formData.fechaFinOlimp}
-                onChange={handleChange}
-                required
-              />
+            <div className="categoria-box">
+              <strong>Categorías:</strong>
+              <ul>
+                {area.categorias.map((cat) => (
+                  <li key={cat.idCategoria}>{cat.nombreCategoria}</li>
+                ))}
+              </ul>
             </div>
           </div>
-
-          <div className="modal-actions">
-            <button type="button" onClick={onClose} className="cancel-button">
-              Cancelar
-            </button>
-            <button type="submit" className="save-button">
-              Guardar Olimpiada
-            </button>
-          </div>
-        </form>
+        ))}
       </div>
     </div>
   );

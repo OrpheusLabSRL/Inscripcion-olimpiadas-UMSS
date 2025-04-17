@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Grados;
+use App\Models\Grado;
 use Illuminate\Http\Request;
 
 class GradoController extends Controller
 {
-    // Listar todos los grados
+    // Obtener todos los grados
     public function index()
     {
-        $grados = Grados::all();
+        $grados = Grado::all();
         return response()->json($grados);
     }
 
-    // Obtener un grado por ID
+    // Obtener un grado por su ID
     public function show($idGrado)
     {
-        $grado = Grados::find($idGrado);
+        $grado = Grado::find($idGrado);
 
         if (!$grado) {
             return response()->json(['message' => 'Grado no encontrado'], 404);
@@ -30,11 +30,15 @@ class GradoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombreGrado' => 'required|string|max:255',
+            'numeroGrado' => 'required|integer',
+            'nivel' => 'required|string|max:10',
+            'estadoGrado' => 'required|boolean'
         ]);
 
-        $grado = Grados::create([
-            'nombreGrado' => $request->nombreGrado,
+        $grado = Grado::create([
+            'numeroGrado' => $request->numeroGrado,
+            'nivel' => $request->nivel,
+            'estadoGrado' => $request->estadoGrado
         ]);
 
         return response()->json(['message' => 'Grado creado correctamente', 'data' => $grado], 201);
@@ -43,18 +47,22 @@ class GradoController extends Controller
     // Actualizar un grado existente
     public function update(Request $request, $idGrado)
     {
-        $grado = Grados::find($idGrado);
+        $grado = Grado::find($idGrado);
 
         if (!$grado) {
             return response()->json(['message' => 'Grado no encontrado'], 404);
         }
 
         $request->validate([
-            'nombreGrado' => 'required|string|max:255',
+            'numeroGrado' => 'required|integer',
+            'nivel' => 'required|string|max:10',
+            'estadoGrado' => 'required|boolean'
         ]);
 
         $grado->update([
-            'nombreGrado' => $request->nombreGrado,
+            'numeroGrado' => $request->numeroGrado,
+            'nivel' => $request->nivel,
+            'estadoGrado' => $request->estadoGrado
         ]);
 
         return response()->json(['message' => 'Grado actualizado correctamente', 'data' => $grado]);
@@ -63,7 +71,7 @@ class GradoController extends Controller
     // Eliminar un grado
     public function destroy($idGrado)
     {
-        $grado = Grados::find($idGrado);
+        $grado = Grado::find($idGrado);
 
         if (!$grado) {
             return response()->json(['message' => 'Grado no encontrado'], 404);

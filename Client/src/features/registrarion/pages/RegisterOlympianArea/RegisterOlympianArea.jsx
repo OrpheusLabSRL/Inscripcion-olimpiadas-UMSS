@@ -92,7 +92,7 @@ export const RegisterOlympianArea = () => {
     const allCatalogo = async () => {
       try {
         const catalogo = await getCatalogoCompleto();
-        setCatalogo(catalogo.data);
+        setCatalogo(catalogo);
       } catch (error) {
         console.log("Ocurrio un error");
       }

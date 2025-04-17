@@ -60,7 +60,6 @@ const normalizarTexto = (texto) => {
     .replace(/6°|6º/g, "6to");
 };
 
-
 export const filtrarAreasPorCurso = (curso, programaCompleto) => {
   const cursoNormalizado = normalizarTexto(curso.replace("_", " "));
 
@@ -69,6 +68,7 @@ export const filtrarAreasPorCurso = (curso, programaCompleto) => {
   const numeroCurso = parseInt(grado.replace(/[^\d]/g, ""));
 
   const areasDisponibles = [];
+
 
   programaCompleto.forEach((item) => {
     const gradosItem = normalizarTexto(item.grados);

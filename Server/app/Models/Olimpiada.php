@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OlimpiadaAreaCategoria;
 
 class Olimpiada extends Model
 {
     use HasFactory;
 
     protected $table = 'olimpiadas';
+    protected $primaryKey = 'idOlimpiada';
+    public $timestamps = false;
 
     protected $fillable = [
         'nombreOlimpiada',
@@ -19,6 +22,7 @@ class Olimpiada extends Model
         'fechaFinOlimp',
     ];
 
+    // Validación de fechas antes de guardar
     public static function boot()
     {
         parent::boot();
@@ -30,8 +34,9 @@ class Olimpiada extends Model
         });
     }
 
-    public function areas()
+    // ✅ Nueva relación: olimpiada ↔ combinaciones (área + categoría)
+    public function combinaciones()
     {
-        return $this->hasMany(Area::class, 'idOlimpiada', 'idOlimpiada');
+        return $this->hasMany(OlimpiadaAreaCategoria::class, 'idOlimpiada');
     }
 }

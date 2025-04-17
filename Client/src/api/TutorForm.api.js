@@ -5,20 +5,22 @@ const tutorApi = axios.create({
   responseType: "json",
   timeout: 10000,
   headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  }
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
 });
 
 export const registerTutor = (tutorData) => {
-  return tutorApi.post("/tutores", tutorData)
-    .then(response => response)
-    .catch(error => {
+  return tutorApi
+    .post("/tutores", tutorData)
+    .then((response) => response)
+    .catch((error) => {
       if (error.response) {
-        // Pasamos el error completo para que el componente pueda acceder a error.response.data
         throw error;
       } else if (error.request) {
-        throw new Error("No se pudo conectar con el servidor. Verifica tu conexión.");
+        throw new Error(
+          "No se pudo conectar con el servidor. Verifica tu conexión."
+        );
       } else {
         throw new Error("Error al configurar la solicitud");
       }
@@ -26,20 +28,23 @@ export const registerTutor = (tutorData) => {
 };
 
 export const checkExistingTutor = (email, carnet) => {
-  return tutorApi.get("/tutores/verificar", {
-    params: {
-      email: email,
-      carnet: carnet
-    }
-  })
-  .then(response => response)
-  .catch(error => {
-    if (error.response) {
-      throw error;
-    } else if (error.request) {
-      throw new Error("No se pudo conectar con el servidor. Verifica tu conexión.");
-    } else {
-      throw new Error("Error al configurar la solicitud");
-    }
-  });
+  return tutorApi
+    .get("/tutores/verificar", {
+      params: {
+        email: email,
+        carnet: carnet,
+      },
+    })
+    .then((response) => response)
+    .catch((error) => {
+      if (error.response) {
+        throw error;
+      } else if (error.request) {
+        throw new Error(
+          "No se pudo conectar con el servidor. Verifica tu conexión."
+        );
+      } else {
+        throw new Error("Error al configurar la solicitud");
+      }
+    });
 };

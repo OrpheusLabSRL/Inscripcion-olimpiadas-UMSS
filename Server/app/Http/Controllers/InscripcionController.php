@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AreaCategoria;
+use App\Models\OlimpiadaAreaCategoria;
 use App\Models\Area;
 use App\Models\Inscripcion;
 use Illuminate\Http\Request;
@@ -19,8 +19,8 @@ class InscripcionController extends Controller
         $inscripciones = [];
 
         // Combinación principal
-        $areaCategoria = AreaCategoria::where('area_id', $request->Area)
-            ->where('categoria_id', $request->Categoria)
+        $areaCategoria = OlimpiadaAreaCategoria::where('idArea', $request->Area)
+            ->where('idCategoria', $request->Categoria)
             ->first();
 
         if (!$areaCategoria) {
@@ -36,7 +36,7 @@ class InscripcionController extends Controller
             'fechaInicio' => Carbon::now()->toDateString(),
             'fechaFin' => Carbon::now()->addDays(5),
             'id_olimpista' => $request->id_olimpista,
-            'id_AreaCategoria' => $areaCategoria->id_AreaCategoria,
+            'idOlimpAreaCategoria' => $areaCategoria->idOlimpAreaCategoria,
         ];
 
         // Agregar id_tutor si está presente
@@ -48,8 +48,8 @@ class InscripcionController extends Controller
 
         // Combinación opcional
         if (!empty($request->AreaOpcional) && !empty($request->CategoriaOpcional)) {
-            $areaCategoriaOpcional = AreaCategoria::where('area_id', $request->AreaOpcional)
-                ->where('categoria_id', $request->CategoriaOpcional)
+            $areaCategoriaOpcional = OlimpiadaAreaCategoria::where('idArea', $request->AreaOpcional)
+                ->where('idCategoria', $request->CategoriaOpcional)
                 ->first();
 
             if (!$areaCategoriaOpcional) {
@@ -64,7 +64,7 @@ class InscripcionController extends Controller
                 'fechaInicio' => Carbon::now()->toDateString(),
                 'fechaFin' => Carbon::now()->addDays(5),
                 'id_olimpista' => $request->id_olimpista,
-                'id_AreaCategoria' => $areaCategoriaOpcional->id_AreaCategoria,
+                'idOlimpAreaCategoria' => $areaCategoriaOpcional->idOlimpAreaCategoria,
             ];
 
             // También incluir id_tutor si está presente
@@ -107,15 +107,15 @@ public function getAreaByOlimpista($id_olimpista)
     $inscripciones = Inscripcion::where('id_olimpista', $id_olimpista)->get();
 
     // Obtener los id_AreaCategoria únicos
-    $areaCategoriaIds = $inscripciones->pluck('id_AreaCategoria')->unique();
+    $areaCategoriaIds = $inscripciones->pluck('idOlimpAreaCategoria')->unique();
 
     // Obtener las áreas-categorías involucradas
-    $areaCategorias = AreaCategoria::with('area', 'categoria') // Asegúrate de tener estas relaciones
-        ->whereIn('id_AreaCategoria', $areaCategoriaIds)
+    $areaCategorias = OlimpiadaAreaCategoria::with('area', 'categoria') // Asegúrate de tener estas relaciones
+        ->whereIn('idOlimpAreaCategoria', $areaCategoriaIds)
         ->get();
 
     // Agrupar por área
-    $areasConCategorias = $areaCategorias->groupBy('area_id')->map(function ($items, $areaId) {
+    $areasConCategorias = $areaCategorias->groupBy('idArea')->map(function ($items, $areaId) {
         $area = $items->first()->area;
 
         return [

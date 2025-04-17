@@ -7,10 +7,11 @@ import { RegisterTutor } from "./features/registrarion/pages/RegisterTutor/Regis
 import { TutorForm } from "./features/registrarion/pages/TutorForm/TutorForm";
 import { MainHome } from "./features/home/pages/MainHome";
 import { ListRegistered } from "./features/registrarion/pages/ListRegistered/ListRegistered";
+import ManageBaseData from "./features/administration/pages/ManageBaseData";
 import ManageArea from "./features/administration/pages/ManageArea";
 import ManageCategoria from "./features/administration/pages/ManageCategoria";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
-import ManageBaseData from "./features/administration/pages/ManageBaseData";
+import ManageBaseGeneral from "./features/administration/pages/ManageBaseDataGeneral";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterReponsible/RegisterResponsible";
@@ -71,7 +72,17 @@ function App() {
             />
 
             {/* Rutas bajo AdminLayout */}
-            <Route path="/admin" element={<AdminLayout />}>
+            <Route path="/admin">
+              <Route
+                path="register-base"
+                element={
+                  <PrivateRoute
+                    element={<ManageBaseData />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
               <Route
                 path="areas"
                 element={
@@ -106,7 +117,7 @@ function App() {
                 path="base-data"
                 element={
                   <PrivateRoute
-                    element={<ManageBaseData />}
+                    element={<ManageBaseGeneral />}
                     allowedRoles={["admin"]}
                     userRole={user.role}
                   />

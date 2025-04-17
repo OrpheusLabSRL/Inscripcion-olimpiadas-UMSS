@@ -18,7 +18,7 @@ class Inscripcion extends Model
         'fechaInicio',
         'fechaFin',
         'id_olimpista',
-        'id_AreaCategoria',
+        'idOlimpAreaCategoria',
         'id_tutor',
     ];
 
@@ -32,20 +32,20 @@ public function tutor()
     return $this->belongsTo(Tutor::class, 'id_tutor', 'id_tutor');
 }
 
-public function areaCategoria()
+public function OlimpiadaAreaCategoria()
 {
-    return $this->belongsTo(AreaCategoria::class, 'id_AreaCategoria');
+    return $this->belongsTo(OlimpiadaAreaCategoria::class, 'idOlimpAreaCategoria');
 }
 
 public function area()
 {
     return $this->hasOneThrough(
         Area::class,
-        AreaCategoria::class,
-        'id_AreaCategoria', // FK en AreaCategoria hacia Inscripcion
+        OlimpiadaAreaCategoria::class,
+        'idOlimpAreaCategoria', // FK en AreaCategoria hacia Inscripcion
         'idArea',            // PK en Area
-        'id_AreaCategoria',  // FK en Inscripcion
-        'area_id'            // FK en AreaCategoria hacia Area
+        'idOlimpAreaCategoria',  // FK en Inscripcion
+        'idArea'            // FK en AreaCategoria hacia Area
     );
 }
 

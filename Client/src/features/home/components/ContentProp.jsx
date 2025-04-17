@@ -4,10 +4,12 @@ import "./ContentProp.css";
 
 function ContentProp() {
   const [showButtons, setShowButtons] = useState(false);
+  const [textColor, setTextColor] = useState('black'); // Inicializamos el color de texto como negro
   const navigate = useNavigate();
 
   const handleStartClick = () => {
     setShowButtons(true);
+    setTextColor('white'); // Cambia el color del texto a blanco cuando se hace clic en el botón
   };
 
   const handleStartRegistration = () => {
@@ -21,8 +23,8 @@ function ContentProp() {
   return (
     <main className="content-container">
       <section className={`event-description ${showButtons ? 'active' : ''}`}>
-        <h2>Olimpiadas Científicas Oh! SanSi</h2>
-        <p>Descubre y desarrolla tu potencial científico en las áreas más fascinantes de la ciencia</p>
+        <h2 className={textColor === 'white' ? 'white-text' : ''}>Olimpiadas Científicas Oh! SanSi</h2>
+        <p className={textColor === 'white' ? 'white-text' : ''}>Descubre y desarrolla tu potencial científico en las áreas más fascinantes de la ciencia</p>
         
         {!showButtons ? (
           <button className="start-adventure" onClick={handleStartClick}>
