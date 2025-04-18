@@ -1,5 +1,5 @@
 //css
-import "./RegisterResponsible.css";
+import "../../Styles/RegisterResponsible.css";
 
 //components
 import { Input } from "../../../../components/inputs/Input";

@@ -1,6 +1,6 @@
 import React from "react";
 import CategoriesTable from "../components/CategoriesTable";
-import "../styles/General.css";
+import "../Styles/General.css";
 import { useNavigate } from "react-router-dom";
 
 const CategoryList = () => {

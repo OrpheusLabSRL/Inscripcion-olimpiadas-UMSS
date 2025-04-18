@@ -1,5 +1,5 @@
 import React from "react";
-import "./Footer.css";
+import "../Styles/Footer.css";
 
 function Footer() {
   return (
@@ -7,7 +7,7 @@ function Footer() {
       <div className="footer-container">
         <div className="footer-content">
           <div className="footer-brand">
-            <h1>Oh! SanSi</h1>
+            <h1>O! SanSi</h1>
             <p>Fomentando la excelencia científica y el desarrollo del talento juvenil en Bolivia desde 2020.</p>
           </div>
 
@@ -58,7 +58,7 @@ function Footer() {
 
         <div className="footer-bottom">
           <p>
-            © 2024 Oh! SanSi - Olimpiadas Científicas. Todos los derechos reservados.
+            © 2024 O! SanSi - Olimpiadas Científicas. Todos los derechos reservados.
             <a href="#">Política de Privacidad</a>
             <a href="#">Términos y Condiciones</a>
             <a href="#">Mapa del Sitio</a>

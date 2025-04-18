@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getCategorias } from "../../../api/inscription.api";
-import "../styles/General.css";
+import "../Styles/General.css";
 
 const CategoriesTable = () => {
   const [categorias, setCategorias] = useState([]);

@@ -1,6 +1,6 @@
 import React from "react";
 import OlympiadsTable from "../components/OlympiadsTable";
-import "../styles/General.css";
+import "../Styles/General.css";
 
 const ManageOlympiads = () => {
   return (

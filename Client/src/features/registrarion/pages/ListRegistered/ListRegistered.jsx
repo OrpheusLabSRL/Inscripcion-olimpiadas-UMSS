@@ -1,5 +1,5 @@
 //css
-import "./ListRegistered.css";
+import "../../Styles/ListRegistered.css";
 
 //Components
 import { ListElement } from "../../components/ListElement/ListElement";

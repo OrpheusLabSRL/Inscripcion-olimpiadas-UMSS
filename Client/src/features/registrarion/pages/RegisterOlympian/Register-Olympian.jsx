@@ -1,5 +1,5 @@
 //css
-import "./RegisterOlympian.css";
+import "../../Styles/RegisterOlympian.css";
 
 //components
 import { Input } from "../../../../components/inputs/Input";

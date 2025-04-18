@@ -1,5 +1,6 @@
 //css
-import "./RegisterOlympianArea.css";
+
+import "../../Styles/RegisterOlympianArea.css";
 
 //components
 import { AreaCategoriaElement } from "../../components/AreaCategoriaElement/AreaCategoriaElement";

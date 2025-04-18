@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "./ContentProp.css";
+import "../Styles/ContentProp.css";
+
 
 function ContentProp() {
   const [showButtons, setShowButtons] = useState(false);
@@ -9,7 +10,7 @@ function ContentProp() {
 
   const handleStartClick = () => {
     setShowButtons(true);
-    setTextColor('white'); // Cambia el color del texto a blanco cuando se hace clic en el botón
+    setTextColor('white'); 
   };
 
   const handleStartRegistration = () => {
@@ -19,26 +20,36 @@ function ContentProp() {
   const handleContinueRegistration = () => {
     navigate('/register/tutor-form', { state: { formType: 'continue' } });
   };
+  const [selectedCategory, setSelectedCategory] = useState('Matemáticas');
+
+  const categoryImages = {
+    'Matemáticas': 'https://www.lifeder.com/wp-content/uploads/2019/12/matematicas-concepto-lifeder-min-1024x682.jpg',
+    'Física': 'https://concepto.de/wp-content/uploads/2018/08/f%C3%ADsica-e1534938838719.jpg',
+    'Biología': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5Xk3FtqL__EGIiI7E82AekqqDLimo4jzoEFshq4DkMU6dJ-1o6rVe9MIYFMBkBUydt7CQbcvfZMJpblJmbtpS-FOh74aisVI8jd3VyV-NOnw_v4vbiglUMpWeWKYjcPFOSCVLpB7n-Mw/s1600/Qui%25C3%25A9n+utilizo+por+primera+vez+la+palabra+Biolog%25C3%25ADa.jpg',
+    'Química': 'https://www.inspiracle.es/wp-content/uploads/2014/11/quimica.jpg',
+    'Informática': 'https://concepto.de/wp-content/uploads/2015/08/informatica-1-e1590711779992-800x400.jpg',
+    'Robótica': 'https://glocalideas.com/wp-content/uploads/2024/01/Robotica-cabecera-3-1200x675.png',
+  };
 
   return (
     <main className="content-container">
       <section className={`event-description ${showButtons ? 'active' : ''}`}>
-        <h2 className={textColor === 'white' ? 'white-text' : ''}>Olimpiadas Científicas Oh! SanSi</h2>
+        <h2 className={textColor === 'white' ? 'white-text' : ''}>Olimpiadas Científicas O! SanSi</h2>
         <p className={textColor === 'white' ? 'white-text' : ''}>Descubre y desarrolla tu potencial científico en las áreas más fascinantes de la ciencia</p>
-        
+
         {!showButtons ? (
           <button className="start-adventure" onClick={handleStartClick}>
             Comienza tu Aventura Científica
           </button>
         ) : (
           <div className="action-buttons">
-            <button 
-              className="action-button start-button" 
+            <button
+              className="action-button start-button"
               onClick={handleStartRegistration}
             >
               Empezar Inscripción
             </button>
-            <button 
+            <button
               className="action-button continue-button"
               onClick={handleContinueRegistration}
             >
@@ -52,35 +63,38 @@ function ContentProp() {
         <h2>Áreas de Competencia</h2>
         <div className="competence-grid">
           <div className="category-card">
+            <img src="https://www.lifeder.com/wp-content/uploads/2019/12/matematicas-concepto-lifeder-min-1024x682.jpg" alt="Matemáticas" />
             <h3>Matemáticas</h3>
             <p>Desarrolla tu pensamiento lógico y resolución de problemas a través de desafíos matemáticos.</p>
           </div>
           <div className="category-card">
+            <img src="https://concepto.de/wp-content/uploads/2018/08/f%C3%ADsica-e1534938838719.jpg" alt="Física" />
             <h3>Física</h3>
             <p>Explora las leyes fundamentales del universo y sus aplicaciones prácticas.</p>
           </div>
           <div className="category-card">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5Xk3FtqL__EGIiI7E82AekqqDLimo4jzoEFshq4DkMU6dJ-1o6rVe9MIYFMBkBUydt7CQbcvfZMJpblJmbtpS-FOh74aisVI8jd3VyV-NOnw_v4vbiglUMpWeWKYjcPFOSCVLpB7n-Mw/s1600/Qui%25C3%25A9n+utilizo+por+primera+vez+la+palabra+Biolog%25C3%25ADa.jpg" alt="Biología" />
+            <h3>Biología</h3>
+            <p>Investiga los procesos de la vida y cómo interactúan los organismos en el entorno.</p>
+          </div>
+          <div className="category-card">
+            <img src="https://www.inspiracle.es/wp-content/uploads/2014/11/quimica.jpg" alt="Química" />
             <h3>Química</h3>
             <p>Descubre la composición de la materia y sus transformaciones en procesos químicos.</p>
           </div>
           <div className="category-card">
-            <h3>Astronomía</h3>
-            <p>Estudia los cuerpos celestes, el cosmos y los fenómenos del universo.</p>
+            <img src="https://concepto.de/wp-content/uploads/2015/08/informatica-1-e1590711779992-800x400.jpg" alt="Informática" />
+            <h3>Informática</h3>
+            <p>Aprende sobre el procesamiento de datos, programación y nuevas tecnologías digitales.</p>
           </div>
-        </div>
-
-        <div className="competence-rules">
-          <h3>Reglamento de Competencia</h3>
-          <div className="rules-section">
-            <h4>Normas Generales</h4>
-            <ul className="rules-list">
-              <li>Todos los participantes deben registrarse dentro del plazo establecido</li>
-              <li>Se evaluarán tanto conocimientos teóricos como prácticos</li>
-              <li>Las pruebas se realizarán en las instalaciones designadas</li>
-            </ul>
+          <div className="category-card">
+            <img src="https://glocalideas.com/wp-content/uploads/2024/01/Robotica-cabecera-3-1200x675.png" alt="Robótica" />
+            <h3>Robótica</h3>
+            <p>Construye y programa robots que solucionen problemas del mundo real.</p>
           </div>
         </div>
       </section>
+
 
       <section className="registration-process">
         <h2>Proceso de Inscripción</h2>

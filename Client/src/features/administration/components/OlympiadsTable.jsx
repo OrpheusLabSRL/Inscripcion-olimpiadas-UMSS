@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getOlimpiadas } from "../../../api/inscription.api";
 import OlympiadsModal from "./OlympiadsModal";
-import "../styles/General.css";
+import "../Styles/General.css";
 
 const OlympiadsTable = () => {
   const [olympiads, setOlympiads] = useState([]);

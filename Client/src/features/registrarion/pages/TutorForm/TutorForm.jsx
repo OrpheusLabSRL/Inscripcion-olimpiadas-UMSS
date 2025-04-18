@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./TutorForm.css";
-import HeaderProp from "../../../../features/home/components/HeaderProp";
+import "../../Styles/TutorForm.css";
+
+import HeaderProp from "../../../../features/home_usuario/components/HeaderProp";
 import {
   registerTutor,
   checkExistingTutor,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../styles/ModalGeneral.css";
+import "../Styles/ModalGeneral.css";
 import { getAreasCategoriasPorOlimpiada } from "../../../api/Administration.api";
 
 const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {

@@ -1,5 +1,5 @@
 //css
-import "./RegisterTutor.css";
+import "../../Styles/RegisterTutor.css";
 
 //components
 import { Input } from "../../../../components/inputs/Input";

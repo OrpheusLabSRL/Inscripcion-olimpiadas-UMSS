@@ -13,6 +13,8 @@ header {
   top: 0; /* Pegado a la parte superior */
   left: 0; /* Pegado a la izquierda */
   z-index: 1000; /* Asegurarse de que esté encima de otros elementos */
+  font-family: 'Inter', sans-serif;
+  font-weight: lighter;
 }
 
 /* Logo */
@@ -40,10 +42,14 @@ nav ul li {
 }
 
 nav ul li:last-child a .btn-next-page {
-  background-color: var(--primary-color); /* Fondo usando el color primario */
+  background-color: #2563EB;
   color: white;
-  padding: var(--high-button) var(--broad-button); /* Padding usando las variables definidas */
-  border-radius: 5px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: lighter;
+  border-color: #2563EB;
+  border: none;
+
 }
 
 /* Contenedor del header */
@@ -69,7 +75,9 @@ nav ul li:last-child a .btn-next-page {
 .header-title {
   font-size: var(--h2-size); /* Usar el tamaño de fuente para h2 definido en las variables */
   color: var(--secondary-color); /* Color usando la variable secundaria */
-  font-weight: bold;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  color: #2563EB;
 }
 
 /* Estilos para la barra de navegación */
@@ -77,6 +85,7 @@ nav ul li:last-child a .btn-next-page {
   display: flex;
   gap: 20px;
   list-style: none;
+  font-weight: regular;
 }
 
 .header-nav li {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../../assets/images/logo-olab.png";
-import "./HeaderProp.css";
+import Logo from "../../../assets/images/logo.png";
+import "../Styles/HeaderProp.css";
 import { NextPage } from "../../../components/Buttons/NextPage";
 
 function HeaderProp() {
@@ -17,9 +17,8 @@ function HeaderProp() {
     <header className="header-container">
       <div className="header-left">
         <img src={Logo} alt="University Logo" className="header-logo" />
-        <h1 className="header-title">Oh! SanSi</h1>
+        <h1 className="header-title">O! SanSi</h1>
       </div>
-      {/* Botón de menú hamburguesa en la esquina superior derecha */}
       <div className="mobile-menu" onClick={toggleMenu}>
         ☰
       </div>

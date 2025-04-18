@@ -1,6 +1,6 @@
 import React from "react";
 import AreasTable from "../components/AreasTable.jsx";
-import "../styles/General.css";
+import "../Styles/General.css";
 import { useNavigate } from "react-router-dom";
 
 const AreaList = () => {
