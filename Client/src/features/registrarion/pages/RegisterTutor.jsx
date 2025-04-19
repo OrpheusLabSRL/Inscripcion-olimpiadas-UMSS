@@ -97,18 +97,48 @@ export const RegisterTutor = () => {
     };
   }, []);
 
+  //CASO GENERAL: NUEVA INSCRIPCION
+  //CASO1: El reponsable es diferente del olimpista, tutor de area, tutor legal
+  //CASO2: El responsable es el mismo que el olimpista, tutor de area, tutor lagal son diferentes
+  //CASO3: El responsable es el mismo que el olimpista, tutor de area y tutor legal
+
+  //Frontend: La solucion simplemente es manejar todos los datoscomo un datasend
+  //Backend: La solucion es preguntar antes de crear una instancia de persona si ese carnet ya se encuentra registrado, si es asi entonces simplemnte se usa su ID
+
+  //CASO GENERAL: CONTINUAR INSCRIPCION
+  //CASO1: El reponsable es diferente del olimpista, tutor de area, tutor legal
+  //CASO2: El responsable es el mismo que el olimpista, tutor de area, tutor lagal son diferentes
+  //CASO3: El responsable es el mismo que el olimpista, tutor de area y tutor legal
+
+  //Cuando se coloque el carnet identidad, entonces primero se buscara en el localstorage del formulario anterior, si no se encuentra se buscara en la BD
+  //PARA TODOS LOS CASOS a nivel backend, la solucion es simplemente preguntar si ese carnet ya se encuentra registrado, si es asi usamos el id para crear el olim[ista o tutor correspondiente
+
   const onSubmit = async (data) => {
     const idTutorInscriptor = localStorage.getItem("tutorInscripcionId");
+    //Si no existe ningun tutorInscripcionId, entonces devuelve null
 
     const dataTutorResponsible = {
+      carnetdeidentidad: localStorage.getItem("NumeroResponsible"),
       nombresTutor: localStorage.getItem("NombreResponsible"),
       apellidosTutor: localStorage.getItem("ApellidoResponsible"),
       tipoTutor: localStorage.getItem("TipoTutorResponsible"),
       emailTutor: localStorage.getItem("EmailResponsible"),
       telefono: localStorage.getItem("NumeroResponsible"),
-      carnetdeidentidad: localStorage.getItem("NumeroResponsible"),
       rol: "responsable inscripcion",
     };
+
+    const dataOlimpista = {
+      CarnetIdentidad: localStorage.getItem("CarnetIdentidadOlympian"),
+      Nombre: localStorage.getItem("NombreOlympian"),
+      Apellido: localStorage.getItem("ApellidoOlympian"),
+      Departamento: localStorage.getItem("DepartamentoOlympian"),
+      Provincia: localStorage.getItem("ProvinciaOlympian"),
+      Colegio: localStorage.getItem("ColegioOlympian"),
+      Curso: localStorage.getItem("CursoOlympian"),
+      FechaNacimiento: localStorage.getItem("FechaNacimientoOlympian"),
+      Email: localStorage.getItem("EmailOlympian"),
+    };
+
     const dataTutorLegal = {
       nombresTutor: localStorage.getItem("NombreLegal"),
       apellidosTutor: localStorage.getItem("ApellidoLegal"),
@@ -137,18 +167,6 @@ export const RegisterTutor = () => {
       telefono: localStorage.getItem("NumeroSecundaria"),
       carnetdeidentidad: localStorage.getItem("NumeroSecundaria"),
       rol: "tutor area2",
-    };
-
-    const dataOlimpista = {
-      Nombre: localStorage.getItem("NombreOlympian"),
-      Apellido: localStorage.getItem("ApellidoOlympian"),
-      Email: localStorage.getItem("EmailOlympian"),
-      CarnetIdentidad: localStorage.getItem("CarnetIdentidadOlympian"),
-      Curso: localStorage.getItem("CursoOlympian"),
-      FechaNacimiento: localStorage.getItem("FechaNacimientoOlympian"),
-      Colegio: localStorage.getItem("ColegioOlympian"),
-      Departamento: localStorage.getItem("DepartamentoOlympian"),
-      Provincia: localStorage.getItem("ProvinciaOlympian"),
     };
 
     const inscripcion = {
