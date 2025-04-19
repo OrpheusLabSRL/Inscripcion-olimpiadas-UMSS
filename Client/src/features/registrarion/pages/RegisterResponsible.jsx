@@ -1,12 +1,12 @@
 //css
-import "../../Styles/RegisterResponsible.css";
+import "../Styles/RegisterResponsible.css";
 
 //components
-import { Input } from "../../../../components/inputs/Input";
-import { Select } from "../../../../components/inputs/Select";
-import { Validator } from "./ValidationRules";
-import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
-import { NextPage } from "../../../../components/Buttons/NextPage";
+import { Input } from "../../../components/inputs/Input";
+import { Select } from "../../../components/inputs/Select";
+import { Validator } from "../utils/ValidationRules";
+import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
+import { NextPage } from "../../../components/Buttons/NextPage";
 
 //react
 import { useEffect } from "react";
@@ -14,13 +14,9 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 
-//utils
-import { tipoTutor } from "./DataOptions";
-
 export const RegisterResponsible = () => {
   const navigation = useNavigate();
   const location = useLocation();
-  const { id_olimpista } = location.state || {};
   const {
     register,
     handleSubmit,
@@ -38,6 +34,12 @@ export const RegisterResponsible = () => {
     },
     mode: "onChange",
   });
+
+  const tipoTutor = [
+    { value: "Profesor", label: "Profesor" },
+    { value: "Padre/Madre", label: "Papá/Mamá" },
+    { value: "Estudiante", label: "Estudiante" },
+  ];
 
   const watchedNombre = watch("Nombre");
   const watchedApellido = watch("Apellido");
@@ -90,16 +92,6 @@ export const RegisterResponsible = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    const dataResponsible = {
-      nombresTutor: data.Nombre,
-      apellidosTutor: data.Apellido,
-      tipoTutor: data.Tipo_Tutor,
-      emailTutor: data.Email,
-      telefono: data.Numero_Celular,
-      carnetdeidentidad: data.Ci,
-      id_olimpista,
-    };
-
     try {
       navigation("/register/olympian", {
         state: { from: location.pathname },

@@ -6,7 +6,7 @@ import { Select } from "../../../../components/inputs/Select";
 
 //react
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const AreaCategoriaElement = ({
   labelArea,
@@ -46,7 +46,7 @@ export const AreaCategoriaElement = ({
           mandatory={mandatory}
           name={nameArea}
           value={watchedArea}
-          asterisk = {asterisk}
+          asterisk={asterisk}
           onChange={onChooseArea}
           options={areas}
           register={register}
@@ -60,7 +60,7 @@ export const AreaCategoriaElement = ({
           mandatory={mandatory}
           name={nameCategoria}
           value={watchedCategoria}
-          asterisk = {asterisk}
+          asterisk={asterisk}
           onChange={(e) => setValue(nameCategoria, e.target.value)}
           options={categorias}
           register={register}

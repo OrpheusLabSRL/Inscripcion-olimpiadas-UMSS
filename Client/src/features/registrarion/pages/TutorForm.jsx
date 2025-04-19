@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "../../Styles/TutorForm.css";
+import "../Styles/TutorForm.css";
 
-import HeaderProp from "../../../../features/home_usuario/components/HeaderProp";
-import {
-  registerTutor,
-  checkExistingTutor,
-} from "../../../../api/TutorForm.api";
-import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
-import { NextPage } from "../../../../components/Buttons/NextPage";
+import HeaderProp from "../../home_usuario/components/HeaderProp";
+import { registerTutor, checkExistingTutor } from "../../../api/TutorForm.api";
+import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
+import { NextPage } from "../../../components/Buttons/NextPage";
 
 export const TutorForm = () => {
   const location = useLocation();

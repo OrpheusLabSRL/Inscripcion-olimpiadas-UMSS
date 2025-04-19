@@ -1,17 +1,14 @@
 //components
-import { Input } from "../../../../components/inputs/Input";
-import { Select } from "../../../../components/inputs/Select";
-import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
-import { Validator } from "./ValidationRules";
+import { Input } from "../../../components/inputs/Input";
+import { Select } from "../../../components/inputs/Select";
+import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
+import { Validator } from "../utils/ValidationRules";
 
 //react
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
-
-//utils
-import { tipoTutor } from "./DataOptions";
 
 export const RegisterTutorOptional = () => {
   const location = useLocation();
@@ -52,6 +49,11 @@ export const RegisterTutorOptional = () => {
     },
     mode: "onChange",
   });
+
+  const tipoTutor = [
+    { value: "Profesor", label: "Profesor" },
+    { value: "Padre/Madre", label: "Papá/Mamá" },
+  ];
 
   const watchedNombre = watch("Nombre");
   const watchedApellido = watch("Apellido");

@@ -1,12 +1,12 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { RegisterOlympian } from "./features/registrarion/pages/RegisterOlympian/Register-Olympian";
+import { RegisterOlympian } from "./features/registrarion/pages/Register-Olympian";
 import Sidebar from "./components/sidebar/Sidebar";
 import "./App.css";
-import { RegisterTutor } from "./features/registrarion/pages/RegisterTutor/RegisterTutor";
-import { TutorForm } from "./features/registrarion/pages/TutorForm/TutorForm";
+import { RegisterTutor } from "./features/registrarion/pages/RegisterTutor";
+import { TutorForm } from "./features/registrarion/pages/TutorForm";
 import { MainHome } from "./features/home_usuario/pages/MainHome";
-import { ListRegistered } from "./features/registrarion/pages/ListRegistered/ListRegistered";
+import { ListRegistered } from "./features/registrarion/pages/ListRegistered";
 import ManageBaseData from "./features/administration/pages/ManageBaseData";
 import ManageArea from "./features/administration/pages/ManageArea";
 import ManageCategoria from "./features/administration/pages/ManageCategoria";
@@ -14,9 +14,9 @@ import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageBaseGeneral from "./features/administration/pages/ManageBaseDataGeneral";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
-import { RegisterResponsible } from "./features/registrarion/pages/RegisterReponsible/RegisterResponsible";
-import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea/RegisterOlympianArea";
-import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional/RegisterTutorOptional";
+import { RegisterResponsible } from "./features/registrarion/pages/RegisterResponsible";
+import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
+import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);

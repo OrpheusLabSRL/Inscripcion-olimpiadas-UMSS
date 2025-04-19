@@ -239,4 +239,100 @@ export const Validator = {
         "No se permiten múltiples espacios en blanco consecutivos",
     },
   },
+
+  numero: {
+    required: {
+      value: true,
+      message: "El numero es requerido",
+    },
+    pattern: {
+      value: /^[0-9ñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      message: "Solo se permiten caracteres alfabeticos",
+    },
+    maxLength: {
+      value: 8,
+      message: "El número no debe ser mayor a 8 caracteres",
+    },
+    minLength: {
+      value: 8,
+      message: "El numero debe tener al menos 8 caracteres",
+    },
+    validate: {
+      noMultipleSpaces: (value) =>
+        !/\s{1,}/.test(value) ||
+        "No se permiten múltiples espacios en blanco consecutivos",
+    },
+  },
+
+  pertenece_correo: {
+    required: {
+      value: true,
+      message: "A quien pertenece el correo es requerido",
+    },
+    pattern: {
+      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      message: "Solo se permiten caracteres alfabeticos",
+    },
+    maxLength: {
+      value: 30,
+      message: "A quien pertece el correo no debe ser mayor a 30 caracteres",
+    },
+    minLength: {
+      value: 3,
+      message: "A quien pertenece el correo debe tener al menos 3 caracteres",
+    },
+    validate: {
+      noMultipleSpaces: (value) =>
+        !/\s{2,}/.test(value) ||
+        "No se permiten múltiples espacios en blanco consecutivos",
+    },
+  },
+
+  pertenece_numero: {
+    required: {
+      value: true,
+      message: "A quien pertenece el número es requerido",
+    },
+    pattern: {
+      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      message: "Solo se permiten caracteres alfabeticos",
+    },
+    maxLength: {
+      value: 30,
+      message: "A quien pertece el número no debe ser mayor a 30 caracteres",
+    },
+    minLength: {
+      value: 3,
+      message: "A quien pertenece el número debe tener al menos 3 caracteres",
+    },
+    validate: {
+      noMultipleSpaces: (value) =>
+        !/\s{2,}/.test(value) ||
+        "No se permiten múltiples espacios en blanco consecutivos",
+    },
+  },
+
+  tipo_tutor: {
+    required: {
+      value: true,
+      message: "El tipo de tutor es requerido",
+    },
+    pattern: {
+      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      message: "Solo se permiten caracteres alfabeticos",
+    },
+    maxLength: {
+      value: 30,
+      message: "El tipo de tutor no debe ser mayor a 30 caracteres",
+    },
+    minLength: {
+      value: 3,
+      message: "A quien pertenece el número debe tener al menos 3 caracteres",
+    },
+    validate: {
+      noMultipleSpaces: (value) =>
+        !/\s{2,}/.test(value) ||
+        "No se permiten múltiples espacios en blanco consecutivos",
+    },
+  },
 };

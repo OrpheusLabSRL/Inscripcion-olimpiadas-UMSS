@@ -1,11 +1,11 @@
 //css
 
-import "../../Styles/RegisterOlympianArea.css";
+import "../Styles/RegisterOlympianArea.css";
 
 //components
-import { AreaCategoriaElement } from "../../components/AreaCategoriaElement/AreaCategoriaElement";
-import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
-import { NextPage } from "../../../../components/Buttons/NextPage";
+import { AreaCategoriaElement } from "../components/AreaCategoriaElement/AreaCategoriaElement";
+import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
+import { NextPage } from "../../../components/Buttons/NextPage";
 
 //react
 import { useEffect, useState } from "react";
@@ -15,10 +15,13 @@ import { IoArrowBackCircle } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router-dom";
 
 //api
-import { getCatalogoCompleto } from "../../../../api/inscription.api";
+import { getCatalogoCompleto } from "../../../api/inscription.api";
 
 //util
-import { filtrarAreasPorCurso, filtrarCategoriasPorCursoYArea } from "./util";
+import {
+  filtrarAreasPorCurso,
+  filtrarCategoriasPorCursoYArea,
+} from "../utils/MethodsArea";
 
 export const RegisterOlympianArea = () => {
   const [catalogo, setCatalogo] = useState([]);

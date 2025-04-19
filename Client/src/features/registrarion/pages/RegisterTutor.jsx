@@ -1,12 +1,12 @@
 //css
-import "../../Styles/RegisterTutor.css";
+import "../Styles/RegisterTutor.css";
 
 //components
-import { Input } from "../../../../components/inputs/Input";
-import { Select } from "../../../../components/inputs/Select";
-import { Validator } from "./ValidationRules";
-import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
-import { NextPage } from "../../../../components/Buttons/NextPage";
+import { Input } from "../../../components/inputs/Input";
+import { Select } from "../../../components/inputs/Select";
+import { Validator } from "../utils/ValidationRules";
+import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
+import { NextPage } from "../../../components/Buttons/NextPage";
 
 //react
 import { useEffect } from "react";
@@ -15,15 +15,12 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
 import swal from "sweetalert";
 
-//utils
-import { tipoTutor } from "./DataOptions";
-
 //api
 import {
   registerDataOlympian,
   setTutor,
   setNewInscription,
-} from "../../../../api/inscription.api";
+} from "../../../api/inscription.api";
 
 export const RegisterTutor = () => {
   const navigation = useNavigate();
@@ -44,6 +41,11 @@ export const RegisterTutor = () => {
     },
     mode: "onChange",
   });
+
+  const tipoTutor = [
+    { value: "Profesor", label: "Profesor" },
+    { value: "Padre/Madre", label: "Papá/Mamá" },
+  ];
 
   const watchedNombre = watch("Nombre");
   const watchedApellido = watch("Apellido");

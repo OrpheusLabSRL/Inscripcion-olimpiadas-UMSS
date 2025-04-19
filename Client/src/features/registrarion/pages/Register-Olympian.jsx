@@ -1,26 +1,26 @@
 //css
-import "../../Styles/RegisterOlympian.css";
+import "../Styles/RegisterOlympian.css";
 
 //components
-import { Input } from "../../../../components/inputs/Input";
-import { Select } from "../../../../components/inputs/Select";
-import { NextPage } from "../../../../components/Buttons/NextPage";
+import { Input } from "../../../components/inputs/Input";
+import { Select } from "../../../components/inputs/Select";
+import { NextPage } from "../../../components/Buttons/NextPage";
 
 //react
 import { useForm } from "react-hook-form";
-import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
+import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
 
 //utils
-import { Validator } from "./ValidationRules";
+import { Validator } from "../utils/ValidationRules";
 import {
   cursosBolivia,
   departamentosBolivia,
   provinciasPorDepartamento,
-} from "./DataOptions";
+} from "../utils/DataOptions";
 
 export const RegisterOlympian = () => {
   const [provinciasFiltradas, setProvinciasFiltradas] = useState(() => {

@@ -1,7 +1,6 @@
 // src/features/administration/pages/ManageBaseData.jsx
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./../Styles/BaseData.css";
+import "../Styles/BaseData.css";
 
 const ManageBaseData = () => {
   const navigate = useNavigate();

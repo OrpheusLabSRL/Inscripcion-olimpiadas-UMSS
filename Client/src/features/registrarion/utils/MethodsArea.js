@@ -69,17 +69,12 @@ export const filtrarAreasPorCurso = (curso, programaCompleto) => {
 
   const areasDisponibles = [];
 
-
   programaCompleto.forEach((item) => {
     const gradosItem = normalizarTexto(item.grados);
 
-    // Coincidencia directa
     if (gradosItem.includes(cursoNormalizado)) {
       areasDisponibles.push({ area: item.area, area_id: item.area_id });
-    }
-
-    // Coincidencia por rango
-    else if (gradosItem.includes(" a ")) {
+    } else if (gradosItem.includes(" a ")) {
       const [inicio, fin] = gradosItem.split(" a ");
       const inicioNumero = parseInt(inicio.replace(/[^\d]/g, ""));
       const finNumero = parseInt(fin.split(" ")[0].replace(/[^\d]/g, ""));
@@ -103,7 +98,6 @@ export const filtrarAreasPorCurso = (curso, programaCompleto) => {
     }
   });
 
-  // Filtrar áreas duplicadas por area_id
   const unicas = Object.values(
     areasDisponibles.reduce((acc, curr) => {
       acc[curr.area_id] = curr;
@@ -111,7 +105,6 @@ export const filtrarAreasPorCurso = (curso, programaCompleto) => {
     }, {})
   );
 
-  // Formato final
   return unicas.map((item) => ({
     value: item.area_id,
     label: item.area,
@@ -123,12 +116,12 @@ const normalizarTexto2 = (texto) => {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/°/g, ""); // Quita símbolo de grado
+    .replace(/°/g, "");
 };
 
 export const filtrarCategoriasPorCursoYArea = (
   curso,
-  areaIdSeleccionada, // numérico
+  areaIdSeleccionada,
   programaCompleto
 ) => {
   const cursoNormalizado = normalizarTexto2(curso.replace("_", " "));
@@ -146,12 +139,9 @@ export const filtrarCategoriasPorCursoYArea = (
 
     let disponible = false;
 
-    // Verificar si el curso exacto está en los grados
     if (gradosItem.includes(cursoNormalizado)) {
       disponible = true;
-    }
-    // Verificar rangos
-    else if (gradosItem.includes(" a ")) {
+    } else if (gradosItem.includes(" a ")) {
       const [inicio, fin] = gradosItem.split(" a ");
 
       const inicioNumero = parseInt(inicio.replace(/[^\d]/g, ""));

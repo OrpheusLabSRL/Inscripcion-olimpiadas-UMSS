@@ -1,16 +1,16 @@
 //css
-import "../../Styles/ListRegistered.css";
+import "../Styles/ListRegistered.css";
 
 //Components
-import { ListElement } from "../../components/ListElement/ListElement";
-import { NextPage } from "../../../../components/Buttons/NextPage";
+import { ListElement } from "../components/ListElement/ListElement";
+import { NextPage } from "../../../components/Buttons/NextPage";
 
 //react
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 //api
-import { getDataOlympian } from "../../../../api/inscription.api";
+import { getDataOlympian } from "../../../api/inscription.api";
 
 export const ListRegistered = () => {
   const [dataOlympians, setDataOlympians] = useState([]);
