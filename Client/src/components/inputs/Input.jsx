@@ -1,4 +1,5 @@
 import "./input.css";
+import { PrimaryButton } from "../Buttons/PrimaryButton";
 
 export const Input = ({
   label,
@@ -11,12 +12,18 @@ export const Input = ({
   validationRules = {},
   errors = null,
   mandatory = false,
+  autofill = null,
 }) => {
   return (
     <div className="config-input">
       {label && (
         <label htmlFor={id}>
           {label} {mandatory ? <span className="mandatory">*</span> : ""}{" "}
+          {autofill && (
+            <button type="button" onClick={autofill} className="btn-autofill">
+              Autocompletar
+            </button>
+          )}
         </label>
       )}
 
