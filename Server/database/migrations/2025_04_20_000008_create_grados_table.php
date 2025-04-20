@@ -17,18 +17,18 @@ return new class extends Migration {
         });
 
         DB::table('grados')->insert([
-            ['numeroGrado' => 1, 'nivel' => 'Primaria', 'estadoGrado' => true],
-            ['numeroGrado' => 2, 'nivel' => 'Primaria', 'estadoGrado' => true],
-            ['numeroGrado' => 3, 'nivel' => 'Primaria', 'estadoGrado' => true],
-            ['numeroGrado' => 4, 'nivel' => 'Primaria', 'estadoGrado' => true],
-            ['numeroGrado' => 5, 'nivel' => 'Primaria', 'estadoGrado' => true],
-            ['numeroGrado' => 6, 'nivel' => 'Primaria', 'estadoGrado' => true],
-            ['numeroGrado' => 1, 'nivel' => 'Secundaria', 'estadoGrado' => true],
-            ['numeroGrado' => 2, 'nivel' => 'Secundaria', 'estadoGrado' => true],
-            ['numeroGrado' => 3, 'nivel' => 'Secundaria', 'estadoGrado' => true],
-            ['numeroGrado' => 4, 'nivel' => 'Secundaria', 'estadoGrado' => true],
-            ['numeroGrado' => 5, 'nivel' => 'Secundaria', 'estadoGrado' => true],
-            ['numeroGrado' => 6, 'nivel' => 'Secundaria', 'estadoGrado' => true],
+            ['numeroGrado' => 1, 'nivel' => 'Primaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['numeroGrado' => 2, 'nivel' => 'Primaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['numeroGrado' => 3, 'nivel' => 'Primaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['numeroGrado' => 4, 'nivel' => 'Primaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['numeroGrado' => 5, 'nivel' => 'Primaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['numeroGrado' => 6, 'nivel' => 'Primaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['numeroGrado' => 1, 'nivel' => 'Secundaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['numeroGrado' => 2, 'nivel' => 'Secundaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['numeroGrado' => 3, 'nivel' => 'Secundaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['numeroGrado' => 4, 'nivel' => 'Secundaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['numeroGrado' => 5, 'nivel' => 'Secundaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['numeroGrado' => 6, 'nivel' => 'Secundaria', 'estadoGrado' => true, 'created_at' => now(), 'updated_at' => now()]
         ]);
     }
 

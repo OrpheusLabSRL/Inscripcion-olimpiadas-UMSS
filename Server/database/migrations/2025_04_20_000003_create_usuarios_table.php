@@ -20,6 +20,25 @@ return new class extends Migration {
 
             $table->foreign('idRol')->references('idRol')->on('roles')->onDelete('cascade');
         });
+        $adminRolId = DB::table('roles')->insertGetId([
+            'nombreRol' => 'Administrador',
+            'descripcionRol' => 'Rol con todos los permisos',
+            'estadoRol' => true,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+    
+        // Crear usuario administrador
+        DB::table('usuarios')->insert([
+            'idRol' => $adminRolId,
+            'nombreUsuario' => 'admin',
+            'nombre' => 'Administrador',
+            'email' => 'admin@olimpiadas.com',
+            'password' => bcrypt('password'), // Asegúrate de hashear la contraseña
+            'estadoUsuario' => true,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 
     public function down()
