@@ -18,12 +18,8 @@ class Categoria extends Model
 
     public function grados()
     {
-        return $this->belongsToMany(
-            Grado::class,
-            'categoria_grado', 
-            'idCategoria',     
-            'idGrado'         
-        )->withPivot('estadoCategoriaGrado');
+        return $this->belongsToMany(Grado::class, 'categorias_grados', 'categoria_id', 'grado_id')
+            ->withPivot('estadoCategoriaGrado');
 
     }
 
