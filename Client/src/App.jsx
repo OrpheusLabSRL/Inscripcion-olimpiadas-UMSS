@@ -7,10 +7,10 @@ import { RegisterTutor } from "./features/registrarion/pages/RegisterTutor";
 import { TutorForm } from "./features/registrarion/pages/TutorForm";
 import { MainHome } from "./features/home_usuario/pages/MainHome";
 import { ListRegistered } from "./features/registrarion/pages/ListRegistered";
-import ManageBaseData from "./features/administration/pages/ManageBaseData";
 import ManageArea from "./features/administration/pages/ManageArea";
 import ManageCategoria from "./features/administration/pages/ManageCategoria";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
+import ManageViewBase from "./features/administration/pages/ManageViewBaseData";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterResponsible";
@@ -24,9 +24,8 @@ function App() {
   const showSidebar =
     location.pathname !== "/" && location.pathname !== "/register/tutor-form";
 
-  // Simular usuario logueado
   const user = {
-    role: "admin", // Cambia a "user" para probar restricciones
+    role: "admin",
   };
 
   return (
@@ -73,10 +72,10 @@ function App() {
             {/* Rutas bajo Admin */}
             <Route path="/admin">
               <Route
-                path="register-base"
+                path="base-data"
                 element={
                   <PrivateRoute
-                    element={<ManageBaseData />}
+                    element={<ManageViewBase />}
                     allowedRoles={["admin"]}
                     userRole={user.role}
                   />

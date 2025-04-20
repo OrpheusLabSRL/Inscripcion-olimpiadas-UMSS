@@ -1,5 +1,3 @@
-
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -17,8 +15,10 @@
   background: white;
   border-radius: 10px;
   padding: 2rem;
-  width: 500px;
-  max-width: 95%;
+  width: 100%;
+  max-width: 850px;
+  max-height: 90vh;
+  overflow-y: auto;
   position: relative;
   box-sizing: border-box;
   color: black;
@@ -41,14 +41,12 @@
   margin-bottom: 1.5rem;
 }
 
-/* MODIFICADO: Eliminar font-size pequeño que afectaba los labels */
 .form-group {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
 }
 
-/* NUEVO: Estilo para todos los labels dentro del modal */
 .modal-content label {
   font-size: 0.85rem;
   font-weight: 500;
@@ -60,13 +58,6 @@
   padding: 0.6rem;
   border-radius: 6px;
   border: 1px solid #ccc;
-}
-
-/* Eliminar esta clase si no la usás directamente en JSX */
-.label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #444;
 }
 
 .form-row {
@@ -88,6 +79,14 @@
   margin-top: 1.5rem;
 }
 
+.modal-button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 .cancel-button,
 .save-button {
   padding: 0.5rem 1rem;
@@ -107,16 +106,9 @@
   color: white;
 }
 
-.checkbox-row label {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem; /* espacio entre texto y checkbox */
-  cursor: pointer;
-}
-
-.checkbox-row input[type="checkbox"] {
-  transform: scale(1.2); /* o el tamaño que quieras */
-  cursor: pointer;
+.input-error {
+  border: 2px solid #dc2626;
+  background-color: #ffecec;
 }
 
 .error-message {
@@ -128,73 +120,31 @@
   border-radius: 5px;
 }
 
-.input-error {
-  border: 2px solid #dc2626;
-  background-color: #ffecec;
-}
-
-.checkbox-group {
+.area-categorias-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.checkbox-item {
+.area-categoria-box {
+  background-color: #f9fbfd;
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
   display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.checkbox-list {
-  list-style: none;
-  padding: 10px;
-  margin: 0;
-  max-height: 200px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 50%;
-  margin-left: auto;
+  justify-content: space-between;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+  align-items: flex-start;
 }
 
-.checkbox-list-item {
-  font-size: 14px;
-  margin-bottom: 6px;
+.area-info,
+.categoria-info {
+  font-size: 0.95rem;
+  color: #111827;
 }
 
-.checkbox-list-item:last-child {
-  margin-bottom: 0;
-}
-
-.checkbox-list-item label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.checkbox-list-item label:hover {
-  background-color: #f3f4f6;
-}
-
-.checkbox-list-item input[type="checkbox"] {
-  transform: scale(1.2);
-  cursor: pointer;
-}
-.toggle-button {
-  background-color: #f3f4f6;
-  color: #333;
-  padding: 0.4rem 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  margin-bottom: 0.6rem;
-  transition: background 0.2s ease;
-}
-
-.toggle-button:hover {
-  background-color: #e5e7eb;
+.categoria-info ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  list-style: disc;
 }

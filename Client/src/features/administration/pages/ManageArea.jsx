@@ -1,7 +1,8 @@
 import React from "react";
 import AreasTable from "../components/administrationTable/AreasTable.jsx";
-import "../Styles/General.css";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../../../components/Buttons/BackButton.jsx";
+import "../Styles/General.css";
 
 const AreaList = () => {
   const navigate = useNavigate();
@@ -20,9 +21,9 @@ const AreaList = () => {
         }}
       >
         <div>
-          <button onClick={goBack} className="back-button">
-            🔙 Volver
-          </button>
+          <BackButton onClick={goBack} className="back-button">
+            Volver
+          </BackButton>
           <h1>Áreas</h1>
           <p>Gestiona las áreas principales de competencia</p>
         </div>

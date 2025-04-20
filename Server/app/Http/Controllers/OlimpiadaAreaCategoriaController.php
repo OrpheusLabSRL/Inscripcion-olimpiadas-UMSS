@@ -62,28 +62,37 @@ class OlimpiadaAreaCategoriaController extends Controller
     public function porOlimpiada($idOlimpiada)
     {
         $combinaciones = OlimpiadaAreaCategoria::where('idOlimpiada', $idOlimpiada)
-            ->with(['area', 'categoria'])
+            ->with(['area', 'categoria.grados']) // ← incluye grados relacionados
             ->get()
             ->groupBy('idArea');
-
+    
         $resultados = [];
-
+    
         foreach ($combinaciones as $idArea => $grupo) {
             $area = $grupo->first()->area;
+    
             $categorias = $grupo->pluck('categoria')->map(function ($cat) {
                 return [
                     'idCategoria' => $cat->idCategoria,
-                    'nombreCategoria' => $cat->nombreCategoria
+                    'nombreCategoria' => $cat->nombreCategoria,
+                    'grados' => $cat->grados->map(function ($grado) {
+                        return [
+                            'idGrado' => $grado->idGrado,
+                            'numeroGrado' => $grado->numeroGrado,
+                            'nivel' => $grado->nivel,
+                        ];
+                    })
                 ];
             });
-
+    
             $resultados[] = [
                 'idArea' => $area->idArea,
                 'nombreArea' => $area->nombreArea,
                 'categorias' => $categorias,
             ];
         }
-
+    
         return response()->json($resultados);
     }
+    
 }

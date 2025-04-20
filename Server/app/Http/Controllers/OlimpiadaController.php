@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Olimpiada;
-use App\Models\OlimpiadaAreaCategoria;
 use Illuminate\Http\Request;
 
 class OlimpiadaController extends Controller
@@ -19,13 +18,14 @@ class OlimpiadaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nombreOlimpiada' => 'required|string|max:100|unique:olimpiada,nombreOlimpiada',
+            'nombreOlimpiada' => 'required|string|max:100|unique:olimpiadas,nombreOlimpiada',
             'version' => 'required|integer|min:1',
             'fechaInicioOlimpiada' => 'required|date',
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
         ]);
 
-        $validated['estadoOlimpiada'] = 1;
+        $validated['estadoOlimpiada'] = true;
+        $validated['idUsuario'] = 1;
 
         $olimpiada = Olimpiada::create($validated);
 
@@ -41,7 +41,7 @@ class OlimpiadaController extends Controller
         $olimpiada = Olimpiada::findOrFail($id);
 
         $request->validate([
-            'nombreOlimpiada' => 'required|string|max:100|unique:olimpiada,nombreOlimpiada,' . $id . ',idOlimpiada',
+            'nombreOlimpiada' => 'required|string|max:100|unique:olimpiadas,nombreOlimpiada,' . $id . ',idOlimpiada',
             'version' => 'required|integer|min:1',
             'fechaInicioOlimpiada' => 'required|date',
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
@@ -66,7 +66,4 @@ class OlimpiadaController extends Controller
             'message' => 'Olimpiada eliminada correctamente'
         ]);
     }
-
-    
 }
- 

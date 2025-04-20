@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\OlimpiadaAreaCategoria;
+use App\Models\Usuario; // Asegúrate que este modelo exista
 
 class Olimpiada extends Model
 {
@@ -20,6 +21,7 @@ class Olimpiada extends Model
         'estadoOlimpiada',
         'fechaInicioOlimpiada',
         'fechaFinOlimpiada',
+        'idUsuario',
     ];
 
     public static function boot()
@@ -30,11 +32,20 @@ class Olimpiada extends Model
             if ($olimpiada->fechaFinOlimpiada <= $olimpiada->fechaInicioOlimpiada) {
                 throw new \Exception("La fecha de fin debe ser mayor que la fecha de inicio.");
             }
+
+            if (empty($olimpiada->idUsuario)) {
+                throw new \Exception("El campo idUsuario es requerido.");
+            }
         });
     }
 
     public function combinaciones()
     {
         return $this->hasMany(OlimpiadaAreaCategoria::class, 'idOlimpiada');
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'idUsuario');
     }
 }
