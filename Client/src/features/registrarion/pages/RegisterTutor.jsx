@@ -16,11 +16,7 @@ import { IoArrowBackCircle } from "react-icons/io5";
 import swal from "sweetalert";
 
 //api
-import {
-  registerDataOlympian,
-  setTutor,
-  setNewInscription,
-} from "../../../api/inscription.api";
+import { setNewInscription } from "../../../api/inscription.api";
 
 export const RegisterTutor = () => {
   const navigation = useNavigate();
@@ -97,134 +93,77 @@ export const RegisterTutor = () => {
     };
   }, []);
 
-  //CASO GENERAL: NUEVA INSCRIPCION
-  //CASO1: El reponsable es diferente del olimpista, tutor de area, tutor legal
-  //CASO2: El responsable es el mismo que el olimpista, tutor de area, tutor lagal son diferentes
-  //CASO3: El responsable es el mismo que el olimpista, tutor de area y tutor legal
-
-  //Frontend: La solucion simplemente es manejar todos los datoscomo un datasend
-  //Backend: La solucion es preguntar antes de crear una instancia de persona si ese carnet ya se encuentra registrado, si es asi entonces simplemnte se usa su ID
-
-  //CASO GENERAL: CONTINUAR INSCRIPCION
-  //CASO1: El reponsable es diferente del olimpista, tutor de area, tutor legal
-  //CASO2: El responsable es el mismo que el olimpista, tutor de area, tutor lagal son diferentes
-  //CASO3: El responsable es el mismo que el olimpista, tutor de area y tutor legal
-
-  //Cuando se coloque el carnet identidad, entonces primero se buscara en el localstorage del formulario anterior, si no se encuentra se buscara en la BD
-  //PARA TODOS LOS CASOS a nivel backend, la solucion es simplemente preguntar si ese carnet ya se encuentra registrado, si es asi usamos el id para crear el olim[ista o tutor correspondiente
-
   const onSubmit = async (data) => {
-    const idTutorInscriptor = localStorage.getItem("tutorInscripcionId");
-    //Si no existe ningun tutorInscripcionId, entonces devuelve null
-
-    const dataTutorResponsible = {
-      carnetdeidentidad: localStorage.getItem("NumeroResponsible"),
-      nombresTutor: localStorage.getItem("NombreResponsible"),
-      apellidosTutor: localStorage.getItem("ApellidoResponsible"),
-      tipoTutor: localStorage.getItem("TipoTutorResponsible"),
-      emailTutor: localStorage.getItem("EmailResponsible"),
-      telefono: localStorage.getItem("NumeroResponsible"),
-      rol: "responsable inscripcion",
+    const dataToSend = {
+      olimpista: {
+        nombre: localStorage.getItem("NombreOlympian"),
+        apellido: localStorage.getItem("ApellidoOlympian"),
+        correo_electronico: localStorage.getItem("EmailOlympian"),
+        carnet_identidad: localStorage.getItem("CarnetIdentidadOlympian"),
+        curso: localStorage.getItem("CursoOlympian"),
+        fecha_nacimiento: localStorage.getItem("FechaNacimientoOlympian"),
+        colegio: localStorage.getItem("ColegioOlympian"),
+        departamento: localStorage.getItem("DepartamentoOlympian"),
+        provincia: localStorage.getItem("ProvinciaOlympian"),
+      },
+      responsable: localStorage.getItem("idTutorInscriptor")
+        ? { id_persona: localStorage.getItem("idTutorInscriptor") }
+        : {
+            nombre: localStorage.getItem("NombreResponsible"),
+            apellido: localStorage.getItem("ApellidoResponsible"),
+            tipo_tutor: localStorage.getItem("TipoTutorResponsible"),
+            correo_electronico: localStorage.getItem("EmailResponsible"),
+            telefono: localStorage.getItem("NumeroResponsible"),
+            carnet_identidad: localStorage.getItem("CiResponsible"),
+          },
+      tutor_legal: {
+        nombre: localStorage.getItem("NombreLegal"),
+        apellido: localStorage.getItem("ApellidoLegal"),
+        tipo_tutor: localStorage.getItem("TipoTutorLegal"),
+        correo_electronico: localStorage.getItem("EmailLegal"),
+        telefono: localStorage.getItem("NumeroLegal"),
+        carnet_identidad: localStorage.getItem("CiLegal"),
+      },
+      inscripciones: [
+        {
+          area: localStorage.getItem("AreaPrincipal"),
+          categoria: localStorage.getItem("CategoriaPrincipal"),
+          existeTutor: localStorage.getItem("TutorArea1"),
+          tutorArea: {
+            nombre: localStorage.getItem("NombrePrincipal"),
+            apellido: localStorage.getItem("ApellidoPrincipal"),
+            tipo_tutor: localStorage.getItem("TipoTutorPrincipal"),
+            correo_electronico: localStorage.getItem("EmailPrincipal"),
+            telefono: localStorage.getItem("NumeroPrincipal"),
+            carnet_identidad: localStorage.getItem("CiPrincipal"),
+          },
+        },
+      ],
     };
 
-    const dataOlimpista = {
-      CarnetIdentidad: localStorage.getItem("CarnetIdentidadOlympian"),
-      Nombre: localStorage.getItem("NombreOlympian"),
-      Apellido: localStorage.getItem("ApellidoOlympian"),
-      Departamento: localStorage.getItem("DepartamentoOlympian"),
-      Provincia: localStorage.getItem("ProvinciaOlympian"),
-      Colegio: localStorage.getItem("ColegioOlympian"),
-      Curso: localStorage.getItem("CursoOlympian"),
-      FechaNacimiento: localStorage.getItem("FechaNacimientoOlympian"),
-      Email: localStorage.getItem("EmailOlympian"),
-    };
-
-    const dataTutorLegal = {
-      nombresTutor: localStorage.getItem("NombreLegal"),
-      apellidosTutor: localStorage.getItem("ApellidoLegal"),
-      tipoTutor: localStorage.getItem("TipoTutorLegal"),
-      emailTutor: localStorage.getItem("EmailLegal"),
-      telefono: localStorage.getItem("NumeroLegal"),
-      carnetdeidentidad: localStorage.getItem("NumeroLegal"),
-      rol: "tutor legal",
-    };
-
-    const dataTutorArea1 = {
-      nombresTutor: localStorage.getItem("NombrePrincipal"),
-      apellidosTutor: localStorage.getItem("ApellidoPrincipal"),
-      tipoTutor: localStorage.getItem("TipoTutorPrincipal"),
-      emailTutor: localStorage.getItem("EmailPrincipal"),
-      telefono: localStorage.getItem("NumeroPrincipal"),
-      carnetdeidentidad: localStorage.getItem("NumeroPrincipal"),
-      rol: "tutor area1",
-    };
-
-    const dataTutorArea2 = {
-      nombresTutor: localStorage.getItem("NombreSecundaria"),
-      apellidosTutor: localStorage.getItem("ApellidoSecundaria"),
-      tipoTutor: localStorage.getItem("TipoTutorSecundaria"),
-      emailTutor: localStorage.getItem("EmailSecundaria"),
-      telefono: localStorage.getItem("NumeroSecundaria"),
-      carnetdeidentidad: localStorage.getItem("NumeroSecundaria"),
-      rol: "tutor area2",
-    };
-
-    const inscripcion = {
-      Area: localStorage.getItem("AreaPrincipal"),
-      Categoria: localStorage.getItem("CategoriaPrincipal"),
-      AreaOpcional: localStorage.getItem("AreaSecundaria"),
-      CategoriaOpcional: localStorage.getItem("CategoriaSecundaria"),
-      estado: false,
-    };
+    if (localStorage.getItem("AreaSecundaria")) {
+      dataToSend.inscripciones.push({
+        area: localStorage.getItem("AreaSecundaria"),
+        categoria: localStorage.getItem("CategoriaSecundaria"),
+        existeTutor: localStorage.getItem("TutorArea2"),
+        tutorArea: {
+          nombre: localStorage.getItem("NombreSecundaria"),
+          apellido: localStorage.getItem("ApellidoSecundaria"),
+          tipo_tutor: localStorage.getItem("TipoTutorSecundaria"),
+          correo_electronico: localStorage.getItem("EmailSecundaria"),
+          telefono: localStorage.getItem("NumeroSecundaria"),
+          carnet_identidad: localStorage.getItem("CiSecundaria"),
+        },
+      });
+    }
 
     try {
-      if (idTutorInscriptor !== null)
-        dataOlimpista.id_tutor = idTutorInscriptor;
-      const resOlympian = await registerDataOlympian(dataOlimpista);
-      const idOlimpista = resOlympian.data.data.id_olimpista;
-      dataTutorResponsible.id_olimpista = idOlimpista;
-      dataTutorLegal.id_olimpista = idOlimpista;
-      inscripcion.id_olimpista = idOlimpista;
-      let resTutorResponsible = null;
-
-      if (idTutorInscriptor == null || idTutorInscriptor == "")
-        resTutorResponsible = await setTutor(dataTutorResponsible);
-
-      await setTutor(dataTutorLegal);
-      let idTutorArea1 = null,
-        idTutorArea2 = null;
-
-      if (
-        Object.values(dataTutorArea1).every(
-          (valor) => valor !== null && valor !== ""
-        )
-      ) {
-        dataTutorArea1.id_olimpista = idOlimpista;
-        const res = await setTutor(dataTutorArea1);
-        idTutorArea1 = res.data.tutorId;
-      }
-      if (
-        Object.values(dataTutorArea2).every(
-          (valor) => valor !== null && valor !== ""
-        )
-      ) {
-        dataTutorArea2.id_olimpista = idOlimpista;
-        const res = await setTutor(dataTutorArea2);
-        idTutorArea2 = res.data.tutorId;
-      }
-
-      if (idTutorArea1) inscripcion.id_tutor1 = idTutorArea1;
-      if (idTutorArea2) inscripcion.id_tutor2 = idTutorArea2;
-
-      await setNewInscription(inscripcion);
-
+      const resInscription = await setNewInscription(dataToSend);
       limpiarCamposLocalStorage();
-      if (resTutorResponsible?.data?.tutorId != null) {
-        localStorage.setItem(
-          "tutorInscripcionId",
-          resTutorResponsible.data.tutorId
-        );
-      }
+      localStorage.setItem(
+        "tutorInscripcionId",
+        resInscription.data.data.tutor_responsable_id
+      );
 
       swal("Datos registrados correctamente");
       navigation("/listRegistered");
