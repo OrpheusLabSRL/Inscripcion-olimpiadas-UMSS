@@ -33,3 +33,10 @@
 .mandatory {
   color: red;
 }
+
+.btn-autofill {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 8px;
+  padding: 5px;
+}

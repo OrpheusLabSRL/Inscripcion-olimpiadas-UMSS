@@ -31,6 +31,9 @@ export const getTutoresOlimpista = (id) =>
 export const getOlimpistaEnable = (carnet) =>
   inscriptionApi.get(`/olimpista/${carnet}/habilitado`);
 
+export const getPersonData = (carnet) =>
+  inscriptionApi.get(`/persona/${carnet}/data`);
+
 export const setNewInscription = (data) =>
   inscriptionApi.post("/newInscription", data);
 

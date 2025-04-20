@@ -10,6 +10,9 @@ import { useForm } from "react-hook-form";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
 
+//api
+import { getPersonData } from "../../../api/inscription.api";
+
 export const RegisterTutorOptional = () => {
   const location = useLocation();
   const navigation = useNavigate();
@@ -126,6 +129,26 @@ export const RegisterTutorOptional = () => {
     }
   };
 
+  const autofill = async () => {
+    try {
+      const personData = await getPersonData(
+        localStorage.getItem("CiResponsible")
+      );
+      if (personData.data.data.nombre) {
+        setValue("Nombre", personData.data.data.nombre);
+        setValue("Apellido", personData.data.data.apellido);
+        setValue("Email", personData.data.data.correoElectronico);
+      }
+
+      if (personData.data.data.tipoTutor) {
+        setValue("Tipo_Tutor", personData.data.data.tipoTutor);
+        setValue("Numero_Celular", personData.data.data.telefono);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="container-form">
       <NavLink to={"/Register/OlympianArea"} onClick={backPage}>
@@ -134,6 +157,10 @@ export const RegisterTutorOptional = () => {
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
           <h1>Registro de datos de tutor de área</h1>
+          <h5 className="message-recomendation">
+            Si ya tiene datos registrados, ingrese su CI y presione el botón
+            "Autocompletar" para llenar automáticamente los campos.
+          </h5>
         </div>
 
         <div className="input-1c">
@@ -142,6 +169,7 @@ export const RegisterTutorOptional = () => {
             placeholder="Ingrese número de CI del tutor"
             mandatory="true"
             name="Ci"
+            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("Ci", e.target.value)}
             s
