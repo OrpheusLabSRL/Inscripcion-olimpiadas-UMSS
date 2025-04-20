@@ -106,8 +106,8 @@ export const RegisterTutor = () => {
         departamento: localStorage.getItem("DepartamentoOlympian"),
         provincia: localStorage.getItem("ProvinciaOlympian"),
       },
-      responsable: localStorage.getItem("idTutorInscriptor")
-        ? { id_persona: localStorage.getItem("idTutorInscriptor") }
+      responsable: localStorage.getItem("tutorInscripcionId")
+        ? { id_persona: localStorage.getItem("tutorInscripcionId") }
         : {
             nombre: localStorage.getItem("NombreResponsible"),
             apellido: localStorage.getItem("ApellidoResponsible"),
@@ -140,6 +140,7 @@ export const RegisterTutor = () => {
         },
       ],
     };
+
 
     if (localStorage.getItem("AreaSecundaria")) {
       dataToSend.inscripciones.push({

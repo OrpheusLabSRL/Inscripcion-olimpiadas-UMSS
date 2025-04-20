@@ -4,39 +4,14 @@ import "./ListElement.css";
 //React
 import { MdDelete } from "react-icons/md";
 import { useState } from "react";
-import { useEffect } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
-
-
-//api
-import {
-  getAreasOlimpista,
-  getTutoresOlimpista,
-} from "../../../../api/inscription.api";
 
 //component
 import { GenericModal } from "../../../../components/modals/GenericModal";
 
 export const ListElement = ({ data }) => {
-  const [areasOlimpista, setAreasOlimpista] = useState([]);
-  const [tutoresOlimpista, setTutoresOlimpista] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  useEffect(() => {
-    const areasOlimpistas = async () => {
-      const res = await getAreasOlimpista(data.id_olimpista);
-      setAreasOlimpista(res.data.data.areas);
-    };
-
-    const tutoresOlimpistas = async () => {
-      const res = await getTutoresOlimpista(data.id_olimpista);
-      setTutoresOlimpista(res.data.data);
-    };
-
-    areasOlimpistas();
-    tutoresOlimpistas();
-  }, []);
 
   const openModal = (e) => {
     e.preventDefault();
@@ -47,17 +22,9 @@ export const ListElement = ({ data }) => {
     setModalIsOpen(false);
   };
 
-  const chooseTitleTutor = (rol) => {
-    if (rol == "responsable inscripcion") return "Responsable de Inscripción";
-
-    if (rol == "tutor area1") return "Tutor de área 1";
-    if (rol == "tutor area2") return "Tutor de área 2";
-    if (rol == "tutor legal") return "Tutor Legal";
-  };
-
   return (
     <div className="container-element-list">
-      <div className="list-data-header" key={data.id_olimpista}>
+      <div className="list-data-header">
         <table className="container-table-list">
           <thead>
             <tr>
@@ -161,41 +128,7 @@ export const ListElement = ({ data }) => {
             </div>
           </div>
 
-          {tutoresOlimpista.map((tutor, index) => (
-            <div className="data-section" key={`tutor-${index}`}>
-              <div className="section-header">
-                <h3>{chooseTitleTutor(tutor.rol)}</h3>
-              </div>
-              <div className="data-grid">
-                <div className="data-item">
-                  <span className="data-label">Nombre:</span>
-                  <span className="data-value">{tutor.nombre}</span>
-                </div>
-                <div className="data-item">
-                  <span className="data-label">Apellido:</span>
-                  <span className="data-value">{tutor.apellido}</span>
-                </div>
-                <div className="data-item">
-                  <span className="data-label">Carnet de Identidad:</span>
-                  <span className="data-value">{tutor.carnetIdentidad}</span>
-                </div>
-                <div className="data-item">
-                  <span className="data-label">Tipo de tutor:</span>
-                  <span className="data-value">{tutor.tipoTutor}</span>
-                </div>
-                <div className="data-item">
-                  <span className="data-label">Número de celular:</span>
-                  <span className="data-value">{tutor.numeroCelular}</span>
-                </div>
-                <div className="data-item">
-                  <span className="data-label">Correo Electrónico:</span>
-                  <span className="data-value">{tutor.correo}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-
-          {areasOlimpista.map((area, index) => (
+          {data.areas.map((area, index) => (
             <div className="data-section" key={`area-${index}`}>
               <div className="section-header">
                 <h3>Área {index + 1}</h3>
@@ -203,14 +136,52 @@ export const ListElement = ({ data }) => {
               <div className="data-grid">
                 <div className="data-item">
                   <span className="data-label">Nombre área:</span>
-                  <span className="data-value">{area.nombreArea}</span>
+                  <span className="data-value">{area.nombre_area}</span>
                 </div>
                 <div className="data-item">
                   <span className="data-label">Categoría:</span>
-                  <span className="data-value">
-                    {area.categorias[0].nombreCategoria}
-                  </span>
+                  <span className="data-value">{area.nombre_categoria}</span>
                 </div>
+
+                {area.nombre_tutor_area ? (
+                  <>
+                    <div className="data-item">
+                      <span className="data-label">Nombre tutor de área:</span>
+                      <span className="data-value">
+                        {area.nombre_tutor_area}
+                      </span>
+                    </div>
+                    <div className="data-item">
+                      <span className="data-label">
+                        Apellido tutor de área:
+                      </span>
+                      <span className="data-value">
+                        {area.apellido_tutor_area}
+                      </span>
+                    </div>
+
+                    <div className="data-item">
+                      <span className="data-label">Tipo de tutor:</span>
+                      <span className="data-value">{area.tipo_tutor}</span>
+                    </div>
+                    <div className="data-item">
+                      <span className="data-label">Carnet de Identidad:</span>
+                      <span className="data-value">{area.carnetIdentidad}</span>
+                    </div>
+                    <div className="data-item">
+                      <span className="data-label">Telefono:</span>
+                      <span className="data-value">{area.telefono}</span>
+                    </div>
+                    <div className="data-item">
+                      <span className="data-label">Correo Electronico:</span>
+                      <span className="data-value">{area.correo}</span>
+                    </div>
+                  </>
+                ) : (
+                  <span className="data-value">
+                    No se cuenta con tutor de área
+                  </span>
+                )}
               </div>
             </div>
           ))}
