@@ -14,6 +14,9 @@ import swal from "sweetalert";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
 
+//api
+import { getOlimpistaEnable } from "../../../api/inscription.api";
+
 //utils
 import { Validator } from "../utils/ValidationRules";
 import {
@@ -130,10 +133,10 @@ export const RegisterOlympian = () => {
 
   const onSubmit = async (data) => {
     try {
+      await getOlimpistaEnable(localStorage.getItem("CarnetIdentidadOlympian"));
       navigation("/Register/OlympianArea", data);
     } catch (error) {
-      console.log(error);
-      swal("Error al registrar los datos");
+      swal("Error", error.response.data.message, "error");
     }
   };
 
