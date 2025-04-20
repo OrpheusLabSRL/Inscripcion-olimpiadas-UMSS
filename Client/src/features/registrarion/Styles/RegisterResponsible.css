@@ -40,3 +40,8 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.message-recomendation {
+  color: #f44336;
+  margin: 0;
+}

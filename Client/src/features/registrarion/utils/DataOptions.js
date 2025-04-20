@@ -14,15 +14,15 @@ export const cursosBolivia = [
 ];
 
 export const departamentosBolivia = [
-  { value: "chuquisaca", label: "Chuquisaca" },
-  { value: "la_paz", label: "La Paz" },
-  { value: "cochabamba", label: "Cochabamba" },
-  { value: "oruro", label: "Oruro" },
-  { value: "potosi", label: "Potosí" },
-  { value: "tarija", label: "Tarija" },
-  { value: "santa_cruz", label: "Santa Cruz" },
-  { value: "beni", label: "Beni" },
-  { value: "pando", label: "Pando" },
+  { value: "Chuquisaca", label: "Chuquisaca" },
+  { value: "La Paz", label: "La Paz" },
+  { value: "Cochabamba", label: "Cochabamba" },
+  { value: "Oruro", label: "Oruro" },
+  { value: "Potosí", label: "Potosí" },
+  { value: "Tarija", label: "Tarija" },
+  { value: "Santa Cruz", label: "Santa Cruz" },
+  { value: "Beni", label: "Beni" },
+  { value: "Pando", label: "Pando" },
 ];
 
 export const provinciasPorDepartamento = {
@@ -157,4 +157,3 @@ export const provinciasPorDepartamento = {
     { label: "Nicolás Suárez", value: "Nicolás Suárez" },
   ],
 };
-

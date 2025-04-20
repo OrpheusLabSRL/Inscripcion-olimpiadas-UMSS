@@ -15,7 +15,10 @@ import { IoArrowBackCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
 
 //api
-import { getOlimpistaEnable } from "../../../api/inscription.api";
+import {
+  getOlimpistaEnable,
+  getPersonData,
+} from "../../../api/inscription.api";
 
 //utils
 import { Validator } from "../utils/ValidationRules";
@@ -131,6 +134,29 @@ export const RegisterOlympian = () => {
     localStorage.setItem("provinciasFiltradas", JSON.stringify(provincias));
   };
 
+  const autofill = async () => {
+    try {
+      const personData = await getPersonData(
+        localStorage.getItem("CarnetIdentidadOlympian")
+      );
+      if (personData.data.data.nombre) {
+        setValue("Nombre", personData.data.data.nombre);
+        setValue("Apellido", personData.data.data.apellido);
+        setValue("Email", personData.data.data.correoElectronico);
+      }
+
+      if (personData.data.data.fechaNacimiento) {
+        setValue("FechaNacimiento", personData.data.data.fechaNacimiento);
+        setValue("Departamento", personData.data.data.departamento);
+        setValue("Provincia", personData.data.data.provincia);
+        setValue("Colegio", personData.data.data.colegio);
+        setValue("Curso", personData.data.data.curso);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
       await getOlimpistaEnable(localStorage.getItem("CarnetIdentidadOlympian"));
@@ -148,6 +174,10 @@ export const RegisterOlympian = () => {
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
           <h1>Registro de datos del Olimpista</h1>
+          <h5 className="message-recomendation">
+            Si ya tiene datos registrados, ingrese su CI y presione el botón
+            "Autocompletar" para llenar automáticamente los campos.
+          </h5>
         </div>
 
         <div className="input-1c">
@@ -156,6 +186,7 @@ export const RegisterOlympian = () => {
             placeholder="Ingrese número de CI del olimpista"
             mandatory="true"
             name="CarnetIdentidad"
+            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("CarnetIdentidad", e.target.value)}
             register={register}

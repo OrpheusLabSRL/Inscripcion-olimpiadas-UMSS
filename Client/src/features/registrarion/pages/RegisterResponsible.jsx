@@ -14,6 +14,9 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 
+//api
+import { getPersonData } from "../../../api/inscription.api";
+
 export const RegisterResponsible = () => {
   const navigation = useNavigate();
   const location = useLocation();
@@ -91,6 +94,26 @@ export const RegisterResponsible = () => {
     };
   }, []);
 
+  const autofill = async () => {
+    try {
+      const personData = await getPersonData(
+        localStorage.getItem("CiResponsible")
+      );
+      if (personData.data.data.nombre) {
+        setValue("Nombre", personData.data.data.nombre);
+        setValue("Apellido", personData.data.data.apellido);
+        setValue("Email", personData.data.data.correoElectronico);
+      }
+
+      if (personData.data.data.tipoTutor) {
+        setValue("Tipo_Tutor", personData.data.data.tipoTutor);
+        setValue("Numero_Celular", personData.data.data.telefono);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
       navigation("/register/olympian", {
@@ -109,6 +132,10 @@ export const RegisterResponsible = () => {
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
           <h1>Datos de responsable de inscripción</h1>
+          <h5 className="message-recomendation">
+            Si ya tiene datos registrados, ingrese su CI y presione el botón
+            "Autocompletar" para llenar automáticamente los campos.
+          </h5>
         </div>
 
         <div className="input-1c">
@@ -117,6 +144,7 @@ export const RegisterResponsible = () => {
             placeholder="Ingrese número de CI del tutor"
             mandatory="true"
             name="Ci"
+            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("Ci", e.target.value)}
             register={register}
