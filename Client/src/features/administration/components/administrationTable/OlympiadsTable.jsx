@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { getOlimpiadas } from "../../../api/inscription.api";
-import OlympiadsModal from "./OlympiadsModal";
-import "../Styles/General.css";
+import { getOlimpiadas } from "../../../../api/inscription.api";
+import OlympiadsModal from "../administrationModal/OlympiadsModal";
+import "../../Styles/General.css";
 
 const OlympiadsTable = () => {
   const [olympiads, setOlympiads] = useState([]);
@@ -13,6 +13,7 @@ const OlympiadsTable = () => {
     try {
       const data = await getOlimpiadas();
       setOlympiads(data.data);
+      console.log("Respuesta cruda de la API:", data.data);
     } catch (error) {
       setOlympiads([]);
     } finally {
@@ -47,8 +48,8 @@ const OlympiadsTable = () => {
           {olympiads.map((item) => (
             <tr key={item.idOlimpiada}>
               <td>{item.nombreOlimpiada}</td>
-              <td>{item.fechaInicioOlimp}</td>
-              <td>{item.fechaFinOlimp}</td>
+              <td>{item.fechaInicioOlimpiada}</td>
+              <td>{item.fechaFinOlimpiada}</td>
               <td>
                 <span
                   className={`badge badge-${

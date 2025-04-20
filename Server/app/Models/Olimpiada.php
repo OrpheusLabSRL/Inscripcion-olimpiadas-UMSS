@@ -18,23 +18,21 @@ class Olimpiada extends Model
         'nombreOlimpiada',
         'version',
         'estadoOlimpiada',
-        'fechaInicioOlimp',
-        'fechaFinOlimp',
+        'fechaInicioOlimpiada',
+        'fechaFinOlimpiada',
     ];
 
-    // Validación de fechas antes de guardar
     public static function boot()
     {
         parent::boot();
 
         static::creating(function ($olimpiada) {
-            if ($olimpiada->fechaFinOlimp <= $olimpiada->fechaInicioOlimp) {
+            if ($olimpiada->fechaFinOlimpiada <= $olimpiada->fechaInicioOlimpiada) {
                 throw new \Exception("La fecha de fin debe ser mayor que la fecha de inicio.");
             }
         });
     }
 
-    // ✅ Nueva relación: olimpiada ↔ combinaciones (área + categoría)
     public function combinaciones()
     {
         return $this->hasMany(OlimpiadaAreaCategoria::class, 'idOlimpiada');

@@ -16,15 +16,17 @@ class Categoria extends Model
         'estadoCategoria',
     ];
 
-    // 🔁 Relación con grados (tabla intermedia: categoria_grado)
     public function grados()
     {
-        return $this->belongsToMany(Grado::class, 'categoria_grados', 'categoria_id', 'grado_id')
-            ->withPivot('estadoCategoriaGrado');
+        return $this->belongsToMany(
+            Grado::class,
+            'categoria_grado', 
+            'idCategoria',     
+            'idGrado'         
+        )->withPivot('estadoCategoriaGrado');
 
     }
 
-    // 🔁 Relación con combinaciones (olimpiada + área + categoría)
     public function combinaciones()
     {
         return $this->hasMany(OlimpiadaAreaCategoria::class, 'idCategoria');

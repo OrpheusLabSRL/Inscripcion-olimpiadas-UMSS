@@ -19,14 +19,14 @@ class Grado extends Model
         'estadoGrado'
     ];
 
-    // Relación con Categoría (tabla pivote: categoria_grado)
     public function categorias()
     {
         return $this->belongsToMany(
             Categoria::class,
-            'categoria_grados',
+            'categoria_grado',
             'idGrado',
             'idCategoria'
         )->withPivot('estadoCategoriaGrado');
     }
 }
+

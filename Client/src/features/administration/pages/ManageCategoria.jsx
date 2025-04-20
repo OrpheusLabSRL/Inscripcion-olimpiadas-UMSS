@@ -1,5 +1,5 @@
 import React from "react";
-import CategoriesTable from "../components/CategoriesTable";
+import CategoriesTable from "../components/administrationTable/CategoriesTable";
 import "../Styles/General.css";
 import { useNavigate } from "react-router-dom";
 

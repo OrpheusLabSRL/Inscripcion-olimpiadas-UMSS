@@ -6,41 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCategoriaGradosTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        Schema::create('categoria_grados', function (Blueprint $table) {
-            $table->id('id_CategoriaGrado'); 
-            $table->unsignedBigInteger('categoria_id'); 
-            $table->unsignedBigInteger('grado_id'); 
-            $table->boolean('estadoCategoriaGrado')->default(true);
+        Schema::create('categoria_grado', function (Blueprint $table) {
+            $table->id('idCategoriaGrado'); 
+            $table->unsignedBigInteger('idGrado')->nullable(); 
+            $table->unsignedBigInteger('idCategoria')->nullable(); 
+            $table->boolean('estadoCategoriaGrado')->nullable(); 
             $table->timestamps();
 
-            $table->foreign('categoria_id')
-                ->references('idCategoria')
-                ->on('categorias')
-                ->onDelete('cascade'); 
-
-            $table->foreign('grado_id')
+            $table->foreign('idGrado')
                 ->references('idGrado')
                 ->on('grados')
-                ->onDelete('cascade'); 
+                ->onDelete('cascade');
 
-            $table->unique(['categoria_id', 'grado_id']);
+            $table->foreign('idCategoria')
+                ->references('idCategoria')
+                ->on('categorias')
+                ->onDelete('cascade');
+ 
+            $table->unique(['idCategoria', 'idGrado']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::dropIfExists('categoria_grados');
+        Schema::dropIfExists('categoria_grado');
     }
 }

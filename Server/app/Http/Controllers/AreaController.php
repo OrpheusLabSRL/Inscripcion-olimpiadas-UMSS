@@ -15,29 +15,6 @@ class AreaController extends Controller
         return response()->json(Area::all(), 200);
     }
 
-    // Vista Blade: Mostrar áreas
-    public function mostrarArea()
-    {
-        $area = Area::all();
-        $olimpiada = Olimpiada::all();
-        return view('area', compact('area', 'olimpiada'));
-    }
-
-    // Guardar área desde formulario Blade
-    public function agregarArea(Request $request)
-    {
-        $request->validate([
-            'nombreArea' => 'required|string|max:30|unique:area,nombreArea',
-            'descripcionArea' => 'nullable|string|max:300',
-            'costoArea' => 'required|integer|min:1',
-            'estadoArea' => 'sometimes|boolean'
-        ]);
-
-        Area::create($request->all());
-
-        return redirect()->route('area.mostrar')->with('success', 'Área creada con éxito');
-    }
-
     // Guardar área vía API
     public function store(Request $request)
     {
