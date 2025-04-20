@@ -11,25 +11,32 @@ class Inscripcion extends Model
 
     protected $table = 'inscripciones';
 
-    protected $primaryKey = 'id_inscripcion';
-
+    protected $primaryKey = 'idInscripcion';
     protected $fillable = [
-        'estado',
-        'fechaInicio',
-        'fechaFin',
-        'id_olimpista',
+        'idTutorResponsable',
+        'idOlimpista',
         'idOlimpAreaCategoria',
-        'id_tutor',
+        'estadoInscripcion',
+        'idTutorLegal',
+        'idTutorArea'
     ];
 
     public function olimpista()
 {
-    return $this->belongsTo(Olimpista::class, 'id_olimpista', 'id_olimpista');
+    return $this->belongsTo(Olimpista::class, 'idOlimpista', 'idOlimpista');
 }
 
-public function tutor()
+public function tutorResponsable()
 {
-    return $this->belongsTo(Tutor::class, 'id_tutor', 'id_tutor');
+    return $this->belongsTo(Tutor::class, 'idTutorResponsable', 'idTutor');
+}
+public function tutorLegal()
+{
+    return $this->belongsTo(Tutor::class, 'idTutorLegal', 'idTutor');
+}
+public function tutorArea()
+{
+    return $this->belongsTo(Tutor::class, 'idTutorArea', 'idTutor');
 }
 
 public function OlimpiadaAreaCategoria()

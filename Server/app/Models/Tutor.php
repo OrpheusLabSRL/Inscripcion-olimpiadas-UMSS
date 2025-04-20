@@ -10,28 +10,34 @@ class Tutor extends Model
     use HasFactory;
 
     protected $table = 'tutores';
-    protected $primaryKey = 'id_tutor';
-
+    protected $primaryKey = 'idPersona';
+    public $incrementing = false;
     protected $fillable = [
-        'nombre',
-        'apellido',
         'tipoTutor',
-        'correo',
-        'numeroCelular',
-        'carnetIdentidad'
+        'idPersona',
+        'telefono',
     ];
 
-    protected $casts = [
-        'nombre' => 'string',
-        'apellido' => 'string',
-        'tipoTutor' => 'string',
-        'correo' => 'string',
-        'numeroCelular' => 'string',
-        'carnetIdentidad' => 'string'
-    ];
-
-    public function olimpistas()
+    // Relación con Persona
+    public function persona()
     {
-        return $this->belongsToMany(Olimpista::class, 'olimpista_tutor', 'id_tutor', 'id_olimpista');
+        return $this->belongsTo(Persona::class, 'idPersona');
+    }
+
+    // Relación con Inscripciones como tutor responsable
+    public function inscripcionesResponsable()
+    {
+        return $this->hasMany(Inscripcion::class, 'idTutorResponsable');
+    }
+
+    // Relación con Inscripciones como tutor legal
+    public function inscripcionesLegal()
+    {
+        return $this->hasMany(Inscripcion::class, 'idTutorLegal');
+    }
+    
+    public function inscripcionesArea()
+    {
+        return $this->hasMany(Inscripcion::class, 'idTutorArea');
     }
 }
