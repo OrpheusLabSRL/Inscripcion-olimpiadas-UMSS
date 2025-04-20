@@ -18,7 +18,7 @@ class Persona extends Model
     ];
 
    
-    public function climpista()
+    public function olimpista()
     {
         return $this->hasOne(Olimpista::class, 'idPersona');
     }

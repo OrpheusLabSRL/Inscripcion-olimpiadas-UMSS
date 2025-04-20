@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 use App\Models\Olimpista;
 use Illuminate\Support\Facades\DB;
 
-
-
 class InscripcionController extends Controller
 {
     public function store(Request $request)

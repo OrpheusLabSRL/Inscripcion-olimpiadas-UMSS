@@ -23,20 +23,25 @@ class Inscripcion extends Model
 
     public function olimpista()
 {
-    return $this->belongsTo(Olimpista::class, 'idOlimpista', 'idOlimpista');
+    return $this->belongsTo(Olimpista::class, 'idOlimpista', 'idPersona');
+}
+
+public function persona()
+{
+    return $this->belongsTo(Persona::class, 'idPersona');
 }
 
 public function tutorResponsable()
 {
-    return $this->belongsTo(Tutor::class, 'idTutorResponsable', 'idTutor');
+    return $this->belongsTo(Tutor::class, 'idTutorResponsable', 'idPersona');
 }
 public function tutorLegal()
 {
-    return $this->belongsTo(Tutor::class, 'idTutorLegal', 'idTutor');
+    return $this->belongsTo(Tutor::class, 'idTutorLegal', 'idPersona');
 }
 public function tutorArea()
 {
-    return $this->belongsTo(Tutor::class, 'idTutorArea', 'idTutor');
+    return $this->belongsTo(Tutor::class, 'idTutorArea', 'idPersona');
 }
 
 public function OlimpiadaAreaCategoria()
