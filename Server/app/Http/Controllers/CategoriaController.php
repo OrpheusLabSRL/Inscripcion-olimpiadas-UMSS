@@ -3,111 +3,76 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
-use App\Models\OlimpiadaAreaCategoria;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CategoriaController extends Controller
 {
-    // Obtener todas las categorías con grados y combinaciones
+    // Obtener todas las categorías
     public function index()
     {
-        $categorias = Categoria::with(['grados', 'combinaciones.area', 'combinaciones.olimpiada'])->get();
-        return response()->json($categorias);
+        return response()->json(Categoria::all());
     }
 
-    // Obtener una sola categoría con sus relaciones
+    // Obtener una categoría por su ID
     public function show($id)
     {
-        $categoria = Categoria::with(['grados', 'combinaciones.area', 'combinaciones.olimpiada'])->findOrFail($id);
+        $categoria = Categoria::find($id);
+
+        if (!$categoria) {
+            return response()->json(['message' => 'Categoría no encontrada'], 404);
+        }
+
         return response()->json($categoria);
     }
 
-    // Guardar una nueva categoría con grados y asignarla a una combinación de olimpiada y área
+    // Crear una nueva categoría
     public function store(Request $request)
     {
         $request->validate([
             'nombreCategoria' => 'required|string|unique:categoria,nombreCategoria',
-            'estado' => 'required|boolean',
-            'idArea' => 'required|exists:area,idArea',
-            'idGrado' => 'required|exists:grado,idGrado',
-            'idOlimpiada' => 'required|exists:olimpiada,idOlimpiada',
+            'estadoCategoria' => 'required|boolean',
         ]);
 
-        DB::transaction(function () use ($request) {
-            $categoria = new Categoria();
-            $categoria->nombreCategoria = $request->nombreCategoria;
-            $categoria->estadoCategoria = $request->estado;
-            $categoria->save();
+        $categoria = Categoria::create($request->only(['nombreCategoria', 'estadoCategoria']));
 
-            // Crear la relación en olimpiada_area_categoria
-            OlimpiadaAreaCategoria::create([
-                'idOlimpiada' => $request->idOlimpiada,
-                'idArea' => $request->idArea,
-                'idCategoria' => $categoria->idCategoria,
-                'estado' => true,
-            ]);
-
-            // Relación con grado
-            DB::table('categoria_grado')->insert([
-                'idCategoria' => $categoria->idCategoria,
-                'idGrado' => $request->idGrado,
-                'estadoCategoriaGrado' => 1
-            ]);
-        });
-
-        return response()->json(['message' => 'Categoría creada con éxito']);
+        return response()->json([
+            'message' => 'Categoría creada con éxito',
+            'data' => $categoria
+        ], 201);
     }
 
-    // Actualizar una categoría y sus relaciones
+    // Actualizar una categoría
     public function update(Request $request, $id)
     {
-        $categoria = Categoria::findOrFail($id);
+        $categoria = Categoria::find($id);
+
+        if (!$categoria) {
+            return response()->json(['message' => 'Categoría no encontrada'], 404);
+        }
 
         $request->validate([
             'nombreCategoria' => 'required|string|unique:categoria,nombreCategoria,' . $id . ',idCategoria',
-            'estado' => 'required|boolean',
-            'idArea' => 'required|exists:area,idArea',
-            'idGrado' => 'required|exists:grado,idGrado',
-            'idOlimpiada' => 'required|exists:olimpiada,idOlimpiada',
+            'estadoCategoria' => 'required|boolean',
         ]);
 
-        DB::transaction(function () use ($request, $categoria) {
-            $categoria->update([
-                'nombreCategoria' => $request->nombreCategoria,
-                'estadoCategoria' => $request->estado,
-            ]);
+        $categoria->update($request->only(['nombreCategoria', 'estadoCategoria']));
 
-            // Limpiar relaciones previas
-            OlimpiadaAreaCategoria::where('idCategoria', $categoria->idCategoria)->delete();
-            DB::table('categoria_grado')->where('idCategoria', $categoria->idCategoria)->delete();
-
-            // Insertar nuevas relaciones
-            OlimpiadaAreaCategoria::create([
-                'idOlimpiada' => $request->idOlimpiada,
-                'idArea' => $request->idArea,
-                'idCategoria' => $categoria->idCategoria,
-                'estado' => true,
-            ]);
-
-            DB::table('categoria_grado')->insert([
-                'idCategoria' => $categoria->idCategoria,
-                'idGrado' => $request->idGrado,
-                'estadoCategoriaGrado' => 1
-            ]);
-        });
-
-        return response()->json(['message' => 'Categoría actualizada con éxito']);
+        return response()->json([
+            'message' => 'Categoría actualizada con éxito',
+            'data' => $categoria
+        ]);
     }
 
-    // Eliminar una categoría y sus relaciones
+    // Eliminar una categoría
     public function destroy($id)
     {
-        $categoria = Categoria::findOrFail($id);
-        $categoria->delete();
+        $categoria = Categoria::find($id);
 
-        OlimpiadaAreaCategoria::where('idCategoria', $id)->delete();
-        DB::table('categoria_grado')->where('idCategoria', $id)->delete();
+        if (!$categoria) {
+            return response()->json(['message' => 'Categoría no encontrada'], 404);
+        }
+
+        $categoria->delete();
 
         return response()->json(['message' => 'Categoría eliminada']);
     }

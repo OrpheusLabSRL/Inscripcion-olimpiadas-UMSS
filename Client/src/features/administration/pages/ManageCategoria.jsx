@@ -1,7 +1,8 @@
 import React from "react";
-import CategoriesTable from "../components/CategoriesTable";
-import "../Styles/General.css";
+import CategoriesTable from "../components/administrationTable/CategoriesTable";
+import BackButton from "../../../components/Buttons/BackButton.jsx";
 import { useNavigate } from "react-router-dom";
+import "../Styles/General.css";
 
 const CategoryList = () => {
   const navigate = useNavigate();
@@ -21,9 +22,9 @@ const CategoryList = () => {
         }}
       >
         <div>
-          <button onClick={goBack} className="back-button">
-            🔙 Volver
-          </button>
+          <BackButton onClick={goBack} className="back-button">
+            Volver
+          </BackButton>
           <h1>Categorías</h1>
           <p>Gestiona las categorías que asociarás a las diferentes áreas</p>
         </div>

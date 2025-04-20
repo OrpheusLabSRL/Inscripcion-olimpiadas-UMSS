@@ -21,7 +21,6 @@ class Area extends Model
         'estadoArea',
     ];
 
-    // Nueva relación: combinaciones (olimpiada + área + categoría)
     public function combinaciones()
     {
         return $this->hasMany(OlimpiadaAreaCategoria::class, 'idArea');

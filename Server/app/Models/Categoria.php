@@ -16,7 +16,6 @@ class Categoria extends Model
         'estadoCategoria',
     ];
 
-    // 🔁 Relación con grados (tabla intermedia: categoria_grado)
     public function grados()
     {
         return $this->belongsToMany(Grado::class, 'categorias_grados', 'categoria_id', 'grado_id')
@@ -24,7 +23,6 @@ class Categoria extends Model
 
     }
 
-    // 🔁 Relación con combinaciones (olimpiada + área + categoría)
     public function combinaciones()
     {
         return $this->hasMany(OlimpiadaAreaCategoria::class, 'idCategoria');

@@ -12,8 +12,8 @@ use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\OlimpiadaController;
 use App\Http\Controllers\OlimpistaController;
 use App\Http\Controllers\TutorController;
-use App\Http\Controllers\OlimpiadaAreaController;
-
+use App\Http\Controllers\CategoriaGradoController;
+use App\Http\Controllers\OlimpiadaAreaCategoriaController;
 
 // Ruta protegida para obtener el usuario autenticado
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -29,7 +29,6 @@ Route::get('/olimpista/{id}/areas', [InscripcionController::class, 'getAreaByOli
 Route::get('/olimpista/{carnet_identidad}/habilitado', [InscripcionController::class, 'enableForIncription']);
 Route::get('/olimpista/{id}/tutores', [TutorController::class, 'getTutoresByOlimpista']);
 
-
 // Rutas para Tutores
 Route::post('/tutores', [TutorController::class, 'store']);
 Route::get('/tutor/{id_tutor}/estudiantes', [OlimpistaController::class, 'getOlimpistasByTutor']);
@@ -39,46 +38,28 @@ Route::get('/tutores/verificar', [TutorController::class, 'checkExistingTutor'])
 Route::post('/contacto', [InformacionContactoController::class, 'store']);
 
 // Rutas para Olimpiadas
-Route::get('/hola', [OlimpiadaController::class, 'mostrarOlimpiada']);
+Route::get('/viewOlimpiadas', [OlimpiadaController::class, 'mostrarOlimpiada']);
 Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
-Route::post('/asignar-olimpiada', [OlimpiadaController::class, 'asignarAreasYCategorias']);
-Route::get('/olimpiada/{id}/areas-categorias', [OlimpiadaController::class, 'obtenerAreasYCategorias']);
-
 
 // Áreas
-Route::get('/areas', [AreaController::class, 'index']);
-Route::post('/registerAreas', [AreaController::class, 'store']);
+Route::get('/viewAreas', [AreaController::class, 'index']);
 Route::get('/catalogoCompleto', [AreaController::class, 'getProgramaCompleto']);
 
-// Categorías (CRUD completo agrupado)
-Route::get('/categorias', [CategoriaController::class, 'index']);
-Route::get('/categorias/{id}', [CategoriaController::class, 'show']);
-Route::post('/categorias', [CategoriaController::class, 'store']);
-Route::put('/categorias/{id}', [CategoriaController::class, 'update']);
-Route::delete('/categorias/{id}', [CategoriaController::class, 'destroy']);
+// Categorías
+Route::get('/viewCategorias', [CategoriaController::class, 'index']);
+Route::get('/viewCategorias/{id}', [CategoriaController::class, 'show']);
 
-// Grados (CRUD completo agrupado)
-Route::get('/grados', [GradoController::class, 'index']);
-Route::get('/grados/{id}', [GradoController::class, 'show']);
-Route::post('/grados', [GradoController::class, 'store']);
-Route::put('/grados/{id}', [GradoController::class, 'update']);
-Route::delete('/grados/{id}', [GradoController::class, 'destroy']);
+// Grados
+Route::get('/viewGrados', [GradoController::class, 'index']);
+Route::get('/viewGrados/{id}', [GradoController::class, 'show']);
 
 // Inscripción de estudiante a olimpiada
 Route::post('/newInscription', [InscripcionController::class, 'store']);
 
-// Tabla intermedia: Olimpiada-Area
-Route::get('/olimpiada-area', [OlimpiadaAreaController::class, 'index']);
-Route::get('/olimpiada-area/{id}', [OlimpiadaAreaController::class, 'show']);
-Route::post('/olimpiada-area', [OlimpiadaAreaController::class, 'store']);
-Route::put('/olimpiada-area/{id}', [OlimpiadaAreaController::class, 'update']);
-Route::delete('/olimpiada-area/{id}', [OlimpiadaAreaController::class, 'destroy']);
+// Relación Categoría - Grado
+Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
 
-// Tabla intermedia: Area-Categoria
-Route::get('/combinaciones', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'index']);
-Route::get('/combinaciones/{id}', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'show']);
-Route::post('/combinaciones', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'store']);
-Route::put('/combinaciones/{id}', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'update']);
-Route::patch('/combinaciones/{id}', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'update']); // opcional
-Route::delete('/combinaciones/{id}', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'destroy']);
-Route::get('/combinaciones/olimpiada/{idOlimpiada}', [App\Http\Controllers\OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);
+// Relación Categoría - Área - Olimpiada
+Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'index']);
+Route::post('/newAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'store']);
+Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);

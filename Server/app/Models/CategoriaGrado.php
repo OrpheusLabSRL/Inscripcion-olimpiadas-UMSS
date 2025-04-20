@@ -14,20 +14,18 @@ class CategoriaGrado extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'categoria_id',
-        'grado_id',
-        'max_participantes',
+        'idCategoria',
+        'idGrado',
         'estadoCategoriaGrado'
     ];
 
     public function categoria()
-{
-    return $this->belongsTo(Categoria::class, 'categoria_id', 'idCategoria');
-}
-
+    {
+        return $this->belongsTo(Categoria::class, 'idCategoria', 'idCategoria');
+    }
 
     public function grado()
     {
-        return $this->belongsTo(Grado::class, 'grado_id', 'idGrado');
+        return $this->belongsTo(Grado::class, 'idGrado', 'idGrado');
     }
 }

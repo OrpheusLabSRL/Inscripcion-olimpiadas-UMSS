@@ -25,7 +25,7 @@ const ManageBaseData = () => {
       description:
         "Personaliza los campos y requisitos del formulario de inscripción.",
       icon: "",
-      route: "/admin/formulario-inscripcion", // ruta placeholder
+      route: "/admin/formulario-inscripcion",
     },
   ];
 

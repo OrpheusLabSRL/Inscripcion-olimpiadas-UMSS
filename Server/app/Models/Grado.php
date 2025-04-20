@@ -19,7 +19,6 @@ class Grado extends Model
         'estadoGrado'
     ];
 
-    // Relación con Categoría (tabla pivote: categoria_grado)
     public function categorias()
     {
         return $this->belongsToMany(
@@ -30,3 +29,4 @@ class Grado extends Model
         )->withPivot('estadoCategoriaGrado');
     }
 }
+

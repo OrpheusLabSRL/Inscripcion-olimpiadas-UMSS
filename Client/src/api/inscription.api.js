@@ -53,11 +53,6 @@ export const setContacto = (data) => inscriptionApi.post("/contacto", data);
 // Áreas
 // ============================
 
-export const getAreas = async () => {
-  const response = await inscriptionApi.get("/areas");
-  return response.data;
-};
-
 export const createArea = async (data) =>
   (await inscriptionApi.post("/registerAreas", data)).data;
 
@@ -69,25 +64,6 @@ export const getCatalogoCompleto = async () =>
 // ============================
 
 export const getOlimpiadas = async () => {
-  const response = await inscriptionApi.get("/hola");
+  const response = await inscriptionApi.get("/viewOlimpiadas");
   return response.data;
 };
-
-export const createOlympiad = async (data) =>
-  (await inscriptionApi.post("/registrarOlimpiadas", data)).data;
-
-// ============================
-// Categorías
-// ============================
-
-export const getCategorias = async () =>
-  (await inscriptionApi.get("/categorias")).data;
-
-export const createCategoria = async (data) =>
-  (await inscriptionApi.post("/categorias", data)).data;
-
-// ============================
-// Grados
-// ============================
-
-export const getGrados = async () => (await inscriptionApi.get("/grados")).data;
