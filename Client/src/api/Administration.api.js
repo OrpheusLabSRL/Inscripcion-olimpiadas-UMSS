@@ -15,7 +15,7 @@ const inscriptionApi = axios.create({
 ======================= */
 
 export const getOlimpiadas = async () => {
-  const response = await inscriptionApi.get("/hola");
+  const response = await inscriptionApi.get("/viewOlimpiadas");
   console.log("Respuesta cruda de la API:", response.data);
   return response.data;
 };
@@ -24,10 +24,12 @@ export const createOlympiad = async (data) =>
   await inscriptionApi.post("/registrarOlimpiadas", data);
 
 export const asignarAreasYCategorias = async (data) =>
-  await inscriptionApi.post("/asignar-olimpiada", data);
+  await inscriptionApi.post("/newAreaCategoria", data);
 
 export const getAreasCategoriasPorOlimpiada = async (idOlimpiada) => {
-  return await inscriptionApi.get(`/olimpiada/${idOlimpiada}/areas-categorias`);
+  return await inscriptionApi.get(
+    `/viewAreaCategoria/olimpiada/${idOlimpiada}`
+  );
 };
 
 /* =======================
@@ -35,33 +37,34 @@ export const getAreasCategoriasPorOlimpiada = async (idOlimpiada) => {
 ======================= */
 
 export const getCategorias = async () => {
-  const response = await inscriptionApi.get("/categorias");
+  const response = await inscriptionApi.get("/viewCategorias");
   return response.data;
 };
-
-export const createCategoria = async (data) =>
-  await inscriptionApi.post("/categorias", data);
 
 /* =======================
    ÁREAS
 ======================= */
 
 export const getAreas = async () => {
-  const response = await inscriptionApi.get("/areas");
+  const response = await inscriptionApi.get("/viewAreas");
   return response.data;
 };
-
-export const createArea = async (data) =>
-  await inscriptionApi.post("/registerAreas", data);
 
 /* =======================
    GRADOS
 ======================= */
 
 export const getGrados = async () => {
-  const response = await inscriptionApi.get("/grados");
+  const response = await inscriptionApi.get("/viewGrados");
   return response.data;
 };
+
+// ============================
+// Categorías
+// ============================
+
+export const getCategoriaGrado = async () =>
+  (await inscriptionApi.get("/viewCategoriaGrado")).data;
 
 /* =======================
    COMBINACIONES (OlimpiadaAreaCategoria)

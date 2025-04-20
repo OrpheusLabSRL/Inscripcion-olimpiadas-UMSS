@@ -7,16 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class CreateGradosTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('grados', function (Blueprint $table) {
             $table->id('idGrado'); 
-            $table->tinyInteger('numeroGrado')->unsigned();  
+            $table->unsignedTinyInteger('numeroGrado');  
             $table->enum('nivel', ['Primaria', 'Secundaria']);  
             $table->boolean('estadoGrado')->default(true);  
             $table->timestamps();  
@@ -38,11 +33,6 @@ class CreateGradosTable extends Migration
         ]);
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('grados');

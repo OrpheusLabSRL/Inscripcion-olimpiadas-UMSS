@@ -2,77 +2,60 @@ import React, { useState } from "react";
 import "../Styles/Dropdown.css";
 
 const Dropdown = ({
-  label,
   options = [],
+  value = "",
   onChange,
   placeholder = "Seleccione una opción",
-  size = "small",
-  value,
-  name = "dropdown",
+  name = "",
   error = false,
   errorMessage = "",
+  size = "small",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSelect = (selectedValue) => {
-    const fakeEvent = {
-      target: {
-        name,
-        value: selectedValue,
-      },
-    };
-    onChange(fakeEvent);
+  const selectedOption = options.find((opt) => opt.value === value);
+
+  const handleSelect = (option) => {
     setIsOpen(false);
+    // Simula un evento onChange nativo
+    onChange({ target: { value: option.value, name } });
   };
 
-  const selectedLabel =
-    options.find((opt) => (opt.value || opt) === value)?.label || value;
-
   return (
-    <div className={`dropdown-container ${size}`}>
-      {label && (
+    <div className="dropdown-container">
+      {name && (
         <label
-          className={`dropdown-label ${size}`}
-          style={error ? { color: "#dc2626" } : {}}
+          htmlFor={name}
+          className={`dropdown-label ${size === "large" ? "large" : ""}`}
         >
-          {label}
+          {placeholder}
         </label>
       )}
-
       <div
         className={`dropdown-wrapper ${size} ${error ? "error-border" : ""}`}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => setIsOpen(!isOpen)}
       >
-        <div
-          className="dropdown-display"
-          style={{
-            color: !value && error ? "#dc2626" : undefined,
-          }}
-        >
-          {value ? selectedLabel : placeholder}
-          <span className="dropdown-arrow">{isOpen ? "▲" : "▼"}</span>
+        <div className="dropdown-display">
+          {selectedOption ? selectedOption.label : placeholder}
+          <span className="dropdown-arrow">▼</span>
         </div>
-
-        {isOpen && (
-          <div className="dropdown-list">
-            {options.map((option, index) => {
-              const optionValue = option.value || option;
-              const optionLabel = option.label || option;
-              return (
-                <div
-                  key={index}
-                  className="dropdown-option"
-                  onClick={() => handleSelect(optionValue)}
-                >
-                  {optionLabel}
-                </div>
-              );
-            })}
-          </div>
-        )}
       </div>
 
-      {error && <p className="error-message">{errorMessage}</p>}
+      {isOpen && (
+        <div className="dropdown-list">
+          {options.map((option) => (
+            <div
+              key={option.value}
+              className="dropdown-option"
+              onClick={() => handleSelect(option)}
+            >
+              {option.label}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {error && <div className="error-message">{errorMessage}</div>}
     </div>
   );
 };

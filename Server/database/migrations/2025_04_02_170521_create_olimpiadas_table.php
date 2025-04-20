@@ -16,16 +16,19 @@ class CreateOlimpiadasTable extends Migration
     {
         Schema::create('olimpiadas', function (Blueprint $table) {
             $table->id('idOlimpiada');
-            $table->string('nombreOlimpiada', 30)->unique(); 
-            $table->integer('version')->unsigned(); 
-            $table->boolean('estadoOlimpiada')->default(true); 
-            $table->date('fechaInicioOlimp'); 
-            $table->date('fechaFinOlimp'); 
+            $table->unsignedBigInteger('idUsuario');
+            $table->string('nombreOlimpiada', 30);
+            $table->integer('version')->unsigned();
+            $table->boolean('estadoOlimpiada')->default(true);
+            $table->date('fechaInicioOlimpiada');
+            $table->date('fechaFinOlimpiada');
             $table->timestamps();
 
             $table->unique(['nombreOlimpiada', 'version']);
+            $table->foreign('idUsuario')->references('idUsuario')->on('usuarios')->onDelete('restrict')->onUpdate('restrict');
         });
-        DB::statement('ALTER TABLE olimpiadas ADD CONSTRAINT chk_fecha CHECK (fechaFinOlimp > fechaInicioOlimp)');
+
+        DB::statement('ALTER TABLE olimpiadas ADD CONSTRAINT chk_fecha CHECK (fechaFinOlimpiada > fechaInicioOlimpiada)');
     }
 
     /**

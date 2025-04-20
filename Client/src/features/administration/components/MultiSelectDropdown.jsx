@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "../Styles/MultiSelectDropdown.css";
+import "../Styles/Dropdown.css";
 
 const MultiSelectDropdown = ({
   label,

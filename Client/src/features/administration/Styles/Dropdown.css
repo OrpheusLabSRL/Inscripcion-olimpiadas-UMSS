@@ -1,42 +1,39 @@
 .dropdown-container {
   margin-bottom: 1rem;
   width: 100%;
-  max-width: 400px; /* Tamaño fijo para evitar que se adapte al texto */
+  max-width: 400px;
   position: relative;
+  font-family: inherit;
 }
 
-.dropdown-label,
-.dropdown-label-large {
+.dropdown-label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
+  font-size: 1rem;
 }
 
-.dropdown-label-large {
+.dropdown-label.large {
   font-size: 1.2rem;
 }
 
 .dropdown-wrapper {
-  position: relative;
-  cursor: pointer;
   background-color: #e2e2e2;
-  border-radius: 8px;
   padding: 0.75rem 1rem;
+  border-radius: 8px;
   user-select: none;
-}
-
-.dropdown-wrapper.large {
-  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .dropdown-wrapper.small {
   font-size: 0.9rem;
 }
 
-.dropdown-display {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.dropdown-wrapper.large {
+  font-size: 1rem;
 }
 
 .dropdown-arrow {
@@ -44,28 +41,64 @@
   font-size: 0.8rem;
 }
 
-.dropdown-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 99;
+.dropdown-list,
+.multi-dropdown-options {
   background-color: #e2e2e2;
-  border-radius: 0 0 8px 8px;
-  padding: 0.5rem 0;
+  position: absolute;
+  width: 100%;
+  z-index: 99;
   max-height: 300px;
   overflow-y: auto;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 4px;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-option {
+.dropdown-option,
+.multi-dropdown-item {
   padding: 0.6rem 1rem;
+  font-size: 14px;
   cursor: pointer;
   transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
 }
 
-.dropdown-option:hover {
+.dropdown-option:hover,
+.multi-dropdown-item:hover {
   background-color: #ccc;
+}
+
+.custom-circle {
+  width: 18px;
+  height: 18px;
+  border: 2px solid black;
+  border-radius: 50%;
+  margin-right: 10px;
+  position: relative;
+}
+
+.custom-circle input[type="checkbox"] {
+  all: unset;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
+.custom-circle input[type="checkbox"]:checked::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 6px;
+  height: 6px;
+  background-color: black;
+  border-radius: 50%;
+}
+
+.multi-label {
+  flex: 1;
 }
 
 .error-border {
