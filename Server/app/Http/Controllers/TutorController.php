@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inscripcion;
+use App\Models\Persona;
 use Illuminate\Http\Request;
 use App\Models\Tutor;
 use App\Models\OlimpistaTutor;
@@ -125,21 +127,21 @@ class TutorController extends Controller
             ], 422);
         }
 
-        $tutor = Tutor::where('correo', $request->email)
+        $tutor = Persona::where('correoElectronico', $request->email)
                      ->where('carnetIdentidad', $request->carnet)
                      ->first();
 
-        if ($tutor) {
+        $inscripcion = Inscripcion::where('idTutorResponsable', $tutor->idPersona)->first();
+
+
+
+        if ($inscripcion) {
             return response()->json([
                 'exists' => true,
-                'tutorId' => $tutor->id_tutor,
+                'tutorId' => $tutor->idPersona,
                 'data' => [
                     'nombresTutor' => $tutor->nombre,
                     'apellidosTutor' => $tutor->apellido,
-                    'tipoTutor' => $tutor->tipoTutor,
-                    'carnetdeidentidad' => $tutor->carnetIdentidad,
-                    'telefono' => $tutor->numeroCelular,
-                    'emailTutor' => $tutor->correo
                 ]
             ]);
         }
