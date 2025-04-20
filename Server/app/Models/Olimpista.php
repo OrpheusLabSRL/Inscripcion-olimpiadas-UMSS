@@ -5,37 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Olimpista extends Model
 {
     use HasFactory;
 
-    protected $table = 'olimpistas';
-
-    protected $primaryKey = 'id_olimpista';
-
+    protected $primaryKey = 'idPersona';
+    public $incrementing = false;
     protected $fillable = [
-        'correo',
-        'apellido',
-        'Nombre',
-        'carnetIdentidad',
-        'curso',
         'fechaNacimiento',
-        'colegio',
         'departamento',
         'provincia',
+        'curso',
+        'colegio',
+        'idPersona'
     ];
-    
 
+    // Relación con Persona
+    public function persona()
+    {
+        return $this->belongsTo(Persona::class, 'idPersona');
+    }
+
+    // Relación con Inscripciones (un clímpista puede tener muchas inscripciones)
     public function inscripciones()
-{
-    return $this->hasMany(Inscripcion::class, 'id_olimpista', 'id_olimpista');
-}
-
-public function tutores()
-{
-    return $this->belongsToMany(Tutor::class, 'olimpista_tutor', 'id_olimpista', 'id_tutor');
-}
-
-
+    {
+        return $this->hasMany(Inscripcion::class, 'idOlimpista');
+    }
 }

@@ -3,22 +3,13 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Inscripcion;
 use Illuminate\Http\Request;
 use App\Models\Olimpista;
 use Illuminate\Support\Facades\Log;
 
 class OlimpistaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -29,7 +20,6 @@ class OlimpistaController extends Controller
 {
     Log::info('Datos del Request:', $request->all());
 
-    // Crear el nuevo Olimpista
     $olimpista = Olimpista::create([
         'correo' => $request->Email,
         'apellido' => $request->Apellido,
@@ -44,45 +34,84 @@ class OlimpistaController extends Controller
     
     $olimpista->tutores()->attach($request->id_tutor);
 
-    // Retornar respuesta (puede ser JSON o redirección)
     return response()->json([
         'message' => 'Olimpista creado exitosamente',
         'data' => $olimpista
     ], 201);
 }
 
+public function getOlimpistasByTutor($idTutorResponsable)
+{
+    try {
+        $inscripciones = Inscripcion::with([
+            'olimpista.persona',
+            'tutorArea.persona',
+            'olimpiadaAreaCategoria.area',
+            'olimpiadaAreaCategoria.categoria'
+        ])
+        ->where('idTutorResponsable', $idTutorResponsable)
+        ->get();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        if ($inscripciones->isEmpty()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'No se encontraron olimpistas para este tutor',
+                'data' => []
+            ], 200);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $olimpistasAgrupados = $inscripciones->groupBy('idOlimpista');
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $resultado = $olimpistasAgrupados->map(function ($inscripcionesGrupo) {
+            $primeraInscripcion = $inscripcionesGrupo->first();
+            $olimpista = $primeraInscripcion->olimpista;
+            $persona = $olimpista->persona;
+
+            $areas = $inscripcionesGrupo->map(function ($inscripcion) {
+                return [
+                    'id_inscripcion' => $inscripcion->idInscripcion,
+                    'nombre_area' => $inscripcion->olimpiadaAreaCategoria->area->nombreArea ?? null,
+                    'nombre_categoria' => $inscripcion->olimpiadaAreaCategoria->categoria->nombreCategoria ?? null,
+                    'nombre_tutor_area' => $inscripcion->tutorArea->persona->nombre ?? null,
+                    'apellido_tutor_area' => $inscripcion->tutorArea->persona->apellido ?? null,
+                    'telefono' => $inscripcion->tutorArea->telefono ?? null,
+                    'tipo_tutor' => $inscripcion->tutorArea->tipoTutor ?? null,
+                    'carnetIdentidad' => $inscripcion->tutorArea->persona->carnetIdentidad ?? null,
+                    'correo' => $inscripcion->tutorArea->persona->correoElectronico ?? null,
+                ];
+            });
+
+            return [
+                'id_olimpista' => $olimpista->idPersona,
+                'nombre' => $persona->nombre,
+                'apellido' => $persona->apellido,
+                'curso' => $olimpista->curso,
+                'colegio' => $olimpista->colegio,
+                'carnetIdentidad' => $persona->carnetIdentidad,
+                'fechaNacimiento' => $olimpista->fechaNacimiento,
+                'departamento' => $olimpista->departamento,
+                'provincia' => $olimpista->provincia,
+                'correo' => $persona->correoElectronico,
+                'areas' => $areas,
+                'total_areas' => $areas->count()
+            ];
+        })->values();
+
+        return response()->json([
+            'success' => true,
+            'total_olimpistas' => $resultado->count(),
+            'data' => $resultado
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al obtener los olimpistas',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
+
+
+
 }

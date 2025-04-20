@@ -3,92 +3,163 @@
 namespace App\Http\Controllers;
 
 use App\Models\OlimpiadaAreaCategoria;
-use App\Models\Area;
 use App\Models\Inscripcion;
+use App\Models\Persona;
+use App\Models\Tutor;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use App\Models\Olimpista;
 use Illuminate\Support\Facades\DB;
 
 class InscripcionController extends Controller
 {
     public function store(Request $request)
-{
-    DB::beginTransaction();
-    try {
-        $inscripciones = [];
+    {
+        // Validar los datos recibidos
+        $validated = $request->validate([
+            'olimpista' => 'required|array',
+            'responsable' => 'required|array',
+            'tutor_legal' => 'required|array',
+            'inscripciones' => 'required|array'
+        ]);
 
-        // Combinación principal
-        $areaCategoria = OlimpiadaAreaCategoria::where('idArea', $request->Area)
-            ->where('idCategoria', $request->Categoria)
-            ->first();
+        DB::beginTransaction();
 
-        if (!$areaCategoria) {
-            DB::rollBack();
-            return response()->json([
-                'message' => 'No se encontró una combinación válida de Área y Categoría principal.'
-            ], 404);
-        }
+        try {
+            // 1. Procesar el olimpista
+            $olimpistaData = $request->olimpista;
+            $personaOlimpista = $this->buscarOCrearPersona($olimpistaData);
+            $olimpista = $this->buscarOCrearOlimpista($personaOlimpista->idPersona, $olimpistaData);
 
-        // Armar los datos de inscripción principal
-        $dataPrincipal = [
-            'estado' => $request->estado,
-            'fechaInicio' => Carbon::now()->toDateString(),
-            'fechaFin' => Carbon::now()->addDays(5),
-            'id_olimpista' => $request->id_olimpista,
-            'idOlimpAreaCategoria' => $areaCategoria->idOlimpAreaCategoria,
-        ];
+            // 2. Procesar el tutor responsable
+            $responsableData = $request->responsable;
+            if (isset($responsableData['id_persona'])) {
+                $tutorResponsable = Tutor::find($responsableData['id_persona']);
+            } else {
+                $personaResponsable = $this->buscarOCrearPersona($responsableData);
+                $tutorResponsable = $this->buscarOCrearTutor($personaResponsable->idPersona, $responsableData);
+            }
 
-        // Agregar id_tutor si está presente
-        if ($request->filled('id_tutor1')) {
-            $dataPrincipal['id_tutor'] = $request->id_tutor1;
-        }
+            // 3. Procesar el tutor legal
+            $tutorLegalData = $request->tutor_legal;
+            $personaTutorLegal = $this->buscarOCrearPersona($tutorLegalData);
+            $tutorLegal = $this->buscarOCrearTutor($personaTutorLegal->idPersona, $tutorLegalData);
 
-        $inscripciones[] = Inscripcion::create($dataPrincipal);
+            // 4. Procesar las inscripciones
+            foreach ($request->inscripciones as $inscripcionData) {
+                // Procesar tutor de área si existe
+                $tutorArea = null;
+                if ($request->has('existeTutor') && $request->existeTutor === true  && isset($inscripcionData['tutorArea'])) {
+                    $personaTutorArea = $this->buscarOCrearPersona($inscripcionData['tutorArea']);
+                    $tutorArea = $this->buscarOCrearTutor($personaTutorArea->idPersona, $inscripcionData['tutorArea']);
+                }
 
-        // Combinación opcional
-        if (!empty($request->AreaOpcional) && !empty($request->CategoriaOpcional)) {
-            $areaCategoriaOpcional = OlimpiadaAreaCategoria::where('idArea', $request->AreaOpcional)
-                ->where('idCategoria', $request->CategoriaOpcional)
+
+                $areaCategoria = OlimpiadaAreaCategoria::where('idArea', $inscripcionData['area'])
+                ->where('idCategoria', $inscripcionData['categoria'])
                 ->first();
 
-            if (!$areaCategoriaOpcional) {
-                DB::rollBack();
-                return response()->json([
-                    'message' => 'No se encontró una combinación válida de Área y Categoría opcional.'
-                ], 404);
+                // Crear la inscripción
+                Inscripcion::create([
+                    'idTutorResponsable' => $tutorResponsable->idPersona,
+                    'idOlimpista' => $olimpista->idPersona,
+                    'idOlimpAreaCategoria' => $areaCategoria->idOlimpAreaCategoria,
+                    'estadoInscripcion' => false,
+                    'idTutorLegal' => $tutorLegal->idPersona,
+                    'idTutorArea' => $tutorArea ? $tutorArea->idPersona : null
+                ]);
             }
 
-            $dataOpcional = [
-                'estado' => $request->estado,
-                'fechaInicio' => Carbon::now()->toDateString(),
-                'fechaFin' => Carbon::now()->addDays(5),
-                'id_olimpista' => $request->id_olimpista,
-                'idOlimpAreaCategoria' => $areaCategoriaOpcional->idOlimpAreaCategoria,
-            ];
+            DB::commit();
 
-            // También incluir id_tutor si está presente
-            if ($request->filled('id_tutor2')) {
-                $dataOpcional['id_tutor'] = $request->id_tutor2;
-            }
+            return response()->json([
+                'success' => true,
+                'message' => 'Inscripción completada exitosamente',
+                'data' => [
+                    'olimpista_id' => $olimpista->idPersona,
+                    'tutor_responsable_id' => $tutorResponsable->idPersona
+                ]
+            ]);
 
-            $inscripciones[] = Inscripcion::create($dataOpcional);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al procesar la inscripción: ' . $e->getMessage(),
+                'error_details' => $e->getTraceAsString()
+            ], 500);
         }
-
-        DB::commit();
-
-        return response()->json([
-            'message' => 'Inscripción(es) creada(s) exitosamente.',
-            'data' => $inscripciones
-        ], 201);
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return response()->json([
-            'message' => 'Error al crear las inscripciones.',
-            'error' => $e->getMessage()
-        ], 500);
     }
+
+    /**
+     * Busca una persona por carnet de identidad o crea una nueva si no existe
+     */
+    private function buscarOCrearPersona(array $data)
+    {
+        return Persona::firstOrCreate(
+            ['carnetIdentidad' => $data['carnet_identidad']],
+            [
+                'nombre' => $data['nombre'],
+                'apellido' => $data['apellido'],
+                'correoElectronico' => $data['correo_electronico'] ?? null
+            ]
+        );
+    }
+
+    /**
+     * Busca un clímpista por idPersona o crea uno nuevo si no existe
+     */
+    private function buscarOCrearOlimpista($idPersona, array $data)
+    {
+        return Olimpista::firstOrCreate(
+            ['idPersona' => $idPersona],
+            [
+                'fechaNacimiento' => $data['fecha_nacimiento'],
+                'departamento' => $data['departamento'],
+                'provincia' => $data['provincia'],
+                'curso' => $data['curso'],
+                'colegio' => $data['colegio']
+            ]
+        );
+    }
+
+    /**
+     * Busca un tutor por idPersona o crea uno nuevo si no existe
+     */
+    private function buscarOCrearTutor($idPersona, array $data)
+    {
+        return Tutor::firstOrCreate(
+            ['idPersona' => $idPersona],
+            [
+                'tipoTutor' => $data['tipo_tutor'],
+                'telefono' => $data['telefono']
+            ]
+        );
+    }
+
+
+public function enableForIncription($carnet_identidad){
+    $olimpista = Persona::where("carnetIdentidad", $carnet_identidad)->first();
+    if(!$olimpista) return;
+    $inscripcionesExistentes = Inscripcion::where('idOlimpista', $olimpista->idPersona)->count();
+        
+        if ($inscripcionesExistentes >= 2) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El olimpista ya está registrado en 2 áreas',
+                'data' => [
+                    'olimpista_id' => $olimpista->idOlimpista,
+                    'inscripciones_actuales' => $inscripcionesExistentes
+                ]
+            ], 422);
+        }
+        return response()->json([
+            'success' => true,
+            'message' => 'El olimpista ya está habilitado',
+            'data' => [
+                'olimpista_id' => $olimpista->idOlimpista,
+                'inscripciones_actuales' => $inscripcionesExistentes
+            ]
+        ]);
 }
 
 public function getAreaByOlimpista($id_olimpista)

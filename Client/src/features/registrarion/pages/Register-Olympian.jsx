@@ -14,6 +14,9 @@ import swal from "sweetalert";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
 
+//api
+import { getOlimpistaEnable } from "../../../api/inscription.api";
+
 //utils
 import { Validator } from "../utils/ValidationRules";
 import {
@@ -120,11 +123,9 @@ export const RegisterOlympian = () => {
   const onSelectDepartamento = (e) => {
     const select = e.target;
     const selectedOption = select.options[select.selectedIndex];
-
     const label = selectedOption.text;
 
     setValue("Departamento", e.target.value);
-
     const provincias = provinciasPorDepartamento[label] || [];
     setProvinciasFiltradas(provincias);
     localStorage.setItem("provinciasFiltradas", JSON.stringify(provincias));
@@ -132,10 +133,10 @@ export const RegisterOlympian = () => {
 
   const onSubmit = async (data) => {
     try {
+      await getOlimpistaEnable(localStorage.getItem("CarnetIdentidadOlympian"));
       navigation("/Register/OlympianArea", data);
     } catch (error) {
-      console.log(error);
-      swal("Error al registrar los datos");
+      swal("Error", error.response.data.message, "error");
     }
   };
 
@@ -147,6 +148,20 @@ export const RegisterOlympian = () => {
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
           <h1>Registro de datos del Olimpista</h1>
+        </div>
+
+        <div className="input-1c">
+          <Input
+            label={"Carnet de identidad"}
+            placeholder="Ingrese número de CI del olimpista"
+            mandatory="true"
+            name="CarnetIdentidad"
+            value={watchedCarnetIdentidad}
+            onChange={(e) => setValue("CarnetIdentidad", e.target.value)}
+            register={register}
+            validationRules={Validator.ci}
+            errors={errors}
+          />
         </div>
 
         <div className="input-1c">
@@ -193,15 +208,30 @@ export const RegisterOlympian = () => {
         </div>
 
         <div className="input-1c">
-          <Input
-            label={"Carnet de identidad"}
-            placeholder="Ingrese número de CI del olimpista"
+          <Select
+            label={"Departamento"}
+            placeholder="Seleccione un departamento"
             mandatory="true"
-            name="CarnetIdentidad"
-            value={watchedCarnetIdentidad}
-            onChange={(e) => setValue("CarnetIdentidad", e.target.value)}
+            name="Departamento"
+            value={watchedDepartamento}
+            onChange={onSelectDepartamento}
+            options={departamentosBolivia}
             register={register}
-            validationRules={Validator.ci}
+            errors={errors}
+          />
+        </div>
+
+        <div className="input-1c">
+          <Select
+            label={"Provincia"}
+            placeholder="Ingrese la provincia"
+            mandatory="true"
+            name="Provincia"
+            value={watchedProvincia}
+            onChange={(e) => setValue("Provincia", e.target.value)}
+            options={provinciasFiltradas}
+            register={register}
+            validationRules={Validator.provincia}
             errors={errors}
           />
         </div>
@@ -230,35 +260,6 @@ export const RegisterOlympian = () => {
             onChange={(e) => setValue("Curso", e.target.value)}
             options={cursosBolivia}
             register={register}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"Departamento"}
-            placeholder="Seleccione un departamento"
-            mandatory="true"
-            name="Departamento"
-            value={watchedDepartamento}
-            onChange={onSelectDepartamento}
-            options={departamentosBolivia}
-            register={register}
-            errors={errors}
-          />
-        </div>
-
-        <div className="input-1c">
-          <Select
-            label={"Provincia"}
-            placeholder="Ingrese la provincia"
-            mandatory="true"
-            name="Provincia"
-            value={watchedProvincia}
-            onChange={(e) => setValue("Provincia", e.target.value)}
-            options={provinciasFiltradas}
-            register={register}
-            validationRules={Validator.provincia}
             errors={errors}
           />
         </div>
