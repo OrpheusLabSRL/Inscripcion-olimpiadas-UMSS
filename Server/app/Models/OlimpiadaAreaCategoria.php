@@ -9,7 +9,7 @@ class OlimpiadaAreaCategoria extends Model
 {
     use HasFactory;
 
-    protected $table = 'olimpiada_area_categoria';
+    protected $table = 'olimpiadas_areas_categorias';
     protected $primaryKey = 'idOlimpAreaCategoria';
     public $incrementing = true;
     protected $keyType = 'int';

@@ -24,7 +24,7 @@ class Grado extends Model
     {
         return $this->belongsToMany(
             Categoria::class,
-            'categoria_grados',
+            'categorias_grados',
             'idGrado',
             'idCategoria'
         )->withPivot('estadoCategoriaGrado');

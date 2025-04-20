@@ -19,7 +19,7 @@ class Categoria extends Model
     // 🔁 Relación con grados (tabla intermedia: categoria_grado)
     public function grados()
     {
-        return $this->belongsToMany(Grado::class, 'categoria_grados', 'categoria_id', 'grado_id')
+        return $this->belongsToMany(Grado::class, 'categorias_grados', 'categoria_id', 'grado_id')
             ->withPivot('estadoCategoriaGrado');
 
     }

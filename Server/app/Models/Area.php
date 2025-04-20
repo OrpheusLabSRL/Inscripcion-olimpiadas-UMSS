@@ -31,7 +31,7 @@ class Area extends Model
 {
     return $this->belongsToMany(
         Categoria::class,
-        'olimpiada_area_categoria',
+        'olimpiadas_areas_categorias',
         'idArea',       // FK en la tabla pivot a este modelo (Area)
         'idCategoria',  // FK en la tabla pivot a Categoria
         'idArea',        // PK en el modelo Area
