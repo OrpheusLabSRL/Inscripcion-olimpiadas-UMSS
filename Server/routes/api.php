@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Rutas para Olimpistas (Estudiantes)
 Route::post('/register', [OlimpistaController::class, 'store']);
 Route::get('/olimpista/{id}/areas', [InscripcionController::class, 'getAreaByOlimpista']);
+Route::get('/olimpista/{carnet_identidad}/habilitado', [InscripcionController::class, 'enableForIncription']);
 Route::get('/olimpista/{id}/tutores', [TutorController::class, 'getTutoresByOlimpista']);
 
 

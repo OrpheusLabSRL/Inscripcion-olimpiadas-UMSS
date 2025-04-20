@@ -137,6 +137,31 @@ class InscripcionController extends Controller
     }
 
 
+public function enableForIncription($carnet_identidad){
+    $olimpista = Persona::where("carnetIdentidad", $carnet_identidad)->first();
+    if(!$olimpista) return;
+    $inscripcionesExistentes = Inscripcion::where('idOlimpista', $olimpista->idPersona)->count();
+        
+        if ($inscripcionesExistentes >= 2) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El olimpista ya está registrado en 2 áreas',
+                'data' => [
+                    'olimpista_id' => $olimpista->idOlimpista,
+                    'inscripciones_actuales' => $inscripcionesExistentes
+                ]
+            ], 422);
+        }
+        return response()->json([
+            'success' => true,
+            'message' => 'El olimpista ya está habilitado',
+            'data' => [
+                'olimpista_id' => $olimpista->idOlimpista,
+                'inscripciones_actuales' => $inscripcionesExistentes
+            ]
+        ]);
+}
+
 public function getAreaByOlimpista($id_olimpista)
 {
     // Verificar si el olimpista existe
