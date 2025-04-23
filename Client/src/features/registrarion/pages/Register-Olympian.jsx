@@ -29,6 +29,7 @@ import {
 } from "../utils/DataOptions";
 
 export const RegisterOlympian = () => {
+  const [isReadOnly, setIsReadOnly] = useState({});
   const [provinciasFiltradas, setProvinciasFiltradas] = useState(() => {
     const stored = localStorage.getItem("provinciasFiltradas");
     return stored ? JSON.parse(stored) : null;
@@ -143,6 +144,12 @@ export const RegisterOlympian = () => {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
         setValue("Email", personData.data.data.correoElectronico);
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+        }));
       }
 
       if (personData.data.data.fechaNacimiento) {
@@ -151,6 +158,14 @@ export const RegisterOlympian = () => {
         setValue("Provincia", personData.data.data.provincia);
         setValue("Colegio", personData.data.data.colegio);
         setValue("Curso", personData.data.data.curso);
+        setIsReadOnly((prev) => ({
+          ...prev,
+          FechaNacimiento: true,
+          Departamento: true,
+          Provincia: true,
+          Colegio: true,
+          Curso: true,
+        }));
       }
     } catch (error) {
       console.log(error);
@@ -186,6 +201,7 @@ export const RegisterOlympian = () => {
             placeholder="Ingrese número de CI del olimpista"
             mandatory="true"
             name="CarnetIdentidad"
+            isReadOnly={isReadOnly}
             autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("CarnetIdentidad", e.target.value)}
@@ -201,6 +217,7 @@ export const RegisterOlympian = () => {
             placeholder="Ingrese nombre(s) del olimpista"
             mandatory="true"
             name="Nombre"
+            isReadOnly={isReadOnly}
             value={watchedNombre}
             onChange={(e) => setValue("Nombre", e.target.value)}
             register={register}
@@ -215,6 +232,7 @@ export const RegisterOlympian = () => {
             placeholder="Ingrese apellido(s) del olimpista"
             mandatory="true"
             name="Apellido"
+            isReadOnly={isReadOnly}
             value={watchedApellido}
             onChange={(e) => setValue("Apellido", e.target.value)}
             register={register}
@@ -230,6 +248,7 @@ export const RegisterOlympian = () => {
             type="date"
             mandatory="true"
             name="FechaNacimiento"
+            isReadOnly={isReadOnly}
             value={watchedFechaNacimiento}
             onChange={(e) => setValue("FechaNacimiento", e.target.value)}
             register={register}
@@ -244,6 +263,7 @@ export const RegisterOlympian = () => {
             placeholder="Seleccione un departamento"
             mandatory="true"
             name="Departamento"
+            isReadOnly={isReadOnly}
             value={watchedDepartamento}
             onChange={onSelectDepartamento}
             options={departamentosBolivia}
@@ -258,6 +278,7 @@ export const RegisterOlympian = () => {
             placeholder="Ingrese la provincia"
             mandatory="true"
             name="Provincia"
+            isReadOnly={isReadOnly}
             value={watchedProvincia}
             onChange={(e) => setValue("Provincia", e.target.value)}
             options={provinciasFiltradas}
@@ -273,6 +294,7 @@ export const RegisterOlympian = () => {
             placeholder="Nombre del Colegio"
             mandatory="true"
             name="Colegio"
+            isReadOnly={isReadOnly}
             value={watchedColegio}
             onChange={(e) => setValue("Colegio", e.target.value)}
             register={register}
@@ -287,6 +309,7 @@ export const RegisterOlympian = () => {
             placeholder="Seleccione un curso"
             mandatory="true"
             name="Curso"
+            isReadOnly={isReadOnly}
             value={watchedCurso}
             onChange={(e) => setValue("Curso", e.target.value)}
             options={cursosBolivia}
@@ -301,6 +324,7 @@ export const RegisterOlympian = () => {
             placeholder="ejemplo@correo.com"
             mandatory="true"
             name="Email"
+            isReadOnly={isReadOnly}
             value={watchedEmail}
             onChange={(e) => setValue("Email", e.target.value)}
             register={register}

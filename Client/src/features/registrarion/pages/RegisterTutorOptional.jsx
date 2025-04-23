@@ -5,7 +5,7 @@ import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { Validator } from "../utils/ValidationRules";
 
 //react
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
@@ -14,6 +14,7 @@ import { IoArrowBackCircle } from "react-icons/io5";
 import { getPersonData } from "../../../api/inscription.api";
 
 export const RegisterTutorOptional = () => {
+  const [isReadOnly, setIsReadOnly] = useState({});
   const location = useLocation();
   const navigation = useNavigate();
   const { area } = location.state;
@@ -138,11 +139,22 @@ export const RegisterTutorOptional = () => {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
         setValue("Email", personData.data.data.correoElectronico);
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+        }));
       }
 
       if (personData.data.data.tipoTutor) {
         setValue("Tipo_Tutor", personData.data.data.tipoTutor);
         setValue("Numero_Celular", personData.data.data.telefono);
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Tipo_Tutor: true,
+          Numero_Celular: true,
+        }));
       }
     } catch (error) {
       console.log(error);
@@ -169,10 +181,10 @@ export const RegisterTutorOptional = () => {
             placeholder="Ingrese número de CI del tutor"
             mandatory="true"
             name="Ci"
+            isReadOnly={isReadOnly}
             autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("Ci", e.target.value)}
-            s
             register={register}
             validationRules={Validator.ci}
             errors={errors}
@@ -185,6 +197,7 @@ export const RegisterTutorOptional = () => {
             placeholder="Ingrese nombre(s) del tutor"
             mandatory="true"
             name="Nombre"
+            isReadOnly={isReadOnly}
             value={watchedNombre}
             onChange={(e) => setValue("Nombre", e.target.value)}
             register={register}
@@ -199,6 +212,7 @@ export const RegisterTutorOptional = () => {
             placeholder="Ingrese apellido(s) del tutor"
             mandatory="true"
             name="Apellido"
+            isReadOnly={isReadOnly}
             value={watchedApellido}
             onChange={(e) => setValue("Apellido", e.target.value)}
             register={register}
@@ -214,6 +228,7 @@ export const RegisterTutorOptional = () => {
             mandatory="true"
             options={tipoTutor}
             name="Tipo_Tutor"
+            isReadOnly={isReadOnly}
             value={watchedTipoTutor}
             onChange={(e) => setValue("Tipo_Tutor", e.target.value)}
             register={register}
@@ -228,6 +243,7 @@ export const RegisterTutorOptional = () => {
             placeholder="Ingrese número de celular"
             mandatory="true"
             name="Numero_Celular"
+            isReadOnly={isReadOnly}
             value={watchedTelefono}
             onChange={(e) => setValue("Numero_Celular", e.target.value)}
             register={register}
@@ -242,6 +258,7 @@ export const RegisterTutorOptional = () => {
             placeholder="ejemplo@correo.com"
             mandatory="true"
             name="Email"
+            isReadOnly={isReadOnly}
             value={watchedEmail}
             onChange={(e) => setValue("Email", e.target.value)}
             register={register}
