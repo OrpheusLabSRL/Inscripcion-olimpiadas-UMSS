@@ -39,37 +39,43 @@ const RegisterExcel = () => {
     setSuccess('');
     setData([]);
     setValidationErrors([]);
-    
+
     const file = e.target.files[0];
     if (!file) return;
-    
+
     if (!file.name.match(/\.(xlsx|xls)$/i)) {
       setError('Por favor, sube únicamente archivos Excel (.xlsx o .xls)');
       return;
     }
-    
+
     setFileName(file.name);
     const reader = new FileReader();
-    
+
     reader.onload = (e) => {
       try {
         const arrayBuffer = e.target.result;
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-        
+        const workbook = XLSX.read(arrayBuffer, { type: 'array', cellStyles: true });
+
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
-        
-        // Convertir a JSON incluyendo celdas vacías
+
+        // Obtener datos incluyendo información de estilo
         const jsonData = XLSX.utils.sheet_to_json(worksheet, {
           header: 1,
-          range: 1, // Ignorar primera fila
-          defval: null, // Usar null para celdas vacías
-          raw: false
+          range: 1,
+          defval: null,
+          raw: false,
+          cellStyles: true
         });
 
-        // Filtrar solo filas que tengan al menos un dato real
+        // Filtrar solo filas que tengan datos reales (ignorar celdas solo con formato)
         const filteredData = jsonData.filter(row => 
-          row.some(cell => cell !== null && cell !== '')
+          row.some((cell, index) => {
+            const cellRef = XLSX.utils.encode_cell({ r: jsonData.indexOf(row) + 1, c: index });
+            const cellInfo = worksheet[cellRef];
+            // Considerar celda vacía solo si no tiene valor NI formato de validación
+            return cell !== null && cell !== '' && (!cellInfo || !cellInfo.s || cellInfo.v !== undefined);
+          })
         );
 
         if (filteredData.length > 0) {
@@ -85,11 +91,16 @@ const RegisterExcel = () => {
                 expected: headers.length,
                 actual: row.length
               });
+              return;
             }
 
-            // Validar campos vacíos solo en filas con datos
+            // Validar campos vacíos
             row.forEach((cell, cellIndex) => {
-              if (cell === null || cell === '') {
+              const cellRef = XLSX.utils.encode_cell({ r: jsonData.indexOf(row) + 1, c: cellIndex });
+              const cellInfo = worksheet[cellRef];
+              
+              // Solo marcar error si la celda está realmente vacía (sin valor y sin formato de validación)
+              if ((cell === null || cell === '') && (!cellInfo || !cellInfo.s || cellInfo.v === undefined)) {
                 errors.push({
                   type: 'empty',
                   row: rowIndex + 2,
@@ -104,9 +115,12 @@ const RegisterExcel = () => {
             setValidationErrors(errors);
             setError('Se encontraron errores en el archivo');
           } else {
-            // Rellenar nulls con strings vacíos para la visualización
+            // Limpiar datos para visualización
             const cleanedData = filteredData.map(row => 
-              row.map(cell => cell === null ? '' : cell)
+              row.map(cell => {
+                if (cell === null || cell === '') return '';
+                return String(cell).trim();
+              })
             );
             setData(cleanedData);
             setSuccess('Archivo procesado correctamente');
@@ -119,7 +133,7 @@ const RegisterExcel = () => {
         console.error(err);
       }
     };
-    
+
     reader.readAsArrayBuffer(file);
   };
 
@@ -128,7 +142,7 @@ const RegisterExcel = () => {
       headers,
       ...Array(3).fill(Array(headers.length).fill(''))
     ];
-    
+
     const ws = XLSX.utils.aoa_to_sheet(templateData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Plantilla");
@@ -173,11 +187,9 @@ const RegisterExcel = () => {
             <ul>
               {validationErrors.map((err, index) => (
                 <li key={index}>
-                  {err.type === 'columns' ? (
-                    `Fila ${err.row}: Tiene ${err.actual} columnas (se esperaban ${err.expected})`
-                  ) : (
-                    `Fila ${err.row}, Columna ${err.column} (${err.header}): Falta información`
-                  )}
+                  {err.type === 'columns'
+                    ? `Fila ${err.row}: Tiene ${err.actual} columnas (se esperaban ${err.expected})`
+                    : `Fila ${err.row}, Columna ${err.column} (${err.header}): Falta información`}
                 </li>
               ))}
             </ul>
@@ -207,7 +219,7 @@ const RegisterExcel = () => {
               </tbody>
             </table>
           </div>
-          
+
           <div className="action-buttons">
             <button className="action-btn register-btn">Registrar Olimpistas</button>
           </div>
