@@ -17,7 +17,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterResponsible";
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
-import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
+import RegisterExcel from "./features/registrarion/pages/registerExcel";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
