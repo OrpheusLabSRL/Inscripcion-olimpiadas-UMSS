@@ -4,28 +4,47 @@ import './RegisterExcel.css';
 
 const RegisterExcel = () => {
   const [data, setData] = useState([]);
-  const [headers, setHeaders] = useState([]);
+  const [headers, setHeaders] = useState([
+    "CARNET DE IDENTIDAD (OLIMPISTA)",
+    "NOMBRE(S) (OLIMPISTA)",
+    "APELLIDO(S) (OLIMPISTA)",
+    "FECHA DE NACIMIENTO (OLIMPISTA)",
+    "CORREO ELECTRONICO (OLIMPISTA)",
+    "DEPARTAMENTO (OLIMPISTA)",
+    "MUNICIPIO/PROVINCIA (OLIMPISTA)",
+    "COLEGIO (OLIMPISTA)",
+    "CURSO (OLIMPISTA)",
+    "AREA",
+    "CATEGORIA",
+    "CARNET DE IDENTIDAD (TUTOR LEGAL)",
+    "NOMBRE(S) (TUTOR LEGAL)",
+    "APELLIDO(S) (TUTOR LEGAL)",
+    "CORREO ELECTRONICO (TUTOR LEGAL)",
+    "CELULAR (TUTOR LEGAL)",
+    "TIPO DE TUTOR",
+    "CARNET DE IDENTIDAD (PROFESOR)",
+    "NOMBRE(S) (PROFESOR)",
+    "APELLIDO(S) (PROFESOR)",
+    "CORREO ELECTRONICO (PROFESOR)",
+    "CELULAR (PROFESOR)",
+    "TIPO DE TUTOR"
+  ]);
   const [fileName, setFileName] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-
-  const cleanCellContent = (value) => {
-    if (typeof value !== 'string') return value;
-    return value.replace(/\bAsk\s*(AI|IA|Al)\b/gi, '').trim() || '-';
-  };
+  const [validationErrors, setValidationErrors] = useState([]);
 
   const handleFileUpload = (e) => {
     setError('');
     setSuccess('');
     setData([]);
-    setHeaders([]);
+    setValidationErrors([]);
     
     const file = e.target.files[0];
     if (!file) return;
     
-    if (!file.name.match(/\.(xlsx)$/i)) {
-      setError('Por favor, sube únicamente archivos Excel (.xlsx)');
+    if (!file.name.match(/\.(xlsx|xls)$/i)) {
+      setError('Por favor, sube únicamente archivos Excel (.xlsx o .xls)');
       return;
     }
     
@@ -37,35 +56,63 @@ const RegisterExcel = () => {
         const arrayBuffer = e.target.result;
         const workbook = XLSX.read(arrayBuffer, { type: 'array' });
         
-        const sheetName = workbook.SheetNames.find(name => 
-          name.trim().toLowerCase() === 'formulario'
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        
+        // Convertir a JSON incluyendo celdas vacías
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+          header: 1,
+          range: 1, // Ignorar primera fila
+          defval: null, // Usar null para celdas vacías
+          raw: false
+        });
+
+        // Filtrar solo filas que tengan al menos un dato real
+        const filteredData = jsonData.filter(row => 
+          row.some(cell => cell !== null && cell !== '')
         );
 
-        if (!sheetName) {
-          setError('No se encontró la hoja "Formulario"');
-          return;
-        }
+        if (filteredData.length > 0) {
+          const errors = [];
+          
+          // Validar cada fila con datos
+          filteredData.forEach((row, rowIndex) => {
+            // Validar número de columnas
+            if (row.length !== headers.length) {
+              errors.push({
+                type: 'columns',
+                row: rowIndex + 2,
+                expected: headers.length,
+                actual: row.length
+              });
+            }
 
-        const worksheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { 
-          header: 1,
-          raw: false,
-          defval: ''
-        });
-        
-        if (jsonData.length > 0) {
-          const cleanedData = jsonData
-            .map(row => row.map(cleanCellContent))
-            .filter(row => row.some(cell => cell !== '-')); 
-          if (cleanedData.length > 0) {
-            setHeaders(cleanedData[0]);
-            setData(cleanedData.slice(1));
-            setSuccess('Archivo procesado correctamente');
+            // Validar campos vacíos solo en filas con datos
+            row.forEach((cell, cellIndex) => {
+              if (cell === null || cell === '') {
+                errors.push({
+                  type: 'empty',
+                  row: rowIndex + 2,
+                  column: cellIndex + 1,
+                  header: headers[cellIndex]
+                });
+              }
+            });
+          });
+
+          if (errors.length > 0) {
+            setValidationErrors(errors);
+            setError('Se encontraron errores en el archivo');
           } else {
-            setError('No se encontraron datos válidos después de la limpieza');
+            // Rellenar nulls con strings vacíos para la visualización
+            const cleanedData = filteredData.map(row => 
+              row.map(cell => cell === null ? '' : cell)
+            );
+            setData(cleanedData);
+            setSuccess('Archivo procesado correctamente');
           }
         } else {
-          setError('La hoja está vacía');
+          setError('El archivo no contiene datos válidos');
         }
       } catch (err) {
         setError('Error al procesar el archivo');
@@ -76,43 +123,74 @@ const RegisterExcel = () => {
     reader.readAsArrayBuffer(file);
   };
 
+  const downloadTemplate = () => {
+    const templateData = [
+      headers,
+      ...Array(3).fill(Array(headers.length).fill(''))
+    ];
+    
+    const ws = XLSX.utils.aoa_to_sheet(templateData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Plantilla");
+    XLSX.writeFile(wb, "Plantilla_Olimpistas.xlsx");
+  };
+
   return (
-    <div className="excel-upload-container">
-      <h1>Cargar Archivo Excel</h1>
-      
-      <div className="file-upload-section">
-        <label>
-          Selecciona un archivo Excel (.xlsx) con hoja "Formulario":
-        </label>
-        <input
-          type="file"
-          accept=".xlsx"
-          onChange={handleFileUpload}
-          className="file-input"
-        />
-        <p className="file-helper-text">
-          Solo archivos .xlsx con hoja llamada "Formulario"
-        </p>
-      </div>
-      
-      {error && <div className="error-message">{error}</div>}
-      {success && <div className="success-message">{success}</div>}
-      
-      {fileName && !error && (
-        <div className="file-info">
-          <p><span>Archivo:</span> {fileName}</p>
+    <div className="app-background">
+      <div className="excel-container">
+        <div className="excel-header">
+          <h1>Inscribir Olimpistas Mediante Archivo Excel</h1>
+          <div className="download-section">
+            <p className="instructions">*Para evitar inconvenientes con el formato y la información del archivo .xlsx, descargue la plantilla*</p>
+            <button onClick={downloadTemplate} className="action-btn">
+              Descargar Plantilla
+            </button>
+          </div>
         </div>
-      )}
-      
-      {data.length > 0 && (
-        <div className="data-table-container">
-          <h2>Datos de la hoja "Formulario"</h2>
-          <div className="table-wrapper">
+
+        <div className="upload-section">
+          <h2>Sube tu archivo en formato .xlsx</h2>
+          <div className="file-input-container">
+            <input
+              type="file"
+              accept=".xlsx,.xls"
+              onChange={handleFileUpload}
+              id="excel-upload"
+              className="file-input"
+            />
+            <label htmlFor="excel-upload" className="action-btn file-label">
+              Seleccionar Archivo
+            </label>
+          </div>
+        </div>
+
+        {error && <div className="error-message">{error}</div>}
+        {success && <div className="success-message">{success}</div>}
+
+        {validationErrors.length > 0 && (
+          <div className="validation-errors">
+            <h3>Errores de validación:</h3>
+            <ul>
+              {validationErrors.map((err, index) => (
+                <li key={index}>
+                  {err.type === 'columns' ? (
+                    `Fila ${err.row}: Tiene ${err.actual} columnas (se esperaban ${err.expected})`
+                  ) : (
+                    `Fila ${err.row}, Columna ${err.column} (${err.header}): Falta información`
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="data-section">
+          <div className="table-container">
             <table className="data-table">
               <thead>
                 <tr>
                   {headers.map((header, index) => (
-                    <th key={index}>{cleanCellContent(header)}</th>
+                    <th key={index}>{header}</th>
                   ))}
                 </tr>
               </thead>
@@ -120,18 +198,21 @@ const RegisterExcel = () => {
                 {data.map((row, rowIndex) => (
                   <tr key={rowIndex}>
                     {row.map((cell, cellIndex) => (
-                      <td key={cellIndex}>{cleanCellContent(cell)}</td>
+                      <td key={cellIndex} className={cell === '' ? 'empty-cell' : ''}>
+                        {cell || '-'}
+                      </td>
                     ))}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="table-footer">
-            <p>{data.length} filas mostradas</p>
+          
+          <div className="action-buttons">
+            <button className="action-btn register-btn">Registrar Olimpistas</button>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

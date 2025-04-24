@@ -1,128 +1,210 @@
-.excel-upload-container {
-    max-width: 100%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .excel-upload-container h1 {
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 24px;
-  }
-  
-  .file-upload-section {
-    margin-bottom: 25px;
-  }
-  
-  .file-upload-section label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 500;
-    color: #2c3e50;
-  }
-  
-  .file-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f8f9fa;
-  }
-  
-  .file-helper-text {
-    font-size: 12px;
-    color: #6c757d;
-    margin-top: 5px;
-  }
-  
-  .error-message {
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    border-left: 4px solid #dc3545;
-  }
-  
-  .success-message {
-    background-color: #d4edda;
-    color: #155724;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    border-left: 4px solid #28a745;
-  }
-  
-  .file-info {
-    background-color: #e7f5ff;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-  }
-  
-  .file-info span {
-    font-weight: 600;
-  }
-  
-  .data-table-container {
-    margin-top: 30px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  .data-table-container h2 {
-    background-color: #f8f9fa;
+.app-background {
+  background-color: #94B4C1;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.excel-container {
+  background-color: white;
+  max-width: 1200px;
+  width: 100%;
+  margin: 20px;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.excel-header {
+  margin-bottom: 30px;
+}
+
+.excel-header h1 {
+  color: #213448;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.download-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.instructions {
+  color: #ff0000;
+  margin: 0;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.action-btn {
+  background-color: #213448;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+}
+
+.action-btn:hover {
+  background-color: #1a2a38;
+}
+
+.upload-section {
+  margin: 30px 0;
+}
+
+.upload-section h2 {
+  color: #213448;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.file-input-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.file-input {
+  position: absolute;
+  left: -9999px;
+}
+
+.file-label {
+  display: inline-block;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.validation-errors {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.validation-errors h3 {
+  margin-top: 0;
+}
+
+.validation-errors ul {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+
+.data-section {
+  margin-top: 30px;
+  position: relative;
+}
+
+.table-container {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table th {
+  background-color: #f1f3f5;
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #dee2e6;
+  position: sticky;
+  top: 0;
+  color: #213448;
+  font-weight: 600;
+}
+
+.data-table td {
+  padding: 12px;
+  border-bottom: 1px solid #dee2e6;
+  color: #495057;
+}
+
+.data-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.empty-cell {
+  background-color: #fff3cd;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.register-btn {
+  background-color: #213448;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.register-btn:hover {
+  background-color: #1a2a38;
+}
+
+@media (max-width: 768px) {
+  .excel-container {
     padding: 15px;
-    margin: 0;
-    font-size: 18px;
-    color: #212529;
-    border-bottom: 1px solid #dee2e6;
   }
   
-  .table-wrapper {
-    overflow-x: auto;
-    max-height: 500px;
-    overflow-y: auto;
+  .excel-header h1 {
+    font-size: 20px;
   }
   
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
+  .download-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
   
-  .data-table th {
-    background-color: #f1f3f5;
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: 600;
-    color: #343a40;
-    border-bottom: 2px solid #dee2e6;
-    position: sticky;
-    top: 0;
+  .table-container {
+    max-height: 400px;
+    font-size: 12px;
   }
   
-  .data-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #dee2e6;
-    color: #495057;
+  .data-table th, .data-table td {
+    padding: 8px;
   }
-  
-  .data-table tr:hover {
-    background-color: #f8f9fa;
-  }
-  
-  .table-footer {
-    padding: 10px 15px;
-    background-color: #f8f9fa;
-    text-align: right;
-    font-size: 13px;
-    color: #6c757d;
-    border-top: 1px solid #dee2e6;
-  }
+}
