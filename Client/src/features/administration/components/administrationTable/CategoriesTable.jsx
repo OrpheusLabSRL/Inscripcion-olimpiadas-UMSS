@@ -23,8 +23,6 @@ const CategoriesTable = () => {
     fetchCategorias();
   }, []);
 
-  if (loading) return <p>Cargando categorías...</p>;
-
   return (
     <table className="data-table">
       <thead>
@@ -35,7 +33,11 @@ const CategoriesTable = () => {
         </tr>
       </thead>
       <tbody>
-        {Array.isArray(categorias) && categorias.length > 0 ? (
+        {loading ? (
+          <tr>
+            <td colSpan="3">Cargando categorías...</td>
+          </tr>
+        ) : Array.isArray(categorias) && categorias.length > 0 ? (
           categorias.map((cat, index) => (
             <tr key={index}>
               <td>{cat.categoria?.nombreCategoria || "-"}</td>

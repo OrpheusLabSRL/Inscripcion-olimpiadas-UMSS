@@ -12,7 +12,10 @@ const CategoryList = () => {
   };
 
   return (
-    <div className="category-container" style={{ padding: "2rem" }}>
+    <div
+      className="category-container"
+      style={{ padding: "2rem", backgroundColor: "#a2bfcb" }}
+    >
       <div
         style={{
           display: "flex",

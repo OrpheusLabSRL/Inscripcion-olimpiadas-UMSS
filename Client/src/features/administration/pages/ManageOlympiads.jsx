@@ -7,7 +7,7 @@ const ManageOlympiads = () => {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div style={{ padding: "2rem", backgroundColor: "#a2bfcb" }}>
       <div
         style={{
           display: "flex",

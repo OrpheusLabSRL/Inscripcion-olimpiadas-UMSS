@@ -11,7 +11,10 @@ const AreaList = () => {
   };
 
   return (
-    <div className="area-container" style={{ padding: "2rem" }}>
+    <div
+      className="area-container"
+      style={{ padding: "2rem", backgroundColor: "#a2bfcb" }}
+    >
       <div
         style={{
           display: "flex",

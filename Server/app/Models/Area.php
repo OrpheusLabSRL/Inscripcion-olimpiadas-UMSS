@@ -26,4 +26,14 @@ class Area extends Model
         return $this->hasMany(OlimpiadaAreaCategoria::class, 'idArea');
     }
 
+    public function categorias()
+    {
+        return $this->belongsToMany(
+            Categoria::class,
+            'area_categoria_olimpiada', 
+            'idArea',                   
+            'idCategoria'              
+        );
+    }
+
 }

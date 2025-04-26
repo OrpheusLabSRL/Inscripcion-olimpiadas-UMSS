@@ -11,8 +11,8 @@ import ManageArea from "./features/administration/pages/ManageArea";
 import ManageCategoria from "./features/administration/pages/ManageCategoria";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageViewBase from "./features/administration/pages/ManageViewBaseData";
+import Home from "./features/administration/pages/Home";
 import PrivateRoute from "./components/auth/PrivateRoute";
-import AdminLayout from "./layouts/AdminLayout";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterResponsible";
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
@@ -71,6 +71,16 @@ function App() {
 
             {/* Rutas bajo Admin */}
             <Route path="/admin">
+              <Route
+                path="home"
+                element={
+                  <PrivateRoute
+                    element={<Home />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
               <Route
                 path="base-data"
                 element={
