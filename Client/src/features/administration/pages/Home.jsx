@@ -1,11 +1,28 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../Styles/Home.css";
 
 export default function Home() {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate(); // 🔥 Activamos el uso de navigate
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+      console.log(storedUser);
+    }
+  }, []);
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h1>Panel de Control</h1>
-        <p>Bienvenido de nuevo, Juan Perez</p>
+        {user ? (
+          <p>Bienvenido de nuevo, {user.nombre}</p>
+        ) : (
+          <p>Bienvenido de nuevo</p>
+        )}
       </div>
 
       <div className="user-card">
@@ -15,8 +32,17 @@ export default function Home() {
           </span>
         </div>
         <div className="user-info">
-          <h2>Juan Perez</h2>
-          <p>Administrador Principal</p>
+          {user ? (
+            <>
+              <h2>{user.nombre}</h2>
+              <p>{user.rol ? user.rol.nombreRol : "Rol no asignado"}</p>
+            </>
+          ) : (
+            <>
+              <h2>Usuario</h2>
+              <p>Rol</p>
+            </>
+          )}
         </div>
       </div>
 
@@ -47,19 +73,19 @@ export default function Home() {
 
       <div className="actions-section">
         <div className="action-card">
-          <h3>Gestionar Olimpiadas</h3>
-          <p>Crea, edita, borra</p>
-          <button>IR A OLIMPIADAS</button>
-        </div>
-        <div className="action-card">
           <h3>Áreas y Categorías</h3>
-          <p>Crea, edita, borra</p>
-          <button>IR A ÁREAS Y CATEGORÍAS</button>
+          <p>Visualiza las áreas y categorías disponibles</p>
+          <button onClick={() => navigate("/admin/base-data")}>
+            IR A ÁREAS Y CATEGORÍAS
+          </button>
         </div>
+
         <div className="action-card">
           <h3>Generar Reportes</h3>
           <p>Genera reportes personalizados con filtros</p>
-          <button>GENERAR REPORTES</button>
+          <button onClick={() => navigate("/admin/reports")}>
+            GENERAR REPORTES
+          </button>
         </div>
       </div>
     </div>

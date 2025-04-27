@@ -14,26 +14,53 @@ const CategoryList = () => {
   return (
     <div
       className="category-container"
-      style={{ padding: "2rem", backgroundColor: "#a2bfcb" }}
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#a2bfcb",
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
       <div
         style={{
+          padding: "2rem",
+          flex: "1 0 auto", // <- hace que el contenido no crezca infinito
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          color: "black",
+          flexDirection: "column",
         }}
       >
-        <div>
+        <div
+          style={{
+            marginBottom: "1.5rem",
+            color: "black",
+          }}
+        >
           <BackButton onClick={goBack} className="back-button">
             Volver
           </BackButton>
-          <h1>Categorías</h1>
+          <h1 style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>
+            Categorías
+          </h1>
           <p>Gestiona las categorías que asociarás a las diferentes áreas</p>
+        </div>
+
+        {/* Cuadro blanco */}
+        <div
+          style={{
+            backgroundColor: "white",
+            padding: "2rem",
+            borderRadius: "12px",
+            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+            flexGrow: 1,
+            overflowX: "auto",
+          }}
+        >
+          <CategoriesTable />
         </div>
       </div>
 
-      <CategoriesTable />
+      {/* Esto hace que el fondo azul siga hasta abajo */}
+      <div style={{ flexShrink: 0 }}></div>
     </div>
   );
 };

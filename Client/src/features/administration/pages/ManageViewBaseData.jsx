@@ -1,5 +1,6 @@
 // src/features/administration/pages/ManageBaseData.jsx
 import { useNavigate } from "react-router-dom";
+import BackButton from "../../../components/Buttons/BackButton.jsx"; // 🔥 Importamos el BackButton
 import "../Styles/BaseData.css";
 
 const ManageBaseData = () => {
@@ -20,17 +21,22 @@ const ManageBaseData = () => {
       icon: "",
       route: "/admin/categorias",
     },
-    {
-      title: "Formulario de Inscripción",
-      description:
-        "Personaliza los campos y requisitos del formulario de inscripción.",
-      icon: "",
-      route: "/admin/formulario-inscripcion",
-    },
   ];
+
+  // 🔥 Función para volver al Home
+  const goBackHome = () => {
+    navigate("/admin/home");
+  };
 
   return (
     <div style={{ padding: "2rem", color: "black" }}>
+      {/* Botón de Volver */}
+      <div style={{ marginBottom: "1.5rem" }}>
+        <BackButton onClick={goBackHome} className="back-button">
+          Volver
+        </BackButton>
+      </div>
+
       <h1>Datos Base</h1>
       <p>Configura las áreas, categorías y el formulario de inscripción</p>
 

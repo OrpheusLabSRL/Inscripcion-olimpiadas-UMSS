@@ -51,12 +51,12 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                   {isOpen ? "Olimpiadas" : ""}
                 </Link>
               </li>
-              <li>
+              {/*<li>
                 <Link to="/admin/base-data">
                   <IoDocumentTextOutline className="sidebar-icons" />{" "}
                   {isOpen ? "Datos base" : ""}
                 </Link>
-              </li>
+              </li>*/}
               <li>
                 <Link>
                   <HiOutlineClipboardDocumentList className="sidebar-icons" />{" "}

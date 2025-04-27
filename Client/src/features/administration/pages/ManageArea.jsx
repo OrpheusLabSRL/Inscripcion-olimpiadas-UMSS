@@ -6,6 +6,7 @@ import "../Styles/General.css";
 
 const AreaList = () => {
   const navigate = useNavigate();
+
   const goBack = () => {
     navigate("/admin/base-data");
   };
@@ -13,26 +14,43 @@ const AreaList = () => {
   return (
     <div
       className="area-container"
-      style={{ padding: "2rem", backgroundColor: "#a2bfcb" }}
+      style={{
+        padding: "2rem",
+        backgroundColor: "#a2bfcb",
+        minHeight: "100vh", // 🔥 cubre toda la altura de la ventana
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          marginBottom: "1.5rem",
           color: "black",
         }}
       >
-        <div>
-          <BackButton onClick={goBack} className="back-button">
-            Volver
-          </BackButton>
-          <h1>Áreas</h1>
-          <p>Gestiona las áreas principales de competencia</p>
-        </div>
+        <BackButton onClick={goBack} className="back-button">
+          Volver
+        </BackButton>
+        <h1 style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Áreas</h1>
+        <p>Gestiona las áreas principales de competencia</p>
       </div>
 
-      <AreasTable />
+      {/* Cuadro blanco que contiene la tabla */}
+      <div
+        style={{
+          backgroundColor: "white",
+          padding: "2rem",
+          borderRadius: "12px",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+          overflowX: "auto",
+          flexGrow: 1,
+          width: "90%",
+          maxWidth: "1200px",
+          margin: "0 auto",
+        }}
+      >
+        <AreasTable />
+      </div>
     </div>
   );
 };

@@ -96,3 +96,12 @@ export const updateCombinacionEstado = async (id, estado) => {
 
 export const asignarCombinaciones = async (data) =>
   await inscriptionApi.post("/asignar-olimpiada", data);
+
+// ============================
+// LOGIN
+// ============================
+
+export const login = async (credentials) => {
+  const response = await inscriptionApi.post("/login", credentials);
+  return response.data;
+};
