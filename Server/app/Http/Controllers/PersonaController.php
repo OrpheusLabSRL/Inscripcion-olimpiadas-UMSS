@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Olimpiada;
 use App\Models\Olimpista;
 use App\Models\Persona;
 use App\Models\Tutor;
-use Illuminate\Http\Request;
 
 class PersonaController extends Controller
 {
@@ -27,7 +25,7 @@ class PersonaController extends Controller
                 'carnetIdentidad' => $persona->carnetIdentidad,
                 'correoElectronico' => $persona->correoElectronico,
                 'departamento' => $olimpista?->departamento,
-                'provincia' => $olimpista?->provincia,
+                'municipio' => $olimpista?->municipio,
                 'fechaNacimiento' => $olimpista?->fechaNacimiento,
                 'curso' => $olimpista?->curso,
                 'colegio' => $olimpista?->colegio,

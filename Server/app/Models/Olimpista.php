@@ -14,7 +14,7 @@ class Olimpista extends Model
     protected $fillable = [
         'fechaNacimiento',
         'departamento',
-        'provincia',
+        'municipio',
         'curso',
         'colegio',
         'idPersona'

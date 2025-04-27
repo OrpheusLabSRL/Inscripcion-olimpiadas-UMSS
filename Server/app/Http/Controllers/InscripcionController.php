@@ -22,6 +22,8 @@ class InscripcionController extends Controller
             'inscripciones' => 'required|array'
         ]);
 
+        // \Log::info('Datos recibidos en store:', $request->all());
+
         DB::beginTransaction();
 
         try {
@@ -48,7 +50,7 @@ class InscripcionController extends Controller
             foreach ($request->inscripciones as $inscripcionData) {
                 // Procesar tutor de área si existe
                 $tutorArea = null;
-                if ($request->has('existeTutor') && $request->existeTutor === true  && isset($inscripcionData['tutorArea'])) {
+                if (isset($inscripcionData['existeTutor']) && $inscripcionData['existeTutor'] == "true" && isset($inscripcionData['tutorArea'])) {
                     $personaTutorArea = $this->buscarOCrearPersona($inscripcionData['tutorArea']);
                     $tutorArea = $this->buscarOCrearTutor($personaTutorArea->idPersona, $inscripcionData['tutorArea']);
                 }
@@ -115,7 +117,7 @@ class InscripcionController extends Controller
             [
                 'fechaNacimiento' => $data['fecha_nacimiento'],
                 'departamento' => $data['departamento'],
-                'provincia' => $data['provincia'],
+                'municipio' => $data['municipio'],
                 'curso' => $data['curso'],
                 'colegio' => $data['colegio']
             ]
