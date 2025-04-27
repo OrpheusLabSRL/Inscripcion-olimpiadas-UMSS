@@ -37,6 +37,7 @@ export const Select = ({
         value={value}
         onChange={onChange}
         disabled={isReadOnly?.Nombre ? true : false}
+        autoComplete="off"
       >
         {placeholder && <option value={""}>{placeholder}</option>}
 

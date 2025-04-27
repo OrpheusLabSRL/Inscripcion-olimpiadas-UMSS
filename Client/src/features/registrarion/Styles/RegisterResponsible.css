@@ -1,3 +1,7 @@
+.container-form {
+  margin-top: 20px;
+}
+
 .container-form-inputs {
   background-color: #fff;
   color: #000;
@@ -44,4 +48,9 @@
 .message-recomendation {
   color: #f44336;
   margin: 0;
+}
+
+.title-register {
+  width: 450px;
+  margin: auto;
 }

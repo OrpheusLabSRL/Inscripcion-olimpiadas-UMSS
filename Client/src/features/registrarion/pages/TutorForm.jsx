@@ -4,8 +4,9 @@ import "../Styles/TutorForm.css";
 
 import HeaderProp from "../../home_usuario/components/HeaderProp";
 import { registerTutor, checkExistingTutor } from "../../../api/TutorForm.api";
-import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { NextPage } from "../../../components/Buttons/NextPage";
+import { GenericCard } from "../../../components/cards/GenericCard";
+import Logo from "../../../assets/images/O-Sansi.jpeg";
 
 export const TutorForm = () => {
   const location = useLocation();
@@ -277,7 +278,7 @@ export const TutorForm = () => {
       );
 
       if (response.data.exists) {
-        localStorage.setItem("tutorInscripcionId", response.data.tutorId);
+        sessionStorage.setItem("tutorInscripcionId", response.data.tutorId);
         setSubmitSuccess("Datos verificados! Redirigiendo...");
         setTimeout(() => {
           navigate("/listRegistered", {
@@ -362,146 +363,13 @@ export const TutorForm = () => {
               className="form-section"
               style={{ display: "flex", justifyContent: "center" }}
             >
-              <NextPage value="Nueva Inscripción" to="/register/responsible" />
-
-              {/* <div className="form-grid">
-                <div className="form-group">
-                  <label htmlFor="nombre">
-                    Nombre(s) <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    placeholder="Ingrese su(s) nombre(s)"
-                    value={formData.nombre}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    className={getInputClass("nombre")}
-                    maxLength={50}
-                  />
-                  {touched.nombre && errors.nombre && (
-                    <span className="error-message">{errors.nombre}</span>
-                  )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="apellido">
-                    Apellido(s) <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="apellido"
-                    name="apellido"
-                    placeholder="Ingrese su(s) apellido(s)"
-                    value={formData.apellido}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    className={getInputClass("apellido")}
-                    maxLength={50}
-                  />
-                  {touched.apellido && errors.apellido && (
-                    <span className="error-message">{errors.apellido}</span>
-                  )}
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="tipoTutor">
-                  Tipo de Tutor <span className="required">*</span>
-                </label>
-                <select
-                  id="tipoTutor"
-                  name="tipoTutor"
-                  value={formData.tipoTutor}
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
-                  className={getInputClass("tipoTutor")}
-                >
-                  <option value="">Seleccione tipo de tutor</option>
-                  <option value="Profesor">Profesor</option>
-                  <option value="Padre/Madre">Padre/Madre</option>
-                  <option value="Tutor Legal">Tutor Legal</option>
-                </select>
-                {touched.tipoTutor && errors.tipoTutor && (
-                  <span className="error-message">{errors.tipoTutor}</span>
-                )}
-              </div>
-
-              <div className="form-grid">
-                <div className="form-group">
-                  <label htmlFor="carnet">
-                    Carnet de identidad <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="carnet"
-                    name="carnet"
-                    placeholder="Ingrese su carnet"
-                    value={formData.carnet}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    className={getInputClass("carnet")}
-                  />
-                  {touched.carnet && errors.carnet && (
-                    <span className="error-message">{errors.carnet}</span>
-                  )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="telefono">
-                    Teléfono <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="telefono"
-                    name="telefono"
-                    placeholder="Ingrese su teléfono (8 dígitos)"
-                    value={formData.telefono}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    className={getInputClass("telefono")}
-                  />
-                  {touched.telefono && errors.telefono && (
-                    <span className="error-message">{errors.telefono}</span>
-                  )}
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="email">
-                  Correo Electrónico <span className="required">*</span>
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Ingrese su correo electrónico"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
-                  className={getInputClass("email")}
-                />
-                {touched.email && errors.email && (
-                  <span className="error-message">{errors.email}</span>
-                )}
-              </div>
-
-              <div className="form-buttons">
-                <button
-                  type="button"
-                  className="back-button"
-                  onClick={() => navigate(-1)}
-                  disabled={isSubmitting}
-                >
-                  Atrás
-                </button>
-                <button
-                  type="submit"
-                  className="submit-button"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Enviando..." : "Siguiente"}
-                </button>
-              </div> */}
+              <GenericCard
+                image={Logo}
+                title="Olimpiadas O! SanSi 2025"
+                description="Inicia una nueva inscripcion y registra uno o mas estudiantes a las Olimpiadas O SanSi 2025"
+                value="Nueva Inscripción"
+                to="/register/responsible"
+              />
             </form>
           ) : (
             <form onSubmit={handleContinue} className="form-section">

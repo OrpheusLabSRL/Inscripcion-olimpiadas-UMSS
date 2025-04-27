@@ -34,8 +34,8 @@ export const Input = ({
         name={name}
         placeholder={placeholder}
         {...(register ? register(name, validationRules) : {})}
-        autoComplete="off"
         readOnly={isReadOnly?.Nombre ? true : false}
+        autoComplete="off"
       />
       {errors && errors[name] && (
         <span className="error-validation">{errors[name].message}</span>

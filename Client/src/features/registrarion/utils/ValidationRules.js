@@ -52,6 +52,14 @@ export const Validator = {
       value: true,
       message: "La fecha de nacimiento es requerido",
     },
+    min: {
+      value: "2005-04-25",
+      message: "Debe tener menos de 20 años",
+    },
+    max: {
+      value: "2019-04-25",
+      message: "Debe tener al menos 6 años",
+    },
   },
   ci: {
     required: {
@@ -67,8 +75,8 @@ export const Validator = {
       message: "El carnet de identidad no debe ser mayor a 12 caracteres",
     },
     minLength: {
-      value: 8,
-      message: "El carnet de identidad debe tener al menos 8 caracteres",
+      value: 7,
+      message: "El carnet de identidad debe tener al menos 7 caracteres",
     },
     validate: {
       noMultipleSpaces: (value) =>
@@ -148,7 +156,7 @@ export const Validator = {
     },
   },
 
-  provincia: {
+  municipio: {
     required: {
       value: true,
       message: "La provincia es requerido",
@@ -175,12 +183,8 @@ export const Validator = {
   email: {
     required: "Él email es requerido",
     maxLength: {
-      value: 255,
-      message: "El título no debe ser mayor a 255 caracteres",
-    },
-    minLength: {
-      value: 2,
-      message: "El título debe tener al menos 2 caracteres",
+      value: 100,
+      message: "Él email no debe ser mayor a 100 caracteres",
     },
     pattern: {
       value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,

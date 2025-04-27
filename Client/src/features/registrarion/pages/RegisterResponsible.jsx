@@ -7,6 +7,7 @@ import { Select } from "../../../components/inputs/Select";
 import { Validator } from "../utils/ValidationRules";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { NextPage } from "../../../components/Buttons/NextPage";
+import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
 import { useEffect, useState } from "react";
@@ -19,6 +20,8 @@ import { getPersonData } from "../../../api/inscription.api";
 
 export const RegisterResponsible = () => {
   const [isReadOnly, setIsReadOnly] = useState({});
+  const [currentStep, sertCurrentStep] = useState(1);
+  const [totalSteps, setTotalStep] = useState(4);
   const navigation = useNavigate();
   const location = useLocation();
   const {
@@ -29,12 +32,12 @@ export const RegisterResponsible = () => {
     setValue,
   } = useForm({
     defaultValues: {
-      Nombre: localStorage.getItem("NombreResponsible") || "",
-      Apellido: localStorage.getItem("ApellidoResponsible") || "",
-      Tipo_Tutor: localStorage.getItem("TipoTutorResponsible") || "",
-      Numero_Celular: localStorage.getItem("NumeroResponsible") || "",
-      Email: localStorage.getItem("EmailResponsible") || "",
-      Ci: localStorage.getItem("CiResponsible") || "",
+      Nombre: sessionStorage.getItem("NombreResponsible") || "",
+      Apellido: sessionStorage.getItem("ApellidoResponsible") || "",
+      Tipo_Tutor: sessionStorage.getItem("TipoTutorResponsible") || "",
+      Numero_Celular: sessionStorage.getItem("NumeroResponsible") || "",
+      Email: sessionStorage.getItem("EmailResponsible") || "",
+      Ci: sessionStorage.getItem("CiResponsible") || "",
     },
     mode: "onChange",
   });
@@ -57,37 +60,37 @@ export const RegisterResponsible = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("NombreResponsible", watchedNombre);
+    sessionStorage.setItem("NombreResponsible", watchedNombre);
   }, [watchedNombre]);
 
   useEffect(() => {
-    localStorage.setItem("ApellidoResponsible", watchedApellido);
+    sessionStorage.setItem("ApellidoResponsible", watchedApellido);
   }, [watchedApellido]);
 
   useEffect(() => {
-    localStorage.setItem("TipoTutorResponsible", watchedTipoTutor);
+    sessionStorage.setItem("TipoTutorResponsible", watchedTipoTutor);
   }, [watchedTipoTutor]);
 
   useEffect(() => {
-    localStorage.setItem("EmailResponsible", watchedEmail);
+    sessionStorage.setItem("EmailResponsible", watchedEmail);
   }, [watchedEmail]);
 
   useEffect(() => {
-    localStorage.setItem("NumeroResponsible", watchedTelefono);
+    sessionStorage.setItem("NumeroResponsible", watchedTelefono);
   }, [watchedTelefono]);
 
   useEffect(() => {
-    localStorage.setItem("CiResponsible", watchedCarnetIdentidad);
+    sessionStorage.setItem("CiResponsible", watchedCarnetIdentidad);
   }, [watchedCarnetIdentidad]);
 
   useEffect(() => {
     const handleUnload = () => {
-      localStorage.removeItem("NombreResponsible");
-      localStorage.removeItem("ApellidoResponsible");
-      localStorage.removeItem("TipoTutorResponsible");
-      localStorage.removeItem("NumeroResponsible");
-      localStorage.removeItem("EmailResponsible");
-      localStorage.removeItem("CiResponsible");
+      sessionStorage.removeItem("NombreResponsible");
+      sessionStorage.removeItem("ApellidoResponsible");
+      sessionStorage.removeItem("TipoTutorResponsible");
+      sessionStorage.removeItem("NumeroResponsible");
+      sessionStorage.removeItem("EmailResponsible");
+      sessionStorage.removeItem("CiResponsible");
     };
     window.addEventListener("beforeunload", handleUnload);
     return () => {
@@ -98,7 +101,7 @@ export const RegisterResponsible = () => {
   const autofill = async () => {
     try {
       const personData = await getPersonData(
-        localStorage.getItem("CiResponsible")
+        sessionStorage.getItem("CiResponsible")
       );
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
@@ -140,8 +143,13 @@ export const RegisterResponsible = () => {
 
   return (
     <div className="container-form">
-      {/* <ProgressBar currentStep={currentStep} totalSteps={totalSteps} /> */}
-      <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
+      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
+      <form
+        className="container-form-inputs"
+        onSubmit={handleSubmit(onSubmit)}
+        autoComplete="off"
+      >
         <div className="input-2c">
           <h1>Datos de responsable de inscripción</h1>
           <h5 className="message-recomendation">

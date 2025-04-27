@@ -18,6 +18,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
   const navigation = useNavigate();
 
   const cerrarSesion = () => {
+    sessionStorage.clear();
     navigation("/");
   };
 

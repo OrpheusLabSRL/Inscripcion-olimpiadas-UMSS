@@ -5,6 +5,7 @@ import "../Styles/RegisterOlympian.css";
 import { Input } from "../../../components/inputs/Input";
 import { Select } from "../../../components/inputs/Select";
 import { NextPage } from "../../../components/Buttons/NextPage";
+import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
 import { useForm } from "react-hook-form";
@@ -25,13 +26,20 @@ import { Validator } from "../utils/ValidationRules";
 import {
   cursosBolivia,
   departamentosBolivia,
-  provinciasPorDepartamento,
+  municipioPorDepartamento,
+  colegioPorMunicipio,
 } from "../utils/DataOptions";
 
 export const RegisterOlympian = () => {
+  const [currentStep, sertCurrentStep] = useState(2);
+  const [totalSteps, setTotalStep] = useState(4);
   const [isReadOnly, setIsReadOnly] = useState({});
-  const [provinciasFiltradas, setProvinciasFiltradas] = useState(() => {
-    const stored = localStorage.getItem("provinciasFiltradas");
+  const [municipiosFiltradas, setMunicipiosFiltradas] = useState(() => {
+    const stored = sessionStorage.getItem("municipiosFiltradas");
+    return stored ? JSON.parse(stored) : null;
+  });
+  const [colegiosFiltradas, setColegiosFiltradas] = useState(() => {
+    const stored = sessionStorage.getItem("colegiosFiltradas");
     return stored ? JSON.parse(stored) : null;
   });
 
@@ -47,15 +55,15 @@ export const RegisterOlympian = () => {
     setValue,
   } = useForm({
     defaultValues: {
-      Nombre: localStorage.getItem("NombreOlympian") || "",
-      Apellido: localStorage.getItem("ApellidoOlympian") || "",
-      FechaNacimiento: localStorage.getItem("FechaNacimientoOlympian") || "",
-      CarnetIdentidad: localStorage.getItem("CarnetIdentidadOlympian") || "",
-      Colegio: localStorage.getItem("ColegioOlympian") || "",
-      Curso: localStorage.getItem("CursoOlympian") || "",
-      Departamento: localStorage.getItem("DepartamentoOlympian") || "",
-      Provincia: localStorage.getItem("ProvinciaOlympian") || "",
-      Email: localStorage.getItem("EmailOlympian") || "",
+      Nombre: sessionStorage.getItem("NombreOlympian") || "",
+      Apellido: sessionStorage.getItem("ApellidoOlympian") || "",
+      FechaNacimiento: sessionStorage.getItem("FechaNacimientoOlympian") || "",
+      CarnetIdentidad: sessionStorage.getItem("CarnetIdentidadOlympian") || "",
+      Colegio: sessionStorage.getItem("ColegioOlympian") || "",
+      Curso: sessionStorage.getItem("CursoOlympian") || "",
+      Departamento: sessionStorage.getItem("DepartamentoOlympian") || "",
+      Municipio: sessionStorage.getItem("MunicipioOlympian") || "",
+      Email: sessionStorage.getItem("EmailOlympian") || "",
     },
     mode: "onChange",
   });
@@ -67,56 +75,58 @@ export const RegisterOlympian = () => {
   const watchedColegio = watch("Colegio");
   const watchedCurso = watch("Curso");
   const watchedDepartamento = watch("Departamento");
-  const watchedProvincia = watch("Provincia");
+  const watchedMunicipio = watch("Municipio");
   const watchedEmail = watch("Email");
 
   useEffect(() => {
-    localStorage.setItem("NombreOlympian", watchedNombre);
+    sessionStorage.setItem("NombreOlympian", watchedNombre);
   }, [watchedNombre]);
 
   useEffect(() => {
-    localStorage.setItem("ApellidoOlympian", watchedApellido);
+    sessionStorage.setItem("ApellidoOlympian", watchedApellido);
   }, [watchedApellido]);
 
   useEffect(() => {
-    localStorage.setItem("FechaNacimientoOlympian", watchedFechaNacimiento);
+    sessionStorage.setItem("FechaNacimientoOlympian", watchedFechaNacimiento);
   }, [watchedFechaNacimiento]);
 
   useEffect(() => {
-    localStorage.setItem("CarnetIdentidadOlympian", watchedCarnetIdentidad);
+    sessionStorage.setItem("CarnetIdentidadOlympian", watchedCarnetIdentidad);
   }, [watchedCarnetIdentidad]);
 
   useEffect(() => {
-    localStorage.setItem("ColegioOlympian", watchedColegio);
+    sessionStorage.setItem("ColegioOlympian", watchedColegio);
   }, [watchedColegio]);
 
   useEffect(() => {
-    localStorage.setItem("CursoOlympian", watchedCurso);
+    sessionStorage.setItem("CursoOlympian", watchedCurso);
   }, [watchedCurso]);
 
   useEffect(() => {
-    localStorage.setItem("DepartamentoOlympian", watchedDepartamento);
+    sessionStorage.setItem("DepartamentoOlympian", watchedDepartamento);
   }, [watchedDepartamento]);
 
   useEffect(() => {
-    localStorage.setItem("ProvinciaOlympian", watchedProvincia);
-  }, [watchedProvincia]);
+    sessionStorage.setItem("MunicipioOlympian", watchedMunicipio);
+  }, [watchedMunicipio]);
 
   useEffect(() => {
-    localStorage.setItem("EmailOlympian", watchedEmail);
+    sessionStorage.setItem("EmailOlympian", watchedEmail);
   }, [watchedEmail]);
 
   useEffect(() => {
     const handleUnload = () => {
-      localStorage.removeItem("NombreOlympian");
-      localStorage.removeItem("ApellidoOlympian");
-      localStorage.removeItem("FechaNacimientoOlympian");
-      localStorage.removeItem("CarnetIdentidadOlympian");
-      localStorage.removeItem("ColegioOlympian");
-      localStorage.removeItem("CursoOlympian");
-      localStorage.removeItem("DepartamentoOlympian");
-      localStorage.removeItem("ProvinciaOlympian");
-      localStorage.removeItem("EmailOlympian");
+      sessionStorage.removeItem("NombreOlympian");
+      sessionStorage.removeItem("ApellidoOlympian");
+      sessionStorage.removeItem("FechaNacimientoOlympian");
+      sessionStorage.removeItem("CarnetIdentidadOlympian");
+      sessionStorage.removeItem("ColegioOlympian");
+      sessionStorage.removeItem("CursoOlympian");
+      sessionStorage.removeItem("DepartamentoOlympian");
+      sessionStorage.removeItem("MunicipioOlympian");
+      sessionStorage.removeItem("EmailOlympian");
+      sessionStorage.removeItem("municipiosFiltradas");
+      sessionStorage.removeItem("colegiosFiltradas");
     };
     window.addEventListener("beforeunload", handleUnload);
     return () => {
@@ -130,15 +140,25 @@ export const RegisterOlympian = () => {
     const label = selectedOption.text;
 
     setValue("Departamento", e.target.value);
-    const provincias = provinciasPorDepartamento[label] || [];
-    setProvinciasFiltradas(provincias);
-    localStorage.setItem("provinciasFiltradas", JSON.stringify(provincias));
+    const provincias = municipioPorDepartamento[label] || [];
+    setMunicipiosFiltradas(provincias);
+    sessionStorage.setItem("municipiosFiltradas", JSON.stringify(provincias));
+  };
+
+  const onSelectMunicipio = (e) => {
+    const select = e.target;
+    const selectedOption = select.options[select.selectedIndex];
+    const label = selectedOption.text;
+    setValue("Municipio", e.target.value);
+    const colegios = colegioPorMunicipio[label] || [];
+    setColegiosFiltradas(colegios);
+    sessionStorage.setItem("colegiosFiltradas", JSON.stringify(colegios));
   };
 
   const autofill = async () => {
     try {
       const personData = await getPersonData(
-        localStorage.getItem("CarnetIdentidadOlympian")
+        sessionStorage.getItem("CarnetIdentidadOlympian")
       );
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
@@ -155,7 +175,7 @@ export const RegisterOlympian = () => {
       if (personData.data.data.fechaNacimiento) {
         setValue("FechaNacimiento", personData.data.data.fechaNacimiento);
         setValue("Departamento", personData.data.data.departamento);
-        setValue("Provincia", personData.data.data.provincia);
+        setValue("Municipio", personData.data.data.provincia);
         setValue("Colegio", personData.data.data.colegio);
         setValue("Curso", personData.data.data.curso);
         setIsReadOnly((prev) => ({
@@ -174,7 +194,9 @@ export const RegisterOlympian = () => {
 
   const onSubmit = async (data) => {
     try {
-      await getOlimpistaEnable(localStorage.getItem("CarnetIdentidadOlympian"));
+      await getOlimpistaEnable(
+        sessionStorage.getItem("CarnetIdentidadOlympian")
+      );
       navigation("/Register/OlympianArea", data);
     } catch (error) {
       swal("Error", error.response.data.message, "error");
@@ -183,10 +205,16 @@ export const RegisterOlympian = () => {
 
   return (
     <div className="container-form">
+      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <NavLink to={previousPath}>
         <IoArrowBackCircle className="btn-back" />
       </NavLink>
-      <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="container-form-inputs"
+        onSubmit={handleSubmit(onSubmit)}
+        autoComplete="off"
+      >
         <div className="input-2c">
           <h1>Registro de datos del Olimpista</h1>
           <h5 className="message-recomendation">
@@ -274,22 +302,22 @@ export const RegisterOlympian = () => {
 
         <div className="input-1c">
           <Select
-            label={"Provincia"}
-            placeholder="Ingrese la provincia"
+            label={"Municipio"}
+            placeholder="Ingrese el municipio"
             mandatory="true"
-            name="Provincia"
+            name="Municipio"
             isReadOnly={isReadOnly}
-            value={watchedProvincia}
-            onChange={(e) => setValue("Provincia", e.target.value)}
-            options={provinciasFiltradas}
+            value={watchedMunicipio}
+            onChange={onSelectMunicipio}
+            options={municipiosFiltradas}
             register={register}
-            validationRules={Validator.provincia}
+            validationRules={Validator.municipio}
             errors={errors}
           />
         </div>
 
         <div className="input-1c">
-          <Input
+          <Select
             label={"Colegio"}
             placeholder="Nombre del Colegio"
             mandatory="true"
@@ -297,6 +325,7 @@ export const RegisterOlympian = () => {
             isReadOnly={isReadOnly}
             value={watchedColegio}
             onChange={(e) => setValue("Colegio", e.target.value)}
+            options={colegiosFiltradas}
             register={register}
             validationRules={Validator.colegio}
             errors={errors}

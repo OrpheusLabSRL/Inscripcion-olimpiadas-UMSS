@@ -3,10 +3,10 @@
 
 :root {
   /*-------------------Paleta de Colores--------------------*/
-  --primary-color: #2563EB;
-  --secondary-color: #4f959d;
-  --tertiary-color: #98d2c0;
-  --quaternary-color: #f6f8d5;
+  --primary-color: #213448;
+  --secondary-color: #547792;
+  --tertiary-color: #94a6c1;
+  --quaternary-color: #ecefca;
 
   /*-------------------Padding botones----------------------*/
   --high-button: 12px;
@@ -25,9 +25,9 @@
   --pS-size: 12px; /* Texto de ayuda */
 
   --label: 16px;
-  --error-size: 14px; 
-  --principal-text: 60px; 
-  --background: #f8fafc;
+  --error-size: 14px;
+  --principal-text: 60px;
+  --background: #94b4c1;
 }
 
 body {
@@ -50,7 +50,7 @@ body {
   grid-template-columns: 90px auto;
   transition: all 0.3s ease;
   flex: 1;
-  min-height: calc(100vh - 29px); 
+  min-height: calc(100vh - 29px);
 }
 
 .main.active {
