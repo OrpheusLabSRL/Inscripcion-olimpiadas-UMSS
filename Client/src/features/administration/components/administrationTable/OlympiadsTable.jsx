@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getOlimpiadas } from "../../../../api/inscription.api";
 import OlympiadsModal from "../administrationModal/OlympiadsModal";
 import BaseDataModal from "../administrationModal/BaseDataModal";
+import { CiCircleInfo } from "react-icons/ci";
+import { MdEdit } from "react-icons/md";
 import "../../Styles/General.css";
 
 const OlympiadsTable = () => {
@@ -73,12 +75,28 @@ const OlympiadsTable = () => {
                   </span>
                 </td>
                 <td>
-                  <button onClick={() => handleView(item)}>👁️</button>
+                  <button
+                    onClick={() => handleView(item)}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "1.5rem",
+                    }}
+                  >
+                    <CiCircleInfo />
+                  </button>
                   <button
                     onClick={() => handleEdit(item)}
-                    style={{ marginLeft: "0.5rem" }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "1.5rem",
+                      marginLeft: "0.5rem",
+                    }}
                   >
-                    ✏️
+                    <MdEdit />
                   </button>
                 </td>
               </tr>
@@ -91,14 +109,12 @@ const OlympiadsTable = () => {
         </tbody>
       </table>
 
-      {/* Modal para ver detalles */}
       <OlympiadsModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         olimpiada={selectedOlympiad}
       />
 
-      {/* Modal para editar (BaseData) */}
       <BaseDataModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}

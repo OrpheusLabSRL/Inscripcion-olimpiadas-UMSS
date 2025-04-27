@@ -26,7 +26,13 @@ const ManageOlympiads = () => {
         }}
       >
         <div>
-          <h1 style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>
+          <h1
+            style={{
+              marginTop: "1rem",
+              marginBottom: "0.5rem",
+              color: "#213448",
+            }}
+          >
             Olimpiadas
           </h1>
           <p>Gestiona las olimpiadas y sus configuraciones</p>
@@ -37,7 +43,7 @@ const ManageOlympiads = () => {
           onClick={() => setIsRegisterModalOpen(true)}
           style={{
             padding: "0.5rem 1rem",
-            backgroundColor: "#007bff",
+            backgroundColor: "#213448",
             color: "white",
             border: "none",
             borderRadius: "8px",
@@ -50,7 +56,7 @@ const ManageOlympiads = () => {
 
       <div
         style={{
-          backgroundColor: "white",
+          backgroundColor: "#ecefca",
           padding: "2rem",
           borderRadius: "12px",
           boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",

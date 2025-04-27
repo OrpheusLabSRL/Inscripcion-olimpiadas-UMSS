@@ -38,7 +38,13 @@ const CategoryList = () => {
           <BackButton onClick={goBack} className="back-button">
             Volver
           </BackButton>
-          <h1 style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>
+          <h1
+            style={{
+              marginTop: "1rem",
+              marginBottom: "0.5rem",
+              color: "#213448",
+            }}
+          >
             Categorías
           </h1>
           <p>Gestiona las categorías que asociarás a las diferentes áreas</p>
@@ -47,7 +53,7 @@ const CategoryList = () => {
         {/* Cuadro blanco */}
         <div
           style={{
-            backgroundColor: "white",
+            backgroundColor: "#ecefca",
             padding: "2rem",
             borderRadius: "12px",
             boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",

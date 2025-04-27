@@ -31,14 +31,22 @@ const AreaList = () => {
         <BackButton onClick={goBack} className="back-button">
           Volver
         </BackButton>
-        <h1 style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Áreas</h1>
+        <h1
+          style={{
+            marginTop: "1rem",
+            marginBottom: "0.5rem",
+            color: "#213448",
+          }}
+        >
+          Áreas
+        </h1>
         <p>Gestiona las áreas principales de competencia</p>
       </div>
 
       {/* Cuadro blanco que contiene la tabla */}
       <div
         style={{
-          backgroundColor: "white",
+          backgroundColor: "#ecefca",
           padding: "2rem",
           borderRadius: "12px",
           boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",

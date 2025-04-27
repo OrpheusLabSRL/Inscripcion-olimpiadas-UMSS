@@ -131,14 +131,23 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
     <div className="modal-overlay">
       <div
         className="modal-content"
-        style={{ maxWidth: "850px", maxHeight: "90vh", overflowY: "auto" }}
+        style={{
+          maxWidth: "850px",
+          maxHeight: "90vh",
+          overflowY: "auto",
+        }}
       >
         <button type="button" className="close-button" onClick={handleReset}>
           ✖
         </button>
 
         <form onSubmit={handleSubmit}>
-          <h3 className="section-title">
+          <h3
+            className="section-title"
+            style={{
+              color: "#000",
+            }}
+          >
             Seleccionar la Versión de la Olimpiada
           </h3>
           <div className="dropdown-container">
@@ -167,7 +176,14 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
             </a>
           </p>
 
-          <h3 className="section-title">Áreas de la Olimpiada</h3>
+          <h3
+            className="section-title"
+            style={{
+              color: "#000",
+            }}
+          >
+            Áreas de la Olimpiada
+          </h3>
           <div className="dropdown-container">
             <div className="dropdown-wrapper large">
               <MultiSelectDropdown
@@ -190,7 +206,14 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
             {errors.areas && <p className="error-message">{errors.areas}</p>}
           </div>
 
-          <h3 className="section-title">Categorías de la Olimpiada</h3>
+          <h3
+            className="section-title"
+            style={{
+              color: "#000",
+            }}
+          >
+            Categorías de la Olimpiada
+          </h3>
 
           {selectedAreas.map((areaId) => {
             const area = areas.find((a) => a.idArea === areaId);

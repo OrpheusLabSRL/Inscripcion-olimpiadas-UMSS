@@ -24,7 +24,7 @@ class OlimpiadaController extends Controller
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
         ]);
 
-        $validated['estadoOlimpiada'] = true;
+        $validated['estadoOlimpiada'] = false;
         $validated['idUsuario'] = 1;
 
         $olimpiada = Olimpiada::create($validated);
