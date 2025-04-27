@@ -42,6 +42,7 @@ Route::post('/contacto', [InformacionContactoController::class, 'store']);
 Route::get('/viewOlimpiadas', [OlimpiadaController::class, 'mostrarOlimpiada']);
 Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::delete('/olimpiada-area-categoria/eliminar-por-olimpiada/{idOlimpiada}', [OlimpiadaAreaCategoriaController::class, 'eliminarPorOlimpiada']);
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);

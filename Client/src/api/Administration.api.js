@@ -32,6 +32,11 @@ export const getAreasCategoriasPorOlimpiada = async (idOlimpiada) => {
   );
 };
 
+export const deleteAreasCategoriasPorOlimpiada = (idOlimpiada) => {
+  return inscriptionApi.delete(
+    `/olimpiada-area-categoria/eliminar-por-olimpiada/${idOlimpiada}`
+  );
+};
 /* =======================
    CATEGORÍAS
 ======================= */

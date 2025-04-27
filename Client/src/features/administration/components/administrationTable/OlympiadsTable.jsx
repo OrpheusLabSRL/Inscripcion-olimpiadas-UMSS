@@ -118,7 +118,7 @@ const OlympiadsTable = () => {
       <BaseDataModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        olimpiada={selectedOlympiad}
+        selectedVersion={selectedOlympiad?.idOlimpiada}
       />
     </>
   );
