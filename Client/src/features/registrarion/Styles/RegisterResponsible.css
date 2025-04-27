@@ -46,8 +46,11 @@
 }
 
 .message-recomendation {
-  color: #f44336;
-  margin: 0;
+  background-color: #ffffeb;
+  border-left: 4px solid #f4e436;
+  padding: 10px;
+  border-radius: 4px;
+  color: #898b23;
 }
 
 .title-register {
