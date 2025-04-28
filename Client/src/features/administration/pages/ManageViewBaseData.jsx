@@ -23,7 +23,6 @@ const ManageBaseData = () => {
     },
   ];
 
-  // 🔥 Función para volver al Home
   const goBackHome = () => {
     navigate("/admin/home");
   };
@@ -37,7 +36,6 @@ const ManageBaseData = () => {
         minHeight: "100vh",
       }}
     >
-      {/* Botón de Volver */}
       <div style={{ marginBottom: "1.5rem" }}>
         <BackButton onClick={goBackHome} className="back-button">
           Volver

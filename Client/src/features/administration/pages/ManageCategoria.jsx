@@ -24,7 +24,7 @@ const CategoryList = () => {
       <div
         style={{
           padding: "2rem",
-          flex: "1 0 auto", // <- hace que el contenido no crezca infinito
+          flex: "1 0 auto",
           display: "flex",
           flexDirection: "column",
         }}
@@ -50,7 +50,6 @@ const CategoryList = () => {
           <p>Gestiona las categorías que asociarás a las diferentes áreas</p>
         </div>
 
-        {/* Cuadro blanco */}
         <div
           style={{
             backgroundColor: "#ecefca",
@@ -65,7 +64,6 @@ const CategoryList = () => {
         </div>
       </div>
 
-      {/* Esto hace que el fondo azul siga hasta abajo */}
       <div style={{ flexShrink: 0 }}></div>
     </div>
   );

@@ -18,7 +18,7 @@ class OlimpiadaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nombreOlimpiada' => 'required|string|max:100|unique:olimpiadas,nombreOlimpiada',
+            'nombreOlimpiada' => 'required|string|max:100',
             'version' => 'required|integer|min:1',
             'fechaInicioOlimpiada' => 'required|date',
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
@@ -64,6 +64,23 @@ class OlimpiadaController extends Controller
 
         return response()->json([
             'message' => 'Olimpiada eliminada correctamente'
+        ]);
+    }
+
+    public function cambiarEstado(Request $request, $id)
+    {
+        $olimpiada = Olimpiada::findOrFail($id);
+
+        $request->validate([
+            'estadoOlimpiada' => 'required|boolean',
+        ]);
+
+        $olimpiada->estadoOlimpiada = $request->estadoOlimpiada;
+        $olimpiada->save();
+
+        return response()->json([
+            'message' => 'Estado actualizado correctamente',
+            'data' => $olimpiada
         ]);
     }
 }

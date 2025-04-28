@@ -17,7 +17,7 @@ const AreaList = () => {
       style={{
         padding: "2rem",
         backgroundColor: "#a2bfcb",
-        minHeight: "100vh", // 🔥 cubre toda la altura de la ventana
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
       }}
@@ -43,7 +43,6 @@ const AreaList = () => {
         <p>Gestiona las áreas principales de competencia</p>
       </div>
 
-      {/* Cuadro blanco que contiene la tabla */}
       <div
         style={{
           backgroundColor: "#ecefca",

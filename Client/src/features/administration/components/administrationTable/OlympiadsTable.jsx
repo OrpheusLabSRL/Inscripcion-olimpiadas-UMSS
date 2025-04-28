@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getOlimpiadas } from "../../../../api/inscription.api";
+import {
+  updateOlimpiadaEstado,
+  getAreasCategoriasPorOlimpiada,
+} from "../../../../api/Administration.api";
 import OlympiadsModal from "../administrationModal/OlympiadsModal";
 import BaseDataModal from "../administrationModal/BaseDataModal";
 import { CiCircleInfo } from "react-icons/ci";
@@ -19,7 +23,6 @@ const OlympiadsTable = () => {
     try {
       const data = await getOlimpiadas();
       setOlympiads(data.data);
-      console.log("Respuesta cruda de la API:", data.data);
     } catch (error) {
       console.error("Error al obtener olimpiadas:", error);
       setOlympiads([]);
@@ -40,6 +43,60 @@ const OlympiadsTable = () => {
   const handleEdit = (olympiad) => {
     setSelectedOlympiad(olympiad);
     setIsEditModalOpen(true);
+  };
+
+  const toggleEstado = async (olympiad) => {
+    try {
+      const hoy = new Date().toISOString().split("T")[0];
+
+      if (olympiad.estadoOlimpiada) {
+        await updateOlimpiadaEstado(olympiad.idOlimpiada, 0);
+        await fetchOlimpiads();
+        return;
+      }
+
+      if (olympiad.fechaFinOlimpiada < hoy) {
+        alert(
+          "No puedes activar una olimpiada cuya fecha de fin ya ha pasado."
+        );
+        return;
+      }
+
+      const response = await getAreasCategoriasPorOlimpiada(
+        olympiad.idOlimpiada
+      );
+      const data = Array.isArray(response) ? response : response.data || [];
+
+      const tieneAsignaciones =
+        data.length > 0 && data.some((area) => area.categorias.length > 0);
+
+      if (!tieneAsignaciones) {
+        alert(
+          "No puedes activar esta olimpiada. No tiene áreas ni categorías registradas."
+        );
+        return;
+      }
+
+      await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
+      await fetchOlimpiads();
+    } catch (error) {
+      console.error("Error al actualizar el estado de la olimpiada:", error);
+      alert("No se pudo actualizar el estado.");
+    }
+  };
+
+  const getEstadoLabel = (olympiad) => {
+    const hoy = new Date().toISOString().split("T")[0];
+    if (olympiad.fechaFinOlimpiada < hoy) return "Finalizado";
+    return olympiad.estadoOlimpiada ? "Activo" : "Inactivo";
+  };
+
+  const getBadgeClass = (olympiad) => {
+    const hoy = new Date().toISOString().split("T")[0];
+    const isFinished = olympiad.fechaFinOlimpiada < hoy;
+    const isActive = olympiad.estadoOlimpiada && !isFinished;
+
+    return isActive ? "badge-success" : "badge-danger";
   };
 
   return (
@@ -66,13 +123,17 @@ const OlympiadsTable = () => {
                 <td>{item.fechaInicioOlimpiada}</td>
                 <td>{item.fechaFinOlimpiada}</td>
                 <td>
-                  <span
-                    className={`badge badge-${
-                      item.estadoOlimpiada ? "success" : "danger"
-                    }`}
+                  <button
+                    onClick={() => toggleEstado(item)}
+                    className={getBadgeClass(item)}
+                    style={{
+                      border: "none",
+                      cursor: "pointer",
+                      width: "100px",
+                    }}
                   >
-                    {item.estadoOlimpiada ? "Activo" : "Finalizado"}
-                  </span>
+                    {getEstadoLabel(item)}
+                  </button>
                 </td>
                 <td>
                   <button

@@ -11,7 +11,7 @@ const ManageOlympiads = () => {
       style={{
         padding: "2rem",
         backgroundColor: "#a2bfcb",
-        minHeight: "100vh", // 🔥 Asegura cubrir toda la pantalla
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
       }}
@@ -70,7 +70,6 @@ const ManageOlympiads = () => {
         <OlympiadsTable />
       </div>
 
-      {/* Modal de registro */}
       <RegisterOlympiadsModal
         isOpen={isRegisterModalOpen}
         onClose={() => setIsRegisterModalOpen(false)}

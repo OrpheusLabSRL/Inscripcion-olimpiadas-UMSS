@@ -123,7 +123,7 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
     setCategorias([]);
     setErrors({});
     setInitialState({ areas: [], categorias: {} });
-    onClose(); // << importante para que cierre
+    onClose();
   };
 
   const handleSubmit = async (e) => {

@@ -16,7 +16,6 @@ const Login = () => {
       const data = await login({ email, password }); // 🚀 usamos login del api
       console.log("Login exitoso:", data);
 
-      // Guardar usuario en localStorage (opcional)
       localStorage.setItem("user", JSON.stringify(data.usuario));
 
       navigate("/admin/home");

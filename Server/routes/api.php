@@ -43,6 +43,7 @@ Route::get('/viewOlimpiadas', [OlimpiadaController::class, 'mostrarOlimpiada']);
 Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::delete('/olimpiada-area-categoria/eliminar-por-olimpiada/{idOlimpiada}', [OlimpiadaAreaCategoriaController::class, 'eliminarPorOlimpiada']);
+Route::put('/editarOlimpiadas/{id}/estado', [OlimpiadaController::class, 'cambiarEstado']);
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);
@@ -58,6 +59,8 @@ Route::get('/viewGrados/{id}', [GradoController::class, 'show']);
 
 // Inscripción de estudiante a olimpiada
 Route::post('/newInscription', [InscripcionController::class, 'store']);
+Route::get('/obtenerInscripciones/olimpiadas', [InscripcionController::class, 'getInscripcionesConOlimpiadas']);
+
 
 // Relación Categoría - Grado
 Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);

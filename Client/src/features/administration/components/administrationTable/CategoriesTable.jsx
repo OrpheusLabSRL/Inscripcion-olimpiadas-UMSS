@@ -44,7 +44,6 @@ const CategoriesTable = () => {
     fetchCategorias();
   }, []);
 
-  // ✅ Agrupar los grados de 3 en 3
   const agruparGradosDeTres = (grados) => {
     const grupos = [];
     for (let i = 0; i < grados.length; i += 3) {
