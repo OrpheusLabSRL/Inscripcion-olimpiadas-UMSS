@@ -5,7 +5,11 @@ const Sidebar = () => {
   return (
     <nav className={styles.sidebar}>
       <header className={styles.header}>
-        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/7330cc38170480eadf5800dd915ae76c4a5737cb" alt="LOGO O SANSI" className={styles.logo} />
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/7330cc38170480eadf5800dd915ae76c4a5737cb"
+          alt="LOGO O SANSI"
+          className={styles.logo}
+        />
         <h1 className={styles.title}>O! SanSi</h1>
       </header>
 

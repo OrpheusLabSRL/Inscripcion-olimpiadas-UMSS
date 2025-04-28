@@ -3,7 +3,7 @@
 
 :root {
   /*-------------------Paleta de Colores--------------------*/
-  --primary-color: #2563EB;
+  --primary-color: #2563eb;
   --secondary-color: #4f959d;
   --tertiary-color: #98d2c0;
   --quaternary-color: #f6f8d5;
@@ -25,8 +25,8 @@
   --pS-size: 12px; /* Texto de ayuda */
 
   --label: 16px;
-  --error-size: 14px; 
-  --principal-text: 60px; 
+  --error-size: 14px;
+  --principal-text: 60px;
   --background: #f8fafc;
 }
 
@@ -50,16 +50,16 @@ body {
   grid-template-columns: 90px auto;
   transition: all 0.3s ease;
   flex: 1;
-  min-height: calc(100vh - 29px); 
+  min-height: calc(100vh - 29px);
 }
 
 .main.active {
-  grid-template-columns: 260px auto;
+  grid-template-columns: 220px auto;
 }
 
 .content-area {
   grid-column-start: 2;
   width: 100%;
   overflow-x: hidden;
-  padding-bottom: 29px;
+  /*padding-bottom: 29px;*/
 }

@@ -32,58 +32,58 @@ class AreaController extends Controller
 
     // Obtener estructura completa del programa (área + categoría + grados) desde la nueva tabla pivote
     public function getProgramaCompleto()
-{
-    $programa = [];
+    {
+        $programa = [];
 
-    $areas = Area::where('estadoArea', true)
-        ->with(['categorias' => function ($query) {
-            $query->where('estadoCategoria', true)
-                ->with(['grados' => function ($q) {
-                    $q->where('estadoGrado', true);
-                }]);
-        }])->get();
+        $areas = Area::where('estadoArea', true)
+            ->with(['categorias' => function ($query) {
+                $query->where('estadoCategoria', true)
+                    ->with(['grados' => function ($q) {
+                        $q->where('estadoGrado', true);
+                    }]);
+            }])->get();
 
-    foreach ($areas as $area) {
-        foreach ($area->categorias as $categoria) {
-            $grados = $categoria->grados;
+        foreach ($areas as $area) {
+            foreach ($area->categorias as $categoria) {
+                $grados = $categoria->grados;
 
-            if ($grados->count() > 0) {
-                // Ordenamos grados por número
-                $gradosOrdenados = $grados->sortBy('numeroGrado')->values();
+                if ($grados->count() > 0) {
+                    // Ordenamos grados por número
+                    $gradosOrdenados = $grados->sortBy('numeroGrado')->values();
 
-                // Tomamos primer y último grado
-                $primero = $gradosOrdenados->first();
-                $ultimo = $gradosOrdenados->last();
+                    // Tomamos primer y último grado
+                    $primero = $gradosOrdenados->first();
+                    $ultimo = $gradosOrdenados->last();
 
-                // Verificamos si todos tienen el mismo nivel (Primaria, Secundaria)
-                $mismoNivel = $gradosOrdenados->every(fn($g) => $g->nivel === $primero->nivel);
+                    // Verificamos si todos tienen el mismo nivel (Primaria, Secundaria)
+                    $mismoNivel = $gradosOrdenados->every(fn($g) => $g->nivel === $primero->nivel);
 
-                // Construimos la cadena de grados
-                if ($gradosOrdenados->count() === 1) {
-                    $gradoFormateado = $this->formatearGrado($primero->numeroGrado, $primero->nivel);
-                } elseif ($mismoNivel) {
-                    $gradoFormateado = "{$primero->numeroGrado}° a {$ultimo->numeroGrado}° {$primero->nivel}";
-                } else {
-                    // Si hay niveles distintos (raro), los listamos separados
-                    $gradoFormateado = $gradosOrdenados->map(function ($g) {
-                        return $this->formatearGrado($g->numeroGrado, $g->nivel);
-                    })->implode(' / ');
+                    // Construimos la cadena de grados
+                    if ($gradosOrdenados->count() === 1) {
+                        $gradoFormateado = $this->formatearGrado($primero->numeroGrado, $primero->nivel);
+                    } elseif ($mismoNivel) {
+                        $gradoFormateado = "{$primero->numeroGrado}° a {$ultimo->numeroGrado}° {$primero->nivel}";
+                    } else {
+                        // Si hay niveles distintos (raro), los listamos separados
+                        $gradoFormateado = $gradosOrdenados->map(function ($g) {
+                            return $this->formatearGrado($g->numeroGrado, $g->nivel);
+                        })->implode(' / ');
+                    }
+
+                    // Agregamos al programa
+                    $programa[] = [
+                        'area' => $area->nombreArea,
+                        'nivel' => $categoria->nombreCategoria,
+                        'grados' => $gradoFormateado,
+                        'area_id' => $area->idArea,
+                        'categoria_id' => $categoria->idCategoria,
+                    ];
                 }
-
-                // Agregamos al programa
-                $programa[] = [
-                    'area' => $area->nombreArea,
-                    'nivel' => $categoria->nombreCategoria,
-                    'grados' => $gradoFormateado,
-                    'area_id' => $area->idArea,
-                    'categoria_id' => $categoria->idCategoria,
-                ];
             }
         }
-    }
 
-    return response()->json($programa);
-}
+        return response()->json($programa);
+    }
 
     // Formato visual del grado
     private function formatearGrado($numero, $nivel)

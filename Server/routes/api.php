@@ -14,6 +14,7 @@ use App\Http\Controllers\OlimpistaController;
 use App\Http\Controllers\TutorController;
 use App\Http\Controllers\CategoriaGradoController;
 use App\Http\Controllers\OlimpiadaAreaCategoriaController;
+use App\Http\Controllers\AuthController;
 
 // Ruta protegida para obtener el usuario autenticado
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -40,6 +41,9 @@ Route::post('/contacto', [InformacionContactoController::class, 'store']);
 // Rutas para Olimpiadas
 Route::get('/viewOlimpiadas', [OlimpiadaController::class, 'mostrarOlimpiada']);
 Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::delete('/olimpiada-area-categoria/eliminar-por-olimpiada/{idOlimpiada}', [OlimpiadaAreaCategoriaController::class, 'eliminarPorOlimpiada']);
+Route::put('/editarOlimpiadas/{id}/estado', [OlimpiadaController::class, 'cambiarEstado']);
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);
@@ -55,6 +59,8 @@ Route::get('/viewGrados/{id}', [GradoController::class, 'show']);
 
 // Inscripción de estudiante a olimpiada
 Route::post('/newInscription', [InscripcionController::class, 'store']);
+Route::get('/obtenerInscripciones/olimpiadas', [InscripcionController::class, 'getInscripcionesConOlimpiadas']);
+
 
 // Relación Categoría - Grado
 Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
@@ -62,4 +68,4 @@ Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
 // Relación Categoría - Área - Olimpiada
 Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'index']);
 Route::post('/newAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'store']);
-Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);
+Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']); 

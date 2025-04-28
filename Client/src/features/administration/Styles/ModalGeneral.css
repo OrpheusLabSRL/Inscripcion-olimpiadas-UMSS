@@ -12,7 +12,7 @@
 }
 
 .modal-content {
-  background: white;
+  background: #ecefca;
   border-radius: 10px;
   padding: 2rem;
   width: 100%;
@@ -97,12 +97,12 @@
 }
 
 .cancel-button {
-  background: #f1f1f1;
-  color: #333;
+  background: #547792;
+  color: white;
 }
 
 .save-button {
-  background: #2563eb;
+  background: #213448;
   color: white;
 }
 
@@ -147,4 +147,23 @@
   padding-left: 1.2rem;
   font-size: 0.9rem;
   list-style: disc;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+  background-color: #d8d7bc;
+  border: 1px solid #aaa;
+  padding: 0.5rem;
+  border-radius: 5px;
+  outline: none;
+  width: 100%;
+  font-size: 1rem;
+  color: #333; /* opcional: texto oscuro para buen contraste */
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus {
+  border-color: #777; /* mejora al hacer focus */
 }

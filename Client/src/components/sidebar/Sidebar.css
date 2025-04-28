@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   height: 95vh;
-  background: #ffffff;
+  background: #ecefca;
   color: rgb(0, 0, 0);
   padding: 20px;
   transition: all 1s;
@@ -11,7 +11,7 @@
 }
 
 .sidebar.active {
-  left: 0;
+  left: 0px;
 }
 
 .close-btn {
@@ -27,7 +27,7 @@
 
 .toggle-btn {
   color: rgb(0, 0, 0);
-  background-color: #ffffff;
+  background-color: #ecefca;
   border: none;
   padding: 10px;
   cursor: pointer;
