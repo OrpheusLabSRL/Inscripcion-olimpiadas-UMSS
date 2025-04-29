@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import "./RegisterExcel.css";
 import Sidebar from "../../../components/sidebar/Sidebar";
@@ -45,34 +45,41 @@ const RegisterExcel = () => {
   const location = useLocation();
   const navigation = useNavigate();
 
+  // Función corregida para descargar la plantilla
+  const downloadTemplate = () => {
+    const link = document.createElement("a");
+    link.href = `${import.meta.env.BASE_URL}plantilla.xlsx`;
+    link.download = "Plantilla_Olimpistas.xlsx";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     setError("");
     setSuccess("");
+    setData([]);
     setValidationErrors([]);
     setIsLoading(true);
 
     try {
-      // 1. Validar tipo de archivo
       if (!file.name.match(/\.(xlsx|xls)$/i)) {
         throw new Error("Solo se permiten archivos Excel (.xlsx, .xls)");
       }
 
-      // 2. Leer archivo (empezando desde fila 2)
       const workbook = XLSX.read(await file.arrayBuffer());
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
-      // Convertir a JSON ignorando la primera fila (encabezados)
       const jsonData = XLSX.utils.sheet_to_json(worksheet, {
         header: 1,
-        range: 1, // Ignorar primera fila
+        range: 1,
         defval: "",
         blankrows: false,
       });
 
-      // Filtrar filas vacías
       const filteredData = jsonData.filter((row) =>
         row.some((cell) => cell !== "")
       );
@@ -83,7 +90,6 @@ const RegisterExcel = () => {
         );
       }
 
-      // Asegurar 22 columnas por fila
       const normalizedData = filteredData.map((row) => {
         const rowData = Array(22).fill("");
         row.forEach((cell, i) => i < 22 && (rowData[i] = cell));
@@ -98,7 +104,7 @@ const RegisterExcel = () => {
     } catch (err) {
       console.error("Error procesando archivo:", err);
       setError(err.message || "Error al procesar el archivo");
-      setData([]); // Limpiar datos en caso de error
+      setData([]);
     } finally {
       setIsLoading(false);
     }
@@ -143,7 +149,6 @@ const RegisterExcel = () => {
           text: successMsg,
           icon: "success",
         }).then(() => {
-          // Limpiar sessionStorage y redirigir
           sessionStorage.clear();
           navigation("/");
         });
@@ -181,12 +186,7 @@ const RegisterExcel = () => {
                   del archivo .xlsx, descargue la plantilla*
                 </p>
                 <button
-                  onClick={() => {
-                    const link = document.createElement("a");
-                    link.href = `${process.env.PUBLIC_URL}/plantilla.xlsx`;
-                    link.download = "Plantilla_Olimpistas.xlsx";
-                    link.click();
-                  }}
+                  onClick={downloadTemplate}
                   className="action-btn"
                 >
                   Descargar Plantilla
@@ -215,7 +215,6 @@ const RegisterExcel = () => {
             {error && <div className="error-message">{error}</div>}
             {success && <div className="success-message">{success}</div>}
 
-            {/* Tabla siempre visible */}
             <div className="data-section">
               <div className="table-container">
                 <table className="data-table">
