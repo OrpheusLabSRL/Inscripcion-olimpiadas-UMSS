@@ -51,7 +51,6 @@ const RegisterExcel = () => {
 
     setError("");
     setSuccess("");
-    setData([]);
     setValidationErrors([]);
     setIsLoading(true);
 
@@ -99,6 +98,7 @@ const RegisterExcel = () => {
     } catch (err) {
       console.error("Error procesando archivo:", err);
       setError(err.message || "Error al procesar el archivo");
+      setData([]); // Limpiar datos en caso de error
     } finally {
       setIsLoading(false);
     }
@@ -215,29 +215,38 @@ const RegisterExcel = () => {
             {error && <div className="error-message">{error}</div>}
             {success && <div className="success-message">{success}</div>}
 
-            {data.length > 0 && (
-              <div className="data-section">
-                <div className="table-container">
-                  <table className="data-table">
-                    <thead>
-                      <tr>
-                        {headers.map((header, i) => (
-                          <th key={i}>{header}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data.map((row, rowIndex) => (
+            {/* Tabla siempre visible */}
+            <div className="data-section">
+              <div className="table-container">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      {headers.map((header, i) => (
+                        <th key={i}>{header}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.length > 0 ? (
+                      data.map((row, rowIndex) => (
                         <tr key={rowIndex}>
                           {row.map((cell, cellIndex) => (
                             <td key={cellIndex}>{cell || "-"}</td>
                           ))}
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={headers.length} className="empty-table-message">
+                          No hay datos cargados. Seleccione un archivo Excel para visualizar los datos.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
 
+              {data.length > 0 && (
                 <div className="action-buttons">
                   <button
                     className="action-btn register-btn"
@@ -247,8 +256,8 @@ const RegisterExcel = () => {
                     {isLoading ? "Registrando..." : "Registrar Olimpistas"}
                   </button>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

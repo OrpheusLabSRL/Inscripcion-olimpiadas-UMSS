@@ -288,6 +288,36 @@
   border-radius: 4px;
   margin: 15px 0;
 }
+.empty-table-message {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.data-table th, .data-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.data-table th {
+  background-color: #f2f2f2;
+  position: sticky;
+  top: 0;
+}
+
+.table-container {
+  max-height: 500px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
 
 /* MEDIA QUERIES AJUSTADAS */
 @media (max-width: 1024px) {
