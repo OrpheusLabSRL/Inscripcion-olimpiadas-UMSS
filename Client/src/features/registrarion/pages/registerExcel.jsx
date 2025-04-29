@@ -4,7 +4,7 @@ import './RegisterExcel.css';
 
 const RegisterExcel = () => {
   const [data, setData] = useState([]);
-  const [headers, setHeaders] = useState([
+  const [headers] = useState([
     "CARNET DE IDENTIDAD (OLIMPISTA)",
     "NOMBRE(S) (OLIMPISTA)",
     "APELLIDO(S) (OLIMPISTA)",
@@ -35,38 +35,21 @@ const RegisterExcel = () => {
   const [cellErrors, setCellErrors] = useState({});
   const [tutorAdjustments, setTutorAdjustments] = useState([]);
 
-  // FUNCIÓN CORREGIDA PARA DESCARGAR PLANTILLA
+  // FUNCIÓN DE DESCARGA CORREGIDA (usa importación directa)
   const downloadTemplate = () => {
     const link = document.createElement('a');
-    link.href = process.env.PUBLIC_URL + '/plantilla.xlsx';
+    link.href = `${import.meta.env.BASE_URL}plantilla.xlsx`;
     link.download = 'Plantilla_Olimpistas.xlsx';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const validateCarnet = (value) => {
-    if (!value) return false;
-    const strValue = String(value).trim();
-    return /^[a-zA-Z0-9]{6,12}$/.test(strValue);
-  };
-
-  const validateEmail = (email) => {
-    if (!email) return false;
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
-
-  const validateDate = (date) => {
-    if (!date) return false;
-    const parsedDate = new Date(date);
-    return !isNaN(parsedDate.getTime());
-  };
-
-  const validatePhone = (phone) => {
-    if (!phone) return false;
-    return /^\d{8}$/.test(String(phone).trim());
-  };
-
+  // VALIDACIONES (se mantienen igual)
+  const validateCarnet = (value) => /^[a-zA-Z0-9]{6,12}$/.test(String(value).trim());
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateDate = (date) => !isNaN(new Date(date).getTime());
+  const validatePhone = (phone) => /^\d{8}$/.test(String(phone).trim());
   const validateOptionalProfessorFields = (row) => {
     const professorFields = row.slice(17, 22);
     const allEmpty = professorFields.every(field => !field || String(field).trim() === '');
@@ -78,13 +61,13 @@ const RegisterExcel = () => {
     if (!value) return '';
     const normalized = String(value).trim().toLowerCase();
     const parentVariations = ['mama', 'mamá', 'papa', 'papá', 'madre', 'padre'];
-    if (parentVariations.some(v => normalized.includes(v))) return 'MAMÁ/PAPÁ';
     const tutorVariations = ['tutor', 'profesor', 'representante', 'legal'];
+    if (parentVariations.some(v => normalized.includes(v))) return 'MAMÁ/PAPÁ';
     if (tutorVariations.some(v => normalized.includes(v))) return 'TUTOR LEGAL';
     return value.toUpperCase();
   };
 
-  // FUNCIÓN CORREGIDA PARA LEER DESDE FILA 2
+  // CARGA DE ARCHIVO (se mantiene igual)
   const handleFileUpload = (e) => {
     setError('');
     setSuccess('');
@@ -106,15 +89,13 @@ const RegisterExcel = () => {
 
     reader.onload = (e) => {
       try {
-        const arrayBuffer = e.target.result;
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-
-        // LEER DESDE FILA 2 (range: 1)
+        const workbook = XLSX.read(e.target.result, { type: 'array' });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        
+        // Leer desde fila 2 (range: 1)
         const jsonData = XLSX.utils.sheet_to_json(worksheet, {
           header: 1,
-          range: 1, // Esta línea hace que lea desde la fila 2
+          range: 1,
           defval: null
         });
 
@@ -122,53 +103,122 @@ const RegisterExcel = () => {
           row.some(cell => cell !== null && cell !== '')
         );
 
-        if (filteredData.length > 0) {
-          const errors = [];
-          const newCellErrors = {};
-          const tutorAdjustments = [];
+        if (filteredData.length === 0) {
+          setError('El archivo no contiene datos válidos');
+          return;
+        }
 
-          const cleanedData = filteredData.map((row, rowIndex) => {
-            if (row.length > 16) {
-              const originalValue = row[16] || '';
-              const normalizedValue = normalizeTutorType(originalValue);
-              
-              if (normalizedValue !== originalValue) {
-                tutorAdjustments.push({
-                  row: rowIndex + 2,
-                  original: originalValue,
-                  normalized: normalizedValue
-                });
-                row[16] = normalizedValue;
-              }
-              
-              if (!['MAMÁ/PAPÁ', 'TUTOR LEGAL'].includes(normalizedValue)) {
-                errors.push({
-                  type: 'invalid_tutor',
-                  row: rowIndex + 2,
-                  column: 17,
-                  header: headers[16],
-                  message: `Fila ${rowIndex + 2}, Columna 17 (${headers[16]}): Valor inválido (debe ser MAMÁ/PAPÁ o TUTOR LEGAL)`
-                });
-                newCellErrors[`${rowIndex}-16`] = true;
-              }
-            }
+        const errors = [];
+        const newCellErrors = {};
+        const tutorAdjustments = [];
 
-            return row.map(cell => cell === null ? '' : String(cell).trim());
-          });
+        // Validar número de columnas
+        filteredData.forEach((row, rowIndex) => {
+          if (row.length !== headers.length) {
+            errors.push({
+              type: 'columns',
+              row: rowIndex + 2,
+              expected: headers.length,
+              actual: row.length,
+              message: `Fila ${rowIndex + 2}: Tiene ${row.length} columnas (se esperaban ${headers.length})`
+            });
+            return;
+          }
 
           // Resto de validaciones...
-          setTutorAdjustments(tutorAdjustments);
-          setData(cleanedData);
-          setCellErrors(newCellErrors);
-
-          if (errors.length > 0) {
-            setValidationErrors(errors);
-            setError('Se encontraron errores en el archivo');
-          } else {
-            setSuccess('Archivo procesado correctamente');
+          if (row.length > 16) {
+            const originalValue = row[16] || '';
+            const normalizedValue = normalizeTutorType(originalValue);
+            
+            if (normalizedValue !== originalValue) {
+              tutorAdjustments.push({
+                row: rowIndex + 2,
+                original: originalValue,
+                normalized: normalizedValue
+              });
+              row[16] = normalizedValue;
+            }
+            
+            if (!['MAMÁ/PAPÁ', 'TUTOR LEGAL'].includes(normalizedValue)) {
+              errors.push({
+                type: 'invalid_tutor',
+                row: rowIndex + 2,
+                column: 17,
+                header: headers[16],
+                message: `Fila ${rowIndex + 2}, Columna 17 (${headers[16]}): Valor inválido (debe ser MAMÁ/PAPÁ o TUTOR LEGAL)`
+              });
+              newCellErrors[`${rowIndex}-16`] = true;
+            }
           }
+
+          // Validar campos
+          row.forEach((cell, cellIndex) => {
+            const cellValue = cell;
+            const header = headers[cellIndex];
+            
+            if (cellIndex < 17 && !cellValue) {
+              errors.push({
+                type: 'empty',
+                row: rowIndex + 2,
+                column: cellIndex + 1,
+                header: header,
+                message: `Fila ${rowIndex + 2}, Columna ${cellIndex + 1} (${header}): Falta información`
+              });
+              newCellErrors[`${rowIndex}-${cellIndex}`] = true;
+            }
+
+            if (cellValue) {
+              let isValid = true;
+              let errorType = '';
+              
+              switch (cellIndex) {
+                case 0: case 11: case 17:
+                  isValid = validateCarnet(cellValue);
+                  errorType = 'invalid_carnet';
+                  break;
+                case 3:
+                  isValid = validateDate(cellValue);
+                  errorType = 'invalid_date';
+                  break;
+                case 4: case 14: case 20:
+                  isValid = validateEmail(cellValue);
+                  errorType = 'invalid_email';
+                  break;
+                case 15: case 21:
+                  isValid = validatePhone(cellValue);
+                  errorType = 'invalid_phone';
+                  break;
+                default:
+                  break;
+              }
+
+              if (!isValid) {
+                errors.push({
+                  type: errorType,
+                  row: rowIndex + 2,
+                  column: cellIndex + 1,
+                  header: header,
+                  message: `Fila ${rowIndex + 2}, Columna ${cellIndex + 1} (${header}): ${getErrorMessage(errorType)}`
+                });
+                newCellErrors[`${rowIndex}-${cellIndex}`] = true;
+              }
+            }
+          });
+        });
+
+        const cleanedData = filteredData.map(row => 
+          row.map(cell => cell === null ? '' : String(cell).trim())
+        );
+
+        setTutorAdjustments(tutorAdjustments);
+        setData(cleanedData);
+        setCellErrors(newCellErrors);
+        setValidationErrors(errors);
+
+        if (errors.length > 0) {
+          setError('Se encontraron errores en el archivo');
         } else {
-          setError('El archivo no contiene datos válidos');
+          setSuccess('Archivo procesado correctamente');
         }
       } catch (err) {
         setError('Error al procesar el archivo');
@@ -178,6 +228,7 @@ const RegisterExcel = () => {
     reader.readAsArrayBuffer(file);
   };
 
+  // FUNCIONES AUXILIARES (se mantienen igual)
   const getErrorMessage = (errorType) => {
     switch (errorType) {
       case 'invalid_carnet': return 'Carnet inválido (6-12 caracteres alfanuméricos)';
@@ -185,6 +236,7 @@ const RegisterExcel = () => {
       case 'invalid_email': return 'Correo electrónico inválido';
       case 'invalid_phone': return 'Celular inválido (8 dígitos exactos)';
       case 'invalid_tutor': return 'Valor inválido (MAMÁ/PAPÁ o TUTOR LEGAL)';
+      case 'columns': return 'Número incorrecto de columnas';
       default: return 'Error de validación';
     }
   };
