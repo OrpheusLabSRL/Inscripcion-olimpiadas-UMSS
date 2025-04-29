@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import "./RegisterExcel.css";
+import Sidebar from "../../../components/sidebar/Sidebar";
+import { useLocation } from "react-router-dom";
 
 const RegisterExcel = () => {
   const [data, setData] = useState([]);
@@ -34,8 +36,9 @@ const RegisterExcel = () => {
   const [validationErrors, setValidationErrors] = useState([]);
   const [cellErrors, setCellErrors] = useState({});
   const [tutorAdjustments, setTutorAdjustments] = useState([]);
+  const [isOpen, setIsOpen] = useState(true);
+  const location = useLocation();
 
-  // FUNCIÓN DE DESCARGA CORREGIDA (usa importación directa)
   const downloadTemplate = () => {
     const link = document.createElement("a");
     link.href = `${import.meta.env.BASE_URL}plantilla.xlsx`;
@@ -45,7 +48,6 @@ const RegisterExcel = () => {
     document.body.removeChild(link);
   };
 
-  // VALIDACIONES (se mantienen igual)
   const validateCarnet = (value) =>
     /^[a-zA-Z0-9]{6,12}$/.test(String(value).trim());
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -74,7 +76,6 @@ const RegisterExcel = () => {
     return value.toUpperCase();
   };
 
-  // CARGA DE ARCHIVO (se mantiene igual)
   const handleFileUpload = (e) => {
     setError("");
     setSuccess("");
@@ -99,7 +100,6 @@ const RegisterExcel = () => {
         const workbook = XLSX.read(e.target.result, { type: "array" });
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
-        // Leer desde fila 2 (range: 1)
         const jsonData = XLSX.utils.sheet_to_json(worksheet, {
           header: 1,
           range: 1,
@@ -119,7 +119,6 @@ const RegisterExcel = () => {
         const newCellErrors = {};
         const tutorAdjustments = [];
 
-        // Validar número de columnas
         filteredData.forEach((row, rowIndex) => {
           if (row.length !== headers.length) {
             errors.push({
@@ -134,7 +133,6 @@ const RegisterExcel = () => {
             return;
           }
 
-          // Resto de validaciones...
           if (row.length > 16) {
             const originalValue = row[16] || "";
             const normalizedValue = normalizeTutorType(originalValue);
@@ -162,7 +160,6 @@ const RegisterExcel = () => {
             }
           }
 
-          // Validar campos
           row.forEach((cell, cellIndex) => {
             const cellValue = cell;
             const header = headers[cellIndex];
@@ -248,7 +245,6 @@ const RegisterExcel = () => {
     reader.readAsArrayBuffer(file);
   };
 
-  // FUNCIONES AUXILIARES (se mantienen igual)
   const getErrorMessage = (errorType) => {
     switch (errorType) {
       case "invalid_carnet":
@@ -283,103 +279,113 @@ const RegisterExcel = () => {
   };
 
   return (
-    <div className="app-background">
-      <div className="excel-container">
-        <div className="excel-header">
-          <h1>Inscribir Olimpistas Mediante Archivo Excel</h1>
-          <div className="download-section">
-            <p className="instructions">
-              *Para evitar inconvenientes con el formato y la información del
-              archivo .xlsx, descargue la plantilla*
-            </p>
-            <button onClick={downloadTemplate} className="action-btn">
-              Descargar Plantilla
-            </button>
-          </div>
-        </div>
+    <div className="app-container">
+      <div className={isOpen ? "main active" : "main"}>
+        <Sidebar
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          admin={!location.pathname.startsWith("/admin") ? false : true}
+        />
 
-        <div className="upload-section">
-          <h2>Sube tu archivo en formato .xlsx</h2>
-          <div className="file-input-container">
-            <input
-              type="file"
-              accept=".xlsx,.xls"
-              onChange={handleFileUpload}
-              id="excel-upload"
-              className="file-input"
-            />
-            <label htmlFor="excel-upload" className="action-btn file-label">
-              Seleccionar Archivo
-            </label>
-          </div>
-        </div>
-
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
-
-        {tutorAdjustments.length > 0 && (
-          <div className="info-message">
-            <h3>Ajustes realizados en la columna TIPO DE TUTOR:</h3>
-            <ul>
-              {tutorAdjustments.map((adj, i) => (
-                <li key={i}>
-                  Fila {adj.row}: "{adj.original}" → "{adj.normalized}"
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {validationErrors.length > 0 && (
-          <div className="validation-errors">
-            <h3>Errores de validación:</h3>
-            <ul>
-              {validationErrors.map((err, i) => (
-                <li key={i}>{err.message}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <div className="data-section">
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  {headers.map((header, i) => (
-                    <th key={i}>
-                      {header}
-                      {isProfessorField(i) && (
-                        <span className="optional-field"> (Opcional)</span>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    {row.map((cell, cellIndex) => (
-                      <td
-                        key={cellIndex}
-                        className={getCellClass(rowIndex, cellIndex, cell)}
-                      >
-                        {cell || "-"}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {validationErrors.length === 0 && data.length > 0 && (
-            <div className="action-buttons">
-              <button className="action-btn register-btn">
-                Registrar Olimpistas
-              </button>
+        <div className="content-area">
+          <div className="excel-container">
+            <div className="excel-header">
+              <h1>Inscribir Olimpistas Mediante Archivo Excel</h1>
+              <div className="download-section">
+                <p className="instructions">
+                  *Para evitar inconvenientes con el formato y la información
+                  del archivo .xlsx, descargue la plantilla*
+                </p>
+                <button onClick={downloadTemplate} className="action-btn">
+                  Descargar Plantilla
+                </button>
+              </div>
             </div>
-          )}
+
+            <div className="upload-section">
+              <h2>Sube tu archivo en formato .xlsx</h2>
+              <div className="file-input-container">
+                <input
+                  type="file"
+                  accept=".xlsx,.xls"
+                  onChange={handleFileUpload}
+                  id="excel-upload"
+                  className="file-input"
+                />
+                <label htmlFor="excel-upload" className="action-btn file-label">
+                  Seleccionar Archivo
+                </label>
+              </div>
+            </div>
+
+            {error && <div className="error-message">{error}</div>}
+            {success && <div className="success-message">{success}</div>}
+
+            {tutorAdjustments.length > 0 && (
+              <div className="info-message">
+                <h3>Ajustes realizados en la columna TIPO DE TUTOR:</h3>
+                <ul>
+                  {tutorAdjustments.map((adj, i) => (
+                    <li key={i}>
+                      Fila {adj.row}: "{adj.original}" → "{adj.normalized}"
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {validationErrors.length > 0 && (
+              <div className="validation-errors">
+                <h3>Errores de validación:</h3>
+                <ul>
+                  {validationErrors.map((err, i) => (
+                    <li key={i}>{err.message}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="data-section">
+              <div className="table-container">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      {headers.map((header, i) => (
+                        <th key={i}>
+                          {header}
+                          {isProfessorField(i) && (
+                            <span className="optional-field"> (Opcional)</span>
+                          )}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((row, rowIndex) => (
+                      <tr key={rowIndex}>
+                        {row.map((cell, cellIndex) => (
+                          <td
+                            key={cellIndex}
+                            className={getCellClass(rowIndex, cellIndex, cell)}
+                          >
+                            {cell || "-"}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {validationErrors.length === 0 && data.length > 0 && (
+                <div className="action-buttons">
+                  <button className="action-btn register-btn">
+                    Registrar Olimpistas
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

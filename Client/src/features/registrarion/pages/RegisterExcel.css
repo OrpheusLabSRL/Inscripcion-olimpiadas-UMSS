@@ -1,23 +1,31 @@
+/* registerexcel.css - Versión ajustada para evitar conflicto con sidebar */
+
+/* Contenedor principal - Ajustes clave: */
 .app-background {
   background-color: #94b4c1;
   min-height: 100vh;
   padding: 20px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start; /* Cambiado de center a flex-start */
+  align-items: flex-start; /* Cambiado de center a flex-start */
+  margin-left: 250px; /* Asegura espacio para UN sidebar */
+  width: calc(100% - 250px); /* Calcula el ancho restante */
 }
 
+/* Contenedor del formulario - Ajustes: */
 .excel-container {
   background-color: white;
-  max-width: 1200px;
-  width: 100%;
-  margin: 20px;
+  width: 90%; /* Ocupa todo el espacio disponible */
+  max-width: 1200px; /* Máximo ancho pero flexible */
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  /* Se eliminó margin-left porque ya lo maneja .app-background */
+  overflow-x: auto; /* Scroll horizontal solo si es necesario */
 }
 
+/* ESTILOS EXISTENTES (conservan su formato original) */
 .excel-header {
   margin-bottom: 30px;
 }
@@ -230,9 +238,25 @@
   background-color: #1a2a38;
 }
 
+/* MEDIA QUERIES AJUSTADAS */
+@media (max-width: 1024px) {
+  .app-background {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+}
+
 @media (max-width: 768px) {
+  .app-background {
+    margin-left: 0;
+    width: 100%;
+    padding: 15px;
+    padding-top: 80px; /* Espacio para header móvil */
+  }
+
   .excel-container {
     padding: 15px;
+    margin: 0 auto; /* Centrado en móvil */
   }
 
   .excel-header h1 {
