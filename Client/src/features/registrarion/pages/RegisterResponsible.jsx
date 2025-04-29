@@ -1,4 +1,3 @@
-//css
 import "../Styles/RegisterResponsible.css";
 
 //components
@@ -131,7 +130,8 @@ export const RegisterResponsible = () => {
 
   const onSubmit = async (data) => {
     try {
-      navigation("/register/olympian", {
+      // Redirigir a la vista de Excel en lugar de a olympian
+      navigation("/register/excel", {
         state: { from: location.pathname },
         data,
       });

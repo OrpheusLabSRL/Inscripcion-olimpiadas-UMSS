@@ -16,13 +16,16 @@ import AdminLayout from "./layouts/AdminLayout";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterResponsible";
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
+import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
 
   const showSidebar =
-    location.pathname !== "/" && location.pathname !== "/register/tutor-form";
+    location.pathname !== "/" &&
+    location.pathname !== "/register/tutor-form" &&
+    location.pathname !== "/register/excel";
 
   const user = {
     role: "admin",
@@ -33,7 +36,8 @@ function App() {
       <div
         className={
           location.pathname === "/" ||
-          location.pathname == "/register/tutor-form"
+          location.pathname === "/register/tutor-form" ||
+          location.pathname === "/register/excel"
             ? ""
             : isOpen
             ? "main active"
@@ -56,6 +60,7 @@ function App() {
             <Route path="register/tutor-legal" element={<RegisterTutor />} />
             <Route path="listRegistered" element={<ListRegistered />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
+            <Route path="/register/excel" element={<RegisterExcel />} />
             <Route
               path="/register/responsible"
               element={<RegisterResponsible />}
