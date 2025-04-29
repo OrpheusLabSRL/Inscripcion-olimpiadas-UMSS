@@ -18,4 +18,10 @@ class BoletaPago extends Model
         'fechaEmision',
         'montoTotal',
     ];
+
+    public function inscripciones()
+{
+    return $this->hasMany(Inscripcion::class, 'codigoBoleta', 'codigoBoleta');
+}
+
 }

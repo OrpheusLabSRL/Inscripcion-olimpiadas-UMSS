@@ -14,7 +14,7 @@ use App\Http\Controllers\OlimpistaController;
 use App\Http\Controllers\TutorController;
 use App\Http\Controllers\CategoriaGradoController;
 use App\Http\Controllers\OlimpiadaAreaCategoriaController;
-
+use App\Http\Controllers\BoletaPagoController;
 // Ruta protegida para obtener el usuario autenticado
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -63,3 +63,5 @@ Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
 Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'index']);
 Route::post('/newAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'store']);
 Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);
+
+Route::get('/boletas/generar/{idTutor}', [BoletaPagoController::class, 'generarBoleta']);
