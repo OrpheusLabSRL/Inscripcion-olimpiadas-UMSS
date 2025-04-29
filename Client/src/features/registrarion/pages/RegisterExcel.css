@@ -101,6 +101,23 @@
   margin: 20px 0;
 }
 
+.info-message {
+  background-color: #e7f5ff;
+  color: #1864ab;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.info-message h3 {
+  margin-top: 0;
+}
+
+.info-message ul {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+
 .validation-errors {
   background-color: #fff3cd;
   color: #856404;
@@ -162,6 +179,35 @@
   background-color: #fff3cd;
 }
 
+.error-cell {
+  background-color: #f8d7da;
+  color: #721c24;
+  font-weight: bold;
+}
+
+.optional-field {
+  font-size: 0.8em;
+  color: #6c757d;
+  font-weight: normal;
+  margin-left: 5px;
+}
+
+.optional-empty {
+  background-color: #e9ecef;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.optional-filled {
+  background-color: #e6f7ff;
+}
+
+.optional-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  font-weight: bold;
+}
+
 .action-buttons {
   display: flex;
   justify-content: flex-end;
@@ -206,5 +252,11 @@
   
   .data-table th, .data-table td {
     padding: 8px;
+  }
+
+  .optional-field {
+    display: block;
+    margin-left: 0;
+    margin-top: 3px;
   }
 }

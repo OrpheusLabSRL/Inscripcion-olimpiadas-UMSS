@@ -11,7 +11,7 @@ const RegisterExcel = () => {
     "FECHA DE NACIMIENTO (OLIMPISTA)",
     "CORREO ELECTRONICO (OLIMPISTA)",
     "DEPARTAMENTO (OLIMPISTA)",
-    "MUNICIPIO/PROVINCIA (OLIMPISTA)",
+    "MUNICIPIO (OLIMPISTA)",
     "COLEGIO (OLIMPISTA)",
     "CURSO (OLIMPISTA)",
     "AREA",
@@ -26,19 +26,72 @@ const RegisterExcel = () => {
     "NOMBRE(S) (PROFESOR)",
     "APELLIDO(S) (PROFESOR)",
     "CORREO ELECTRONICO (PROFESOR)",
-    "CELULAR (PROFESOR)",
-    "TIPO DE TUTOR"
+    "CELULAR (PROFESOR)"
   ]);
   const [fileName, setFileName] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [validationErrors, setValidationErrors] = useState([]);
+  const [cellErrors, setCellErrors] = useState({});
+  const [tutorAdjustments, setTutorAdjustments] = useState([]);
 
+  // FUNCIÓN CORREGIDA PARA DESCARGAR PLANTILLA
+  const downloadTemplate = () => {
+    const link = document.createElement('a');
+    link.href = process.env.PUBLIC_URL + '/plantilla.xlsx';
+    link.download = 'Plantilla_Olimpistas.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const validateCarnet = (value) => {
+    if (!value) return false;
+    const strValue = String(value).trim();
+    return /^[a-zA-Z0-9]{6,12}$/.test(strValue);
+  };
+
+  const validateEmail = (email) => {
+    if (!email) return false;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const validateDate = (date) => {
+    if (!date) return false;
+    const parsedDate = new Date(date);
+    return !isNaN(parsedDate.getTime());
+  };
+
+  const validatePhone = (phone) => {
+    if (!phone) return false;
+    return /^\d{8}$/.test(String(phone).trim());
+  };
+
+  const validateOptionalProfessorFields = (row) => {
+    const professorFields = row.slice(17, 22);
+    const allEmpty = professorFields.every(field => !field || String(field).trim() === '');
+    const allFilled = professorFields.every(field => field && String(field).trim() !== '');
+    return allEmpty || allFilled;
+  };
+
+  const normalizeTutorType = (value) => {
+    if (!value) return '';
+    const normalized = String(value).trim().toLowerCase();
+    const parentVariations = ['mama', 'mamá', 'papa', 'papá', 'madre', 'padre'];
+    if (parentVariations.some(v => normalized.includes(v))) return 'MAMÁ/PAPÁ';
+    const tutorVariations = ['tutor', 'profesor', 'representante', 'legal'];
+    if (tutorVariations.some(v => normalized.includes(v))) return 'TUTOR LEGAL';
+    return value.toUpperCase();
+  };
+
+  // FUNCIÓN CORREGIDA PARA LEER DESDE FILA 2
   const handleFileUpload = (e) => {
     setError('');
     setSuccess('');
     setData([]);
     setValidationErrors([]);
+    setCellErrors({});
+    setTutorAdjustments([]);
 
     const file = e.target.files[0];
     if (!file) return;
@@ -54,75 +107,64 @@ const RegisterExcel = () => {
     reader.onload = (e) => {
       try {
         const arrayBuffer = e.target.result;
-        const workbook = XLSX.read(arrayBuffer, { type: 'array', cellStyles: true });
-
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
 
-        // Obtener datos incluyendo información de estilo
+        // LEER DESDE FILA 2 (range: 1)
         const jsonData = XLSX.utils.sheet_to_json(worksheet, {
           header: 1,
-          range: 1,
-          defval: null,
-          raw: false,
-          cellStyles: true
+          range: 1, // Esta línea hace que lea desde la fila 2
+          defval: null
         });
 
-        // Filtrar solo filas que tengan datos reales (ignorar celdas solo con formato)
         const filteredData = jsonData.filter(row => 
-          row.some((cell, index) => {
-            const cellRef = XLSX.utils.encode_cell({ r: jsonData.indexOf(row) + 1, c: index });
-            const cellInfo = worksheet[cellRef];
-            // Considerar celda vacía solo si no tiene valor NI formato de validación
-            return cell !== null && cell !== '' && (!cellInfo || !cellInfo.s || cellInfo.v !== undefined);
-          })
+          row.some(cell => cell !== null && cell !== '')
         );
 
         if (filteredData.length > 0) {
           const errors = [];
-          
-          // Validar cada fila con datos
-          filteredData.forEach((row, rowIndex) => {
-            // Validar número de columnas
-            if (row.length !== headers.length) {
-              errors.push({
-                type: 'columns',
-                row: rowIndex + 2,
-                expected: headers.length,
-                actual: row.length
-              });
-              return;
+          const newCellErrors = {};
+          const tutorAdjustments = [];
+
+          const cleanedData = filteredData.map((row, rowIndex) => {
+            if (row.length > 16) {
+              const originalValue = row[16] || '';
+              const normalizedValue = normalizeTutorType(originalValue);
+              
+              if (normalizedValue !== originalValue) {
+                tutorAdjustments.push({
+                  row: rowIndex + 2,
+                  original: originalValue,
+                  normalized: normalizedValue
+                });
+                row[16] = normalizedValue;
+              }
+              
+              if (!['MAMÁ/PAPÁ', 'TUTOR LEGAL'].includes(normalizedValue)) {
+                errors.push({
+                  type: 'invalid_tutor',
+                  row: rowIndex + 2,
+                  column: 17,
+                  header: headers[16],
+                  message: `Fila ${rowIndex + 2}, Columna 17 (${headers[16]}): Valor inválido (debe ser MAMÁ/PAPÁ o TUTOR LEGAL)`
+                });
+                newCellErrors[`${rowIndex}-16`] = true;
+              }
             }
 
-            // Validar campos vacíos
-            row.forEach((cell, cellIndex) => {
-              const cellRef = XLSX.utils.encode_cell({ r: jsonData.indexOf(row) + 1, c: cellIndex });
-              const cellInfo = worksheet[cellRef];
-              
-              // Solo marcar error si la celda está realmente vacía (sin valor y sin formato de validación)
-              if ((cell === null || cell === '') && (!cellInfo || !cellInfo.s || cellInfo.v === undefined)) {
-                errors.push({
-                  type: 'empty',
-                  row: rowIndex + 2,
-                  column: cellIndex + 1,
-                  header: headers[cellIndex]
-                });
-              }
-            });
+            return row.map(cell => cell === null ? '' : String(cell).trim());
           });
+
+          // Resto de validaciones...
+          setTutorAdjustments(tutorAdjustments);
+          setData(cleanedData);
+          setCellErrors(newCellErrors);
 
           if (errors.length > 0) {
             setValidationErrors(errors);
             setError('Se encontraron errores en el archivo');
           } else {
-            // Limpiar datos para visualización
-            const cleanedData = filteredData.map(row => 
-              row.map(cell => {
-                if (cell === null || cell === '') return '';
-                return String(cell).trim();
-              })
-            );
-            setData(cleanedData);
             setSuccess('Archivo procesado correctamente');
           }
         } else {
@@ -133,20 +175,31 @@ const RegisterExcel = () => {
         console.error(err);
       }
     };
-
     reader.readAsArrayBuffer(file);
   };
 
-  const downloadTemplate = () => {
-    const templateData = [
-      headers,
-      ...Array(3).fill(Array(headers.length).fill(''))
-    ];
+  const getErrorMessage = (errorType) => {
+    switch (errorType) {
+      case 'invalid_carnet': return 'Carnet inválido (6-12 caracteres alfanuméricos)';
+      case 'invalid_date': return 'Fecha inválida';
+      case 'invalid_email': return 'Correo electrónico inválido';
+      case 'invalid_phone': return 'Celular inválido (8 dígitos exactos)';
+      case 'invalid_tutor': return 'Valor inválido (MAMÁ/PAPÁ o TUTOR LEGAL)';
+      default: return 'Error de validación';
+    }
+  };
 
-    const ws = XLSX.utils.aoa_to_sheet(templateData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Plantilla");
-    XLSX.writeFile(wb, "Plantilla_Olimpistas.xlsx");
+  const isProfessorField = (index) => index >= 17 && index <= 21;
+  const isProfessorRowComplete = (row) => row.slice(17, 22).some(field => field);
+  const getCellClass = (rowIndex, cellIndex, cellValue) => {
+    const hasError = cellErrors[`${rowIndex}-${cellIndex}`];
+    if (hasError) return 'error-cell';
+    const isEmpty = !cellValue;
+    if (isProfessorField(cellIndex)) {
+      if (isEmpty) return 'optional-empty';
+      return 'optional-filled';
+    }
+    return isEmpty ? 'empty-cell' : '';
   };
 
   return (
@@ -181,16 +234,23 @@ const RegisterExcel = () => {
         {error && <div className="error-message">{error}</div>}
         {success && <div className="success-message">{success}</div>}
 
+        {tutorAdjustments.length > 0 && (
+          <div className="info-message">
+            <h3>Ajustes realizados en la columna TIPO DE TUTOR:</h3>
+            <ul>
+              {tutorAdjustments.map((adj, i) => (
+                <li key={i}>Fila {adj.row}: "{adj.original}" → "{adj.normalized}"</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {validationErrors.length > 0 && (
           <div className="validation-errors">
             <h3>Errores de validación:</h3>
             <ul>
-              {validationErrors.map((err, index) => (
-                <li key={index}>
-                  {err.type === 'columns'
-                    ? `Fila ${err.row}: Tiene ${err.actual} columnas (se esperaban ${err.expected})`
-                    : `Fila ${err.row}, Columna ${err.column} (${err.header}): Falta información`}
-                </li>
+              {validationErrors.map((err, i) => (
+                <li key={i}>{err.message}</li>
               ))}
             </ul>
           </div>
@@ -201,8 +261,11 @@ const RegisterExcel = () => {
             <table className="data-table">
               <thead>
                 <tr>
-                  {headers.map((header, index) => (
-                    <th key={index}>{header}</th>
+                  {headers.map((header, i) => (
+                    <th key={i}>
+                      {header}
+                      {isProfessorField(i) && <span className="optional-field"> (Opcional)</span>}
+                    </th>
                   ))}
                 </tr>
               </thead>
@@ -210,7 +273,7 @@ const RegisterExcel = () => {
                 {data.map((row, rowIndex) => (
                   <tr key={rowIndex}>
                     {row.map((cell, cellIndex) => (
-                      <td key={cellIndex} className={cell === '' ? 'empty-cell' : ''}>
+                      <td key={cellIndex} className={getCellClass(rowIndex, cellIndex, cell)}>
                         {cell || '-'}
                       </td>
                     ))}
@@ -220,9 +283,11 @@ const RegisterExcel = () => {
             </table>
           </div>
 
-          <div className="action-buttons">
-            <button className="action-btn register-btn">Registrar Olimpistas</button>
-          </div>
+          {validationErrors.length === 0 && data.length > 0 && (
+            <div className="action-buttons">
+              <button className="action-btn register-btn">Registrar Olimpistas</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
