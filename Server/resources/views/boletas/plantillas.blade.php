@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Boleta de Pago</h1>
-    <p>Nombre del Tutor: {{ $tutor->nombre }} {{ $tutor->apellido }}</p>
+    <p>Nombre del Tutor: {{ $tutor->persona->nombre }} {{ $tutor->persona->apellido }}</p>
     <p>Fecha de Emisión: {{ $fecha }}</p>
     <p>Total de Estudiantes: {{ $inscripciones->count() }}</p>
     <p>Monto Total: Bs {{ $montoTotal }}</p>

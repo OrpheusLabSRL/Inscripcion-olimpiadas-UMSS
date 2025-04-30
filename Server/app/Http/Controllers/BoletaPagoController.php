@@ -22,9 +22,7 @@ public function generarBoleta($idTutor)
         }
 
         // Obtener inscripciones sin boleta
-        $inscripciones = Inscripcion::where('idTutorResponsable', $idTutor)
-            ->whereNull('codigoBoleta')
-            ->get();
+        $inscripciones = Inscripcion::where('idTutorResponsable', $idTutor)->get();
 
         if ($inscripciones->isEmpty()) {
             return response()->json(['message' => 'No hay inscripciones pendientes.'], 404);
