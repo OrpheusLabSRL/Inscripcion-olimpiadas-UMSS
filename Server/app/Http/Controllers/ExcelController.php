@@ -151,16 +151,24 @@ class ExcelController extends Controller
                         throw new \Exception("Combinación de Área y Categoría no encontrada");
                     }
 
-                    // 11. Crear inscripción
-                    Inscripcion::firstOrCreate([
-                        'idOlimpista' => $olimpista->idOlimpista,
-                        'idOlimpAreaCategoria' => $combination->idOlimpAreaCategoria
-                    ], [
-                        'idTutorResponsable' => $responsibleTutor->idTutor,
-                        'idTutorLegal' => $tutorLegal->idTutor,
-                        'idTutorArea' => $tutorArea ? $tutorArea->idTutor : null,
-                        'estadoInscripcion' => 'PENDIENTE PAGO'
-                    ]);
+                    // 11. SOLUCIÓN CORREGIDA: Crear inscripción usando idPersona
+                    $inscripcionData = [
+                        'idOlimpista' => $olimpistaPerson->idPersona,
+                        'idOlimpAreaCategoria' => $combination->idOlimpAreaCategoria,
+                        'idTutorResponsable' => $responsibleTutor->idPersona,
+                        'idTutorLegal' => $tutorLegal->idPersona,
+                        'estadoInscripcion' => 0 // 0 para PENDIENTE, 1 para PAGADO (o según tu esquema)
+                    ];
+                    
+                    if ($tutorArea) {
+                        $inscripcionData['idTutorArea'] = $tutorArea->idPersona;
+                    }
+                    
+                    $inscripcion = Inscripcion::create($inscripcionData);
+
+                    if (!$inscripcion) {
+                        throw new \Exception("Error al crear la inscripción");
+                    }
 
                     $registeredOlimpistas[] = $olimpista;
 
