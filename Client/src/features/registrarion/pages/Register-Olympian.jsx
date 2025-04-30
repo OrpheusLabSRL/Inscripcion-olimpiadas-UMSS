@@ -14,6 +14,7 @@ import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
+import { MdCleaningServices } from "react-icons/md";
 
 //api
 import {
@@ -92,6 +93,9 @@ export const RegisterOlympian = () => {
 
   useEffect(() => {
     sessionStorage.setItem("CarnetIdentidadOlympian", watchedCarnetIdentidad);
+    if (watchedCarnetIdentidad.length >= 7) {
+      autofill();
+    }
   }, [watchedCarnetIdentidad]);
 
   useEffect(() => {
@@ -192,6 +196,17 @@ export const RegisterOlympian = () => {
     }
   };
 
+  const cleanFlieds = () => {
+    setValue("Nombre", "");
+    setValue("Apellido", "");
+    setValue("Tipo_Tutor", "");
+    setValue("Numero_Celular", "");
+    setValue("Email", "");
+    setValue("Ci", "");
+
+    setIsReadOnly({});
+  };
+
   const onSubmit = async (data) => {
     try {
       await getOlimpistaEnable(
@@ -218,9 +233,16 @@ export const RegisterOlympian = () => {
         <div className="input-2c">
           <h1>Registro de datos del Olimpista</h1>
           <h5 className="message-recomendation">
-            Si ya tiene datos registrados, ingrese su CI y presione el botón
-            "Autocompletar" para llenar automáticamente los campos.
+            Si ya tiene datos registrados, ingrese su CI y se llenara
+            automáticamente los campos.
           </h5>
+          <div className="container-clean-fields">
+            <p>Limpiar campos</p>
+            <MdCleaningServices
+              className="icon-clean-fields"
+              onClick={cleanFlieds}
+            />
+          </div>
         </div>
 
         <div className="input-1c">
@@ -230,7 +252,6 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="CarnetIdentidad"
             isReadOnly={isReadOnly}
-            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("CarnetIdentidad", e.target.value)}
             register={register}

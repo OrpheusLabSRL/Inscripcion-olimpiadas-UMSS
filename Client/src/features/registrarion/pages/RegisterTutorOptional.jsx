@@ -100,6 +100,9 @@ export const RegisterTutorOptional = () => {
     area == "AreaPrincipal"
       ? sessionStorage.setItem("CiPrincipal", watchedCarnetIdentidad)
       : sessionStorage.setItem("CiSecundaria", watchedCarnetIdentidad);
+    if (watchedCarnetIdentidad.length >= 7) {
+      autofill();
+    }
   }, [watchedCarnetIdentidad]);
 
   const onSubmit = async (data) => {
@@ -132,9 +135,11 @@ export const RegisterTutorOptional = () => {
 
   const autofill = async () => {
     try {
-      const personData = await getPersonData(
-        sessionStorage.getItem("CiResponsible")
-      );
+      const ci =
+        area == "AreaPrincipal"
+          ? sessionStorage.getItem("CiPrincipal", watchedCarnetIdentidad)
+          : sessionStorage.getItem("CiSecundaria", watchedCarnetIdentidad);
+      const personData = await getPersonData(ci);
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
@@ -170,8 +175,8 @@ export const RegisterTutorOptional = () => {
         <div className="input-2c">
           <h1>Registro de profesor de área</h1>
           <h5 className="message-recomendation">
-            Si ya tiene datos registrados, ingrese su CI y presione el botón
-            "Autocompletar" para llenar automáticamente los campos.
+            Si ya tiene datos registrados, ingrese su CI y se llenara
+            automáticamente los campos.
           </h5>
         </div>
 
@@ -182,7 +187,6 @@ export const RegisterTutorOptional = () => {
             mandatory="true"
             name="Ci"
             isReadOnly={isReadOnly}
-            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("Ci", e.target.value)}
             register={register}

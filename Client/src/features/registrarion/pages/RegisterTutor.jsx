@@ -80,6 +80,9 @@ export const RegisterTutor = () => {
 
   useEffect(() => {
     sessionStorage.setItem("CiLegal", watchedCarnetIdentidad);
+    if (watchedCarnetIdentidad.length >= 7) {
+      autofill();
+    }
   }, [watchedCarnetIdentidad]);
 
   useEffect(() => {
@@ -228,8 +231,8 @@ export const RegisterTutor = () => {
         <div className="input-2c">
           <h1>Registro de datos de tutor legal</h1>
           <h5 className="message-recomendation">
-            Si ya tiene datos registrados, ingrese su CI y presione el botón
-            "Autocompletar" para llenar automáticamente los campos.
+            Si ya tiene datos registrados, ingrese su CI y se llenara
+            automáticamente los campos.
           </h5>
         </div>
 
@@ -240,7 +243,6 @@ export const RegisterTutor = () => {
             mandatory="true"
             name="Ci"
             isReadOnly={isReadOnly}
-            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("Ci", e.target.value)}
             register={register}

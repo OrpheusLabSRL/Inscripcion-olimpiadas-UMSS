@@ -57,3 +57,19 @@
   width: 450px;
   margin: auto;
 }
+
+.container-clean-fields {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+
+.icon-clean-fields {
+  font-size: 22px;
+  margin: 10px;
+}
+
+.icon-clean-fields:hover {
+  font-size: 25px;
+}

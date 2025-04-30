@@ -21,7 +21,6 @@ export const ListRegistered = () => {
     const getStudents = async () => {
       try {
         const res = await getDataOlympian(tutorId);
-        console.log("hola", res);
         setDataOlympians(res.data.data);
       } catch (error) {
         console.log("Error en la peticion", error);

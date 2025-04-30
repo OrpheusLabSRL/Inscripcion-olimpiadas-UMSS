@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
+import { MdCleaningServices } from "react-icons/md";
 
 //api
 import { getPersonData } from "../../../api/inscription.api";
@@ -81,6 +82,10 @@ export const RegisterResponsible = () => {
 
   useEffect(() => {
     sessionStorage.setItem("CiResponsible", watchedCarnetIdentidad);
+
+    if (watchedCarnetIdentidad.length >= 7) {
+      autofill();
+    }
   }, [watchedCarnetIdentidad]);
 
   useEffect(() => {
@@ -129,6 +134,17 @@ export const RegisterResponsible = () => {
     }
   };
 
+  const cleanFlieds = () => {
+    setValue("Nombre", "");
+    setValue("Apellido", "");
+    setValue("Tipo_Tutor", "");
+    setValue("Numero_Celular", "");
+    setValue("Email", "");
+    setValue("Ci", "");
+
+    setIsReadOnly({});
+  };
+
   const onSubmit = async (data) => {
     try {
       navigation("/register/olympian", {
@@ -153,9 +169,16 @@ export const RegisterResponsible = () => {
         <div className="input-2c">
           <h1>Datos de responsable de inscripción</h1>
           <h5 className="message-recomendation">
-            Si ya tiene datos registrados, ingrese su CI y presione el botón
-            "Autocompletar" para llenar automáticamente los campos.
+            Si ya tiene datos registrados, ingrese su CI y se llenara
+            automáticamente los campos.
           </h5>
+          <div className="container-clean-fields">
+            <p>Limpiar campos</p>
+            <MdCleaningServices
+              className="icon-clean-fields"
+              onClick={cleanFlieds}
+            />
+          </div>
         </div>
 
         <div className="input-1c">
@@ -165,7 +188,6 @@ export const RegisterResponsible = () => {
             mandatory="true"
             name="Ci"
             isReadOnly={isReadOnly}
-            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("Ci", e.target.value)}
             register={register}
