@@ -175,7 +175,7 @@ export const RegisterTutor = () => {
       );
 
       swal("Datos registrados correctamente");
-      navigation("/listRegistered");
+      navigation("/register/listRegistered");
     } catch (error) {
       console.log(error);
       swal("Error al registrar los datos");

@@ -1,6 +1,5 @@
 //React
-import { Link } from "react-router-dom";
-
+import { NavLink } from "react-router-dom";
 //Icons
 import { FaHome } from "react-icons/fa";
 import { IoDocumentTextOutline } from "react-icons/io5";
@@ -40,48 +39,49 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
           {admin ? (
             <>
               <li>
-                <Link to="/admin/olimpiadas">
+                <NavLink to="/admin/olimpiadas">
                   <FaHome className="sidebar-icons" />{" "}
                   {isOpen ? "Olimpiadas" : ""}
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/admin/base-data">
+                <NavLink to="/admin/base-data">
                   <IoDocumentTextOutline className="sidebar-icons" />{" "}
                   {isOpen ? "Datos base" : ""}
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link>
+                <NavLink>
                   <HiOutlineClipboardDocumentList className="sidebar-icons" />{" "}
                   {isOpen ? "Exámenes" : ""}
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link>
+                <NavLink>
                   <HiOutlineClipboardDocument className="sidebar-icons" />{" "}
                   {isOpen ? "Reportes" : ""}
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link>
+                <NavLink>
                   <FaRegCalendarAlt className="sidebar-icons" />{" "}
                   {isOpen ? "Calendario" : ""}
-                </Link>
+                </NavLink>
               </li>
             </>
           ) : (
             <>
               <li>
-                <Link>
-                  <FaHome className="sidebar-icons" /> {isOpen ? "Inicio" : ""}
-                </Link>
+                <NavLink to={"/register"}>
+                  <FaHome className="sidebar-icons" />{" "}
+                  {isOpen ? "Inscripción" : ""}
+                </NavLink>
               </li>
               <li>
-                <Link>
+                <NavLink to={"/contacto"}>
                   <IoDocumentTextOutline className="sidebar-icons" />{" "}
                   {isOpen ? "Contacto" : ""}
-                </Link>
+                </NavLink>
               </li>
             </>
           )}

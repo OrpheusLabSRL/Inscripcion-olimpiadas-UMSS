@@ -8,10 +8,27 @@
   transition: all 1s;
   box-shadow: 1px 1px 5px #00000034;
   z-index: 1000;
+
+  &.sidebar ul li {
+    display: flex;
+    justify-content: center;
+  }
+
+  &.sidebar ul li a {
+    width: auto;
+  }
 }
 
 .sidebar.active {
   left: 0;
+
+  &.sidebar ul li {
+    justify-content: left;
+  }
+
+  &.sidebar ul li a {
+    width: 100%;
+  }
 }
 
 .close-btn {
@@ -62,7 +79,7 @@
 }
 
 .sidebar ul li a.active {
-  background: #f27878;
+  background: var(--tertiary-color);
 }
 
 .btn-logout {
@@ -77,7 +94,8 @@
 }
 
 .sidebar-title {
-  font-size: var(--h2-size);
+  font-size: var(--h3-size);
+  margin-right: 5px;
 }
 
 .sidebar-icons {
@@ -97,4 +115,8 @@
 
 .sidebar-header-contrain {
   justify-content: center;
+}
+
+.navlink-inscripcion ul li a.active {
+  background-color: #f27878;
 }

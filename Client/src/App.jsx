@@ -54,10 +54,10 @@ function App() {
             <Route path="/" element={<MainHome />} />
             <Route path="register/olympian" element={<RegisterOlympian />} />
             <Route path="register/tutor-legal" element={<RegisterTutor />} />
-            <Route path="listRegistered" element={<ListRegistered />} />
+            <Route path="/register/listRegistered" element={<ListRegistered />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
             <Route
-              path="/register/responsible"
+              path="/register"
               element={<RegisterResponsible />}
             />
             <Route
