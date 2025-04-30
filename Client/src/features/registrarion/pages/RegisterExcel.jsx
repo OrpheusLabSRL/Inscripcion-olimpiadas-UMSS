@@ -37,6 +37,8 @@ const RegisterExcel = () => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [validationErrors, setValidationErrors] = useState([]);
+    const [errorCells, setErrorCells] = useState({});
     const location = useLocation();
     const navigation = useNavigate();
 
@@ -49,28 +51,105 @@ const RegisterExcel = () => {
         document.body.removeChild(link);
     };
 
-    // Función para convertir fecha de DD/MM/YYYY a YYYY-MM-DD
     const convertExcelDate = (excelDate) => {
         if (!excelDate) return "";
         
-        // Si ya está en formato correcto, retornar tal cual
         if (typeof excelDate === 'string' && excelDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
             return excelDate;
         }
         
-        // Si es número (formato Excel), convertirlo
         if (typeof excelDate === 'number') {
             const date = new Date((excelDate - (25567 + 2)) * 86400 * 1000);
             return date.toISOString().split('T')[0];
         }
         
-        // Si es string con formato DD/MM/YYYY
         if (typeof excelDate === 'string' && excelDate.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
             const [day, month, year] = excelDate.split('/');
             return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
         }
         
-        return excelDate; // Devolver original si no coincide con ningún formato
+        return excelDate;
+    };
+
+    const validateData = (data) => {
+        const errors = [];
+        const cellErrors = {};
+        
+        data.forEach((row, rowIndex) => {
+            // Validar CI Olimpista (columna 0)
+            if (!row[0] || !row[0].toString().match(/^[a-zA-Z0-9]{6,12}$/)) {
+                errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (OLIMPISTA) debe tener entre 6 y 12 caracteres alfanuméricos`);
+                cellErrors[`${rowIndex}-0`] = true;
+            }
+            
+            // Validar CI Tutor Legal (columna 11)
+            if (!row[11] || !row[11].toString().match(/^[a-zA-Z0-9]{6,12}$/)) {
+                errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (TUTOR LEGAL) debe tener entre 6 y 12 caracteres alfanuméricos`);
+                cellErrors[`${rowIndex}-11`] = true;
+            }
+            
+            // Validar CI Profesor (columna 17) solo si existe
+            if (row[17] && !row[17].toString().match(/^[a-zA-Z0-9]{6,12}$/)) {
+                errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (PROFESOR) debe tener entre 6 y 12 caracteres alfanuméricos`);
+                cellErrors[`${rowIndex}-17`] = true;
+            }
+            
+            // Validar Fecha de Nacimiento (columna 3)
+            if (!row[3] || !row[3].toString().match(/^\d{4}-\d{2}-\d{2}$/)) {
+                errors.push(`Fila ${rowIndex + 2}: FECHA DE NACIMIENTO (OLIMPISTA) debe estar en formato DD/MM/YYYY en el Excel`);
+                cellErrors[`${rowIndex}-3`] = true;
+            }
+            
+            // Validar Correos (columnas 4, 14, 20)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!row[4] || !emailRegex.test(row[4].toString())) {
+                errors.push(`Fila ${rowIndex + 2}: CORREO ELECTRONICO (OLIMPISTA) no es válido`);
+                cellErrors[`${rowIndex}-4`] = true;
+            }
+            if (!row[14] || !emailRegex.test(row[14].toString())) {
+                errors.push(`Fila ${rowIndex + 2}: CORREO ELECTRONICO (TUTOR LEGAL) no es válido`);
+                cellErrors[`${rowIndex}-14`] = true;
+            }
+            if (row[20] && !emailRegex.test(row[20].toString())) {
+                errors.push(`Fila ${rowIndex + 2}: CORREO ELECTRONICO (PROFESOR) no es válido`);
+                cellErrors[`${rowIndex}-20`] = true;
+            }
+            
+            // Validar Celulares (columnas 15, 21)
+            if (!row[15] || !row[15].toString().match(/^\d{8}$/)) {
+                errors.push(`Fila ${rowIndex + 2}: CELULAR (TUTOR LEGAL) debe tener exactamente 8 dígitos`);
+                cellErrors[`${rowIndex}-15`] = true;
+            }
+            if (row[21] && !row[21].toString().match(/^\d{8}$/)) {
+                errors.push(`Fila ${rowIndex + 2}: CELULAR (PROFESOR) debe tener exactamente 8 dígitos`);
+                cellErrors[`${rowIndex}-21`] = true;
+            }
+            
+            // Validar y normalizar Tipo Tutor (columna 16)
+            if (row[16]) {
+                const tipoTutor = row[16].toString().toUpperCase().trim();
+                
+                // Primero verificar si ya está en formato MAMÁ/PAPÁ o variantes
+                if (tipoTutor.match(/^(MAMA\/PAPA|MAMÁ\/PAPÁ|MAMA\/PAPÁ|MAMÁ\/PAPA)$/i)) {
+                    row[16] = "MAMÁ/PAPÁ";
+                } 
+                // Luego verificar formatos individuales
+                else if (tipoTutor.match(/^(PAPA|PAPÁ|MAMA|MAMÁ)$/)) {
+                    row[16] = tipoTutor.replace("PAPA", "PAPÁ").replace("MAMA", "MAMÁ");
+                } else if (tipoTutor.match(/^(TUTOR|TUTOR LEGAL|LEGAL)$/)) {
+                    row[16] = "TUTOR LEGAL";
+                } else if (!["PAPÁ", "MAMÁ", "TUTOR LEGAL", "MAMÁ/PAPÁ"].includes(tipoTutor)) {
+                    errors.push(`Fila ${rowIndex + 2}: TIPO DE TUTOR debe ser PAPÁ, MAMÁ, MAMÁ/PAPÁ o TUTOR LEGAL`);
+                    cellErrors[`${rowIndex}-16`] = true;
+                }
+            } else {
+                errors.push(`Fila ${rowIndex + 2}: TIPO DE TUTOR es requerido`);
+                cellErrors[`${rowIndex}-16`] = true;
+            }
+        });
+        
+        setErrorCells(cellErrors);
+        return errors;
     };
 
     const handleFileUpload = async (e) => {
@@ -80,6 +159,8 @@ const RegisterExcel = () => {
         setError("");
         setSuccess("");
         setData([]);
+        setValidationErrors([]);
+        setErrorCells({});
         setIsLoading(true);
 
         try {
@@ -105,19 +186,16 @@ const RegisterExcel = () => {
                 throw new Error("El archivo no contiene datos válidos");
             }
 
-            // Normalizar datos convirtiendo fechas
             const normalizedData = filteredData.map((row) => {
                 const rowData = Array(22).fill("");
                 row.forEach((cell, i) => {
                     if (i < 22) {
-                        // Convertir fecha si es la columna de fecha de nacimiento (índice 3)
                         rowData[i] = (i === 3) ? convertExcelDate(cell) : 
                                     (cell !== null && cell !== undefined ? 
                                     (typeof cell === 'string' ? cell.trim() : cell.toString()) : "");
                     }
                 });
                 
-                // Limpiar datos de profesor si no hay CI
                 if (rowData[17] === "") {
                     for (let i = 17; i <= 21; i++) {
                         rowData[i] = "";
@@ -127,9 +205,16 @@ const RegisterExcel = () => {
                 return rowData;
             });
 
+            const errors = validateData(normalizedData);
             setData(normalizedData);
             setFileName(file.name);
-            setSuccess("Archivo cargado correctamente. Revise los datos antes de registrar.");
+            
+            if (errors.length > 0) {
+                setValidationErrors(errors);
+                setError(`Se encontraron ${errors.length} errores de validación. Revise los campos marcados en rojo.`);
+            } else {
+                setSuccess("Archivo cargado correctamente. Revise los datos antes de registrar.");
+            }
 
         } catch (err) {
             console.error("Error procesando archivo:", err);
@@ -181,7 +266,6 @@ const RegisterExcel = () => {
                     icon: response.data.errores?.length > 0 ? "warning" : "success",
                 });
                 
-                // No redirigir, solo limpiar si fue éxito total
                 if (response.data.errores?.length === 0) {
                     setData([]);
                     setFileName("");
@@ -200,6 +284,18 @@ const RegisterExcel = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const getCellClassName = (rowIndex, cellIndex, cellValue) => {
+        if (errorCells[`${rowIndex}-${cellIndex}`]) {
+            return "error-cell";
+        }
+        if (cellIndex >= 17 && cellIndex <= 21) {
+            if (!cellValue) return "optional-empty";
+            return "optional-filled";
+        }
+        if (!cellValue && cellIndex < 17) return "empty-cell";
+        return "";
     };
 
     return (
@@ -250,6 +346,20 @@ const RegisterExcel = () => {
                         {error && <div className="error-message">{error}</div>}
                         {success && <div className="success-message">{success}</div>}
 
+                        {validationErrors.length > 0 && (
+                            <div className="validation-errors">
+                                <h3>Errores de validación:</h3>
+                                <ul>
+                                    {validationErrors.slice(0, 10).map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                    {validationErrors.length > 10 && (
+                                        <li>...y {validationErrors.length - 10} errores más</li>
+                                    )}
+                                </ul>
+                            </div>
+                        )}
+
                         <div className="data-section">
                             <div className="table-container">
                                 <table className="data-table">
@@ -265,7 +375,10 @@ const RegisterExcel = () => {
                                             data.map((row, rowIndex) => (
                                                 <tr key={rowIndex}>
                                                     {row.map((cell, cellIndex) => (
-                                                        <td key={cellIndex}>
+                                                        <td 
+                                                            key={cellIndex}
+                                                            className={getCellClassName(rowIndex, cellIndex, cell)}
+                                                        >
                                                             {cell || (cellIndex >= 17 && cellIndex <= 21 ? "-" : "⚠")}
                                                         </td>
                                                     ))}
@@ -282,7 +395,7 @@ const RegisterExcel = () => {
                                 </table>
                             </div>
 
-                            {data.length > 0 && (
+                            {data.length > 0 && validationErrors.length === 0 && (
                                 <div className="action-buttons">
                                     <button
                                         className="action-btn register-btn"
