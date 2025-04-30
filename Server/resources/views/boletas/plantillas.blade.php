@@ -13,7 +13,38 @@
             text-align: center;
         }
 
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .titulo-boleta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .titulo {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+        }
+
+        .codigo-boleta {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+            position: absolute;
+            right: 0;
+        }
+
         .info {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 20px;
         }
 
@@ -23,30 +54,31 @@
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             margin-top: 10px;
+            border: 1px solid #007BFF;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        table, th, td {
-            border: 1px solid black;
+        thead th {
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
         }
 
         th, td {
             padding: 8px;
             font-size: 13px;
             text-align: left;
+            border: 1px solid #007BFF;
         }
 
         .total {
             text-align: right;
             margin-top: 10px;
-        }
-
-        .codigo-boleta {
-            text-align: right;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 10px;
         }
 
         /* Marca de agua */
@@ -65,21 +97,27 @@
     </style>
 </head>
 <body>
+    <div class="header">
+        UNIVERSIDAD MAYOR DE SAN SIMÓN <br>
+        FACULTAD DE CIENCIAS Y TECNOLOGÍA <br>
+        SECRETARÍA ADMINISTRATIVA
+    </div>
 
     <!-- Marca de agua -->
     <div class="watermark">
         <img src="{{ public_path('images/marca_agua.png') }}" alt="Marca de Agua">
     </div>
 
-    <h1>Boleta de Pago</h1>
-
-    <div class="codigo-boleta">
-        Código de Boleta: {{ $boleta->codigoBoleta }}
+    <div class="titulo-boleta">
+        <div class="codigo-boleta">
+            N°: {{ $boleta->codigoBoleta }}
+        </div>
+        <h2 class="titulo">ORDEN DE PAGO</h2>
     </div>
 
     <div class="info">
-        <p><strong>Nombre del Tutor:</strong> {{ $tutor->persona->nombre }} {{ $tutor->persona->apellido }}</p>
-        <p><strong>Fecha de Emisión:</strong> {{ $fecha }}</p>
+        <p><strong>Señor(es):</strong> {{ $tutor->persona->nombre }} {{ $tutor->persona->apellido }}</p>
+        <p><strong>NIT/CI:</strong> {{ $tutor->persona->carnetIdentidad }}</p>
     </div>
 
     <h3>Detalle de Inscripciones</h3>
@@ -98,16 +136,17 @@
                     <td>{{ $inscripcion->olimpista->persona->nombre }} {{ $inscripcion->olimpista->persona->apellido }}</td>
                     <td>{{ $inscripcion->olimpista->persona->carnetIdentidad }}</td>
                     <td>{{ $inscripcion->OlimpiadaAreaCategoria->area->nombreArea }}</td>
-                    <td>Bs {{ $inscripcion->OlimpiadaAreaCategoria->area->costoArea }}</td>
+                    <td>Bs{{ $inscripcion->OlimpiadaAreaCategoria->area->costoArea }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
     <div class="total">
-        <p><strong>Total a Pagar:</strong> Bs {{ $montoTotal }}</p>
+        <p><strong>Son:</strong> {{ $montoTotal }} Bolivianos</p>
+     
         <p><strong>Total de Estudiantes:</strong> {{ $inscripciones->count() }}</p>
+        <p><strong>Cochabamba,</strong> {{ \Carbon\Carbon::parse($fecha)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') }}</p>
     </div>
-
 </body>
 </html>
