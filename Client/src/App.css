@@ -1,8 +1,9 @@
+/* App.css */
 @import url("https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&family=Alata&display=swap");
 
 :root {
   /*-------------------Paleta de Colores--------------------*/
-  --primary-color: #205781;
+  --primary-color: #547792;
   --secondary-color: #4f959d;
   --tertiary-color: #98d2c0;
   --quaternary-color: #f6f8d5;
@@ -24,8 +25,8 @@
   --pS-size: 12px; /* Texto de ayuda */
 
   --label: 16px;
-  --error-size: 14px; /* Tamaño de errores (ajustado) */
-  --principal-text: 60px; /* Para encabezados grandes */
+  --error-size: 14px; 
+  --principal-text: 60px; 
   --background: #f8fafc;
 }
 
@@ -33,15 +34,32 @@ body {
   font-family: "Alata", sans-serif;
   background-color: var(--background);
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .main {
   display: grid;
-  height: 90vh;
   grid-template-columns: 90px auto;
-  transition: all 1s; /* <-- Añadir para transición suave */
+  transition: all 0.3s ease;
+  flex: 1;
+  min-height: calc(100vh - 29px); 
+}
 
-  &.active {
-    grid-template-columns: 260px auto;
-  }
+.main.active {
+  grid-template-columns: 260px auto;
+}
+
+.content-area {
+  grid-column-start: 2;
+  width: 100%;
+  overflow-x: hidden;
+  padding-bottom: 29px;
 }

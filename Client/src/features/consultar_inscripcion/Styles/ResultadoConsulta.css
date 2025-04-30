@@ -1,0 +1,241 @@
+.resultado-container {
+    padding: 2rem;
+    min-height: 100vh;
+    background-color: #94B4C1;
+    margin-top: 60px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.resultado-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding-bottom: 1.5rem;
+}
+
+.resultado-content h2 {
+    color: black;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.8rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.tutor-info {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+}
+
+.tutor-info h3 {
+    color: black;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.tutor-info p {
+    color: black;
+    margin: 0.75rem 0;
+    font-size: 1.1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.olimpistas-table {
+    margin-top: 2rem;
+}
+
+.olimpistas-table h3 {
+    color: black;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.olimpistas-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.olimpistas-table th,
+.olimpistas-table td {
+    color: black;
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 1.1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.olimpistas-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.olimpistas-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.estado-realizado {
+    color: #28a745 !important;  /* Verde */
+    font-weight: 600;
+}
+
+.estado-pendiente {
+    color: #dc3545 !important;  /* Rojo */
+    font-weight: 600;
+}
+
+button {
+    display: block;
+    margin: 1.5rem auto 0;
+    padding: 0.75rem 1.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: #dc3545;
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 1.1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.persona-info,
+.inscripciones-info {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+}
+
+h4 {
+    color: #333;
+    margin: 15px 0 10px;
+}
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.info-table td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+}
+
+.info-table .label {
+    font-weight: bold;
+    color: #666;
+    width: 200px;
+}
+
+.info-table td:not(.label) {
+    color: #000000;
+}
+
+.inscripcion-item {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.inscripcion-item h4 {
+    margin: 0 0 15px 0;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: black;
+    font-family: 'Poppins', sans-serif;
+}
+
+.olimpista-info-mini {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+    color: black;
+}
+
+.olimpista-info-mini h5 {
+    color: black !important;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.olimpista-info-mini p {
+    margin: 5px 0;
+    font-size: 0.95em;
+    color: #000000;
+}
+
+.back-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+.boton-volver-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.inscripciones-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    color: black;
+}
+
+.inscripciones-table th {
+    background-color: #f8f9fa;
+    color: black;
+    font-weight: bold;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+} 
+.titulo-resultado{
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
