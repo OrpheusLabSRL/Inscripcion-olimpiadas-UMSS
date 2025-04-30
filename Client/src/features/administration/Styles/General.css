@@ -1,0 +1,83 @@
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  color: black;
+}
+
+.data-table th,
+.data-table td {
+  border-bottom: 1px solid #ebebeb;
+  padding: 0.75rem;
+  text-align: left;
+  color: black;
+}
+
+.badge-success {
+  background-color: #d4f8d4;
+  color: #1a7f1a;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.add-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+.badge-success {
+  background-color: #d4f8d4;
+  color: #1a7f1a;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.badge-danger {
+  background-color: #ffe0e0;
+  color: #e63946;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.manage-container {
+  padding: 20px;
+}
+
+.back-button {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  color: #333;
+  padding: 5px 10px;
+  transition: color 0.3s ease;
+}
+
+.back-button:hover {
+  color: #007bff;
+}
+
+.btn-registrar {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-registrar:hover {
+  background-color: #1e40af;
+}

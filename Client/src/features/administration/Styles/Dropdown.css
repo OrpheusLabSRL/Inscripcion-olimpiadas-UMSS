@@ -1,0 +1,117 @@
+.dropdown-container {
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  font-family: inherit;
+}
+
+.dropdown-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.dropdown-label.large {
+  font-size: 1.2rem;
+}
+
+.dropdown-wrapper {
+  background-color: #e2e2e2;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropdown-wrapper.small {
+  font-size: 0.9rem;
+}
+
+.dropdown-wrapper.large {
+  font-size: 1rem;
+}
+
+.dropdown-arrow {
+  margin-left: 10px;
+  font-size: 0.8rem;
+}
+
+.dropdown-list,
+.multi-dropdown-options {
+  background-color: #e2e2e2;
+  position: absolute;
+  width: 100%;
+  z-index: 99;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 4px;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-option,
+.multi-dropdown-item {
+  padding: 0.6rem 1rem;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-option:hover,
+.multi-dropdown-item:hover {
+  background-color: #ccc;
+}
+
+.custom-circle {
+  width: 18px;
+  height: 18px;
+  border: 2px solid black;
+  border-radius: 50%;
+  margin-right: 10px;
+  position: relative;
+}
+
+.custom-circle input[type="checkbox"] {
+  all: unset;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
+.custom-circle input[type="checkbox"]:checked::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 6px;
+  height: 6px;
+  background-color: black;
+  border-radius: 50%;
+}
+
+.multi-label {
+  flex: 1;
+}
+
+.error-border {
+  border: 2px solid #dc2626 !important;
+  background-color: #ffecec !important;
+  border-radius: 6px;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  background: #ffecec;
+  padding: 0.4rem 0.75rem;
+  border-radius: 5px;
+}

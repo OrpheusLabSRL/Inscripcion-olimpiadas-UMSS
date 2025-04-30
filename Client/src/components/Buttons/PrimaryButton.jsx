@@ -7,6 +7,8 @@ export const PrimaryButton = ({
   label = "",
   id = "",
   type,
+  icon,
+  style,
 }) => {
   return (
     <div className="config-btn-primary">
@@ -15,6 +17,7 @@ export const PrimaryButton = ({
         className={`btn-primary ${className}`}
         onClick={onClick && onClick}
         type={type}
+        style={style}
       >
         {value}
       </button>

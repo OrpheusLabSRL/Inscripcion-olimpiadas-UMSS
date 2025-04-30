@@ -1,0 +1,290 @@
+:root {
+  /* Colores base */
+  --primary-color: #2563eb;       /* Azul principal */
+  --primary-hover: #1d4ed8;      /* Azul oscuro (hover/active) */
+  --primary-light: #93c5fd;      /* Azul claro (fondos/detalles) */
+  --background: #f8fafc;         /* Fondo gris claro */
+  --white: #ffffff;              /* Blanco puro */
+  
+  /* Texto */
+  --text-primary: #1e293b;       /* Texto principal */
+  --text-secondary: #64748b;     /* Texto secundario */
+  --text-light: #94a3b8;         /* Texto claro */
+  
+  /* Bordes */
+  --border-color: #e2e8f0;       /* Borde gris */
+  --border-radius: 8px;          /* Radio de esquinas */
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  /* Tamaños de fuente */
+  --h1-size: 2rem;
+  --h4-size: 1.25rem;
+  --h5-size: 1rem;
+  --h6-size: 0.875rem;
+  /* --pL-size: 1.125rem;
+  --error-size: 0.75rem; */
+  
+  /* Espaciado */
+  --high-button: 12px;
+  --broad-button: 24px;
+  --input-padding: 12px 16px;    /* Nuevo: padding para inputs */
+}
+
+/* Estructura principal */
+.tutor-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #94B4C1;
+  color: var(--text-primary);
+  font-family: "Alata", sans-serif;
+}
+
+.tutor-form-content {
+  flex: 1;
+  padding-top: 80px;
+}
+
+.tutor-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Encabezado */
+.tutor-form-container h1 {
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: var(--h1-size);
+}
+
+.form-description {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+  font-size: var(--pL-size);
+}
+
+/* Pestañas de opciones */
+.form-options-container {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  justify-content: center;
+}
+
+.form-option {
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: var(--h5-size);
+  font-weight: bold;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.form-option:hover {
+  color: var(--primary-color);
+}
+
+.form-option.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+/* Secciones del formulario */
+.form-section {
+  background: var(--white);
+  padding: 25px;
+  border-radius: var(--border-radius);
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: start; /* Asegura alineación vertical */
+}
+
+/* Grupos de campos */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Asegura misma altura */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: var(--h4-size);
+}
+
+.required {
+  color: #dc2626;
+}
+
+/* Estilos mejorados para inputs */
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: var(--input-padding);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: var(--h5-size);
+  transition: all 0.3s;
+  height: 48px; /* Altura fija para consistencia */
+  box-sizing: border-box;
+}
+
+/* Placeholders mejorados */
+.form-group input::placeholder,
+.form-group select::placeholder {
+  color: var(--text-light);
+  opacity: 1; /* Asegura visibilidad en todos los navegadores */
+  font-size: var(--h5-size);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+/* Mensajes de error */
+.error-message {
+  color: #dc2626;
+  font-size: var(--error-size);
+  margin-top: 5px;
+  display: block;
+}
+
+/* Estilos de validación */
+.valid-input {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 1px #10b981;
+}
+
+.invalid-input {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 1px #ef4444;
+}
+
+/* Botones del formulario */
+.form-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.back-button {
+  flex: 1;
+  padding: var(--high-button) var(--broad-button);
+  background-color: var(--white);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  font-size: var(--h5-size);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  height: 48px; /* Misma altura que los inputs */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-button:hover {
+  background-color: #f0f7ff;
+}
+
+.submit-button {
+  flex: 2;
+  padding: var(--high-button) var(--broad-button);
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  font-size: var(--h5-size);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  height: 48px; /* Misma altura que los inputs */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-button:hover {
+  background-color: var(--primary-hover);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Mensajes de estado */
+.error-message {
+  background-color: #ffebee;
+  border-left: 4px solid #f44336;
+  padding: 12px;
+  margin: 16px 0;
+  border-radius: 4px;
+  color: #d32f2f;
+}
+
+.success-message {
+  background-color: #e8f5e9;
+  border-left: 4px solid #4caf50;
+  padding: 12px;
+  margin: 16px 0;
+  border-radius: 4px;
+  color: #2e7d32;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tutor-form-content {
+    padding-top: 70px;
+  }
+  
+  .tutor-form-container {
+    padding: 15px;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-option {
+    padding: 8px 15px;
+    font-size: var(--h6-size);
+  }
+
+  .form-group input,
+  .form-group select {
+    height: 44px; /* Altura ligeramente menor en móviles */
+  }
+
+  .back-button,
+  .submit-button {
+    height: 44px;
+  }
+}
