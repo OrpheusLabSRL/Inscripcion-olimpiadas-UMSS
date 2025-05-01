@@ -27,7 +27,8 @@ function HeaderProp() {
           <li onClick={() => navigate("/")}>Inicio</li>
           <li>Acerca de</li>
           <li>Olimpiadas Anteriores</li>
-          <li>Contacto</li>
+          <li onClick={() => navigate("/consultar-inscripcion")}>Estado Inscripcion</li>
+          <li onClick={() => navigate("/contacto")}>Contacto</li>
           <li><NextPage value="Inscribirse" to="/register/tutor-form" /></li>
         </ul>
       </nav>

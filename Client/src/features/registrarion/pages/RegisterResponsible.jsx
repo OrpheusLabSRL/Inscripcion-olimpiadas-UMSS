@@ -1,4 +1,3 @@
-//css
 import "../Styles/RegisterResponsible.css";
 
 //components
@@ -7,7 +6,6 @@ import { Select } from "../../../components/inputs/Select";
 import { Validator } from "../utils/ValidationRules";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { NextPage } from "../../../components/Buttons/NextPage";
-import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
 import { useEffect, useState } from "react";
@@ -22,8 +20,6 @@ import { getPersonData } from "../../../api/inscription.api";
 
 export const RegisterResponsible = () => {
   const [isReadOnly, setIsReadOnly] = useState({});
-  const [currentStep, sertCurrentStep] = useState(1);
-  const [totalSteps, setTotalStep] = useState(4);
   const navigation = useNavigate();
   const location = useLocation();
   const {
@@ -182,7 +178,6 @@ export const RegisterResponsible = () => {
   return (
     <div className="container-form">
       <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
-      <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <form
         className="container-form-inputs"
         onSubmit={handleSubmit(onSubmit)}

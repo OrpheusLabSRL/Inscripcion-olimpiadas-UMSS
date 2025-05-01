@@ -11,18 +11,35 @@ import ManageArea from "./features/administration/pages/ManageArea";
 import ManageCategoria from "./features/administration/pages/ManageCategoria";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageViewBase from "./features/administration/pages/ManageViewBaseData";
+import Home from "./features/administration/pages/Home";
+import Login from "./features/administration/pages/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterResponsible";
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
+import PaginaContacto from "./features/contacto/pages/PaginaContacto";
+import ConsultarInscripcion from "./features/consultar_inscripcion/pages/ConsultarInscripcion";
+import ResultadoConsulta from "./features/consultar_inscripcion/pages/ResultadoConsulta";
+import ResultadoConsulta_Tutor from "./features/consultar_inscripcion/pages/ResultadoConsulta_Tutor";
+import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
 
-  const showSidebar =
-    location.pathname !== "/" && location.pathname !== "/register/tutor-form";
+  // 🔥 Rutas donde NO queremos mostrar el Sidebar
+  const hideSidebarRoutes = [
+    "/",
+    "/register/tutor-form",
+    "/register/excel",
+    "/admin",
+    "/contacto",
+    "/consultar-inscripcion",
+    "/consultar-inscripcion/resultado",
+    "/consultar-inscripcion/resultado-tutor"
+  ];
+  const showSidebar = !hideSidebarRoutes.includes(location.pathname);
 
   const user = {
     role: "admin",
@@ -32,85 +49,46 @@ function App() {
     <div className="app-container">
       <div
         className={
-          location.pathname === "/" ||
-          location.pathname == "/register/tutor-form"
+          hideSidebarRoutes.includes(location.pathname)
             ? ""
             : isOpen
             ? "main active"
             : "main"
         }
       >
+        {/* Mostrar el Sidebar solo donde corresponde */}
         {showSidebar && (
           <Sidebar
             isOpen={isOpen}
             setIsOpen={setIsOpen}
-            admin={!location.pathname.startsWith("/admin") ? false : true}
+            admin={location.pathname.startsWith("/admin")}
           />
         )}
 
         <div className="content-area">
           <Routes>
-            {/* Rutas públicas */}
             <Route path="/" element={<MainHome />} />
-            <Route path="register/olympian" element={<RegisterOlympian />} />
-            <Route path="register/tutor-legal" element={<RegisterTutor />} />
-            <Route path="/register/listRegistered" element={<ListRegistered />} />
+            <Route path="/register/olympian" element={<RegisterOlympian />} />
+            <Route path="/register/tutor-legal" element={<RegisterTutor />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
-            <Route
-              path="/register"
-              element={<RegisterResponsible />}
-            />
-            <Route
-              path="/Register/OlympianArea"
-              element={<RegisterOlympianArea />}
-            />
-            <Route
-              path="/Register/OlympianArea/tutorOptional"
-              element={<RegisterTutorOptional />}
-            />
+            <Route path="/register/excel" element={<RegisterExcel />} />
+            <Route path="/register" element={<RegisterResponsible />} />
+            <Route path="/register/olympian-area" element={<RegisterOlympianArea />} />
+            <Route path="/register/tutor-optional" element={<RegisterTutorOptional />} />
+            <Route path="/register/listRegistered" element={<ListRegistered />} />
+            <Route path="/contacto" element={<PaginaContacto />} />
+            <Route path="/consultar-inscripcion" element={<ConsultarInscripcion />} />
+            <Route path="/consultar-inscripcion/resultado" element={<ResultadoConsulta />} />
+            <Route path="/consultar-inscripcion/resultado-tutor" element={<ResultadoConsulta_Tutor />} />
 
-            {/* Rutas bajo Admin */}
-            <Route path="/admin">
-              <Route
-                path="base-data"
-                element={
-                  <PrivateRoute
-                    element={<ManageViewBase />}
-                    allowedRoles={["admin"]}
-                    userRole={user.role}
-                  />
-                }
-              />
-              <Route
-                path="areas"
-                element={
-                  <PrivateRoute
-                    element={<ManageArea />}
-                    allowedRoles={["admin"]}
-                    userRole={user.role}
-                  />
-                }
-              />
-              <Route
-                path="categorias"
-                element={
-                  <PrivateRoute
-                    element={<ManageCategoria />}
-                    allowedRoles={["admin"]}
-                    userRole={user.role}
-                  />
-                }
-              />
-              <Route
-                path="olimpiadas"
-                element={
-                  <PrivateRoute
-                    element={<ManageOlympiads />}
-                    allowedRoles={["admin"]}
-                    userRole={user.role}
-                  />
-                }
-              />
+            {/* Rutas de administración */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Home />} />
+              <Route path="login" element={<Login />} />
+              <Route path="areas" element={<ManageArea />} />
+              <Route path="categorias" element={<ManageCategoria />} />
+              <Route path="olimpiadas" element={<ManageOlympiads />} />
+              <Route path="view-base" element={<ManageViewBase />} />
             </Route>
           </Routes>
         </div>

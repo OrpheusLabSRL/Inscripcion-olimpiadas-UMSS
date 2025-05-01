@@ -1,32 +1,38 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Models;
 
-class CreateUsuarioTable extends Migration
+use Illuminate\Database\Eloquent\Model;
+
+class Usuario extends Model
 {
-    public function up()
-    {
-        Schema::create('usuarios', function (Blueprint $table) {
-            $table->id('idUsuario');
-            $table->unsignedBigInteger('idRol')->nullable();
-            $table->string('nombreUsuario', 20)->nullable();
-            $table->string('nombre', 20)->nullable();
-            $table->string('email', 30)->nullable();
-            $table->string('password', 13)->nullable();
-            $table->boolean('estadoUsuario')->nullable();
-            $table->timestamps();
+    // Nombre de la tabla asociada
+    protected $table = 'usuarios';
 
-            $table->foreign('idRol')
-                ->references('idRol')
-                ->on('rol')
-                ->onDelete('set null');
-        });
+    // Clave primaria personalizada
+    protected $primaryKey = 'idUsuario';
+
+    // Atributos que se pueden asignar masivamente
+    protected $fillable = [
+        'idRol',
+        'nombreUsuario',
+        'nombre',
+        'email',
+        'password',
+        'estadoUsuario',
+    ];
+
+    // Indica si el modelo debe manejar timestamps automáticamente
+    public $timestamps = true;
+
+    // Relación: Un Usuario pertenece a un Rol
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'idRol', 'idRol');
     }
 
-    public function down()
-    {
-        Schema::dropIfExists('usuarios');
-    }
+    // Ocultar atributos sensibles al devolver el modelo como JSON
+    protected $hidden = [
+        'password',
+    ];
 }

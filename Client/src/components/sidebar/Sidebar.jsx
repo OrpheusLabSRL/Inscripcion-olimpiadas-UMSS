@@ -8,6 +8,7 @@ import { HiOutlineClipboardDocument } from "react-icons/hi2";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { IoLogInOutline } from "react-icons/io5";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
+import { GiAchievement } from "react-icons/gi";
 
 //css
 import "./Sidebar.css";
@@ -39,17 +40,23 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
           {admin ? (
             <>
               <li>
-                <NavLink to="/admin/olimpiadas">
-                  <FaHome className="sidebar-icons" />{" "}
-                  {isOpen ? "Olimpiadas" : ""}
-                </NavLink>
+                <Link to="/admin/home">
+                  <FaHome className="sidebar-icons" />
+                  {isOpen ? "Inicio" : ""}
+                </Link>
               </li>
               <li>
-                <NavLink to="/admin/base-data">
+                <Link to="/admin/olimpiadas">
+                  <GiAchievement className="sidebar-icons" />{" "}
+                  {isOpen ? "Olimpiadas" : ""}
+                </Link>
+              </li>
+              {/*<li>
+                <Link to="/admin/base-data">
                   <IoDocumentTextOutline className="sidebar-icons" />{" "}
                   {isOpen ? "Datos base" : ""}
-                </NavLink>
-              </li>
+                </Link>
+              </li>*/}
               <li>
                 <NavLink>
                   <HiOutlineClipboardDocumentList className="sidebar-icons" />{" "}

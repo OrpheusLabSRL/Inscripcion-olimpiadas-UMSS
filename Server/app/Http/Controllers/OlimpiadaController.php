@@ -24,7 +24,7 @@ class OlimpiadaController extends Controller
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
         ]);
 
-        $validated['estadoOlimpiada'] = true;
+        $validated['estadoOlimpiada'] = false;
         $validated['idUsuario'] = 1;
 
         $olimpiada = Olimpiada::create($validated);
@@ -64,6 +64,23 @@ class OlimpiadaController extends Controller
 
         return response()->json([
             'message' => 'Olimpiada eliminada correctamente'
+        ]);
+    }
+
+    public function cambiarEstado(Request $request, $id)
+    {
+        $olimpiada = Olimpiada::findOrFail($id);
+
+        $request->validate([
+            'estadoOlimpiada' => 'required|boolean',
+        ]);
+
+        $olimpiada->estadoOlimpiada = $request->estadoOlimpiada;
+        $olimpiada->save();
+
+        return response()->json([
+            'message' => 'Estado actualizado correctamente',
+            'data' => $olimpiada
         ]);
     }
 }

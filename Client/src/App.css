@@ -54,12 +54,12 @@ body {
 }
 
 .main.active {
-  grid-template-columns: 260px auto;
+  grid-template-columns: 220px auto;
 }
 
 .content-area {
   grid-column-start: 2;
   width: 100%;
   overflow-x: hidden;
-  padding-bottom: 29px;
+  /*padding-bottom: 29px;*/
 }
