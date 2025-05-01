@@ -63,10 +63,7 @@ export const RegisterTutorOptional = () => {
   const watchedCarnetIdentidad = watch("Ci");
 
   useEffect(() => {
-    sessionStorage.setItem(
-      "pantallaActualRegistro",
-      location.pathname
-    );
+    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
   }, []);
 
   useEffect(() => {
@@ -106,7 +103,7 @@ export const RegisterTutorOptional = () => {
     area == "AreaPrincipal"
       ? sessionStorage.setItem("TutorArea1", true)
       : sessionStorage.setItem("TutorArea2", true);
-    navigation("/Register/OlympianArea");
+    navigation("/register/olympian-area");
   };
 
   const backPage = () => {
@@ -203,6 +200,7 @@ export const RegisterTutorOptional = () => {
 
     setIsReadOnly({});
   };
+  
 
   return (
     <div className="container-form">

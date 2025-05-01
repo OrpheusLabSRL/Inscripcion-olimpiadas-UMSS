@@ -328,10 +328,11 @@ export const RegisterTutor = () => {
     });
 
     if (confirmacion.isConfirmed) {
+      limpiarCamposLocalStorage();
       navigation(
         sessionStorage.getItem("tutorInscripcionId")
           ? "/register/listRegistered"
-          : "/"
+          : "/register"
       );
     }
   };
@@ -451,7 +452,7 @@ export const RegisterTutor = () => {
         </div>
 
         <div className="container-btn-back-olympian input-1c">
-        <NextPage value="Cancelar" onClick={cancelInscription} />
+          <NextPage value="Cancelar" onClick={cancelInscription} />
         </div>
 
         <div>

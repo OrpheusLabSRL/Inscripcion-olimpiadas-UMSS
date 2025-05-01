@@ -85,6 +85,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                       ? sessionStorage.getItem("pantallaActualRegistro")
                       : "/register"
                   }
+                  className={({ isActive }) => (isActive ? 'active-link' : '')}
                 >
                   <FaHome className="sidebar-icons" />{" "}
                   {isOpen ? "Inscripción" : ""}

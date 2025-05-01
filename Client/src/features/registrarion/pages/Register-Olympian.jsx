@@ -248,12 +248,20 @@ export const RegisterOlympian = () => {
     });
 
     if (confirmacion.isConfirmed) {
+      limpiarCamposLocalStorage();
       navigation(
         sessionStorage.getItem("tutorInscripcionId")
           ? "/register/listRegistered"
-          : "/"
+          : "/register"
       );
     }
+  };
+
+  const limpiarCamposLocalStorage = () => {
+    const campoAConservar = sessionStorage.getItem("tutorInscripcionId");
+    sessionStorage.clear();
+    if (campoAConservar !== null)
+      sessionStorage.setItem("tutorInscripcionId", campoAConservar);
   };
 
   const onSubmit = async (data) => {
@@ -261,7 +269,7 @@ export const RegisterOlympian = () => {
       await getOlimpistaEnable(
         sessionStorage.getItem("CarnetIdentidadOlympian")
       );
-      navigation("/Register/OlympianArea", data);
+      navigation("/register/olympian-area", data);
     } catch (error) {
       swal("Error", error.response.data.message, "error");
     }

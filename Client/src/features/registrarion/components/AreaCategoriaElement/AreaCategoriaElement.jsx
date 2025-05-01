@@ -34,7 +34,7 @@ export const AreaCategoriaElement = ({
   );
 
   const addTutor = () => {
-    navigation("tutorOptional", { state: { area: nameArea } });
+    navigation("/register/tutor-optional", { state: { area: nameArea } });
   };
 
   return (

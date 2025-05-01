@@ -6,6 +6,7 @@ import { Select } from "../../../components/inputs/Select";
 import { Validator } from "../utils/ValidationRules";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { NextPage } from "../../../components/Buttons/NextPage";
+import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
 import { useEffect, useState } from "react";
@@ -20,8 +21,12 @@ import { getPersonData } from "../../../api/inscription.api";
 
 export const RegisterResponsible = () => {
   const [isReadOnly, setIsReadOnly] = useState({});
+  const [currentStep, sertCurrentStep] = useState(1);
+  const [totalSteps, setTotalStep] = useState(4);
   const navigation = useNavigate();
   const location = useLocation();
+  const manual = sessionStorage.getItem("inscripcionManual");
+
   const {
     register,
     handleSubmit,
@@ -154,18 +159,26 @@ export const RegisterResponsible = () => {
     });
 
     if (confirmacion.isConfirmed) {
+      limpiarCamposLocalStorage();
       navigation(
         sessionStorage.getItem("tutorInscripcionId")
           ? "/register/listRegistered"
-          : "/"
+          : "/register"
       );
     }
+  };
+
+  const limpiarCamposLocalStorage = () => {
+    const campoAConservar = sessionStorage.getItem("tutorInscripcionId");
+    sessionStorage.clear();
+    if (campoAConservar !== null)
+      sessionStorage.setItem("tutorInscripcionId", campoAConservar);
   };
 
   const onSubmit = async (data) => {
     try {
       sessionStorage.setItem("prevPage", location.pathname);
-      navigation("/register/olympian", {
+      navigation(manual === "true" ? "/register/olympian" : "/register/excel", {
         state: { from: location.pathname },
         data,
       });
@@ -178,6 +191,9 @@ export const RegisterResponsible = () => {
   return (
     <div className="container-form">
       <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      {manual === "true" && (
+        <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
+      )}
       <form
         className="container-form-inputs"
         onSubmit={handleSubmit(onSubmit)}

@@ -25,6 +25,7 @@ import ConsultarInscripcion from "./features/consultar_inscripcion/pages/Consult
 import ResultadoConsulta from "./features/consultar_inscripcion/pages/ResultadoConsulta";
 import ResultadoConsulta_Tutor from "./features/consultar_inscripcion/pages/ResultadoConsulta_Tutor";
 import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
+import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
@@ -34,7 +35,7 @@ function App() {
   const hideSidebarRoutes = [
     "/",
     "/register/tutor-form",
-    "/register/excel",
+    // "/register/excel",
     "/admin",
     "/contacto",
     "/consultar-inscripcion",
@@ -70,14 +71,27 @@ function App() {
         <div className="content-area">
           <Routes>
             <Route path="/" element={<MainHome />} />
+            <Route path="/register" element={<RegisterChoose />} />
             <Route path="/register/olympian" element={<RegisterOlympian />} />
             <Route path="/register/tutor-legal" element={<RegisterTutor />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
             <Route path="/register/excel" element={<RegisterExcel />} />
-            <Route path="/register" element={<RegisterResponsible />} />
-            <Route path="/register/olympian-area" element={<RegisterOlympianArea />} />
-            <Route path="/register/tutor-optional" element={<RegisterTutorOptional />} />
-            <Route path="/register/listRegistered" element={<ListRegistered />} />
+            <Route
+              path="/register/responsible"
+              element={<RegisterResponsible />}
+            />
+            <Route
+              path="/register/olympian-area"
+              element={<RegisterOlympianArea />}
+            />
+            <Route
+              path="/register/tutor-optional"
+              element={<RegisterTutorOptional />}
+            />
+            <Route
+              path="/register/listRegistered"
+              element={<ListRegistered />}
+            />
             <Route path="/contacto" element={<PaginaContacto />} />
             <Route
               path="/consultar-inscripcion"

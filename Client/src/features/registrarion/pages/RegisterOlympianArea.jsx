@@ -186,7 +186,7 @@ export const RegisterOlympianArea = () => {
         sessionStorage.getItem("CarnetIdentidadOlympian")
       );
       if (
-        resEnable.data.data.inscripciones_actuales == 1 &&
+        resEnable?.data?.data?.inscripciones_actuales == 1 &&
         data.AreaPrincipal &&
         data.AreaSecundaria
       ) {
@@ -224,12 +224,20 @@ export const RegisterOlympianArea = () => {
     });
 
     if (confirmacion.isConfirmed) {
+      limpiarCamposLocalStorage();
       navigation(
         sessionStorage.getItem("tutorInscripcionId")
           ? "/register/listRegistered"
-          : "/"
+          : "/register"
       );
     }
+  };
+
+  const limpiarCamposLocalStorage = () => {
+    const campoAConservar = sessionStorage.getItem("tutorInscripcionId");
+    sessionStorage.clear();
+    if (campoAConservar !== null)
+      sessionStorage.setItem("tutorInscripcionId", campoAConservar);
   };
 
   return (
