@@ -3,10 +3,10 @@
 
 :root {
   /*-------------------Paleta de Colores--------------------*/
-  --primary-color: #2563eb;
-  --secondary-color: #4f959d;
-  --tertiary-color: #98d2c0;
-  --quaternary-color: #f6f8d5;
+  --primary-color: #213448;
+  --secondary-color: #547792;
+  --tertiary-color: #94a6c1;
+  --quaternary-color: #ecefca;
 
   /*-------------------Padding botones----------------------*/
   --high-button: 12px;
@@ -27,7 +27,7 @@
   --label: 16px;
   --error-size: 14px;
   --principal-text: 60px;
-  --background: #f8fafc;
+  --background: #94b4c1;
 }
 
 body {

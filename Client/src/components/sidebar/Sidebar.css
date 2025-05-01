@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   height: 95vh;
-  background: #ecefca;
+  background: var(--quaternary-color);
   color: rgb(0, 0, 0);
   padding: 20px;
   transition: all 1s;
@@ -27,7 +27,7 @@
 
 .toggle-btn {
   color: rgb(0, 0, 0);
-  background-color: #ecefca;
+  background-color: transparent;
   border: none;
   padding: 10px;
   cursor: pointer;

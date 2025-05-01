@@ -15,12 +15,13 @@ import { getDataOlympian } from "../../../api/inscription.api";
 export const ListRegistered = () => {
   const [dataOlympians, setDataOlympians] = useState([]);
   const location = useLocation();
-  const tutorId = localStorage.getItem("tutorInscripcionId");
+  const tutorId = sessionStorage.getItem("tutorInscripcionId");
 
   useEffect(() => {
     const getStudents = async () => {
       try {
         const res = await getDataOlympian(tutorId);
+        console.log("hola", res);
         setDataOlympians(res.data.data);
       } catch (error) {
         console.log("Error en la peticion", error);
@@ -30,20 +31,23 @@ export const ListRegistered = () => {
   }, []);
 
   return (
-    <div className="container-list-registered">
-      <div className="list-header">
-        <h1>Estudiantes Registrados</h1>
-        <NextPage
-          value="+ Agregar Estudiante"
-          className="btn-add-student"
-          to="/register/olympian"
-          state={{ from: location.pathname }}
-        />
-      </div>
-      <div className="container-list">
-        {dataOlympians.map((estudiante) => (
-          <ListElement data={estudiante} key={estudiante.id_olimpista} />
-        ))}
+    <div className="container-form">
+      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <div className="container-list-registered">
+        <div className="list-header">
+          <h1>Estudiantes Registrados</h1>
+          <NextPage
+            value="+ Agregar Estudiante"
+            className="btn-add-student"
+            to="/register/olympian"
+            state={{ from: location.pathname }}
+          />
+        </div>
+        <div className="container-list">
+          {dataOlympians.map((estudiante) => (
+            <ListElement data={estudiante} key={estudiante.id_olimpista} />
+          ))}
+        </div>
       </div>
     </div>
   );

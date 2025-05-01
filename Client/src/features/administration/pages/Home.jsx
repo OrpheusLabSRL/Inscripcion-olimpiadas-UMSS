@@ -12,7 +12,7 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [activeOlimpiadas, setActiveOlimpiadas] = useState([]);
   const [areasPorOlimpiada, setAreasPorOlimpiada] = useState({});
-  const [allInscripciones, setAllInscripciones] = useState([]); // 🔥 todas las inscripciones
+  const [allInscripciones, setAllInscripciones] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const [participantes, setParticipantes] = useState(0);
@@ -128,7 +128,6 @@ export default function Home() {
       </div>
 
       <div className="summary-section">
-        {/* Olimpiadas actuales */}
         <div className="summary-card" style={{ textAlign: "center" }}>
           <h3>Nombre de las Olimpiadas Actuales</h3>
           {activeOlimpiadas.length > 0 ? (
@@ -172,21 +171,18 @@ export default function Home() {
           )}
         </div>
 
-        {/* Áreas Registradas */}
         <div className="summary-card" style={{ textAlign: "center" }}>
           <h3>Áreas Registradas</h3>
           <p className="big-text">{currentAreas.length}</p>
           <p>Aún se pueden aumentar</p>
         </div>
 
-        {/* Participantes */}
         <div className="summary-card">
           <h3>Participantes</h3>
           <p className="big-text">{participantes}</p>
           <p>+20% respecto al mes anterior</p>
         </div>
 
-        {/* Pagos Pendientes */}
         <div className="summary-card">
           <h3>Pagos Pendientes</h3>
           <p className="big-text">{pagosPendientes}</p>

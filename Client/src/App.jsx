@@ -17,14 +17,19 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterResponsible";
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
+import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
 
   // 🔥 Rutas donde NO queremos mostrar el Sidebar
-  const hideSidebarRoutes = ["/", "/register/tutor-form", "/admin"];
-
+  const hideSidebarRoutes = [
+    "/",
+    "/register/tutor-form",
+    "/register/excel",
+    "/admin",
+  ];
   const showSidebar = !hideSidebarRoutes.includes(location.pathname);
 
   const user = {
@@ -35,7 +40,9 @@ function App() {
     <div className="app-container">
       <div
         className={
-          hideSidebarRoutes.includes(location.pathname)
+          location.pathname === "/" ||
+          location.pathname === "/register/tutor-form" ||
+          location.pathname === "/register/excel"
             ? ""
             : isOpen
             ? "main active"
@@ -59,6 +66,7 @@ function App() {
             <Route path="register/tutor-legal" element={<RegisterTutor />} />
             <Route path="listRegistered" element={<ListRegistered />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
+            <Route path="/register/excel" element={<RegisterExcel />} />
             <Route
               path="/register/responsible"
               element={<RegisterResponsible />}

@@ -3,6 +3,8 @@
 use App\Http\Controllers\PersonaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExcelController;
+
 
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CategoriaController;
@@ -68,4 +70,11 @@ Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
 // Relación Categoría - Área - Olimpiada
 Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'index']);
 Route::post('/newAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'store']);
+Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);
+
+
+// Rutas para registro desde Excel
+Route::post('/register-from-excel', [ExcelController::class, 'registerFromExcel']);
+Route::post('/validate-excel-data', [ExcelController::class, 'validateExcelData']);
+Route::get('/available-combinations', [ExcelController::class, 'getAvailableCombinations']);
 Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']); 
