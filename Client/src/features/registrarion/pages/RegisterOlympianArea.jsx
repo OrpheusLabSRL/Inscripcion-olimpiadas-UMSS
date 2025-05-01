@@ -14,9 +14,14 @@ import swal from "sweetalert";
 import { useForm } from "react-hook-form";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { MdCleaningServices } from "react-icons/md";
+import Swal from "sweetalert2";
 
 //api
-import { getCatalogoCompleto } from "../../../api/inscription.api";
+import {
+  getCatalogoCompleto,
+  getOlimpistaEnable,
+} from "../../../api/inscription.api";
 
 //util
 import {
@@ -90,10 +95,7 @@ export const RegisterOlympianArea = () => {
       sessionStorage.removeItem("TutorArea2");
     };
     window.addEventListener("beforeunload", handleUnload);
-    sessionStorage.setItem(
-      "pantallaActualRegistro",
-      location.pathname
-    );
+    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
     return () => {
       window.removeEventListener("beforeunload", handleUnload);
     };
@@ -180,11 +182,53 @@ export const RegisterOlympianArea = () => {
         );
         return;
       }
-
+      const resEnable = await getOlimpistaEnable(
+        sessionStorage.getItem("CarnetIdentidadOlympian")
+      );
+      if (
+        resEnable.data.data.inscripciones_actuales == 1 &&
+        data.AreaPrincipal &&
+        data.AreaSecundaria
+      ) {
+        swal(
+          "No se puede inscribir en mas de 2 áreas",
+          "El olimpista solo puede inscribirse en una área mas",
+          "warning"
+        );
+        return;
+      }
       navigation("/register/tutor-legal", data);
     } catch (error) {
       console.log(error);
       swal("Error al registrar los datos");
+    }
+  };
+
+  const cleanFlieds = () => {
+    setValue("AreaPrincipal", "");
+    setValue("CategoriaPrincipal", "");
+    setValue("AreaSecundaria", "");
+    setValue("CategoriaSecundaria", "");
+    setCategoriasInteres([]);
+    setCategoriasInteresSecundaria(null);
+  };
+
+  const cancelInscription = async () => {
+    const confirmacion = await Swal.fire({
+      title: "¿Estás seguro que quieres salir?",
+      text: "Se perderan los datos ingresados.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, aceptar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (confirmacion.isConfirmed) {
+      navigation(
+        sessionStorage.getItem("tutorInscripcionId")
+          ? "/register/listRegistered"
+          : "/"
+      );
     }
   };
 
@@ -195,12 +239,21 @@ export const RegisterOlympianArea = () => {
       <NavLink to={"/register/olympian"}>
         <IoArrowBackCircle className="btn-back" />
       </NavLink>
+
       <form
         className="container-area-form-register"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="input-2c">
           <h1>Datos de competición</h1>
+        </div>
+
+        <div className="container-clean-fields input-2c">
+          <p>Limpiar campos</p>
+          <MdCleaningServices
+            className="icon-clean-fields"
+            onClick={cleanFlieds}
+          />
         </div>
 
         <AreaCategoriaElement
@@ -240,7 +293,7 @@ export const RegisterOlympianArea = () => {
         />
 
         <div className="container-btn-back-olympian input-1c">
-          <NextPage to={"/"} value="Cancelar" />
+          <NextPage value="Cancelar" onClick={cancelInscription} />
         </div>
 
         <div className="container-btn-next-olympian input-1c">

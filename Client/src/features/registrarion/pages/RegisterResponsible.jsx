@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import { MdCleaningServices } from "react-icons/md";
+import Swal from "sweetalert2";
 
 //api
 import { getPersonData } from "../../../api/inscription.api";
@@ -58,10 +59,7 @@ export const RegisterResponsible = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    sessionStorage.setItem(
-      "pantallaActualRegistro",
-      location.pathname
-    );
+    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
   }, []);
 
   useEffect(() => {
@@ -147,6 +145,25 @@ export const RegisterResponsible = () => {
     setValue("Ci", "");
 
     setIsReadOnly({});
+  };
+
+  const cancelInscription = async () => {
+    const confirmacion = await Swal.fire({
+      title: "¿Estás seguro que quieres salir?",
+      text: "Se perderan los datos ingresados.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, aceptar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (confirmacion.isConfirmed) {
+      navigation(
+        sessionStorage.getItem("tutorInscripcionId")
+          ? "/register/listRegistered"
+          : "/"
+      );
+    }
   };
 
   const onSubmit = async (data) => {
@@ -278,7 +295,7 @@ export const RegisterResponsible = () => {
         </div>
 
         <div className="container-btn-back-responsible input-1c">
-          <NextPage to={"/"} value="Cancelar" />
+          <NextPage value="Cancelar" onClick={cancelInscription} />
         </div>
         <div>
           <PrimaryButton type="submit" value="Siguiente" />

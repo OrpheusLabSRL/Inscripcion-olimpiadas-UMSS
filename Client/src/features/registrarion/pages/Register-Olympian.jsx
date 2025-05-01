@@ -15,6 +15,7 @@ import swal from "sweetalert";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { MdCleaningServices } from "react-icons/md";
+import Swal from "sweetalert2";
 
 //api
 import {
@@ -236,6 +237,25 @@ export const RegisterOlympian = () => {
     setIsReadOnly({});
   };
 
+  const cancelInscription = async () => {
+    const confirmacion = await Swal.fire({
+      title: "¿Estás seguro que quieres salir?",
+      text: "Se perderan los datos ingresados.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, aceptar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (confirmacion.isConfirmed) {
+      navigation(
+        sessionStorage.getItem("tutorInscripcionId")
+          ? "/register/listRegistered"
+          : "/"
+      );
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
       await getOlimpistaEnable(
@@ -412,7 +432,7 @@ export const RegisterOlympian = () => {
           />
         </div>
         <div className="container-btn-back-olympian input-1c">
-          <NextPage to={"/"} value="Cancelar" />
+          <NextPage value="Cancelar" onClick={cancelInscription} />
         </div>
 
         <div className="container-btn-next-olympian input-1c">
