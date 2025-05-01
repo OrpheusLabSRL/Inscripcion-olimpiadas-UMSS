@@ -54,6 +54,11 @@
   padding: 1.5rem;
   border-radius: 15px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .big-text {
@@ -96,6 +101,7 @@
   border-radius: 8px;
   cursor: pointer;
   margin-top: 1rem;
+  font-size: 16px;
 }
 
 .action-card button:hover {
