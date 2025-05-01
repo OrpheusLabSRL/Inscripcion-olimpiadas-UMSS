@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Boleta de Pago</title>
@@ -9,7 +10,8 @@
             position: relative;
         }
 
-        h1, h3 {
+        h1,
+        h3 {
             text-align: center;
         }
 
@@ -49,7 +51,8 @@
         }
 
         .info p {
-            margin: 3px 0;
+            margin-bottom: 5px;
+            font-size: 16px
         }
 
         table {
@@ -58,7 +61,7 @@
             border-spacing: 0;
             margin-top: 10px;
             border: 1px solid #007BFF;
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
         }
 
@@ -69,11 +72,13 @@
             padding: 10px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px;
             font-size: 13px;
-            text-align: left;
+            text-align: center;
             border: 1px solid #007BFF;
+            background-color: rgb(0, 123, 255, 0.1);
         }
 
         .total {
@@ -96,6 +101,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         UNIVERSIDAD MAYOR DE SAN SIMÓN <br>
@@ -110,9 +116,9 @@
 
     <div class="titulo-boleta">
         <div class="codigo-boleta">
-            N°: {{ $boleta->codigoBoleta }}
+            N°: 00{{ $boleta->codigoBoleta }}
         </div>
-        <h2 class="titulo">ORDEN DE PAGO</h2>
+        <h2 class="titulo">Boleta de Inscripción</h2>
     </div>
 
     <div class="info">
@@ -124,8 +130,8 @@
     <table>
         <thead>
             <tr>
-                <th>Nombre del Olimpista</th>
-                <th>Carnet de Identidad</th>
+                <th>Carnet de Identidad <br> del estudiante</th>
+                <th>Nombre del Estudiante</th>
                 <th>Área</th>
                 <th>Precio</th>
             </tr>
@@ -133,8 +139,10 @@
         <tbody>
             @foreach ($inscripciones as $inscripcion)
                 <tr>
-                    <td>{{ $inscripcion->olimpista->persona->nombre }} {{ $inscripcion->olimpista->persona->apellido }}</td>
+
                     <td>{{ $inscripcion->olimpista->persona->carnetIdentidad }}</td>
+                    <td>{{ $inscripcion->olimpista->persona->nombre }} {{ $inscripcion->olimpista->persona->apellido }}
+                    </td>
                     <td>{{ $inscripcion->OlimpiadaAreaCategoria->area->nombreArea }}</td>
                     <td>Bs{{ $inscripcion->OlimpiadaAreaCategoria->area->costoArea }}</td>
                 </tr>
@@ -144,9 +152,10 @@
 
     <div class="total">
         <p><strong>Son:</strong> {{ $montoTotal }} Bolivianos</p>
-     
+
         <p><strong>Total de Estudiantes:</strong> {{ $inscripciones->count() }}</p>
-        <p><strong>Cochabamba,</strong> {{ \Carbon\Carbon::parse($fecha)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') }}</p>
+        <p>Cochabamba, {{ \Carbon\Carbon::parse($fecha)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') }}</p>
     </div>
 </body>
+
 </html>
