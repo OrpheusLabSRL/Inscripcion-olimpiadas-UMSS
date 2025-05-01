@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
+import { MdCleaningServices } from "react-icons/md";
 
 //api
 import { getPersonData } from "../../../api/inscription.api";
@@ -34,10 +35,6 @@ export const RegisterTutorOptional = () => {
         area == "AreaPrincipal"
           ? sessionStorage.getItem("ApellidoPrincipal") || ""
           : sessionStorage.getItem("ApellidoSecundaria") || "",
-      // Tipo_Tutor:
-      //   area == "AreaPrincipal"
-      //     ? sessionStorage.getItem("TipoTutorPrincipal") || ""
-      //     : sessionStorage.getItem("TipoTutorSecundaria") || "",
       Numero_Celular:
         area == "AreaPrincipal"
           ? sessionStorage.getItem("NumeroPrincipal") || ""
@@ -61,10 +58,13 @@ export const RegisterTutorOptional = () => {
 
   const watchedNombre = watch("Nombre");
   const watchedApellido = watch("Apellido");
-  // const watchedTipoTutor = watch("Tipo_Tutor");
   const watchedEmail = watch("Email");
   const watchedTelefono = watch("Numero_Celular");
   const watchedCarnetIdentidad = watch("Ci");
+
+  useEffect(() => {
+    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
+  }, []);
 
   useEffect(() => {
     area == "AreaPrincipal"
@@ -77,12 +77,6 @@ export const RegisterTutorOptional = () => {
       ? sessionStorage.setItem("ApellidoPrincipal", watchedApellido)
       : sessionStorage.setItem("ApellidoSecundaria", watchedApellido);
   }, [watchedApellido]);
-
-  // useEffect(() => {
-  //   area == "AreaPrincipal"
-  //     ? sessionStorage.setItem("TipoTutorPrincipal", watchedTipoTutor)
-  //     : sessionStorage.setItem("TipoTutorSecundaria", watchedTipoTutor);
-  // }, [watchedTipoTutor]);
 
   useEffect(() => {
     area == "AreaPrincipal"
@@ -100,20 +94,22 @@ export const RegisterTutorOptional = () => {
     area == "AreaPrincipal"
       ? sessionStorage.setItem("CiPrincipal", watchedCarnetIdentidad)
       : sessionStorage.setItem("CiSecundaria", watchedCarnetIdentidad);
+    if (watchedCarnetIdentidad.length >= 7) {
+      autofill();
+    }
   }, [watchedCarnetIdentidad]);
 
   const onSubmit = async (data) => {
     area == "AreaPrincipal"
       ? sessionStorage.setItem("TutorArea1", true)
       : sessionStorage.setItem("TutorArea2", true);
-    navigation("/Register/OlympianArea");
+    navigation("/register/olympian-area");
   };
 
   const backPage = () => {
     const campos = {
       nombre: watchedNombre,
       apellido: watchedApellido,
-      // tipoTutor: watchedTipoTutor,
       email: watchedEmail,
       telefono: watchedTelefono,
       ci: watchedCarnetIdentidad,
@@ -132,9 +128,11 @@ export const RegisterTutorOptional = () => {
 
   const autofill = async () => {
     try {
-      const personData = await getPersonData(
-        sessionStorage.getItem("CiResponsible")
-      );
+      const ci =
+        area == "AreaPrincipal"
+          ? sessionStorage.getItem("CiPrincipal", watchedCarnetIdentidad)
+          : sessionStorage.getItem("CiSecundaria", watchedCarnetIdentidad);
+      const personData = await getPersonData(ci);
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
@@ -148,18 +146,61 @@ export const RegisterTutorOptional = () => {
       }
 
       if (personData.data.data.telefono) {
-        // setValue("Tipo_Tutor", personData.data.data.tipoTutor);
         setValue("Numero_Celular", personData.data.data.telefono);
         setIsReadOnly((prev) => ({
           ...prev,
-          // Tipo_Tutor: true,
           Numero_Celular: true,
         }));
       }
     } catch (error) {
-      console.log(error);
+      const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
+      const ciOlympian =
+        sessionStorage.getItem("CarnetIdentidadOlympian") || "";
+      const ciProfesor =
+        area == "AreaPrincipal"
+          ? sessionStorage.getItem("CiPrincipal") || ""
+          : sessionStorage.getItem("CiSecundaria") || "";
+
+      if (ciResponsible == ciProfesor) {
+        setValue("Nombre", sessionStorage.getItem("NombreResponsible"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoResponsible"));
+        setValue("Email", sessionStorage.getItem("EmailResponsible"));
+        setValue("Numero_Celular", sessionStorage.getItem("NumeroResponsible"));
+
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Ci: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+          Numero_Celular: true,
+        }));
+      } else if (ciProfesor == ciOlympian) {
+        setValue("Nombre", sessionStorage.getItem("NombreOlympian"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoOlympian"));
+        setValue("Email", sessionStorage.getItem("EmailOlympian"));
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Ci: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+        }));
+      }
     }
   };
+
+  const cleanFlieds = () => {
+    setValue("Nombre", "");
+    setValue("Apellido", "");
+    setValue("Tipo_Tutor", "");
+    setValue("Numero_Celular", "");
+    setValue("Email", "");
+    setValue("Ci", "");
+
+    setIsReadOnly({});
+  };
+  
 
   return (
     <div className="container-form">
@@ -170,9 +211,16 @@ export const RegisterTutorOptional = () => {
         <div className="input-2c">
           <h1>Registro de profesor de área</h1>
           <h5 className="message-recomendation">
-            Si ya tiene datos registrados, ingrese su CI y presione el botón
-            "Autocompletar" para llenar automáticamente los campos.
+            Si ya tiene datos registrados, ingrese su CI y se llenara
+            automáticamente los campos.
           </h5>
+          <div className="container-clean-fields">
+            <p>Limpiar campos</p>
+            <MdCleaningServices
+              className="icon-clean-fields"
+              onClick={cleanFlieds}
+            />
+          </div>
         </div>
 
         <div className="input-1c">
@@ -182,7 +230,6 @@ export const RegisterTutorOptional = () => {
             mandatory="true"
             name="Ci"
             isReadOnly={isReadOnly}
-            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("Ci", e.target.value)}
             register={register}
@@ -220,22 +267,6 @@ export const RegisterTutorOptional = () => {
             errors={errors}
           />
         </div>
-
-        {/* <div className="input-1c">
-          <Select
-            label={"Tipo de tutor"}
-            placeholder="Seleccione tipo"
-            mandatory="true"
-            options={tipoTutor}
-            name="Tipo_Tutor"
-            isReadOnly={isReadOnly}
-            value={watchedTipoTutor}
-            onChange={(e) => setValue("Tipo_Tutor", e.target.value)}
-            register={register}
-            validationRules={Validator.tipo_tutor}
-            errors={errors}
-          />
-        </div> */}
 
         <div className="input-1c">
           <Input

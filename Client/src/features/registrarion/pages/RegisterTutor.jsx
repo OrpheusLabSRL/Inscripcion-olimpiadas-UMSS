@@ -12,9 +12,11 @@ import ProgressBar from "../components/ProgressBar/ProgressBar";
 //react
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
 import swal from "sweetalert";
+import { MdCleaningServices } from "react-icons/md";
+import Swal from "sweetalert2";
 
 //api
 import { setNewInscription, getPersonData } from "../../../api/inscription.api";
@@ -23,7 +25,12 @@ export const RegisterTutor = () => {
   const [currentStep, sertCurrentStep] = useState(4);
   const [totalSteps, setTotalStep] = useState(4);
   const [isReadOnly, setIsReadOnly] = useState({});
+  const [tipoTutor, setTipoTutor] = useState([
+    { value: "Padre/Madre", label: "Papá/Mamá" },
+    { value: "Tutor Legal", label: "Tutor Legal" },
+  ]);
   const navigation = useNavigate();
+  const location = useLocation();
   const {
     register,
     handleSubmit,
@@ -42,11 +49,6 @@ export const RegisterTutor = () => {
     mode: "onChange",
   });
 
-  const tipoTutor = [
-    { value: "Padre/Madre", label: "Papá/Mamá" },
-    { value: "Tutor Legal", label: "Tutor Legal" },
-  ];
-
   const watchedNombre = watch("Nombre");
   const watchedApellido = watch("Apellido");
   const watchedTipoTutor = watch("Tipo_Tutor");
@@ -56,6 +58,7 @@ export const RegisterTutor = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
   }, []);
 
   useEffect(() => {
@@ -80,6 +83,9 @@ export const RegisterTutor = () => {
 
   useEffect(() => {
     sessionStorage.setItem("CiLegal", watchedCarnetIdentidad);
+    if (watchedCarnetIdentidad.length >= 7) {
+      autofill();
+    }
   }, [watchedCarnetIdentidad]);
 
   useEffect(() => {
@@ -98,84 +104,93 @@ export const RegisterTutor = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    const dataToSend = {
-      olimpista: {
-        nombre: sessionStorage.getItem("NombreOlympian"),
-        apellido: sessionStorage.getItem("ApellidoOlympian"),
-        correo_electronico: sessionStorage.getItem("EmailOlympian"),
-        carnet_identidad: sessionStorage.getItem("CarnetIdentidadOlympian"),
-        curso: sessionStorage.getItem("CursoOlympian"),
-        fecha_nacimiento: sessionStorage.getItem("FechaNacimientoOlympian"),
-        colegio: sessionStorage.getItem("ColegioOlympian"),
-        departamento: sessionStorage.getItem("DepartamentoOlympian"),
-        municipio: sessionStorage.getItem("MunicipioOlympian"),
-      },
-      responsable: sessionStorage.getItem("tutorInscripcionId")
-        ? { id_persona: sessionStorage.getItem("tutorInscripcionId") }
-        : {
-            nombre: sessionStorage.getItem("NombreResponsible"),
-            apellido: sessionStorage.getItem("ApellidoResponsible"),
-            tipo_tutor: sessionStorage.getItem("TipoTutorResponsible"),
-            correo_electronico: sessionStorage.getItem("EmailResponsible"),
-            telefono: sessionStorage.getItem("NumeroResponsible"),
-            carnet_identidad: sessionStorage.getItem("CiResponsible"),
+    const confirmacion = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Se registraran los datos ingresados.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, aceptar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (confirmacion.isConfirmed) {
+      const dataToSend = {
+        olimpista: {
+          nombre: sessionStorage.getItem("NombreOlympian"),
+          apellido: sessionStorage.getItem("ApellidoOlympian"),
+          correo_electronico: sessionStorage.getItem("EmailOlympian"),
+          carnet_identidad: sessionStorage.getItem("CarnetIdentidadOlympian"),
+          curso: sessionStorage.getItem("CursoOlympian"),
+          fecha_nacimiento: sessionStorage.getItem("FechaNacimientoOlympian"),
+          colegio: sessionStorage.getItem("ColegioOlympian"),
+          departamento: sessionStorage.getItem("DepartamentoOlympian"),
+          municipio: sessionStorage.getItem("MunicipioOlympian"),
+        },
+        responsable: sessionStorage.getItem("tutorInscripcionId")
+          ? { id_persona: sessionStorage.getItem("tutorInscripcionId") }
+          : {
+              nombre: sessionStorage.getItem("NombreResponsible"),
+              apellido: sessionStorage.getItem("ApellidoResponsible"),
+              tipo_tutor: sessionStorage.getItem("TipoTutorResponsible"),
+              correo_electronico: sessionStorage.getItem("EmailResponsible"),
+              telefono: sessionStorage.getItem("NumeroResponsible"),
+              carnet_identidad: sessionStorage.getItem("CiResponsible"),
+            },
+        tutor_legal: {
+          nombre: sessionStorage.getItem("NombreLegal"),
+          apellido: sessionStorage.getItem("ApellidoLegal"),
+          tipo_tutor: sessionStorage.getItem("TipoTutorLegal"),
+          correo_electronico: sessionStorage.getItem("EmailLegal"),
+          telefono: sessionStorage.getItem("NumeroLegal"),
+          carnet_identidad: sessionStorage.getItem("CiLegal"),
+        },
+        inscripciones: [
+          {
+            area: sessionStorage.getItem("AreaPrincipal"),
+            categoria: sessionStorage.getItem("CategoriaPrincipal"),
+            existeTutor: sessionStorage.getItem("TutorArea1"),
+            tutorArea: {
+              nombre: sessionStorage.getItem("NombrePrincipal"),
+              apellido: sessionStorage.getItem("ApellidoPrincipal"),
+              tipo_tutor: "Profesor",
+              correo_electronico: sessionStorage.getItem("EmailPrincipal"),
+              telefono: sessionStorage.getItem("NumeroPrincipal"),
+              carnet_identidad: sessionStorage.getItem("CiPrincipal"),
+            },
           },
-      tutor_legal: {
-        nombre: sessionStorage.getItem("NombreLegal"),
-        apellido: sessionStorage.getItem("ApellidoLegal"),
-        tipo_tutor: sessionStorage.getItem("TipoTutorLegal"),
-        correo_electronico: sessionStorage.getItem("EmailLegal"),
-        telefono: sessionStorage.getItem("NumeroLegal"),
-        carnet_identidad: sessionStorage.getItem("CiLegal"),
-      },
-      inscripciones: [
-        {
-          area: sessionStorage.getItem("AreaPrincipal"),
-          categoria: sessionStorage.getItem("CategoriaPrincipal"),
-          existeTutor: sessionStorage.getItem("TutorArea1"),
+        ],
+      };
+
+      if (sessionStorage.getItem("AreaSecundaria")) {
+        dataToSend.inscripciones.push({
+          area: sessionStorage.getItem("AreaSecundaria"),
+          categoria: sessionStorage.getItem("CategoriaSecundaria"),
+          existeTutor: sessionStorage.getItem("TutorArea2"),
           tutorArea: {
-            nombre: sessionStorage.getItem("NombrePrincipal"),
-            apellido: sessionStorage.getItem("ApellidoPrincipal"),
+            nombre: sessionStorage.getItem("NombreSecundaria"),
+            apellido: sessionStorage.getItem("ApellidoSecundaria"),
             tipo_tutor: "Profesor",
-            correo_electronico: sessionStorage.getItem("EmailPrincipal"),
-            telefono: sessionStorage.getItem("NumeroPrincipal"),
-            carnet_identidad: sessionStorage.getItem("CiPrincipal"),
+            correo_electronico: sessionStorage.getItem("EmailSecundaria"),
+            telefono: sessionStorage.getItem("NumeroSecundaria"),
+            carnet_identidad: sessionStorage.getItem("CiSecundaria"),
           },
-        },
-      ],
-    };
+        });
+      }
 
-    if (sessionStorage.getItem("AreaSecundaria")) {
-      dataToSend.inscripciones.push({
-        area: sessionStorage.getItem("AreaSecundaria"),
-        categoria: sessionStorage.getItem("CategoriaSecundaria"),
-        existeTutor: sessionStorage.getItem("TutorArea2"),
-        tutorArea: {
-          nombre: sessionStorage.getItem("NombreSecundaria"),
-          apellido: sessionStorage.getItem("ApellidoSecundaria"),
-          tipo_tutor: "Profesor",
-          correo_electronico: sessionStorage.getItem("EmailSecundaria"),
-          telefono: sessionStorage.getItem("NumeroSecundaria"),
-          carnet_identidad: sessionStorage.getItem("CiSecundaria"),
-        },
-      });
-    }
+      try {
+        const resInscription = await setNewInscription(dataToSend);
+        limpiarCamposLocalStorage();
+        sessionStorage.setItem(
+          "tutorInscripcionId",
+          resInscription.data.data.tutor_responsable_id
+        );
 
-    console.log("Los datos de inscripcion son: ", dataToSend);
-
-    try {
-      const resInscription = await setNewInscription(dataToSend);
-      limpiarCamposLocalStorage();
-      sessionStorage.setItem(
-        "tutorInscripcionId",
-        resInscription.data.data.tutor_responsable_id
-      );
-
-      swal("Datos registrados correctamente");
-      navigation("/listRegistered");
-    } catch (error) {
-      console.log(error);
-      swal("Error al registrar los datos");
+        swal("Datos registrados correctamente");
+        navigation("/register/listRegistered");
+      } catch (error) {
+        console.log(error);
+        swal("Error al registrar los datos");
+      }
     }
   };
 
@@ -188,15 +203,14 @@ export const RegisterTutor = () => {
 
   const autofill = async () => {
     try {
-      const personData = await getPersonData(
-        sessionStorage.getItem("CiResponsible")
-      );
+      const personData = await getPersonData(sessionStorage.getItem("CiLegal"));
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
         setValue("Email", personData.data.data.correoElectronico);
         setIsReadOnly((prev) => ({
           ...prev,
+          Ci: true,
           Nombre: true,
           Apellido: true,
           Email: true,
@@ -204,6 +218,12 @@ export const RegisterTutor = () => {
       }
 
       if (personData.data.data.tipoTutor) {
+        setTipoTutor([
+          ...tipoTutor,
+          { value: "Profesor", label: "Profesor" },
+          { value: "Estudiante", label: "Estudiante" },
+        ]);
+
         setValue("Tipo_Tutor", personData.data.data.tipoTutor);
         setValue("Numero_Celular", personData.data.data.telefono);
         setIsReadOnly((prev) => ({
@@ -213,7 +233,107 @@ export const RegisterTutor = () => {
         }));
       }
     } catch (error) {
-      console.log(error);
+      const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
+      const ciOlympian =
+        sessionStorage.getItem("CarnetIdentidadOlympian") || "";
+      const ciProfesorPrincipal = sessionStorage.getItem("CiPrincipal") || "";
+      const ciProfesorSecundario = sessionStorage.getItem("CiSecundaria") || "";
+      const ciLegal = sessionStorage.getItem("CiLegal") || "";
+
+      if (ciLegal == ciResponsible) {
+        setValue("Nombre", sessionStorage.getItem("NombreResponsible"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoResponsible"));
+        setValue("Email", sessionStorage.getItem("EmailResponsible"));
+        setValue("Numero_Celular", sessionStorage.getItem("NumeroResponsible"));
+
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Ci: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+          Numero_Celular: true,
+        }));
+        return;
+      }
+      if (ciLegal == ciOlympian) {
+        setValue("Nombre", sessionStorage.getItem("NombreOlympian"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoOlympian"));
+        setValue("Email", sessionStorage.getItem("EmailOlympian"));
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Ci: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+        }));
+      }
+      if (ciLegal == ciProfesorPrincipal) {
+        setValue("Nombre", sessionStorage.getItem("NombrePrincipal"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoPrincipal"));
+        setValue("Email", sessionStorage.getItem("EmailResponsible"));
+        setValue("Numero_Celular", sessionStorage.getItem("NumeroPrincipal"));
+
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Ci: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+          Numero_Celular: true,
+        }));
+        return;
+      }
+      if (ciLegal == ciProfesorSecundario) {
+        setValue("Nombre", sessionStorage.getItem("NombreSecundaria"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoSecundaria"));
+        setValue("Email", sessionStorage.getItem("EmailSecundaria"));
+        setValue("Numero_Celular", sessionStorage.getItem("NumeroSecundaria"));
+
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Ci: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+          Numero_Celular: true,
+        }));
+        return;
+      }
+    }
+  };
+
+  const cleanFlieds = () => {
+    setValue("Nombre", "");
+    setValue("Apellido", "");
+    setValue("Tipo_Tutor", "");
+    setValue("Numero_Celular", "");
+    setValue("Email", "");
+    setValue("Ci", "");
+    setTipoTutor([
+      { value: "Padre/Madre", label: "Papá/Mamá" },
+      { value: "Tutor Legal", label: "Tutor Legal" },
+    ]);
+    setIsReadOnly({});
+  };
+
+  const cancelInscription = async () => {
+    const confirmacion = await Swal.fire({
+      title: "¿Estás seguro que quieres salir?",
+      text: "Se perderan los datos ingresados.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, aceptar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (confirmacion.isConfirmed) {
+      limpiarCamposLocalStorage();
+      navigation(
+        sessionStorage.getItem("tutorInscripcionId")
+          ? "/register/listRegistered"
+          : "/register"
+      );
     }
   };
 
@@ -221,16 +341,23 @@ export const RegisterTutor = () => {
     <div className="container-form">
       <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-      <NavLink to={"/register/OlympianArea"}>
+      <NavLink to={"/register/olympian-area"}>
         <IoArrowBackCircle className="btn-back" />
       </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
           <h1>Registro de datos de tutor legal</h1>
           <h5 className="message-recomendation">
-            Si ya tiene datos registrados, ingrese su CI y presione el botón
-            "Autocompletar" para llenar automáticamente los campos.
+            Si ya tiene datos registrados, ingrese su CI y se llenara
+            automáticamente los campos.
           </h5>
+          <div className="container-clean-fields">
+            <p>Limpiar campos</p>
+            <MdCleaningServices
+              className="icon-clean-fields"
+              onClick={cleanFlieds}
+            />
+          </div>
         </div>
 
         <div className="input-1c">
@@ -240,7 +367,6 @@ export const RegisterTutor = () => {
             mandatory="true"
             name="Ci"
             isReadOnly={isReadOnly}
-            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("Ci", e.target.value)}
             register={register}
@@ -326,7 +452,7 @@ export const RegisterTutor = () => {
         </div>
 
         <div className="container-btn-back-olympian input-1c">
-          <NextPage to={"/"} value="Cancelar" />
+          <NextPage value="Cancelar" onClick={cancelInscription} />
         </div>
 
         <div>

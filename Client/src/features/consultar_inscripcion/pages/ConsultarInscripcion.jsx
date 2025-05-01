@@ -44,8 +44,8 @@ const ConsultarInscripcion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    
+    setError("");
+
     // Validar el formulario antes de enviar
     if (!validateForm()) {
       return;
@@ -54,34 +54,36 @@ const ConsultarInscripcion = () => {
     setLoading(true);
 
     try {
-      const endpoint = rol === 'tutor' 
-        ? 'http://localhost:8000/api/consultar-inscripcion-tutor'
-        : 'http://localhost:8000/api/consultar-inscripcion-olimpista';
+      const endpoint =
+        rol === "tutor"
+          ? "http://localhost:8000/api/consultar-inscripcion-tutor"
+          : "http://localhost:8000/api/consultar-inscripcion-olimpista";
 
       const response = await axios.post(endpoint, {
         carnetIdentidad: ci,
         correoElectronico: correo,
-        rol: rol
+        rol: rol,
       });
 
       if (response.data.success) {
-        const redirectPath = rol === 'tutor' 
-          ? '/consultar-inscripcion/resultado-tutor'
-          : '/consultar-inscripcion/resultado';
-          
-        navigate(redirectPath, { 
+        const redirectPath =
+          rol === "tutor"
+            ? "/consultar-inscripcion/resultado-tutor"
+            : "/consultar-inscripcion/resultado";
+
+        navigate(redirectPath, {
           state: { resultado: response.data },
-          replace: true 
+          replace: true,
         });
       } else {
-        setError(response.data.message || 'No se encontraron resultados');
+        setError(response.data.message || "No se encontraron resultados");
       }
     } catch (err) {
       if (err.response?.data?.errors) {
         // Si hay errores de validación del servidor
         const serverErrors = err.response.data.errors;
         const newErrors = {};
-        
+
         if (serverErrors.carnetIdentidad) {
           newErrors.ci = serverErrors.carnetIdentidad[0];
         }
@@ -91,14 +93,18 @@ const ConsultarInscripcion = () => {
         if (serverErrors.rol) {
           newErrors.rol = serverErrors.rol[0];
         }
-        
+
         setErrors(newErrors);
       } else if (err.response) {
-        setError(err.response.data.message || 'Error al consultar la inscripción');
+        setError(
+          err.response.data.message || "Error al consultar la inscripción"
+        );
       } else if (err.request) {
-        setError('No se pudo conectar con el servidor. Por favor, verifica que el servidor Laravel esté corriendo.');
+        setError(
+          "No se pudo conectar con el servidor. Por favor, verifica que el servidor Laravel esté corriendo."
+        );
       } else {
-        setError('Error al procesar la solicitud');
+        setError("Error al procesar la solicitud");
       }
     } finally {
       setLoading(false);
@@ -110,7 +116,7 @@ const ConsultarInscripcion = () => {
       <HeaderProp />
       <form className="consultar-form" onSubmit={handleSubmit} noValidate>
         <h2>Consultar Estado de Inscripción</h2>
-        
+
         <div className="form-group">
           <label htmlFor="ci">
             Carnet de Identidad <span className="required-field">*</span>
@@ -125,9 +131,7 @@ const ConsultarInscripcion = () => {
             placeholder="Ingrese su carnet de identidad"
             aria-required="true"
           />
-          {errors.ci && (
-            <div className="error-message">{errors.ci}</div>
-          )}
+          {errors.ci && <div className="error-message">{errors.ci}</div>}
         </div>
 
         <div className="form-group">
@@ -165,13 +169,15 @@ const ConsultarInscripcion = () => {
             <option value="olimpista">Olimpista</option>
             <option value="tutor">Tutor</option>
           </select>
-          {errors.rol && (
-            <div className="error-message">{errors.rol}</div>
-          )}
+          {errors.rol && <div className="error-message">{errors.rol}</div>}
         </div>
 
-        <button type="submit" className="submit-button" disabled={loading}>
-          {loading ? 'Consultando...' : 'CONSULTAR'}
+        <button
+          type="submit"
+          className="btn-consulta submit-button"
+          disabled={loading}
+        >
+          {loading ? "Consultando..." : "CONSULTAR"}
         </button>
 
         {error && <div className="error-message">{error}</div>}

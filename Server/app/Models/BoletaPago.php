@@ -10,7 +10,7 @@ class BoletaPago extends Model
     use HasFactory;
 
     protected $table = 'boletas_pagos';
-    protected $primaryKey = 'codigoBoleta'; // ¡Importante! porque no es "id"
+    protected $primaryKey = 'codigoBoleta';
 
     protected $fillable = [
         'idTutor',
@@ -20,8 +20,8 @@ class BoletaPago extends Model
     ];
 
     public function inscripciones()
-{
-    return $this->hasMany(Inscripcion::class, 'codigoBoleta', 'codigoBoleta');
+    {
+        return $this->hasMany(Inscripcion::class, 'codigoBoleta', 'codigoBoleta');
+    }
 }
 
-}

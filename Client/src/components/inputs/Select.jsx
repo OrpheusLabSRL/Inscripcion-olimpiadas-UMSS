@@ -36,7 +36,7 @@ export const Select = ({
             : register(name, { required: false })))}
         value={value}
         onChange={onChange}
-        disabled={isReadOnly?.Nombre ? true : false}
+        disabled={isReadOnly[name] ? true : false}
         autoComplete="off"
       >
         {placeholder && <option value={""}>{placeholder}</option>}
