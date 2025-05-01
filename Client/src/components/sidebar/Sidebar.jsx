@@ -1,6 +1,5 @@
 //React
-import { Link } from "react-router-dom";
-
+import { NavLink, Link } from "react-router-dom";
 //Icons
 import { FaHome } from "react-icons/fa";
 import { IoDocumentTextOutline } from "react-icons/io5";
@@ -59,36 +58,44 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                 </Link>
               </li>*/}
               <li>
-                <Link>
+                <NavLink>
                   <HiOutlineClipboardDocumentList className="sidebar-icons" />{" "}
                   {isOpen ? "Exámenes" : ""}
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to= "/admin/reports">
+                <Link to="/admin/reports">
                   <HiOutlineClipboardDocument className="sidebar-icons" />{" "}
                   {isOpen ? "Reportes" : ""}
                 </Link>
               </li>
               <li>
-                <Link>
+                <NavLink>
                   <FaRegCalendarAlt className="sidebar-icons" />{" "}
                   {isOpen ? "Calendario" : ""}
-                </Link>
+                </NavLink>
               </li>
             </>
           ) : (
             <>
               <li>
-                <Link>
-                  <FaHome className="sidebar-icons" /> {isOpen ? "Inicio" : ""}
-                </Link>
+                <NavLink
+                  to={
+                    sessionStorage.getItem("pantallaActualRegistro")
+                      ? sessionStorage.getItem("pantallaActualRegistro")
+                      : "/register"
+                  }
+                  className={({ isActive }) => (isActive ? 'active-link' : '')}
+                >
+                  <FaHome className="sidebar-icons" />{" "}
+                  {isOpen ? "Inscripción" : ""}
+                </NavLink>
               </li>
               <li>
-                <Link>
+                <NavLink to={"/contacto"}>
                   <IoDocumentTextOutline className="sidebar-icons" />{" "}
                   {isOpen ? "Contacto" : ""}
-                </Link>
+                </NavLink>
               </li>
             </>
           )}

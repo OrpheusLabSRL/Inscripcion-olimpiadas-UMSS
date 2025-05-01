@@ -191,7 +191,7 @@ export const TutorForm = () => {
       if (response.data.success) {
         setSubmitSuccess("Registro exitoso! Redirigiendo...");
         setTimeout(() => {
-          navigate("/register/responsible", {
+          navigate("/register", {
             state: {
               tutorId: response.data.tutorId,
               tutorData: formData,
@@ -281,7 +281,7 @@ export const TutorForm = () => {
         sessionStorage.setItem("tutorInscripcionId", response.data.tutorId);
         setSubmitSuccess("Datos verificados! Redirigiendo...");
         setTimeout(() => {
-          navigate("/listRegistered", {
+          navigate("/register/listRegistered", {
             state: {
               tutorId: response.data.tutorId,
               tutorData: {
@@ -368,7 +368,7 @@ export const TutorForm = () => {
                 title="Olimpiadas O! SanSi 2025"
                 description="Inicia una nueva inscripcion y registra uno o mas estudiantes a las Olimpiadas O SanSi 2025"
                 value="Nueva Inscripción"
-                to="/register/responsible"
+                to="/register"
               />
             </form>
           ) : (

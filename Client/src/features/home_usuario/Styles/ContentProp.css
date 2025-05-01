@@ -398,8 +398,9 @@ section {
     font-size: var(--pS-size); /* Usando la variable de tamaño de fuente */
   }
 }
-h1 {
-  font-size: 1.5rem; /* Tamaño más pequeño */
+
+/* h1 {
+  font-size: 1.5rem;
 }
 
 h2 {
@@ -408,11 +409,11 @@ h2 {
 }
 
 p {
-  font-size: 1rem; /* Tamaño más pequeño */
+  font-size: 1rem;
   font-weight: 450;
   font-family: 'Inter', sans-serif;
 }
 h3 {
   font-family: 'Inter', sans-serif;
   font-weight: 500;
-}
+} */

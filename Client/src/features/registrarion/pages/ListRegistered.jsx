@@ -21,7 +21,6 @@ export const ListRegistered = () => {
     const getStudents = async () => {
       try {
         const res = await getDataOlympian(tutorId);
-        console.log("hola", res);
         setDataOlympians(res.data.data);
       } catch (error) {
         console.log("Error en la peticion", error);
@@ -41,6 +40,9 @@ export const ListRegistered = () => {
             className="btn-add-student"
             to="/register/olympian"
             state={{ from: location.pathname }}
+            onClick={() =>
+              sessionStorage.setItem("prevPage", location.pathname)
+            }
           />
         </div>
         <div className="container-list">

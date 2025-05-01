@@ -115,7 +115,7 @@ class InscripcionController extends Controller
             [
                 'fechaNacimiento' => $data['fecha_nacimiento'],
                 'departamento' => $data['departamento'],
-                'provincia' => $data['provincia'],
+                'municipio' => $data['municipio'],
                 'curso' => $data['curso'],
                 'colegio' => $data['colegio']
             ]
@@ -297,7 +297,7 @@ class InscripcionController extends Controller
                             'correoElectronico' => $persona->correoElectronico,
                             'fechaNacimiento' => $olimpista->fechaNacimiento,
                             'departamento' => $olimpista->departamento,
-                            'provincia' => $olimpista->provincia,
+                            'municipio' => $olimpista->municipio,
                             'curso' => $olimpista->curso,
                             'colegio' => $olimpista->colegio
                         ],

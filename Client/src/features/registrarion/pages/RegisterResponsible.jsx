@@ -6,20 +6,27 @@ import { Select } from "../../../components/inputs/Select";
 import { Validator } from "../utils/ValidationRules";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { NextPage } from "../../../components/Buttons/NextPage";
+import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
+import { MdCleaningServices } from "react-icons/md";
+import Swal from "sweetalert2";
 
 //api
 import { getPersonData } from "../../../api/inscription.api";
 
 export const RegisterResponsible = () => {
   const [isReadOnly, setIsReadOnly] = useState({});
+  const [currentStep, sertCurrentStep] = useState(1);
+  const [totalSteps, setTotalStep] = useState(4);
   const navigation = useNavigate();
   const location = useLocation();
+  const manual = sessionStorage.getItem("inscripcionManual");
+
   const {
     register,
     handleSubmit,
@@ -53,6 +60,7 @@ export const RegisterResponsible = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
   }, []);
 
   useEffect(() => {
@@ -77,6 +85,10 @@ export const RegisterResponsible = () => {
 
   useEffect(() => {
     sessionStorage.setItem("CiResponsible", watchedCarnetIdentidad);
+
+    if (watchedCarnetIdentidad.length >= 7) {
+      autofill();
+    }
   }, [watchedCarnetIdentidad]);
 
   useEffect(() => {
@@ -125,9 +137,48 @@ export const RegisterResponsible = () => {
     }
   };
 
+  const cleanFlieds = () => {
+    setValue("Nombre", "");
+    setValue("Apellido", "");
+    setValue("Tipo_Tutor", "");
+    setValue("Numero_Celular", "");
+    setValue("Email", "");
+    setValue("Ci", "");
+
+    setIsReadOnly({});
+  };
+
+  const cancelInscription = async () => {
+    const confirmacion = await Swal.fire({
+      title: "¿Estás seguro que quieres salir?",
+      text: "Se perderan los datos ingresados.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, aceptar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (confirmacion.isConfirmed) {
+      limpiarCamposLocalStorage();
+      navigation(
+        sessionStorage.getItem("tutorInscripcionId")
+          ? "/register/listRegistered"
+          : "/register"
+      );
+    }
+  };
+
+  const limpiarCamposLocalStorage = () => {
+    const campoAConservar = sessionStorage.getItem("tutorInscripcionId");
+    sessionStorage.clear();
+    if (campoAConservar !== null)
+      sessionStorage.setItem("tutorInscripcionId", campoAConservar);
+  };
+
   const onSubmit = async (data) => {
     try {
-      navigation("/register/excel", {
+      sessionStorage.setItem("prevPage", location.pathname);
+      navigation(manual === "true" ? "/register/olympian" : "/register/excel", {
         state: { from: location.pathname },
         data,
       });
@@ -140,6 +191,9 @@ export const RegisterResponsible = () => {
   return (
     <div className="container-form">
       <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      {manual === "true" && (
+        <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
+      )}
       <form
         className="container-form-inputs"
         onSubmit={handleSubmit(onSubmit)}
@@ -148,9 +202,16 @@ export const RegisterResponsible = () => {
         <div className="input-2c">
           <h1>Datos de responsable de inscripción</h1>
           <h5 className="message-recomendation">
-            Si ya tiene datos registrados, ingrese su CI y presione el botón
-            "Autocompletar" para llenar automáticamente los campos.
+            Si ya tiene datos registrados, ingrese su CI y se llenara
+            automáticamente los campos.
           </h5>
+          <div className="container-clean-fields">
+            <p>Limpiar campos</p>
+            <MdCleaningServices
+              className="icon-clean-fields"
+              onClick={cleanFlieds}
+            />
+          </div>
         </div>
 
         <div className="input-1c">
@@ -160,7 +221,6 @@ export const RegisterResponsible = () => {
             mandatory="true"
             name="Ci"
             isReadOnly={isReadOnly}
-            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("Ci", e.target.value)}
             register={register}
@@ -246,7 +306,7 @@ export const RegisterResponsible = () => {
         </div>
 
         <div className="container-btn-back-responsible input-1c">
-          <NextPage to={"/"} value="Cancelar" />
+          <NextPage value="Cancelar" onClick={cancelInscription} />
         </div>
         <div>
           <PrimaryButton type="submit" value="Siguiente" />

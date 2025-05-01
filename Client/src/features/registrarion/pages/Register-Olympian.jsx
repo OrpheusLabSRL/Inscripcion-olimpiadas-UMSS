@@ -14,6 +14,8 @@ import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
+import { MdCleaningServices } from "react-icons/md";
+import Swal from "sweetalert2";
 
 //api
 import {
@@ -45,7 +47,7 @@ export const RegisterOlympian = () => {
 
   const navigation = useNavigate();
   const location = useLocation();
-  const previousPath = location.state?.from;
+  const previousPath = sessionStorage.getItem("prevPage");
 
   const {
     register,
@@ -92,6 +94,9 @@ export const RegisterOlympian = () => {
 
   useEffect(() => {
     sessionStorage.setItem("CarnetIdentidadOlympian", watchedCarnetIdentidad);
+    if (watchedCarnetIdentidad.length >= 7) {
+      autofill();
+    }
   }, [watchedCarnetIdentidad]);
 
   useEffect(() => {
@@ -129,6 +134,7 @@ export const RegisterOlympian = () => {
       sessionStorage.removeItem("colegiosFiltradas");
     };
     window.addEventListener("beforeunload", handleUnload);
+    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
     return () => {
       window.removeEventListener("beforeunload", handleUnload);
     };
@@ -160,12 +166,14 @@ export const RegisterOlympian = () => {
       const personData = await getPersonData(
         sessionStorage.getItem("CarnetIdentidadOlympian")
       );
+
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
         setValue("Email", personData.data.data.correoElectronico);
         setIsReadOnly((prev) => ({
           ...prev,
+          CarnetIdentidad: true,
           Nombre: true,
           Apellido: true,
           Email: true,
@@ -175,21 +183,85 @@ export const RegisterOlympian = () => {
       if (personData.data.data.fechaNacimiento) {
         setValue("FechaNacimiento", personData.data.data.fechaNacimiento);
         setValue("Departamento", personData.data.data.departamento);
-        setValue("Municipio", personData.data.data.provincia);
+        const provincias =
+          municipioPorDepartamento[personData.data.data.departamento] || [];
+        setMunicipiosFiltradas(provincias);
+        setValue("Municipio", personData.data.data.municipio);
+        const colegios =
+          colegioPorMunicipio[personData.data.data.municipio] || [];
+        setColegiosFiltradas(colegios);
         setValue("Colegio", personData.data.data.colegio);
         setValue("Curso", personData.data.data.curso);
         setIsReadOnly((prev) => ({
           ...prev,
+          CarnetIdentidad: true,
           FechaNacimiento: true,
           Departamento: true,
-          Provincia: true,
+          Municipio: true,
           Colegio: true,
           Curso: true,
         }));
       }
     } catch (error) {
-      console.log(error);
+      const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
+      const ciOlympian =
+        sessionStorage.getItem("CarnetIdentidadOlympian") || "";
+
+      if (ciResponsible == ciOlympian) {
+        setValue("Nombre", sessionStorage.getItem("NombreResponsible"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoResponsible"));
+        setValue("Email", sessionStorage.getItem("EmailResponsible"));
+        setIsReadOnly((prev) => ({
+          ...prev,
+          CarnetIdentidad: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+        }));
+        console.log(isReadOnly);
+      }
     }
+  };
+
+  const cleanFlieds = () => {
+    setValue("Nombre", "");
+    setValue("Apellido", "");
+    setValue("Email", "");
+    setValue("CarnetIdentidad", "");
+    setValue("FechaNacimiento", "");
+    setValue("Departamento", "");
+    setValue("Municipio", "");
+    setValue("Colegio", "");
+    setValue("Curso", "");
+
+    setIsReadOnly({});
+  };
+
+  const cancelInscription = async () => {
+    const confirmacion = await Swal.fire({
+      title: "¿Estás seguro que quieres salir?",
+      text: "Se perderan los datos ingresados.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, aceptar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (confirmacion.isConfirmed) {
+      limpiarCamposLocalStorage();
+      navigation(
+        sessionStorage.getItem("tutorInscripcionId")
+          ? "/register/listRegistered"
+          : "/register"
+      );
+    }
+  };
+
+  const limpiarCamposLocalStorage = () => {
+    const campoAConservar = sessionStorage.getItem("tutorInscripcionId");
+    sessionStorage.clear();
+    if (campoAConservar !== null)
+      sessionStorage.setItem("tutorInscripcionId", campoAConservar);
   };
 
   const onSubmit = async (data) => {
@@ -197,7 +269,7 @@ export const RegisterOlympian = () => {
       await getOlimpistaEnable(
         sessionStorage.getItem("CarnetIdentidadOlympian")
       );
-      navigation("/Register/OlympianArea", data);
+      navigation("/register/olympian-area", data);
     } catch (error) {
       swal("Error", error.response.data.message, "error");
     }
@@ -218,9 +290,16 @@ export const RegisterOlympian = () => {
         <div className="input-2c">
           <h1>Registro de datos del Olimpista</h1>
           <h5 className="message-recomendation">
-            Si ya tiene datos registrados, ingrese su CI y presione el botón
-            "Autocompletar" para llenar automáticamente los campos.
+            Si ya tiene datos registrados, ingrese su CI y se llenara
+            automáticamente los campos.
           </h5>
+          <div className="container-clean-fields">
+            <p>Limpiar campos</p>
+            <MdCleaningServices
+              className="icon-clean-fields"
+              onClick={cleanFlieds}
+            />
+          </div>
         </div>
 
         <div className="input-1c">
@@ -230,7 +309,6 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="CarnetIdentidad"
             isReadOnly={isReadOnly}
-            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("CarnetIdentidad", e.target.value)}
             register={register}
@@ -362,7 +440,7 @@ export const RegisterOlympian = () => {
           />
         </div>
         <div className="container-btn-back-olympian input-1c">
-          <NextPage to={"/"} value="Cancelar" />
+          <NextPage value="Cancelar" onClick={cancelInscription} />
         </div>
 
         <div className="container-btn-next-olympian input-1c">
