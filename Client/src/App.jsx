@@ -18,6 +18,8 @@ import AdminLayout from "./layouts/AdminLayout";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterResponsible";
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
+import Reports from "./features/administration/pages/Reports";
+
 import PaginaContacto from "./features/contacto/pages/PaginaContacto";
 import ConsultarInscripcion from "./features/consultar_inscripcion/pages/ConsultarInscripcion";
 import ResultadoConsulta from "./features/consultar_inscripcion/pages/ResultadoConsulta";
@@ -107,6 +109,16 @@ function App() {
               <Route path="categorias" element={<ManageCategoria />} />
               <Route path="olimpiadas" element={<ManageOlympiads />} />
               <Route path="view-base" element={<ManageViewBase />} />
+              <Route
+                path="reports"
+                element={
+                  <PrivateRoute
+                    element={<Reports />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
             </Route>
           </Routes>
         </div>

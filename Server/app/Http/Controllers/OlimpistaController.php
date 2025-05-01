@@ -133,6 +133,49 @@ public function getOlimpistasByTutor($idTutorResponsable)
     }
 }
 
+    public function getAllOlimpistas()
+    {
+        try {
+            // Join with personas, inscripciones, olimpiadas_areas_categorias, areas, categorias, aulas, grados
+            $olimpistas = \DB::table('olimpistas')
+                ->leftJoin('personas', 'olimpistas.idPersona', '=', 'personas.idPersona')
+                ->leftJoin('inscripciones', 'olimpistas.idPersona', '=', 'inscripciones.idOlimpista')
+                ->leftJoin('olimpiadas_areas_categorias', 'inscripciones.idOlimpAreaCategoria', '=', 'olimpiadas_areas_categorias.idOlimpAreaCategoria')
+                ->leftJoin('areas', 'olimpiadas_areas_categorias.idArea', '=', 'areas.idArea')
+                ->leftJoin('categorias', 'olimpiadas_areas_categorias.idCategoria', '=', 'categorias.idCategoria')
+                // Removed join with aulas due to missing column inscripciones.idAula
+                // ->leftJoin('aulas', 'inscripciones.idAula', '=', 'aulas.id')
+                // Removed join with grados as per instruction
+                ->select(
+                    'personas.carnetIdentidad as carnetDeIdentidad',
+                    'personas.nombre',
+                    'personas.apellido',
+                    'olimpistas.fechaNacimiento',
+                    'olimpistas.departamento',
+                    'olimpistas.curso',
+                    'olimpistas.colegio',
+                    'areas.nombreArea',
+                    'categorias.nombreCategoria as nombreCategoria',
+                    //'grados.nombreGrado as grado', // removed
+                    //'aulas.nombreAula' // removed due to missing join
+                )
+                ->distinct()
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $olimpistas
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error en getAllOlimpistas: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener todos los olimpistas con detalles',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
 
 }
