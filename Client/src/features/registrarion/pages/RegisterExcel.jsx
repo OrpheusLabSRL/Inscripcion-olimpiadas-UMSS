@@ -26,11 +26,11 @@ const RegisterExcel = () => {
         "CORREO ELECTRONICO (TUTOR LEGAL)",
         "CELULAR (TUTOR LEGAL)",
         "TIPO DE TUTOR",
-        "CARNET DE IDENTIDAD (PROFESOR)",
-        "NOMBRE(S) (PROFESOR)",
-        "APELLIDO(S) (PROFESOR)",
-        "CORREO ELECTRONICO (PROFESOR)",
-        "CELULAR (PROFESOR)"
+        "CARNET DE IDENTIDAD (PROFESOR)*",
+        "NOMBRE(S) (PROFESOR)*",
+        "APELLIDO(S) (PROFESOR)*",
+        "CORREO ELECTRONICO (PROFESOR)*",
+        "CELULAR (PROFESOR)*"
     ]);
 
     const [fileName, setFileName] = useState("");
@@ -41,6 +41,34 @@ const RegisterExcel = () => {
     const [errorCells, setErrorCells] = useState({});
     const location = useLocation();
     const navigation = useNavigate();
+
+    // Lista de áreas válidas con formato estándar
+    const validAreas = [
+        "Astronomía y Astrofísica",
+        "Biología",
+        "Física",
+        "Informática",
+        "Matemáticas",
+        "Química",
+        "Robótica"
+    ];
+
+    // Lista de categorías válidas con formato estándar
+    const validCategories = [
+        "3P", "4P", "5P", "6P", "1S", "2S", 
+        "Guacamayo", "Builders P", "Lego P", "Guanaco", 
+        "Londra", "Bufeo", "Jucumari", "Puma", 
+        "Primer Nivel", "Segundo Nivel", "Tercer Nivel", 
+        "Cuarto Nivel", "Quinto Nivel", "Sexto Nivel",
+        "2S", "3S", "4S", "5S", "6S", "Lego S", "Builders S"
+    ];
+
+    // Lista de cursos válidos con formato estándar
+    const validCourses = [
+        "1º Primaria", "2º Primaria", "3º Primaria", "4º Primaria", 
+        "5º Primaria", "6º Primaria", "1º Secundaria", "2º Secundaria", 
+        "3º Secundaria", "4º Secundaria", "5º Secundaria", "6º Secundaria"
+    ];
 
     const downloadTemplate = () => {
         const link = document.createElement("a");
@@ -69,6 +97,71 @@ const RegisterExcel = () => {
         }
         
         return excelDate;
+    };
+
+    const normalizeCourse = (input) => {
+        if (!input) return null;
+        
+        // Eliminar espacios y convertir a minúsculas
+        const cleanInput = input.toString().trim().toLowerCase();
+        
+        // Buscar coincidencia exacta ignorando mayúsculas y espacios
+        const exactMatch = validCourses.find(course => 
+            course.toLowerCase() === cleanInput
+        );
+        if (exactMatch) return exactMatch;
+        
+        // Buscar coincidencia flexible (con o sin º, con o sin espacio después del número)
+        const flexibleMatch = validCourses.find(course => {
+            const courseLower = course.toLowerCase();
+            const inputWithoutSymbol = cleanInput.replace(/º|°/g, '').replace(/([0-9])([a-z])/, '$1 $2');
+            return courseLower === inputWithoutSymbol || 
+                   courseLower.replace('º', '') === cleanInput.replace(/º|°/g, '');
+        });
+        
+        return flexibleMatch || null;
+    };
+
+    const normalizeArea = (input) => {
+        if (!input) return null;
+        
+        const normalized = input.toString()
+            .toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/ y /g, " y ")
+            .trim();
+        
+        const matchedArea = validAreas.find(area => 
+            area.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") === normalized
+        );
+        
+        return matchedArea || null;
+    };
+
+    const normalizeCategory = (input) => {
+        if (!input) return null;
+        
+        const normalized = input.toString()
+            .toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .trim();
+        
+        const matchedCategory = validCategories.find(category => 
+            category.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") === normalized
+        );
+        
+        return matchedCategory || null;
+    };
+
+    const validateProfessorFields = (row, rowIndex) => {
+        const professorFields = [row[17], row[18], row[19], row[20], row[21]];
+        const hasSomeFields = professorFields.some(field => field && field.trim() !== "");
+        const hasAllFields = professorFields.every(field => field && field.trim() !== "");
+        
+        if (hasSomeFields && !hasAllFields) {
+            return `Fila ${rowIndex + 2}: Los campos de PROFESOR deben estar todos completos o todos vacíos`;
+        }
+        return null;
     };
 
     const validateData = (data) => {
@@ -129,11 +222,9 @@ const RegisterExcel = () => {
             if (row[16]) {
                 const tipoTutor = row[16].toString().toUpperCase().trim();
                 
-                // Primero verificar si ya está en formato MAMÁ/PAPÁ o variantes
                 if (tipoTutor.match(/^(MAMA\/PAPA|MAMÁ\/PAPÁ|MAMA\/PAPÁ|MAMÁ\/PAPA)$/i)) {
                     row[16] = "MAMÁ/PAPÁ";
                 } 
-                // Luego verificar formatos individuales
                 else if (tipoTutor.match(/^(PAPA|PAPÁ|MAMA|MAMÁ)$/)) {
                     row[16] = tipoTutor.replace("PAPA", "PAPÁ").replace("MAMA", "MAMÁ");
                 } else if (tipoTutor.match(/^(TUTOR|TUTOR LEGAL|LEGAL)$/)) {
@@ -145,6 +236,60 @@ const RegisterExcel = () => {
             } else {
                 errors.push(`Fila ${rowIndex + 2}: TIPO DE TUTOR es requerido`);
                 cellErrors[`${rowIndex}-16`] = true;
+            }
+            
+            // Validar y normalizar Área (columna 9)
+            if (row[9]) {
+                const normalizedArea = normalizeArea(row[9]);
+                if (normalizedArea) {
+                    row[9] = normalizedArea; // Asignar el formato estándar
+                } else {
+                    errors.push(`Fila ${rowIndex + 2}: AREA no válida. Las áreas válidas son: ${validAreas.join(", ")}`);
+                    cellErrors[`${rowIndex}-9`] = true;
+                }
+            } else {
+                errors.push(`Fila ${rowIndex + 2}: AREA es requerida`);
+                cellErrors[`${rowIndex}-9`] = true;
+            }
+            
+            // Validar y normalizar Categoría (columna 10)
+            if (row[10]) {
+                const normalizedCategory = normalizeCategory(row[10]);
+                if (normalizedCategory) {
+                    row[10] = normalizedCategory; // Asignar el formato estándar
+                } else {
+                    errors.push(`Fila ${rowIndex + 2}: CATEGORIA no válida. Las categorías válidas son: ${validCategories.join(", ")}`);
+                    cellErrors[`${rowIndex}-10`] = true;
+                }
+            } else {
+                errors.push(`Fila ${rowIndex + 2}: CATEGORIA es requerida`);
+                cellErrors[`${rowIndex}-10`] = true;
+            }
+            
+            // Validar y normalizar Curso (columna 8)
+            if (row[8]) {
+                const normalizedCourse = normalizeCourse(row[8]);
+                if (normalizedCourse) {
+                    row[8] = normalizedCourse; // Asignar el formato estándar
+                } else {
+                    errors.push(`Fila ${rowIndex + 2}: CURSO (OLIMPISTA) no válido. Los cursos válidos son: ${validCourses.join(", ")}`);
+                    cellErrors[`${rowIndex}-8`] = true;
+                }
+            } else {
+                errors.push(`Fila ${rowIndex + 2}: CURSO (OLIMPISTA) es requerido`);
+                cellErrors[`${rowIndex}-8`] = true;
+            }
+            
+            // Validar campos de PROFESOR (deben estar todos llenos o todos vacíos)
+            const professorError = validateProfessorFields(row, rowIndex);
+            if (professorError) {
+                errors.push(professorError);
+                // Marcar todos los campos de profesor como error
+                for (let i = 17; i <= 21; i++) {
+                    if (row[i]) {
+                        cellErrors[`${rowIndex}-${i}`] = true;
+                    }
+                }
             }
         });
         
@@ -195,12 +340,6 @@ const RegisterExcel = () => {
                                     (typeof cell === 'string' ? cell.trim() : cell.toString()) : "");
                     }
                 });
-                
-                if (rowData[17] === "") {
-                    for (let i = 17; i <= 21; i++) {
-                        rowData[i] = "";
-                    }
-                }
                 
                 return rowData;
             });
@@ -314,7 +453,8 @@ const RegisterExcel = () => {
                             <div className="download-section">
                                 <p className="instructions">
                                     *Para evitar inconvenientes con el formato y la información
-                                    del archivo .xlsx, descargue la plantilla*
+                                    del archivo .xlsx, descargue la plantilla*<br />
+                                    *Los campos marcados con (*) son opcionales, pero si se completa uno deben completarse todos*
                                 </p>
                                 <button
                                     onClick={downloadTemplate}
