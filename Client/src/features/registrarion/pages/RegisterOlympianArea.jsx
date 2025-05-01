@@ -6,6 +6,7 @@ import "../Styles/RegisterOlympianArea.css";
 import { AreaCategoriaElement } from "../components/AreaCategoriaElement/AreaCategoriaElement";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { NextPage } from "../../../components/Buttons/NextPage";
+import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
 import { useEffect, useState } from "react";
@@ -24,16 +25,18 @@ import {
 } from "../utils/MethodsArea";
 
 export const RegisterOlympianArea = () => {
+  const [currentStep, sertCurrentStep] = useState(3);
+  const [totalSteps, setTotalStep] = useState(4);
   const [catalogo, setCatalogo] = useState([]);
   const [areaInteres, setAreaInteres] = useState([]);
   const [categoriasInteres, setCategoriasInteres] = useState(() => {
-    const stored = localStorage.getItem("CategoriasFiltradas");
+    const stored = sessionStorage.getItem("CategoriasFiltradas");
     return stored ? JSON.parse(stored) : null;
   });
 
   const [categoriasInteresSecundaria, setCategoriasInteresSecundaria] =
     useState(() => {
-      const stored = localStorage.getItem("CategoriasFiltradasSecundaria");
+      const stored = sessionStorage.getItem("CategoriasFiltradasSecundaria");
       return stored ? JSON.parse(stored) : null;
     });
 
@@ -47,10 +50,10 @@ export const RegisterOlympianArea = () => {
     setValue,
   } = useForm({
     defaultValues: {
-      AreaPrincipal: localStorage.getItem("AreaPrincipal") || "",
-      CategoriaPrincipal: localStorage.getItem("CategoriaPrincipal") || "",
-      AreaSecundaria: localStorage.getItem("AreaSecundaria") || "",
-      CategoriaSecundaria: localStorage.getItem("CategoriaSecundaria") || "",
+      AreaPrincipal: sessionStorage.getItem("AreaPrincipal") || "",
+      CategoriaPrincipal: sessionStorage.getItem("CategoriaPrincipal") || "",
+      AreaSecundaria: sessionStorage.getItem("AreaSecundaria") || "",
+      CategoriaSecundaria: sessionStorage.getItem("CategoriaSecundaria") || "",
     },
     mode: "onChange",
   });
@@ -61,30 +64,30 @@ export const RegisterOlympianArea = () => {
   const watchedCategoriaSecundaria = watch("CategoriaSecundaria");
 
   useEffect(() => {
-    localStorage.setItem("AreaPrincipal", watchedAreaPrincipal);
+    sessionStorage.setItem("AreaPrincipal", watchedAreaPrincipal);
   }, [watchedAreaPrincipal]);
 
   useEffect(() => {
-    localStorage.setItem("CategoriaPrincipal", watchedCategoriaPrincipal);
+    sessionStorage.setItem("CategoriaPrincipal", watchedCategoriaPrincipal);
   }, [watchedCategoriaPrincipal]);
   useEffect(() => {
-    localStorage.setItem("AreaSecundaria", watchedAreaSecundaria);
+    sessionStorage.setItem("AreaSecundaria", watchedAreaSecundaria);
   }, [watchedAreaSecundaria]);
 
   useEffect(() => {
-    localStorage.setItem("CategoriaSecundaria", watchedCategoriaSecundaria);
+    sessionStorage.setItem("CategoriaSecundaria", watchedCategoriaSecundaria);
   }, [watchedCategoriaSecundaria]);
 
   useEffect(() => {
     const handleUnload = () => {
-      localStorage.removeItem("AreaPrincipal");
-      localStorage.removeItem("CategoriaPrincipal");
-      localStorage.removeItem("AreaSecundaria");
-      localStorage.removeItem("CategoriaSecundaria");
-      localStorage.removeItem("CategoriasFiltradas");
-      localStorage.removeItem("CategoriasFiltradasSecundaria");
-      localStorage.removeItem("TutorArea1");
-      localStorage.removeItem("TutorArea2");
+      sessionStorage.removeItem("AreaPrincipal");
+      sessionStorage.removeItem("CategoriaPrincipal");
+      sessionStorage.removeItem("AreaSecundaria");
+      sessionStorage.removeItem("CategoriaSecundaria");
+      sessionStorage.removeItem("CategoriasFiltradas");
+      sessionStorage.removeItem("CategoriasFiltradasSecundaria");
+      sessionStorage.removeItem("TutorArea1");
+      sessionStorage.removeItem("TutorArea2");
     };
     window.addEventListener("beforeunload", handleUnload);
     return () => {
@@ -106,7 +109,7 @@ export const RegisterOlympianArea = () => {
 
   useEffect(() => {
     const areasFiltradas = filtrarAreasPorCurso(
-      localStorage.getItem("CursoOlympian"),
+      sessionStorage.getItem("CursoOlympian"),
       catalogo
     );
     setAreaInteres(areasFiltradas);
@@ -115,19 +118,19 @@ export const RegisterOlympianArea = () => {
   const onChooseArea = () => (e) => {
     if (e.target.value !== "") {
       const categoriasFiltradas = filtrarCategoriasPorCursoYArea(
-        localStorage.getItem("CursoOlympian"),
+        sessionStorage.getItem("CursoOlympian"),
         e.target.value,
         catalogo
       );
 
       if (e.target.name == "AreaPrincipal") {
-        localStorage.setItem(
+        sessionStorage.setItem(
           "CategoriasFiltradas",
           JSON.stringify(categoriasFiltradas)
         );
         setCategoriasInteres(categoriasFiltradas);
       } else {
-        localStorage.setItem(
+        sessionStorage.setItem(
           "CategoriasFiltradasSecundaria",
           JSON.stringify(categoriasFiltradas)
         );
@@ -174,19 +177,6 @@ export const RegisterOlympianArea = () => {
         return;
       }
 
-      // if (areasOlimpista.length == 2) {
-      //   swal(
-      //     "No se puede registrar mas de 2 áreas",
-      //     "Ya se registro en 2 áreas",
-      //     "warning"
-      //   );
-      //   return;
-      // }
-
-      // await setNewInscription(dataAreas);
-      // const updatedAreas = await getAreasOlimpista(data.id_olimpista);
-      // setAreasOlimpista(updatedAreas.data.data.areas);
-
       navigation("/register/tutor-legal", data);
     } catch (error) {
       console.log(error);
@@ -195,7 +185,9 @@ export const RegisterOlympianArea = () => {
   };
 
   return (
-    <>
+    <div className="container-form">
+      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <NavLink to={"/register/olympian"}>
         <IoArrowBackCircle className="btn-back" />
       </NavLink>
@@ -251,6 +243,6 @@ export const RegisterOlympianArea = () => {
           <PrimaryButton type="submit" value="Siguiente" />
         </div>
       </form>
-    </>
+    </div>
   );
 };

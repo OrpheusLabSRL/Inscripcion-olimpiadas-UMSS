@@ -29,7 +29,7 @@ class OlimpistaController extends Controller
         'fechaNacimiento' => $request->FechaNacimiento,
         'colegio' => $request->Colegio,
         'departamento' => $request->Departamento,
-        'provincia' => $request->Provincia,
+        'municipio' => $request->Municipio,
     ]);
     
     $olimpista->tutores()->attach($request->id_tutor);
@@ -45,7 +45,9 @@ public function getOlimpistasByTutor($idTutorResponsable)
     try {
         $inscripciones = Inscripcion::with([
             'olimpista.persona',
+            'tutorResponsable.persona',
             'tutorArea.persona',
+            'tutorLegal.persona',
             'olimpiadaAreaCategoria.area',
             'olimpiadaAreaCategoria.categoria'
         ])
@@ -67,7 +69,7 @@ public function getOlimpistasByTutor($idTutorResponsable)
             $olimpista = $primeraInscripcion->olimpista;
             $persona = $olimpista->persona;
 
-            $areas = $inscripcionesGrupo->map(function ($inscripcion) {
+            $inscripciones = $inscripcionesGrupo->map(function ($inscripcion) {
                 return [
                     'id_inscripcion' => $inscripcion->idInscripcion,
                     'nombre_area' => $inscripcion->olimpiadaAreaCategoria->area->nombreArea ?? null,
@@ -78,8 +80,27 @@ public function getOlimpistasByTutor($idTutorResponsable)
                     'tipo_tutor' => $inscripcion->tutorArea->tipoTutor ?? null,
                     'carnetIdentidad' => $inscripcion->tutorArea->persona->carnetIdentidad ?? null,
                     'correo' => $inscripcion->tutorArea->persona->correoElectronico ?? null,
+                    
+                    'tutor_legal' => [
+                        'nombre' => $inscripcion->tutorLegal->persona->nombre ?? null,
+                        'apellido' => $inscripcion->tutorLegal->persona->apellido ?? null,
+                        'telefono' => $inscripcion->tutorLegal->telefono ?? null,
+                        'tipo_tutor' => $inscripcion->tutorLegal->tipoTutor ?? null,
+                        'carnetIdentidad' => $inscripcion->tutorLegal->persona->carnetIdentidad ?? null,
+                        'correo' => $inscripcion->tutorLegal->persona->correoElectronico ?? null,
+                    ],
                 ];
             });
+
+            $responsableInscripcion = [
+                'nombre' => $primeraInscripcion->tutorResponsable->persona->nombre ?? null,
+                'apellido' => $primeraInscripcion->tutorResponsable->persona->apellido ?? null,
+                'telefono' => $primeraInscripcion->tutorResponsable->telefono ?? null,
+                'tipo_tutor' => $primeraInscripcion->tutorResponsable->tipoTutor ?? null,
+                'carnetIdentidad' => $primeraInscripcion->tutorResponsable->persona->carnetIdentidad ?? null,
+                'correo' => $primeraInscripcion->tutorResponsable->persona->correoElectronico ?? null,
+            ];
+            
 
             return [
                 'id_olimpista' => $olimpista->idPersona,
@@ -90,10 +111,10 @@ public function getOlimpistasByTutor($idTutorResponsable)
                 'carnetIdentidad' => $persona->carnetIdentidad,
                 'fechaNacimiento' => $olimpista->fechaNacimiento,
                 'departamento' => $olimpista->departamento,
-                'provincia' => $olimpista->provincia,
+                'municipio' => $olimpista->municipio,
                 'correo' => $persona->correoElectronico,
-                'areas' => $areas,
-                'total_areas' => $areas->count()
+                'inscripciones' => $inscripciones,
+                'responsableInscripcion' => $responsableInscripcion,
             ];
         })->values();
 
