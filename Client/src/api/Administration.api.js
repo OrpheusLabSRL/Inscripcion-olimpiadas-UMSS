@@ -121,7 +121,7 @@ export const getInscripcionesConOlimpiadas = async () => {
     const response = await inscriptionApi.get(
       "/obtenerInscripciones/olimpiadas"
     );
-    return response.data.data; // Solo devolvemos el array de inscripciones
+    return response.data.data;
   } catch (error) {
     console.error("Error al obtener inscripciones:", error);
     throw error;

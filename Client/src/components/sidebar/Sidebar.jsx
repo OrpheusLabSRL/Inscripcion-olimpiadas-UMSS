@@ -1,5 +1,5 @@
 //React
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 //Icons
 import { FaHome } from "react-icons/fa";
 import { IoDocumentTextOutline } from "react-icons/io5";
@@ -64,10 +64,10 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                 </NavLink>
               </li>
               <li>
-                <NavLink>
+                <Link to="/admin/reports">
                   <HiOutlineClipboardDocument className="sidebar-icons" />{" "}
                   {isOpen ? "Reportes" : ""}
-                </NavLink>
+                </Link>
               </li>
               <li>
                 <NavLink>
