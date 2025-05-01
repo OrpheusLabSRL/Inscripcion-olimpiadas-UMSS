@@ -7,8 +7,8 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
-    color: black;
-    background-color: white;
+    color: #000000;
+    background-color: #ECEFCA;
   }
   
   .data-table th,
@@ -16,6 +16,7 @@
     border-bottom: 1px solid #ddd;
     padding: 0.75rem;
     text-align: left;
+    color: #000000 !important;
   }
   
   .data-table th {
@@ -43,6 +44,9 @@
     align-items: center;
     gap: 0.5rem; /* Reduced space between elements */
     margin-top: 1rem;
+    background-color: #a2bfcb;
+    padding: 1rem;
+    border-radius: 0 0 8px 8px;
   }
   
   .reports-select {
@@ -52,6 +56,62 @@
   
   .btn-registrar {
     margin-left: 0.5rem;
+    background-color: #213448;
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
   }
-  
-  
+
+  .btn-registrar:disabled {
+    background-color: #6b7280;
+    cursor: not-allowed;
+  }
+
+  /* Adjusted styles to reduce space between sidebar and content */
+  .reports-container {
+    padding-left: 20px !important; /* reduced space for sidebar */
+    padding-bottom: 100px; /* space for footer */
+    overflow: auto;
+    background-color: #a2bfcb !important;
+    font-family: 'Inter', sans-serif;
+    color: #000000;
+    height: auto;
+    max-height: 100vh;
+    box-sizing: border-box;
+  }
+
+  .reports-container h1,
+  .reports-container h2,
+  .reports-container h3 {
+    font-family: 'Poppins', sans-serif;
+    color: #213448;
+  }
+
+  .reports-header {
+    background-color: #a2bfcb;
+    padding: 1rem;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .reports-content {
+    max-height: none;
+    overflow-y: visible;
+    background-color: #a2bfcb !important;
+    color: #000000;
+    border-radius: 0 0 8px 8px;
+  }
+
+  /* Added style for content-area to control overall background */
+  .content-area {
+    background-color: #a2bfcb !important;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Checkbox check mark color */
+  .reports-container input[type="checkbox"] {
+    accent-color: #ECEFCA;
+  }

@@ -58,8 +58,8 @@ const OlympiadsReportTable = () => {
     fetchOlympiads();
   }, []);
 
-  if (loading) return <p>Cargando reporte de olimpiadas...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <p style={{ color: "#000000" }}>Cargando reporte de olimpiadas...</p>;
+  if (error) return <p style={{ color: "#000000" }}>{error}</p>;
 
   // Filter rows based on rowFilter and selected filterColumn (case insensitive substring match)
   const filteredOlympiads = olympiads.filter((item) => {
@@ -83,7 +83,7 @@ const OlympiadsReportTable = () => {
   };
 
   return (
-    <div>
+    <div style={{ color: "#000000" }}>
       <div className="filter-controls" style={{ marginBottom: "1rem" }}>
         <div
           style={{
@@ -93,21 +93,21 @@ const OlympiadsReportTable = () => {
             gap: "1rem",
           }}
         >
-          <label style={{ color: "#547792" }}>
+          <label style={{ color: "#000000" }}>
             Filtrar por columna:
             <select
               value={filterColumn}
               onChange={(e) => setFilterColumn(e.target.value)}
-              style={{ marginLeft: "0.5rem" }}
+              style={{ marginLeft: "0.5rem", color: "#000000" }}
             >
               {columnOptions.map((col) => (
-                <option key={col.value} value={col.value}>
+                <option key={col.value} value={col.value} style={{ color: "#000000" }}>
                   {col.label}
                 </option>
               ))}
             </select>
           </label>
-          <label style={{ color: "#547792" }}>
+          <label style={{ color: "#000000" }}>
             Valor filtro:
             <input
               type="text"
@@ -116,18 +116,18 @@ const OlympiadsReportTable = () => {
               placeholder={`Buscar en ${
                 columnOptions.find((c) => c.value === filterColumn)?.label || ""
               }...`}
-              style={{ marginLeft: "0.5rem" }}
+              style={{ marginLeft: "0.5rem", color: "#000000" }}
             />
           </label>
         </div>
         <div>
-          <span style={{ color: "#547792" }}>Columnas a mostrar:</span>
+          <span style={{ color: "#000000" }}>Columnas a mostrar:</span>
           {columnOptions.map((col) => (
             <label
               key={col.value}
               style={{
                 marginLeft: "1rem",
-                color: "#547792",
+                color: "#000000",
                 display: "inline-flex",
                 alignItems: "center",
               }}
