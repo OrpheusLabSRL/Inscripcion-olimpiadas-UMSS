@@ -341,7 +341,7 @@ export const RegisterTutor = () => {
     <div className="container-form">
       <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-      <NavLink to={"/register/OlympianArea"}>
+      <NavLink to={"/register/olympian-area"}>
         <IoArrowBackCircle className="btn-back" />
       </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
