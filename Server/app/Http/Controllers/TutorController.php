@@ -53,30 +53,30 @@ class TutorController extends Controller
             'tipoTutor.in' => 'Seleccione un tipo de tutor válido'
         ]);
 
-        // if ($validator->fails()) {
-        //     $errors = $validator->errors();
+        if ($validator->fails()) {
+            $errors = $validator->errors();
             
-        //     if ($errors->has('carnetdeidentidad')) {
-        //         return response()->json([
-        //             'success' => false,
-        //             'error_code' => 'duplicate_ci',
-        //             'message' => 'El carnet de identidad ya está registrado'
-        //         ], 422);
-        //     }
+            if ($errors->has('carnetdeidentidad')) {
+                return response()->json([
+                    'success' => false,
+                    'error_code' => 'duplicate_ci',
+                    'message' => 'El carnet de identidad ya está registrado'
+                ], 422);
+            }
             
-        //     if ($errors->has('emailTutor')) {
-        //         return response()->json([
-        //             'success' => false,
-        //             'error_code' => 'duplicate_email',
-        //             'message' => 'El correo electrónico ya está registrado'
-        //         ], 422);
-        //     }
+            if ($errors->has('emailTutor')) {
+                return response()->json([
+                    'success' => false,
+                    'error_code' => 'duplicate_email',
+                    'message' => 'El correo electrónico ya está registrado'
+                ], 422);
+            }
 
-        //     return response()->json([
-        //         'success' => false,
-        //         'errors' => $errors
-        //     ], 422);
-        // }
+            return response()->json([
+                'success' => false,
+                'errors' => $errors
+            ], 422);
+        }
 
         try {
             $tutor = Tutor::create([
@@ -133,8 +133,6 @@ class TutorController extends Controller
 
         $inscripcion = Inscripcion::where('idTutorResponsable', $tutor->idPersona)->first();
 
-
-
         if ($inscripcion) {
             return response()->json([
                 'exists' => true,
@@ -153,55 +151,55 @@ class TutorController extends Controller
     }
 
     public function getTutoresByOlimpista($id_olimpista)
-{
-    try {
-        // Buscamos al olimpista
-        $olimpista = Olimpista::findOrFail($id_olimpista);
-        
-        // Obtenemos las relaciones con los tutores
-        $estudiante_tutores = OlimpistaTutor::with('tutor') // Asegúrate de tener la relación definida
-            ->where('id_olimpista', $id_olimpista)
-            ->get();
-        
-        // Si no hay relaciones
-        if ($estudiante_tutores->isEmpty()) {
+    {
+        try {
+            // Buscamos al olimpista
+            $olimpista = Olimpista::findOrFail($id_olimpista);
+            
+            // Obtenemos las relaciones con los tutores
+            $estudiante_tutores = OlimpistaTutor::with('tutor') // Asegúrate de tener la relación definida
+                ->where('id_olimpista', $id_olimpista)
+                ->get();
+            
+            // Si no hay relaciones
+            if ($estudiante_tutores->isEmpty()) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'El olimpista no tiene tutores asociados',
+                    'data' => []
+                ], 200);
+            }
+
+            // Construimos la respuesta con los campos correctos
+            $tutores_con_roles = $estudiante_tutores->map(function ($relacion) {
+                $tutor = $relacion->tutor;
+
+                return [
+                    'id_tutor' => $tutor->id_tutor,
+                    'nombre' => $tutor->nombre,
+                    'apellido' => $tutor->apellido,
+                    'tipoTutor' => $tutor->tipoTutor,
+                    'correo' => $tutor->correo,
+                    'numeroCelular' => $tutor->numeroCelular,
+                    'carnetIdentidad' => $tutor->carnetIdentidad,
+                    'rol' => $relacion->rol
+                ];
+            });
+
             return response()->json([
                 'status' => 'success',
-                'message' => 'El olimpista no tiene tutores asociados',
-                'data' => []
+                'message' => 'Tutores obtenidos correctamente',
+                'data' => $tutores_con_roles
             ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al obtener los tutores: ' . $e->getMessage(),
+                'data' => null
+            ], 500);
         }
-
-        // Construimos la respuesta con los campos correctos
-        $tutores_con_roles = $estudiante_tutores->map(function ($relacion) {
-            $tutor = $relacion->tutor;
-
-            return [
-                'id_tutor' => $tutor->id_tutor,
-                'nombre' => $tutor->nombre,
-                'apellido' => $tutor->apellido,
-                'tipoTutor' => $tutor->tipoTutor,
-                'correo' => $tutor->correo,
-                'numeroCelular' => $tutor->numeroCelular,
-                'carnetIdentidad' => $tutor->carnetIdentidad,
-                'rol' => $relacion->rol
-            ];
-        });
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Tutores obtenidos correctamente',
-            'data' => $tutores_con_roles
-        ], 200);
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Error al obtener los tutores: ' . $e->getMessage(),
-            'data' => null
-        ], 500);
     }
-}
 
     public function getTutorWithPersona($id)
     {

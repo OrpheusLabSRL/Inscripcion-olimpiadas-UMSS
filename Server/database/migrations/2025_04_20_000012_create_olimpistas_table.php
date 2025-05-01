@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('idPersona')->primary();
             $table->date('fechaNacimiento');
             $table->string('departamento', 15);
-            $table->string('provincia', 50);
+            $table->string('municipio', 50);
             $table->string('curso', 30);
             $table->string('colegio', 50);
             $table->timestamps();

@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../Styles/ModalGeneral.css";
 import "../../Styles/General.css";
-import { createOlympiad } from "../../../../api/Administration.api";
+import {
+  createOlympiad,
+  getOlimpiadas,
+} from "../../../../api/Administration.api";
 
 const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
   const initialFormState = {
@@ -13,8 +16,22 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
 
   const [formData, setFormData] = useState(initialFormState);
   const [errors, setErrors] = useState({});
+  const [olympiads, setOlympiads] = useState([]);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (isOpen) {
+      fetchOlympiads();
+    }
+  }, [isOpen]);
+
+  const fetchOlympiads = async () => {
+    try {
+      const data = await getOlimpiadas();
+      setOlympiads(data.data || []);
+    } catch (error) {
+      console.error("Error al cargar olimpiadas:", error);
+    }
+  };
 
   const resetForm = () => {
     setFormData(initialFormState);
@@ -37,11 +54,42 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
       ...prev,
       [name]: "",
     }));
+
+    if (name === "fechaInicioOlimpiada" || name === "fechaFinOlimpiada") {
+      validarFechas(
+        name === "fechaInicioOlimpiada" ? value : formData.fechaInicioOlimpiada,
+        name === "fechaFinOlimpiada" ? value : formData.fechaFinOlimpiada
+      );
+    }
+  };
+
+  const validarFechas = (fechaInicio, fechaFin) => {
+    const hoy = new Date().toISOString().split("T")[0];
+    const nuevosErrores = { ...errors };
+
+    if (fechaInicio && fechaInicio < hoy) {
+      nuevosErrores.fechaInicioOlimpiada =
+        "La fecha de inicio no puede ser pasada";
+    } else {
+      delete nuevosErrores.fechaInicioOlimpiada;
+    }
+
+    if (fechaFin && fechaFin < hoy) {
+      nuevosErrores.fechaFinOlimpiada = "La fecha de fin no puede ser pasada";
+    } else {
+      delete nuevosErrores.fechaFinOlimpiada;
+    }
+
+    if (fechaInicio && fechaFin && fechaFin < fechaInicio) {
+      nuevosErrores.fechaFinOlimpiada =
+        "La fecha de fin no puede ser anterior a la de inicio";
+    }
+
+    setErrors(nuevosErrores);
   };
 
   const validarFormulario = () => {
     const nuevosErrores = {};
-    const hoy = new Date().toISOString().split("T")[0];
 
     if (!formData.nombreOlimpiada.trim()) {
       nuevosErrores.nombreOlimpiada = "Este campo es requerido";
@@ -51,15 +99,25 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
     }
     if (!formData.fechaInicioOlimpiada) {
       nuevosErrores.fechaInicioOlimpiada = "Este campo es requerido";
-    } else if (formData.fechaInicioOlimpiada < hoy) {
-      nuevosErrores.fechaInicioOlimpiada = "La fecha no puede ser pasada";
     }
-
     if (!formData.fechaFinOlimpiada) {
       nuevosErrores.fechaFinOlimpiada = "Este campo es requerido";
-    } else if (formData.fechaFinOlimpiada < formData.fechaInicioOlimpiada) {
-      nuevosErrores.fechaFinOlimpiada =
-        "La fecha de fin no puede ser anterior a la de inicio";
+    }
+
+    validarFechas(formData.fechaInicioOlimpiada, formData.fechaFinOlimpiada);
+
+    const existe = olympiads.some(
+      (o) =>
+        o.nombreOlimpiada.trim().toLowerCase() ===
+          formData.nombreOlimpiada.trim().toLowerCase() &&
+        parseInt(o.version) === parseInt(formData.version)
+    );
+
+    if (existe) {
+      nuevosErrores.nombreOlimpiada =
+        "Ya existe una olimpiada con este nombre y versión";
+      nuevosErrores.version =
+        "Ya existe una olimpiada con este nombre y versión";
     }
 
     setErrors(nuevosErrores);
@@ -80,9 +138,12 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
       const payload = {
         ...formData,
         version: parseInt(formData.version),
-        estadoOlimpiada: 1,
+        estadoOlimpiada: 0,
+        idUsuario: 1,
       };
+
       await createOlympiad(payload);
+
       alert("Versión registrada correctamente");
       resetForm();
       onClose();
@@ -90,9 +151,15 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
       window.location.reload();
     } catch (error) {
       console.error("Error al crear la olimpiada:", error);
-      alert("Error al guardar la olimpiada.");
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrors(error.response.data.errors);
+      } else {
+        alert("Error inesperado al guardar la olimpiada.");
+      }
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="modal-overlay">

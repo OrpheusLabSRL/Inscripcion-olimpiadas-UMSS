@@ -9,24 +9,21 @@ class Olimpista extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'idPersona';
-    public $incrementing = false;
+    protected $primaryKey = 'idOlimpista';
     protected $fillable = [
+        'idPersona',
         'fechaNacimiento',
         'departamento',
         'municipio',
-        'curso',
         'colegio',
-        'idPersona'
+        'curso'
     ];
 
-    // Relación con Persona
     public function persona()
     {
-        return $this->belongsTo(Persona::class, 'idPersona');
+        return $this->belongsTo(Persona::class, 'idPersona', 'idPersona');
     }
 
-    // Relación con Inscripciones (un olimpista puede tener muchas inscripciones)
     public function inscripciones()
     {
         return $this->hasMany(Inscripcion::class, 'idOlimpista');

@@ -1,4 +1,3 @@
-//css
 import "../Styles/RegisterResponsible.css";
 
 //components
@@ -9,7 +8,7 @@ import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { NextPage } from "../../../components/Buttons/NextPage";
 
 //react
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
@@ -18,6 +17,7 @@ import swal from "sweetalert";
 import { getPersonData } from "../../../api/inscription.api";
 
 export const RegisterResponsible = () => {
+  const [isReadOnly, setIsReadOnly] = useState({});
   const navigation = useNavigate();
   const location = useLocation();
   const {
@@ -28,12 +28,12 @@ export const RegisterResponsible = () => {
     setValue,
   } = useForm({
     defaultValues: {
-      Nombre: localStorage.getItem("NombreResponsible") || "",
-      Apellido: localStorage.getItem("ApellidoResponsible") || "",
-      Tipo_Tutor: localStorage.getItem("TipoTutorResponsible") || "",
-      Numero_Celular: localStorage.getItem("NumeroResponsible") || "",
-      Email: localStorage.getItem("EmailResponsible") || "",
-      Ci: localStorage.getItem("CiResponsible") || "",
+      Nombre: sessionStorage.getItem("NombreResponsible") || "",
+      Apellido: sessionStorage.getItem("ApellidoResponsible") || "",
+      Tipo_Tutor: sessionStorage.getItem("TipoTutorResponsible") || "",
+      Numero_Celular: sessionStorage.getItem("NumeroResponsible") || "",
+      Email: sessionStorage.getItem("EmailResponsible") || "",
+      Ci: sessionStorage.getItem("CiResponsible") || "",
     },
     mode: "onChange",
   });
@@ -56,37 +56,37 @@ export const RegisterResponsible = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("NombreResponsible", watchedNombre);
+    sessionStorage.setItem("NombreResponsible", watchedNombre);
   }, [watchedNombre]);
 
   useEffect(() => {
-    localStorage.setItem("ApellidoResponsible", watchedApellido);
+    sessionStorage.setItem("ApellidoResponsible", watchedApellido);
   }, [watchedApellido]);
 
   useEffect(() => {
-    localStorage.setItem("TipoTutorResponsible", watchedTipoTutor);
+    sessionStorage.setItem("TipoTutorResponsible", watchedTipoTutor);
   }, [watchedTipoTutor]);
 
   useEffect(() => {
-    localStorage.setItem("EmailResponsible", watchedEmail);
+    sessionStorage.setItem("EmailResponsible", watchedEmail);
   }, [watchedEmail]);
 
   useEffect(() => {
-    localStorage.setItem("NumeroResponsible", watchedTelefono);
+    sessionStorage.setItem("NumeroResponsible", watchedTelefono);
   }, [watchedTelefono]);
 
   useEffect(() => {
-    localStorage.setItem("CiResponsible", watchedCarnetIdentidad);
+    sessionStorage.setItem("CiResponsible", watchedCarnetIdentidad);
   }, [watchedCarnetIdentidad]);
 
   useEffect(() => {
     const handleUnload = () => {
-      localStorage.removeItem("NombreResponsible");
-      localStorage.removeItem("ApellidoResponsible");
-      localStorage.removeItem("TipoTutorResponsible");
-      localStorage.removeItem("NumeroResponsible");
-      localStorage.removeItem("EmailResponsible");
-      localStorage.removeItem("CiResponsible");
+      sessionStorage.removeItem("NombreResponsible");
+      sessionStorage.removeItem("ApellidoResponsible");
+      sessionStorage.removeItem("TipoTutorResponsible");
+      sessionStorage.removeItem("NumeroResponsible");
+      sessionStorage.removeItem("EmailResponsible");
+      sessionStorage.removeItem("CiResponsible");
     };
     window.addEventListener("beforeunload", handleUnload);
     return () => {
@@ -97,17 +97,28 @@ export const RegisterResponsible = () => {
   const autofill = async () => {
     try {
       const personData = await getPersonData(
-        localStorage.getItem("CiResponsible")
+        sessionStorage.getItem("CiResponsible")
       );
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
         setValue("Email", personData.data.data.correoElectronico);
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+        }));
       }
 
       if (personData.data.data.tipoTutor) {
         setValue("Tipo_Tutor", personData.data.data.tipoTutor);
         setValue("Numero_Celular", personData.data.data.telefono);
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Tipo_Tutor: true,
+          Numero_Celular: true,
+        }));
       }
     } catch (error) {
       console.log(error);
@@ -116,7 +127,7 @@ export const RegisterResponsible = () => {
 
   const onSubmit = async (data) => {
     try {
-      navigation("/register/olympian", {
+      navigation("/register/excel", {
         state: { from: location.pathname },
         data,
       });
@@ -128,8 +139,12 @@ export const RegisterResponsible = () => {
 
   return (
     <div className="container-form">
-      {/* <ProgressBar currentStep={currentStep} totalSteps={totalSteps} /> */}
-      <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
+      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <form
+        className="container-form-inputs"
+        onSubmit={handleSubmit(onSubmit)}
+        autoComplete="off"
+      >
         <div className="input-2c">
           <h1>Datos de responsable de inscripción</h1>
           <h5 className="message-recomendation">
@@ -144,6 +159,7 @@ export const RegisterResponsible = () => {
             placeholder="Ingrese número de CI del tutor"
             mandatory="true"
             name="Ci"
+            isReadOnly={isReadOnly}
             autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("Ci", e.target.value)}
@@ -159,6 +175,7 @@ export const RegisterResponsible = () => {
             placeholder="Ingrese nombre(s) del tutor"
             mandatory="true"
             name="Nombre"
+            isReadOnly={isReadOnly}
             value={watchedNombre}
             onChange={(e) => setValue("Nombre", e.target.value)}
             register={register}
@@ -173,6 +190,7 @@ export const RegisterResponsible = () => {
             placeholder="Ingrese apellido(s) del tutor"
             mandatory="true"
             name="Apellido"
+            isReadOnly={isReadOnly}
             value={watchedApellido}
             onChange={(e) => setValue("Apellido", e.target.value)}
             register={register}
@@ -188,6 +206,7 @@ export const RegisterResponsible = () => {
             mandatory="true"
             options={tipoTutor}
             name="Tipo_Tutor"
+            isReadOnly={isReadOnly}
             value={watchedTipoTutor}
             onChange={(e) => setValue("Tipo_Tutor", e.target.value)}
             register={register}
@@ -202,6 +221,7 @@ export const RegisterResponsible = () => {
             placeholder="Ingrese número de celular"
             mandatory="true"
             name="Numero_Celular"
+            isReadOnly={isReadOnly}
             value={watchedTelefono}
             onChange={(e) => setValue("Numero_Celular", e.target.value)}
             register={register}
@@ -216,6 +236,7 @@ export const RegisterResponsible = () => {
             placeholder="ejemplo@correo.com"
             mandatory="true"
             name="Email"
+            isReadOnly={isReadOnly}
             value={watchedEmail}
             onChange={(e) => setValue("Email", e.target.value)}
             register={register}

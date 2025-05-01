@@ -29,8 +29,8 @@ export const AreaCategoriaElement = ({
   const navigation = useNavigate();
   const [tutorArea, setTutorArea] = useState(
     nameArea == "AreaPrincipal"
-      ? localStorage.getItem("TutorArea1")
-      : localStorage.getItem("TutorArea2")
+      ? sessionStorage.getItem("TutorArea1")
+      : sessionStorage.getItem("TutorArea2")
   );
 
   const addTutor = () => {
@@ -71,17 +71,19 @@ export const AreaCategoriaElement = ({
         <div className="nombre-tutor">
           <span>Tutor: </span>
           {nameArea === "AreaPrincipal"
-            ? `${localStorage.getItem("NombrePrincipal") || ""} ${
-                localStorage.getItem("ApellidoPrincipal") || ""
+            ? `${sessionStorage.getItem("NombrePrincipal") || ""} ${
+                sessionStorage.getItem("ApellidoPrincipal") || ""
               }`
-            : `${localStorage.getItem("NombreSecundaria") || ""} ${
-                localStorage.getItem("ApellidoSecundaria") || ""
+            : `${sessionStorage.getItem("NombreSecundaria") || ""} ${
+                sessionStorage.getItem("ApellidoSecundaria") || ""
               }`}
         </div>
       )}
       {watchedArea && watchedCategoria && (
         <div className="input-2c option-add-tutor">
-          <p onClick={addTutor}>Elegir un tutor para el area (Opcional)</p>
+          <p onClick={addTutor}>
+            Registrar un profesor para el area (Opcional)
+          </p>
         </div>
       )}
     </>

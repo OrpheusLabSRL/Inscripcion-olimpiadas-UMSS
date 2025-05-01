@@ -11,7 +11,7 @@ return new class extends Migration {
         Schema::create('olimpiadas', function (Blueprint $table) {
             $table->id('idOlimpiada');
             $table->unsignedBigInteger('idUsuario');
-            $table->string('nombreOlimpiada', 50)->unique();// Cambiado de 30 a 50 caracteres
+            $table->string('nombreOlimpiada', 50)->unique();
             $table->integer('version')->unsigned();
             $table->boolean('estadoOlimpiada')->default(true);
             $table->date('fechaInicioOlimpiada');

@@ -31,6 +31,16 @@ export const getAreasCategoriasPorOlimpiada = async (idOlimpiada) => {
     `/viewAreaCategoria/olimpiada/${idOlimpiada}`
   );
 };
+export const deleteAreasCategoriasPorOlimpiada = (idOlimpiada) => {
+  return inscriptionApi.delete(
+    `/olimpiada-area-categoria/eliminar-por-olimpiada/${idOlimpiada}`
+  );
+};
+export const updateOlimpiadaEstado = async (idOlimpiada, nuevoEstado) => {
+  return await inscriptionApi.put(`/editarOlimpiadas/${idOlimpiada}/estado`, {
+    estadoOlimpiada: nuevoEstado,
+  });
+};
 
 /* =======================
    CATEGORÍAS
@@ -96,3 +106,24 @@ export const updateCombinacionEstado = async (id, estado) => {
 
 export const asignarCombinaciones = async (data) =>
   await inscriptionApi.post("/asignar-olimpiada", data);
+
+// ============================
+// LOGIN
+// ============================
+
+export const login = async (credentials) => {
+  const response = await inscriptionApi.post("/login", credentials);
+  return response.data;
+};
+
+export const getInscripcionesConOlimpiadas = async () => {
+  try {
+    const response = await inscriptionApi.get(
+      "/obtenerInscripciones/olimpiadas"
+    );
+    return response.data.data; // Solo devolvemos el array de inscripciones
+  } catch (error) {
+    console.error("Error al obtener inscripciones:", error);
+    throw error;
+  }
+};

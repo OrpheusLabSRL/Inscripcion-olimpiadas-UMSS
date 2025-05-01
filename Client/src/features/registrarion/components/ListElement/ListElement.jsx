@@ -48,7 +48,7 @@ export const ListElement = ({ data }) => {
               <td>{data.colegio}</td>
               <td>{data.curso}</td>
               <td>{data.departamento}</td>
-              <td>{data.provincia}</td>
+              <td>{data.municipio}</td>
               <td>
                 <div>
                   <FaEdit
@@ -119,7 +119,7 @@ export const ListElement = ({ data }) => {
               </div>
               <div className="data-item">
                 <span className="data-label">Provincia:</span>
-                <span className="data-value">{data.provincia}</span>
+                <span className="data-value">{data.municipio}</span>
               </div>
               <div className="data-item">
                 <span className="data-label">Correo Electrónico:</span>
@@ -128,63 +128,167 @@ export const ListElement = ({ data }) => {
             </div>
           </div>
 
-          {data.areas.map((area, index) => (
-            <div className="data-section" key={`area-${index}`}>
-              <div className="section-header">
-                <h3>Área {index + 1}</h3>
+          {data.inscripciones.map((inscripcion, index) => (
+            <div key={`inscripcion-${index}`}>
+              <div className="data-section">
+                <div className="section-header">
+                  <h3>Área {index + 1}</h3>
+                </div>
+                <div className="data-grid">
+                  <div className="data-item">
+                    <span className="data-label">Nombre área:</span>
+                    <span className="data-value">
+                      {inscripcion.nombre_area}
+                    </span>
+                  </div>
+                  <div className="data-item">
+                    <span className="data-label">Categoría:</span>
+                    <span className="data-value">
+                      {inscripcion.nombre_categoria}
+                    </span>
+                  </div>
+
+                  {inscripcion.nombre_tutor_area ? (
+                    <>
+                      <div className="data-item">
+                        <span className="data-label">
+                          Nombre tutor de área:
+                        </span>
+                        <span className="data-value">
+                          {inscripcion.nombre_tutor_area}
+                        </span>
+                      </div>
+                      <div className="data-item">
+                        <span className="data-label">
+                          Apellido tutor de área:
+                        </span>
+                        <span className="data-value">
+                          {inscripcion.apellido_tutor_area}
+                        </span>
+                      </div>
+
+                      <div className="data-item">
+                        <span className="data-label">Tipo de tutor:</span>
+                        <span className="data-value">
+                          {inscripcion.tipo_tutor}
+                        </span>
+                      </div>
+                      <div className="data-item">
+                        <span className="data-label">Carnet de Identidad:</span>
+                        <span className="data-value">
+                          {inscripcion.carnetIdentidad}
+                        </span>
+                      </div>
+                      <div className="data-item">
+                        <span className="data-label">Telefono:</span>
+                        <span className="data-value">
+                          {inscripcion.telefono}
+                        </span>
+                      </div>
+                      <div className="data-item">
+                        <span className="data-label">Correo Electronico:</span>
+                        <span className="data-value">{inscripcion.correo}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <span className="data-value">
+                      No se cuenta con tutor de área
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className="data-grid">
-                <div className="data-item">
-                  <span className="data-label">Nombre área:</span>
-                  <span className="data-value">{area.nombre_area}</span>
-                </div>
-                <div className="data-item">
-                  <span className="data-label">Categoría:</span>
-                  <span className="data-value">{area.nombre_categoria}</span>
-                </div>
 
-                {area.nombre_tutor_area ? (
-                  <>
-                    <div className="data-item">
-                      <span className="data-label">Nombre tutor de área:</span>
-                      <span className="data-value">
-                        {area.nombre_tutor_area}
-                      </span>
-                    </div>
-                    <div className="data-item">
-                      <span className="data-label">
-                        Apellido tutor de área:
-                      </span>
-                      <span className="data-value">
-                        {area.apellido_tutor_area}
-                      </span>
-                    </div>
+              <div className="data-section">
+                <div className="section-header">
+                  <h3>Tutor legal para Área {index + 1}</h3>
+                </div>
+                <div className="data-grid">
+                  <div className="data-item">
+                    <span className="data-label">Nombre tutor legal:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.nombre}
+                    </span>
+                  </div>
+                  <div className="data-item">
+                    <span className="data-label">Apellido tutor de legal:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.apellido}
+                    </span>
+                  </div>
 
-                    <div className="data-item">
-                      <span className="data-label">Tipo de tutor:</span>
-                      <span className="data-value">{area.tipo_tutor}</span>
-                    </div>
-                    <div className="data-item">
-                      <span className="data-label">Carnet de Identidad:</span>
-                      <span className="data-value">{area.carnetIdentidad}</span>
-                    </div>
-                    <div className="data-item">
-                      <span className="data-label">Telefono:</span>
-                      <span className="data-value">{area.telefono}</span>
-                    </div>
-                    <div className="data-item">
-                      <span className="data-label">Correo Electronico:</span>
-                      <span className="data-value">{area.correo}</span>
-                    </div>
-                  </>
-                ) : (
-                  <span className="data-value">
-                    No se cuenta con tutor de área
-                  </span>
-                )}
+                  <div className="data-item">
+                    <span className="data-label">Tipo de tutor:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.tipo_tutor}
+                    </span>
+                  </div>
+                  <div className="data-item">
+                    <span className="data-label">Carnet de Identidad:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.carnetIdentidad}
+                    </span>
+                  </div>
+                  <div className="data-item">
+                    <span className="data-label">Telefono:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.telefono}
+                    </span>
+                  </div>
+                  <div className="data-item">
+                    <span className="data-label">Correo Electronico:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.correo}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
+
+          <div className="data-section">
+            <div className="section-header">
+              <h3>Responsable de inscripción</h3>
+            </div>
+            <div className="data-grid">
+              <div className="data-item">
+                <span className="data-label">Nombre tutor legal:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.nombre}
+                </span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Apellido tutor de legal:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.apellido}
+                </span>
+              </div>
+
+              <div className="data-item">
+                <span className="data-label">Tipo de tutor:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.tipo_tutor}
+                </span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Carnet de Identidad:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.carnetIdentidad}
+                </span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Telefono:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.telefono}
+                </span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Correo Electronico:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.correo}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </GenericModal>
     </div>
