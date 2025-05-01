@@ -22,9 +22,9 @@ class Rol extends Model
     // Manejar timestamps automáticamente
     public $timestamps = true;
 
-    // Opcionalmente podrías agregar relaciones inversas, por ejemplo:
-    // public function usuarios()
-    // {
-    //     return $this->hasMany(Usuario::class, 'idRol', 'idRol');
-    // }
+    // Relación: Un Rol puede tener muchos Usuarios
+    public function usuarios()
+    {
+        return $this->hasMany(Usuario::class, 'idRol', 'idRol');
+    }
 }

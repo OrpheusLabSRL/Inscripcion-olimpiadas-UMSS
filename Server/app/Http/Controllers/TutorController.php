@@ -54,30 +54,30 @@ class TutorController extends Controller
             'tipoTutor.in' => 'Seleccione un tipo de tutor válido'
         ]);
 
-        // if ($validator->fails()) {
-        //     $errors = $validator->errors();
+        if ($validator->fails()) {
+            $errors = $validator->errors();
             
-        //     if ($errors->has('carnetdeidentidad')) {
-        //         return response()->json([
-        //             'success' => false,
-        //             'error_code' => 'duplicate_ci',
-        //             'message' => 'El carnet de identidad ya está registrado'
-        //         ], 422);
-        //     }
+            if ($errors->has('carnetdeidentidad')) {
+                return response()->json([
+                    'success' => false,
+                    'error_code' => 'duplicate_ci',
+                    'message' => 'El carnet de identidad ya está registrado'
+                ], 422);
+            }
             
-        //     if ($errors->has('emailTutor')) {
-        //         return response()->json([
-        //             'success' => false,
-        //             'error_code' => 'duplicate_email',
-        //             'message' => 'El correo electrónico ya está registrado'
-        //         ], 422);
-        //     }
+            if ($errors->has('emailTutor')) {
+                return response()->json([
+                    'success' => false,
+                    'error_code' => 'duplicate_email',
+                    'message' => 'El correo electrónico ya está registrado'
+                ], 422);
+            }
 
-        //     return response()->json([
-        //         'success' => false,
-        //         'errors' => $errors
-        //     ], 422);
-        // }
+            return response()->json([
+                'success' => false,
+                'errors' => $errors
+            ], 422);
+        }
 
         try {
             $tutor = Tutor::create([
@@ -202,6 +202,30 @@ class TutorController extends Controller
         }
     }
 
+    public function getTutorWithPersona($id)
+    {
+        try {
+            $tutor = Tutor::with('persona')->find($id);
+            
+            if (!$tutor) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tutor no encontrado'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'tutor' => $tutor
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener los datos del tutor',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
     public function getAllTutors()
     {
         try {

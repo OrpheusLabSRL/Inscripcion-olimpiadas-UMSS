@@ -105,6 +105,7 @@ const OlympiadsTable = () => {
         <thead>
           <tr>
             <th>Nombre</th>
+            <th>Versión</th>
             <th>Fecha inicio</th>
             <th>Fecha fin</th>
             <th>Estado</th>
@@ -114,12 +115,13 @@ const OlympiadsTable = () => {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="5">Cargando olimpiadas...</td>
+              <td colSpan="6">Cargando olimpiadas...</td>
             </tr>
           ) : olympiads.length > 0 ? (
             olympiads.map((item) => (
               <tr key={item.idOlimpiada}>
                 <td>{item.nombreOlimpiada}</td>
+                <td>{item.version}</td>
                 <td>{item.fechaInicioOlimpiada}</td>
                 <td>{item.fechaFinOlimpiada}</td>
                 <td>
@@ -164,7 +166,7 @@ const OlympiadsTable = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="5">No hay olimpiadas registradas.</td>
+              <td colSpan="6">No hay olimpiadas registradas.</td>
             </tr>
           )}
         </tbody>

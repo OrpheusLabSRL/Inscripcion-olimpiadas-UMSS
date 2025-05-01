@@ -322,7 +322,7 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
             style={{ justifyContent: "flex-end", marginTop: "2rem" }}
           >
             <button type="submit" className="save-button">
-              REGISTRAR
+              Guardar
             </button>
           </div>
         </form>

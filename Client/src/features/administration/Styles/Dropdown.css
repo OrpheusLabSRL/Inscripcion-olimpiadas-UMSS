@@ -18,7 +18,7 @@
 }
 
 .dropdown-wrapper {
-  background-color: #d8d7bc;
+  background-color: #e2e2e2;
   padding: 0.75rem 1rem;
   border-radius: 8px;
   user-select: none;
@@ -43,7 +43,7 @@
 
 .dropdown-list,
 .multi-dropdown-options {
-  background-color: #d8d7bc;
+  background-color: #e2e2e2;
   position: absolute;
   width: 100%;
   z-index: 99;
@@ -66,7 +66,7 @@
 
 .dropdown-option:hover,
 .multi-dropdown-item:hover {
-  background-color: #c7c6a8;
+  background-color: #ccc;
 }
 
 .custom-circle {
@@ -89,13 +89,12 @@
 .custom-circle input[type="checkbox"]:checked::before {
   content: "";
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 8px;
-  height: 8px;
+  top: 4px;
+  left: 4px;
+  width: 6px;
+  height: 6px;
   background-color: black;
   border-radius: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .multi-label {
