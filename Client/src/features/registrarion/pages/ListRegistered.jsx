@@ -86,7 +86,7 @@ export const ListRegistered = () => {
               sessionStorage.setItem("prevPage", location.pathname)
             }
           />
-           <button className="btn-generate-boleta" onClick={generarBoleta}>
+           <button className="btn-add-student" onClick={generarBoleta}>
             Generar Boleta
           </button>
         </div>
