@@ -8,7 +8,7 @@ const CategoryList = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
-    navigate("/admin/base-data");
+    navigate("/admin/view-base");
   };
 
   return (

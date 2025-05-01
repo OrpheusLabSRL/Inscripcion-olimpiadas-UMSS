@@ -1,6 +1,6 @@
 // src/features/administration/pages/ManageBaseData.jsx
 import { useNavigate } from "react-router-dom";
-import BackButton from "../../../components/Buttons/BackButton.jsx"; // 🔥 Importamos el BackButton
+import BackButton from "../../../components/Buttons/BackButton.jsx";
 import "../Styles/BaseData.css";
 
 const ManageBaseData = () => {

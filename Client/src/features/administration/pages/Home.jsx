@@ -14,7 +14,6 @@ export default function Home() {
   const [areasPorOlimpiada, setAreasPorOlimpiada] = useState({});
   const [allInscripciones, setAllInscripciones] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const [participantes, setParticipantes] = useState(0);
   const [pagosPendientes, setPagosPendientes] = useState(0);
 
@@ -129,7 +128,7 @@ export default function Home() {
 
       <div className="summary-section">
         <div className="summary-card" style={{ textAlign: "center" }}>
-          <h3>Nombre de las Olimpiadas Actuales</h3>
+          <h3>Olimpiadas Activas</h3>
           {activeOlimpiadas.length > 0 ? (
             <div
               className="olimpiada-slider"
@@ -174,19 +173,19 @@ export default function Home() {
         <div className="summary-card" style={{ textAlign: "center" }}>
           <h3>Áreas Registradas</h3>
           <p className="big-text">{currentAreas.length}</p>
-          <p>Aún se pueden aumentar</p>
+          <p>Areas registradas a la olimpiada</p>
         </div>
 
         <div className="summary-card">
           <h3>Participantes</h3>
           <p className="big-text">{participantes}</p>
-          <p>+20% respecto al mes anterior</p>
+          <p>Estudiantes oficialmente inscritos</p>
         </div>
 
         <div className="summary-card">
           <h3>Pagos Pendientes</h3>
           <p className="big-text">{pagosPendientes}</p>
-          <p>Aún le quedan 3 meses para pagar</p>
+          <p>Pagos aún no confirmados</p>
         </div>
       </div>
 
@@ -194,18 +193,18 @@ export default function Home() {
 
       <div className="actions-section">
         <div className="action-card">
-          <h3>Áreas y Categorías</h3>
+          <h3 style={{ fontWeight: "bold" }}>Áreas y Categorías</h3>
           <p>Visualiza las áreas y categorías disponibles</p>
-          <button onClick={() => navigate("/admin/base-data")}>
-            IR A ÁREAS Y CATEGORÍAS
+          <button onClick={() => navigate("/admin/view-base")}>
+            ir a areas y categorías
           </button>
         </div>
 
         <div className="action-card">
-          <h3>Generar Reportes</h3>
+          <h3 style={{ fontWeight: "bold" }}>Generar Reportes</h3>
           <p>Genera reportes personalizados con filtros</p>
           <button onClick={() => navigate("/admin/reports")}>
-            GENERAR REPORTES
+            generar reportes
           </button>
         </div>
       </div>
