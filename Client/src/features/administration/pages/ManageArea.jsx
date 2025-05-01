@@ -8,7 +8,7 @@ const AreaList = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
-    navigate("/admin/base-data");
+    navigate("/admin/view-base");
   };
 
   return (
@@ -31,6 +31,7 @@ const AreaList = () => {
         <BackButton onClick={goBack} className="back-button">
           Volver
         </BackButton>
+
         <h1
           style={{
             marginTop: "1rem",
