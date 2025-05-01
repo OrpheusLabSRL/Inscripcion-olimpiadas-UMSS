@@ -1,0 +1,57 @@
+.report-table-container {
+    padding: 1rem;
+    overflow-x: auto;
+  }
+  
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    color: black;
+    background-color: white;
+  }
+  
+  .data-table th,
+  .data-table td {
+    border-bottom: 1px solid #ddd;
+    padding: 0.75rem;
+    text-align: left;
+  }
+  
+  .data-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+  
+  .badge-success {
+    background-color: #d4f8d4;
+    color: #1a7f1a;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .badge-danger {
+    background-color: #ffe0e0;
+    color: #e63946;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+  }
+  .reports-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Reduced space between elements */
+    margin-top: 1rem;
+  }
+  
+  .reports-select {
+    flex-grow: 0; /* Prevents the select from growing too large */
+    width: 180px; /* Set a fixed width to reduce size */
+  }
+  
+  .btn-registrar {
+    margin-left: 0.5rem;
+  }
+  
+  

@@ -57,7 +57,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                 </Link>
               </li>
               <li>
-                <Link>
+                <Link to= "/admin/reports">
                   <HiOutlineClipboardDocument className="sidebar-icons" />{" "}
                   {isOpen ? "Reportes" : ""}
                 </Link>

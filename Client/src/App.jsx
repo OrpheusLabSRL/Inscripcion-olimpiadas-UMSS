@@ -16,6 +16,8 @@ import AdminLayout from "./layouts/AdminLayout";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterResponsible";
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
+import Reports from "./features/administration/pages/Reports";
+
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
@@ -106,6 +108,16 @@ function App() {
                 element={
                   <PrivateRoute
                     element={<ManageOlympiads />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
+              <Route
+                path="reports"
+                element={
+                  <PrivateRoute
+                    element={<Reports />}
                     allowedRoles={["admin"]}
                     userRole={user.role}
                   />
