@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
 /* Estilos generales del header */
 header {
   height: 80px; /* Altura del header */
-  background-color: var(--background); /* Fondo usando la variable de fondo */
+  background-color: #ECEFCA; /* Fondo usando el color especificado */
   padding: var(--high-button) var(--broad-button); /* Padding del header usando las variables */
   display: flex; /* Layout con flexbox */
   align-items: center; /* Alineación vertical centrada */
@@ -13,8 +15,6 @@ header {
   top: 0; /* Pegado a la parte superior */
   left: 0; /* Pegado a la izquierda */
   z-index: 1000; /* Asegurarse de que esté encima de otros elementos */
-  font-family: 'Inter', sans-serif;
-  font-weight: lighter;
 }
 
 /* Logo */
@@ -23,9 +23,12 @@ header {
 }
 
 /* Título */
-h1 {
-  font-size: var(--h1-size); /* Usar el tamaño de fuente para h1 definido en las variables */
-  color: var(--primary-color); /* Color de texto usando la variable de color primario */
+.header-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #547792;
+  margin-left: 10px;
 }
 
 /* Estilos para los elementos de navegación */
@@ -34,22 +37,41 @@ nav ul {
   display: flex; /* Flexbox para los items de navegación */
   gap: 20px; /* Espacio entre los items de navegación */
   align-items: center;
+  height: 100%;
 }
 
 nav ul li {
   cursor: pointer; /* Cursor de puntero para los items de navegación */
   color: var(--primary-color); /* Color de texto para los items de navegación usando la variable */
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #547792;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 5px;
 }
 
 nav ul li:last-child a .btn-next-page {
-  background-color: #2563EB;
+  background-color: #547792;
   color: white;
   border-radius: 8px;
   font-family: 'Inter', sans-serif;
-  font-weight: lighter;
-  border-color: #2563EB;
+  font-weight: 500;
   border: none;
+  padding: 6px 16px;
+  height: 32px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  margin: 0;
+}
 
+nav ul li:last-child a .btn-next-page:hover {
+  background-color: #3a5a6e;
 }
 
 /* Contenedor del header */
@@ -58,7 +80,7 @@ nav ul li:last-child a .btn-next-page {
   justify-content: space-between;
   align-items: center;
   padding: var(--high-button) var(--broad-button); /* Padding usando las variables */
-  background-color: var(--background); /* Fondo usando la variable */
+  background-color: #ECEFCA; /* Fondo usando el color especificado */
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -70,14 +92,6 @@ nav ul li:last-child a .btn-next-page {
 .header-logo {
   height: 50px;
   margin-right: 10px;
-}
-
-.header-title {
-  font-size: var(--h2-size); /* Usar el tamaño de fuente para h2 definido en las variables */
-  color: var(--secondary-color); /* Color usando la variable secundaria */
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  color: #2563EB;
 }
 
 /* Estilos para la barra de navegación */
@@ -100,9 +114,9 @@ nav ul li:last-child a .btn-next-page {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 0%;
+  width: 0;
   height: 2px;
-  background-color: var(--primary-color); /* Usar el color primario para el subrayado */
+  background-color: #547792;
   transition: width 0.3s ease;
 }
 
@@ -111,69 +125,66 @@ nav ul li:last-child a .btn-next-page {
 }
 
 .header-nav li:hover {
-  color: var(--primary-color); /* Cambiar el color del texto al pasar el mouse */
+  color: #3a5a6e;
 }
 
-/* Estilos para el menú hamburguesa en dispositivos móviles */
+/* Estilos para el menú móvil */
 .mobile-menu {
-  display: none; /* Ocultar el menú hamburguesa por defecto */
+  display: none;
+  font-size: 24px;
   cursor: pointer;
-  font-size: 30px; /* Tamaño del ícono del menú */
-  color: black; /* Color negro */
-  position: absolute;
-  top: 20px; /* Poner el botón en la parte superior */
-  right: 20px; /* Alinearlo a la derecha */
+  color: #547792;
 }
 
-/* Estilos de navegación responsive */
+/* Media queries para responsividad */
 @media (max-width: 768px) {
   header {
-    height: auto; /* Dejar que la altura se ajuste dependiendo del contenido */
-    padding: var(--high-button) var(--broad-button); /* Ajustar padding para dispositivos pequeños */
-    position: relative; /* Cambiar a relativa para evitar problemas de visibilidad */
+    padding: 10px;
   }
 
   .header-container {
-    flex-direction: column; /* Cambiar la disposición a columna en pantallas pequeñas */
-    align-items: flex-start; /* Alineación izquierda para el logo y título */
+    padding: 10px;
   }
 
   .header-logo img {
-    height: 40px; /* Reducir el tamaño del logo */
+    height: 40px;
   }
 
   h1 {
-    font-size: var(--h2-size); /* Reducir el tamaño de la fuente del título */
+    font-size: 24px;
   }
 
   .header-nav {
-    flex-direction: column; /* Cambiar la navegación a columna */
-    gap: 10px; /* Reducir el espacio entre los items de navegación */
-    margin-top: var(--high-button); /* Añadir espacio superior */
-    display: none; /* Ocultar el menú en dispositivos móviles por defecto */
-    width: 100%;
-    text-align: center;
+    display: none;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background-color: #ECEFCA;
+    flex-direction: column;
+    padding: 20px;
+    gap: 15px;
   }
 
   .mobile-menu {
-    display: block; /* Mostrar el menú hamburguesa */
+    display: block;
   }
 
   .header-nav.show {
-    display: flex; /* Mostrar el menú cuando se active */
+    display: flex;
   }
 }
 
 @media (max-width: 480px) {
   .header-title {
-    font-size: var(--h3-size); /* Reducir aún más el tamaño de la fuente */
+    font-size: 20px;
   }
 
   .header-logo img {
-    height: 35px; /* Reducir el tamaño del logo para pantallas muy pequeñas */
+    height: 35px;
   }
 
   .header-container {
-    padding: var(--high-button); /* Ajustar padding para pantallas muy pequeñas */
+    padding: 5px;
   }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Inscripcion extends Model
 {
@@ -23,7 +24,7 @@ class Inscripcion extends Model
 
     public function olimpista()
     {
-        return $this->belongsTo(Olimpista::class, 'idOlimpista', 'idPersona');
+        return $this->belongsTo(Olimpista::class, 'idOlimpista', 'idOlimpista');
     }
 
     public function persona()
@@ -33,17 +34,17 @@ class Inscripcion extends Model
 
     public function tutorResponsable()
     {
-        return $this->belongsTo(Tutor::class, 'idTutorResponsable', 'idPersona');
+        return $this->belongsTo(Tutor::class, 'idTutorResponsable', 'idTutor');
     }
 
     public function tutorLegal()
     {
-        return $this->belongsTo(Tutor::class, 'idTutorLegal', 'idPersona');
+        return $this->belongsTo(Tutor::class, 'idTutorLegal', 'idTutor');
     }
 
     public function tutorArea()
     {
-        return $this->belongsTo(Tutor::class, 'idTutorArea', 'idPersona');
+        return $this->belongsTo(Tutor::class, 'idTutorArea', 'idTutor');
     }
 
     public function OlimpiadaAreaCategoria()
@@ -63,8 +64,13 @@ class Inscripcion extends Model
         );
     }
 
-    public function olimpiada()
+    public function logInscripcion()
     {
-        return $this->belongsTo(Olimpiada::class, 'idOlimpiada', 'idOlimpiada');
+        Log::info('Procesando inscripción:', [
+            'idInscripcion' => $this->idInscripcion,
+            'area' => $this->area,
+            'categoria' => $this->categoria,
+            'datos_completos' => $this
+        ]);
     }
 }

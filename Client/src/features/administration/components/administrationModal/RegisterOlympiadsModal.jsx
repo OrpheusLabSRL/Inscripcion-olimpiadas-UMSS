@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../Styles/ModalGeneral.css";
-import "../../styles/General.css";
+import "../../Styles/General.css";
 import {
   createOlympiad,
   getOlimpiadas,

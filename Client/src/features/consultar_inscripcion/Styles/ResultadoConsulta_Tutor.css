@@ -1,0 +1,129 @@
+.resultado-container {
+    padding: 2rem;
+    min-height: 100vh;
+    background-color: #94B4C1;
+    margin-top: 60px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.resultado-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.resultado-content h2 {
+    color: black;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.8rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.tutor-info {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+}
+
+.tutor-info h3 {
+    color: black;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.tutor-info p {
+    color: black;
+    margin: 0.75rem 0;
+    font-size: 1.1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.olimpistas-table {
+    margin-top: 2rem;
+}
+
+.olimpistas-table h3 {
+    color: black;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.olimpistas-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.olimpistas-table th,
+.olimpistas-table td {
+    color: black;
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 1.1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.olimpistas-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.olimpistas-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+button {
+    display: block;
+    margin: 2rem auto 0;
+    padding: 0.75rem 1.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: #dc3545;
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 1.1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.estado-pago {
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.estado-pago.realizado {
+    color: #28a745;
+}
+
+.estado-pago.pendiente {
+    color: #dc3545;
+} 
