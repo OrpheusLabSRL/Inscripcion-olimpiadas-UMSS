@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CategoriaController;
@@ -18,8 +17,9 @@ use App\Http\Controllers\OlimpiadaAreaCategoriaController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\BoletaPagoController;
 
-// Ruta protegida
+// Ruta protegida para obtener el usuario autenticado
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -74,7 +74,9 @@ Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
 // Categoría - Área - Olimpiada
 Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'index']);
 Route::post('/newAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'store']);
-Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']); // ✅ Solo una vez
+Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);
+
+Route::get('/boletas/generar/{idTutor}', [BoletaPagoController::class, 'generarBoleta']);
 
 // Excel
 Route::post('/register-from-excel', [ExcelController::class, 'registerFromExcel']);

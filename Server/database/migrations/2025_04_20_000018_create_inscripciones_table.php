@@ -17,12 +17,15 @@ return new class extends Migration {
             $table->unsignedBigInteger('idTutorLegal');
             $table->unsignedBigInteger('idTutorArea')->nullable();
             $table->unsignedBigInteger('idOlimpAreaCategoria');
+            $table->unsignedBigInteger('codigoBoleta')->nullable();
 
             $table->foreign('idOlimpista')->references('idPersona')->on('olimpistas')->onDelete('cascade');
             $table->foreign('idTutorResponsable')->references('idPersona')->on('tutores')->onDelete('cascade');
             $table->foreign('idTutorLegal')->references('idPersona')->on('tutores')->onDelete('cascade');
             $table->foreign('idTutorArea')->references('idPersona')->on('tutores')->onDelete('cascade');
             $table->foreign('idOlimpAreaCategoria')->references('idOlimpAreaCategoria')->on('olimpiadas_areas_categorias')->onDelete('cascade');
+            $table->foreign('codigoBoleta')->references('codigoBoleta')->on('boletas_pagos')->onDelete('set null');
+
         });
     }
 
