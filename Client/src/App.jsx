@@ -11,20 +11,28 @@ import ManageArea from "./features/administration/pages/ManageArea";
 import ManageCategoria from "./features/administration/pages/ManageCategoria";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageViewBase from "./features/administration/pages/ManageViewBaseData";
+import Home from "./features/administration/pages/Home";
+import Login from "./features/administration/pages/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
-import AdminLayout from "./layouts/AdminLayout";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterResponsible";
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
 import Reports from "./features/administration/pages/Reports";
 
+import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
 
-  const showSidebar =
-    location.pathname !== "/" && location.pathname !== "/register/tutor-form";
+  // 🔥 Rutas donde NO queremos mostrar el Sidebar
+  const hideSidebarRoutes = [
+    "/",
+    "/register/tutor-form",
+    "/register/excel",
+    "/admin",
+  ];
+  const showSidebar = !hideSidebarRoutes.includes(location.pathname);
 
   const user = {
     role: "admin",
@@ -35,18 +43,20 @@ function App() {
       <div
         className={
           location.pathname === "/" ||
-          location.pathname == "/register/tutor-form"
+          location.pathname === "/register/tutor-form" ||
+          location.pathname === "/register/excel"
             ? ""
             : isOpen
             ? "main active"
             : "main"
         }
       >
+        {/* Mostrar el Sidebar solo donde corresponde */}
         {showSidebar && (
           <Sidebar
             isOpen={isOpen}
             setIsOpen={setIsOpen}
-            admin={!location.pathname.startsWith("/admin") ? false : true}
+            admin={location.pathname.startsWith("/admin")}
           />
         )}
 
@@ -58,6 +68,7 @@ function App() {
             <Route path="register/tutor-legal" element={<RegisterTutor />} />
             <Route path="listRegistered" element={<ListRegistered />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
+            <Route path="/register/excel" element={<RegisterExcel />} />
             <Route
               path="/register/responsible"
               element={<RegisterResponsible />}
@@ -73,6 +84,26 @@ function App() {
 
             {/* Rutas bajo Admin */}
             <Route path="/admin">
+              <Route
+                path=""
+                element={
+                  <PrivateRoute
+                    element={<Login />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
+              <Route
+                path="home"
+                element={
+                  <PrivateRoute
+                    element={<Home />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
               <Route
                 path="base-data"
                 element={

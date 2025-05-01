@@ -22,6 +22,8 @@ class InscripcionController extends Controller
             'inscripciones' => 'required|array'
         ]);
 
+        // \Log::info('Datos recibidos en store:', $request->all());
+
         DB::beginTransaction();
 
         try {
@@ -48,7 +50,7 @@ class InscripcionController extends Controller
             foreach ($request->inscripciones as $inscripcionData) {
                 // Procesar tutor de área si existe
                 $tutorArea = null;
-                if ($request->has('existeTutor') && $request->existeTutor === true  && isset($inscripcionData['tutorArea'])) {
+                if (isset($inscripcionData['existeTutor']) && $inscripcionData['existeTutor'] == "true" && isset($inscripcionData['tutorArea'])) {
                     $personaTutorArea = $this->buscarOCrearPersona($inscripcionData['tutorArea']);
                     $tutorArea = $this->buscarOCrearTutor($personaTutorArea->idPersona, $inscripcionData['tutorArea']);
                 }
@@ -90,7 +92,7 @@ class InscripcionController extends Controller
         }
     }
 
-    /**
+    /** 
      * Busca una persona por carnet de identidad o crea una nueva si no existe
      */
     private function buscarOCrearPersona(array $data)
@@ -115,7 +117,7 @@ class InscripcionController extends Controller
             [
                 'fechaNacimiento' => $data['fecha_nacimiento'],
                 'departamento' => $data['departamento'],
-                'provincia' => $data['provincia'],
+                'municipio' => $data['municipio'],
                 'curso' => $data['curso'],
                 'colegio' => $data['colegio']
             ]
@@ -137,83 +139,106 @@ class InscripcionController extends Controller
     }
 
 
-public function enableForIncription($carnet_identidad){
-    $olimpista = Persona::where("carnetIdentidad", $carnet_identidad)->first();
-    if(!$olimpista) return;
-    $inscripcionesExistentes = Inscripcion::where('idOlimpista', $olimpista->idPersona)->count();
-        
-        if ($inscripcionesExistentes >= 2) {
+    public function enableForIncription($carnet_identidad){
+        $olimpista = Persona::where("carnetIdentidad", $carnet_identidad)->first();
+        if(!$olimpista) return;
+        $inscripcionesExistentes = Inscripcion::where('idOlimpista', $olimpista->idPersona)->count();
+            
+            if ($inscripcionesExistentes >= 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El olimpista ya está registrado en 2 áreas',
+                    'data' => [
+                        'olimpista_id' => $olimpista->idOlimpista,
+                        'inscripciones_actuales' => $inscripcionesExistentes
+                    ]
+                ], 422);
+            }
             return response()->json([
-                'success' => false,
-                'message' => 'El olimpista ya está registrado en 2 áreas',
+                'success' => true,
+                'message' => 'El olimpista ya está habilitado',
                 'data' => [
                     'olimpista_id' => $olimpista->idOlimpista,
                     'inscripciones_actuales' => $inscripcionesExistentes
                 ]
-            ], 422);
-        }
-        return response()->json([
-            'success' => true,
-            'message' => 'El olimpista ya está habilitado',
-            'data' => [
-                'olimpista_id' => $olimpista->idOlimpista,
-                'inscripciones_actuales' => $inscripcionesExistentes
-            ]
-        ]);
-}
-
-public function getAreaByOlimpista($id_olimpista)
-{
-    // Verificar si el olimpista existe
-    $olimpista = Olimpista::find($id_olimpista);
-    
-    if (!$olimpista) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Olimpista no encontrado'
-        ], 404);
+            ]);
     }
 
-    // Obtener las inscripciones del olimpista
-    $inscripciones = Inscripcion::where('id_olimpista', $id_olimpista)->get();
+    public function getAreaByOlimpista($id_olimpista)
+    {
+        // Verificar si el olimpista existe
+        $olimpista = Olimpista::find($id_olimpista);
+        
+        if (!$olimpista) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Olimpista no encontrado'
+            ], 404);
+        }
 
-    // Obtener los id_AreaCategoria únicos
-    $areaCategoriaIds = $inscripciones->pluck('idOlimpAreaCategoria')->unique();
+        // Obtener las inscripciones del olimpista
+        $inscripciones = Inscripcion::where('id_olimpista', $id_olimpista)->get();
 
-    // Obtener las áreas-categorías involucradas
-    $areaCategorias = OlimpiadaAreaCategoria::with('area', 'categoria') // Asegúrate de tener estas relaciones
-        ->whereIn('idOlimpAreaCategoria', $areaCategoriaIds)
-        ->get();
+        // Obtener los id_AreaCategoria únicos
+        $areaCategoriaIds = $inscripciones->pluck('idOlimpAreaCategoria')->unique();
 
-    // Agrupar por área
-    $areasConCategorias = $areaCategorias->groupBy('idArea')->map(function ($items, $areaId) {
-        $area = $items->first()->area;
+        // Obtener las áreas-categorías involucradas
+        $areaCategorias = OlimpiadaAreaCategoria::with('area', 'categoria') // Asegúrate de tener estas relaciones
+            ->whereIn('idOlimpAreaCategoria', $areaCategoriaIds)
+            ->get();
 
-        return [
-            'idArea' => $area->idArea,
-            'nombreArea' => $area->nombreArea,
-            'descripcionArea' => $area->descripcionArea,
-            'costoArea' => $area->costoArea,
-            'estadoArea' => $area->estadoArea,
-            'categorias' => $items->map(function ($item) {
-                return [
-                    'idCategoria' => $item->categoria->idCategoria ?? null,
-                    'nombreCategoria' => $item->categoria->nombreCategoria ?? null,
-                    'estadoCategoria' => $item->categoria->descripcionCategoria ?? null,
-                ];
-            })->values()
-        ];
-    })->values();
+        // Agrupar por área
+        $areasConCategorias = $areaCategorias->groupBy('idArea')->map(function ($items, $areaId) {
+            $area = $items->first()->area;
 
-    return response()->json([
-        'success' => true,
-        'data' => [
-            'olimpista' => $olimpista,
-            'areas' => $areasConCategorias
-        ]
-    ], 200);
-}
+            return [
+                'idArea' => $area->idArea,
+                'nombreArea' => $area->nombreArea,
+                'descripcionArea' => $area->descripcionArea,
+                'costoArea' => $area->costoArea,
+                'estadoArea' => $area->estadoArea,
+                'categorias' => $items->map(function ($item) {
+                    return [
+                        'idCategoria' => $item->categoria->idCategoria ?? null,
+                        'nombreCategoria' => $item->categoria->nombreCategoria ?? null,
+                        'estadoCategoria' => $item->categoria->descripcionCategoria ?? null,
+                    ];
+                })->values()
+            ];
+        })->values();
 
-    
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'olimpista' => $olimpista,
+                'areas' => $areasConCategorias
+            ]
+        ], 200);
+    }
+
+    public function getInscripcionesConOlimpiadas()
+    {
+        $inscripciones = Inscripcion::with(['olimpista', 'OlimpiadaAreaCategoria.olimpiada'])
+            ->get();
+
+        $result = $inscripciones->map(function ($inscripcion) {
+            return [
+                'idInscripcion' => $inscripcion->idInscripcion,
+                'estadoInscripcion' => $inscripcion->estadoInscripcion,
+                'olimpista' => [
+                    'nombre' => $inscripcion->olimpista->persona->nombre ?? '',
+                    'apellido' => $inscripcion->olimpista->persona->apellido ?? '',
+                    'carnet_identidad' => $inscripcion->olimpista->persona->carnetIdentidad ?? '',
+                ],
+                'idOlimpiada' => $inscripcion->OlimpiadaAreaCategoria->idOlimpiada ?? null,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $result,
+        ], 200);
+    }
+
 
 }

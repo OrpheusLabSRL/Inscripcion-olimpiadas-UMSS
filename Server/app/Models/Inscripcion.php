@@ -60,6 +60,10 @@ public function area()
         'idArea'            // FK en AreaCategoria hacia Area
     );
 }
+public function olimpiada()
+{
+    return $this->belongsTo(Olimpiada::class, 'idOlimpiada', 'idOlimpiada');
+}
 
 
 }

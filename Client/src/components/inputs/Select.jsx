@@ -14,6 +14,7 @@ export const Select = ({
   options = [],
   errors = null,
   mandatory = false,
+  isReadOnly = {},
 }) => {
   return (
     <div className="config-input">
@@ -35,6 +36,8 @@ export const Select = ({
             : register(name, { required: false })))}
         value={value}
         onChange={onChange}
+        disabled={isReadOnly?.Nombre ? true : false}
+        autoComplete="off"
       >
         {placeholder && <option value={""}>{placeholder}</option>}
 
