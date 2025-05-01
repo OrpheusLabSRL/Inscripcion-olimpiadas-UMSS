@@ -1,0 +1,313 @@
+:root {
+  --primary-color: #547792;     
+  --primary-hover: #547792;    
+  --background: #94B4C1;         
+  --white: #ffffff;            
+  
+  
+  --text-primary: #1e293b;       
+  --text-secondary: #64748b;     
+  --text-light: #94a3b8;        
+  
+  --border-color: #e2e8f0;      
+  --border-radius: 8px;          
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  --h1-size: 2rem;
+  --h4-size: 1.25rem;
+  --h5-size: 1rem;
+  --h6-size: 0.875rem;
+  --error-size: 0.875rem;
+  
+  --high-button: 12px;
+  --broad-button: 24px;
+  --input-padding: 12px 16px;
+}
+
+.pagina-contacto-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #94B4C1;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+.contact-main-container {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  margin-top: 80px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0;
+  background-color: #94B4C1;
+}
+
+.contact-sidebar {
+  flex: 0 0 30%;
+  background-color: #547792;
+  color: var(--white);
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0;
+  margin: 0 40px 0 0;
+}
+
+.contact-info {
+  max-width: 300px;
+  width: 100%;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+.info-item .icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.info-content h3 {
+  font-size: 25px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.info-content p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Formulario de contacto */
+.contact-main-container .contacto-form-wrapper {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  max-width: none;
+  width: 100%;
+}
+
+.contacto-form-wrapper h2 {
+  color: #547792 !important;
+  margin-bottom: 40px;
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 25px;
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: var(--h5-size);
+  color: var(--text-primary);
+  width: 100%;
+}
+
+.required {
+  color: #dc2626;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s;
+  box-sizing: border-box;
+  background-color: #f5f7fa;
+  margin: 0;
+}
+
+.form-group input,
+.form-group select {
+  height: 48px;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 150px;
+  width: 100%;
+}
+
+.form-group input::placeholder,
+.form-group select::placeholder {
+  color: var(--text-light);
+  opacity: 1;
+  font-size: var(--h5-size);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #547792;
+  box-shadow: 0 0 0 2px rgba(84, 119, 146, 0.1);
+}
+
+.valid-input {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 1px #10b981;
+}
+
+.invalid-input {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 1px #ef4444;
+}
+
+.error-message {
+  background-color: #ffebee;
+  border-left: 4px solid #f44336;
+  padding: 12px;
+  margin: 16px 0;
+  border-radius: 4px;
+  color: #d32f2f;
+  font-size: var(--error-size);
+}
+
+.success-message {
+  background-color: #e8f5e9;
+  border-left: 4px solid #4caf50;
+  padding: 12px;
+  margin: 16px 0;
+  border-radius: 4px;
+  color: #2e7d32;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+  width: 100%;
+}
+
+.submit-button {
+  padding: var(--high-button) var(--broad-button);
+  background-color: #547792 !important;
+  color: var(--white) !important;
+  border: none;
+  border-radius: 8px;
+  font-size: var(--h5-size);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  height: 48px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.submit-button:hover {
+  background-color: #547792 !important;
+}
+#descripcion {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-main-container {
+    flex-direction: column;
+    margin-top: 70px;
+    gap: 20px;
+  }
+  
+  .contact-sidebar {
+    flex: 0 0 100%;
+    margin: 0;
+    padding: 0 20px;
+  }
+  
+  .contact-main-container .contacto-form-wrapper {
+    margin: 10px 20px;
+    padding: 30px;
+  }
+  
+  .submit-button {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.form-group select {
+  width: 100%;
+  padding: 16px 40px 16px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s;
+  box-sizing: border-box;
+  background-color: #f5f7fa;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8.825L1.175 4 2.238 2.938 6 6.7l3.763-3.762L10.825 4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: auto;
+  min-height: 48px;
+  line-height: 1.2;
+}
+
+.form-group select option {
+  padding: 16px;
+  font-size: 16px;
+  white-space: normal;
+}
+
+.form-group select:hover {
+  border-color: #547792;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #547792;
+  box-shadow: 0 0 0 2px rgba(84, 119, 146, 0.1);
+}

@@ -3,7 +3,7 @@
   color: #ffffff; /* Mantengo el color blanco */
   width: 100%;
   padding: var(--high-button) var(--broad-button); /* Ajustando padding con las variables */
-  font-family: "Arial", sans-serif;
+  font-family: 'Arial', sans-serif;
 }
 
 .footer-content {
@@ -12,7 +12,7 @@
   align-items: flex-start;
   flex-wrap: nowrap;
   width: 100%;
-  gap: 2rem;
+  gap: 2rem; 
 }
 
 .footer-brand {
@@ -73,7 +73,7 @@
 .footer-column.contact-info {
   flex-shrink: 0;
   max-width: 300px;
-  text-align: right;
+  text-align: right; 
 }
 
 .contact-info p {

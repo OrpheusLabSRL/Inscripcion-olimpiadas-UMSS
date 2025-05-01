@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../Styles/ModalGeneral.css";
-import "../../styles/General.css";
+import "../../Styles/General.css";
 import {
   createOlympiad,
   getOlimpiadas,
@@ -222,7 +222,7 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
 
             <div className="form-group">
               <label>
-                Fecha de Fin <span style={{ color: "red" }}>*</span>
+                Fecha de Finalización <span style={{ color: "red" }}>*</span>
               </label>
               <input
                 type="date"
@@ -246,7 +246,7 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
               Cancelar
             </button>
             <button type="submit" className="save-button">
-              Guardar Olimpiada
+              Registrar Olimpiada
             </button>
           </div>
         </form>

@@ -12,6 +12,7 @@
   text-align: left;
   color: black;
 }
+
 .badge-success {
   background-color: #d4f8d4;
   color: #1a7f1a;
@@ -21,7 +22,7 @@
 }
 
 .add-button {
-  background-color: #547792;
+  background-color: #2563eb;
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
@@ -32,25 +33,17 @@
 .badge-success {
   background-color: #d4f8d4;
   color: #1a7f1a;
-  padding: 0.3rem 0.7rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-align: center;
-  white-space: nowrap;
-  display: inline-block;
+  font-size: 0.8rem;
 }
 
 .badge-danger {
   background-color: #ffe0e0;
   color: #e63946;
-  padding: 0.3rem 0.7rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-align: center;
-  white-space: nowrap;
-  display: inline-block;
+  font-size: 0.8rem;
 }
 
 .manage-container {
