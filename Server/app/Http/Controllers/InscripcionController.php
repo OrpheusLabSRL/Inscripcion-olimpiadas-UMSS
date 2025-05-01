@@ -137,256 +137,280 @@ class InscripcionController extends Controller
     }
 
 
-public function enableForIncription($carnet_identidad){
-    $olimpista = Persona::where("carnetIdentidad", $carnet_identidad)->first();
-    if(!$olimpista) return;
-    $inscripcionesExistentes = Inscripcion::where('idOlimpista', $olimpista->idPersona)->count();
-        
-        if ($inscripcionesExistentes >= 2) {
+    public function enableForIncription($carnet_identidad){
+        $olimpista = Persona::where("carnetIdentidad", $carnet_identidad)->first();
+        if(!$olimpista) return;
+        $inscripcionesExistentes = Inscripcion::where('idOlimpista', $olimpista->idPersona)->count();
+            
+            if ($inscripcionesExistentes >= 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El olimpista ya está registrado en 2 áreas',
+                    'data' => [
+                        'olimpista_id' => $olimpista->idOlimpista,
+                        'inscripciones_actuales' => $inscripcionesExistentes
+                    ]
+                ], 422);
+            }
             return response()->json([
-                'success' => false,
-                'message' => 'El olimpista ya está registrado en 2 áreas',
+                'success' => true,
+                'message' => 'El olimpista ya está habilitado',
                 'data' => [
                     'olimpista_id' => $olimpista->idOlimpista,
                     'inscripciones_actuales' => $inscripcionesExistentes
                 ]
-            ], 422);
-        }
-        return response()->json([
-            'success' => true,
-            'message' => 'El olimpista ya está habilitado',
-            'data' => [
-                'olimpista_id' => $olimpista->idOlimpista,
-                'inscripciones_actuales' => $inscripcionesExistentes
-            ]
-        ]);
-}
-
-public function getAreaByOlimpista($id_olimpista)
-{
-    // Verificar si el olimpista existe
-    $olimpista = Olimpista::find($id_olimpista);
-    
-    if (!$olimpista) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Olimpista no encontrado'
-        ], 404);
+            ]);
     }
 
-    // Obtener las inscripciones del olimpista
-    $inscripciones = Inscripcion::where('id_olimpista', $id_olimpista)->get();
-
-    // Obtener los id_AreaCategoria únicos
-    $areaCategoriaIds = $inscripciones->pluck('idOlimpAreaCategoria')->unique();
-
-    // Obtener las áreas-categorías involucradas
-    $areaCategorias = OlimpiadaAreaCategoria::with('area', 'categoria') // Asegúrate de tener estas relaciones
-        ->whereIn('idOlimpAreaCategoria', $areaCategoriaIds)
-        ->get();
-
-    // Agrupar por área
-    $areasConCategorias = $areaCategorias->groupBy('idArea')->map(function ($items, $areaId) {
-        $area = $items->first()->area;
-
-        return [
-            'idArea' => $area->idArea,
-            'nombreArea' => $area->nombreArea,
-            'descripcionArea' => $area->descripcionArea,
-            'costoArea' => $area->costoArea,
-            'estadoArea' => $area->estadoArea,
-            'categorias' => $items->map(function ($item) {
-                return [
-                    'idCategoria' => $item->categoria->idCategoria ?? null,
-                    'nombreCategoria' => $item->categoria->nombreCategoria ?? null,
-                    'estadoCategoria' => $item->categoria->descripcionCategoria ?? null,
-                ];
-            })->values()
-        ];
-    })->values();
-
-    return response()->json([
-        'success' => true,
-        'data' => [
-            'olimpista' => $olimpista,
-            'areas' => $areasConCategorias
-        ]
-    ], 200);
-}
-
-public function consultarInscripcion(Request $request)
-{
-    // Validar los datos recibidos
-    $validated = $request->validate([
-        'carnetIdentidad' => 'required|string',
-        'correoElectronico' => 'required|email',
-        'rol' => 'required|in:olimpista,tutor'
-    ]);
-
-    try {
-        // 1. Primero buscamos la persona por CI y correo
-        $persona = Persona::where('carnetIdentidad', $validated['carnetIdentidad'])
-                        ->where('correoElectronico', $validated['correoElectronico'])
-                        ->first();
-
-        if (!$persona) {
+    public function getAreaByOlimpista($id_olimpista)
+    {
+        // Verificar si el olimpista existe
+        $olimpista = Olimpista::find($id_olimpista);
+        
+        if (!$olimpista) {
             return response()->json([
                 'success' => false,
-                'message' => 'No se encontró ninguna persona con los datos proporcionados'
+                'message' => 'Olimpista no encontrado'
             ], 404);
         }
 
-        if ($validated['rol'] === 'olimpista') {
-            // 2. Buscamos las inscripciones del olimpista
-            $inscripciones = Inscripcion::where('idOlimpista', $persona->idPersona)
-                ->with(['olimpiadaAreaCategoria.area', 'olimpiadaAreaCategoria.categoria'])
-                ->get();
+        // Obtener las inscripciones del olimpista
+        $inscripciones = Inscripcion::where('id_olimpista', $id_olimpista)->get();
 
-            if ($inscripciones->isEmpty()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No se encontraron inscripciones para este olimpista'
-                ], 404);
-            }
+        // Obtener los id_AreaCategoria únicos
+        $areaCategoriaIds = $inscripciones->pluck('idOlimpAreaCategoria')->unique();
 
-            // 3. Obtenemos los datos del olimpista
-            $olimpista = Olimpista::where('idPersona', $persona->idPersona)
-                ->first();
-
-            // 4. Para cada inscripción, obtenemos el tutor responsable y el estado de pago
-            $inscripcionesCompletas = $inscripciones->map(function ($inscripcion) {
-                // Obtener los datos del tutor responsable
-                $tutorInfo = DB::table('tutores')
-                    ->join('personas', 'tutores.idPersona', '=', 'personas.idPersona')
-                    ->where('tutores.idPersona', $inscripcion->idTutorResponsable)
-                    ->select(
-                        'personas.nombre',
-                        'personas.apellido',
-                        'personas.carnetIdentidad',
-                        'personas.correoElectronico',
-                        'tutores.tipoTutor',
-                        'tutores.telefono'
-                    )
-                    ->first();
-
-                return [
-                    'olimpiadaAreaCategoria' => [
-                        'area' => $inscripcion->olimpiadaAreaCategoria->area,
-                        'categoria' => $inscripcion->olimpiadaAreaCategoria->categoria
-                    ],
-                    'tutorResponsable' => $tutorInfo ? [
-                        'nombre' => $tutorInfo->nombre,
-                        'apellido' => $tutorInfo->apellido,
-                        'carnetIdentidad' => $tutorInfo->carnetIdentidad,
-                        'correoElectronico' => $tutorInfo->correoElectronico,
-                        'tipoTutor' => $tutorInfo->tipoTutor,
-                        'telefono' => $tutorInfo->telefono
-                    ] : null,
-                    'estadoInscripcion' => $inscripcion->estadoInscripcion,
-                    'tutorArea' => $inscripcion->idTutorArea ? Persona::find($inscripcion->idTutorArea) : null
-                ];
-            });
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'olimpista' => [
-                        'nombre' => $persona->nombre,
-                        'apellido' => $persona->apellido,
-                        'carnetIdentidad' => $persona->carnetIdentidad,
-                        'correoElectronico' => $persona->correoElectronico,
-                        'fechaNacimiento' => $olimpista->fechaNacimiento,
-                        'departamento' => $olimpista->departamento,
-                        'provincia' => $olimpista->provincia,
-                        'curso' => $olimpista->curso,
-                        'colegio' => $olimpista->colegio
-                    ],
-                    'inscripciones' => $inscripcionesCompletas
-                ]
-            ]);
-        } else {
-            // Caso tutor: buscamos las inscripciones donde esta persona es tutor (legal, responsable o área)
-            $inscripcionesTutor = Inscripcion::where(function($query) use ($persona) {
-                $query->where('idTutorLegal', $persona->idPersona)
-                      ->orWhere('idTutorResponsable', $persona->idPersona)
-                      ->orWhere('idTutorArea', $persona->idPersona);
-            })
-            ->with([
-                'olimpiadaAreaCategoria.area',
-                'olimpiadaAreaCategoria.categoria',
-                'olimpista.persona'
-            ])
+        // Obtener las áreas-categorías involucradas
+        $areaCategorias = OlimpiadaAreaCategoria::with('area', 'categoria') // Asegúrate de tener estas relaciones
+            ->whereIn('idOlimpAreaCategoria', $areaCategoriaIds)
             ->get();
 
-            if ($inscripcionesTutor->isEmpty()) {
+        // Agrupar por área
+        $areasConCategorias = $areaCategorias->groupBy('idArea')->map(function ($items, $areaId) {
+            $area = $items->first()->area;
+
+            return [
+                'idArea' => $area->idArea,
+                'nombreArea' => $area->nombreArea,
+                'descripcionArea' => $area->descripcionArea,
+                'costoArea' => $area->costoArea,
+                'estadoArea' => $area->estadoArea,
+                'categorias' => $items->map(function ($item) {
+                    return [
+                        'idCategoria' => $item->categoria->idCategoria ?? null,
+                        'nombreCategoria' => $item->categoria->nombreCategoria ?? null,
+                        'estadoCategoria' => $item->categoria->descripcionCategoria ?? null,
+                    ];
+                })->values()
+            ];
+        })->values();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'olimpista' => $olimpista,
+                'areas' => $areasConCategorias
+            ]
+        ], 200);
+    }
+
+    public function consultarInscripcion(Request $request)
+    {
+        // Validar los datos recibidos
+        $validated = $request->validate([
+            'carnetIdentidad' => 'required|string',
+            'correoElectronico' => 'required|email',
+            'rol' => 'required|in:olimpista,tutor'
+        ]);
+
+        try {
+            // 1. Primero buscamos la persona por CI y correo
+            $persona = Persona::where('carnetIdentidad', $validated['carnetIdentidad'])
+                            ->where('correoElectronico', $validated['correoElectronico'])
+                            ->first();
+
+            if (!$persona) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No se encontraron inscripciones asociadas a este tutor'
+                    'message' => 'No se encontró ninguna persona con los datos proporcionados'
                 ], 404);
             }
 
-            // Obtener información del tutor
-            $tutor = Tutor::where('idPersona', $persona->idPersona)->first();
+            if ($validated['rol'] === 'olimpista') {
+                // 2. Buscamos las inscripciones del olimpista
+                $inscripciones = Inscripcion::where('idOlimpista', $persona->idPersona)
+                    ->with(['olimpiadaAreaCategoria.area', 'olimpiadaAreaCategoria.categoria'])
+                    ->get();
 
-            // Agrupar las inscripciones por olimpista
-            $inscripcionesAgrupadas = $inscripcionesTutor->groupBy('idOlimpista');
-
-            // Para cada olimpista, obtener la información completa
-            $olimpistasInfo = $inscripcionesAgrupadas->map(function ($inscripciones) use ($persona) {
-                $primeraInscripcion = $inscripciones->first();
-                $olimpista = $primeraInscripcion->olimpista;
-                $personaOlimpista = $olimpista->persona;
-
-                // Determinar el tipo de tutor para este olimpista
-                $tipoTutor = [];
-                foreach ($inscripciones as $inscripcion) {
-                    if ($inscripcion->idTutorLegal == $persona->idPersona) {
-                        $tipoTutor[] = 'Tutor Legal';
-                    }
-                    if ($inscripcion->idTutorResponsable == $persona->idPersona) {
-                        $tipoTutor[] = 'Tutor Responsable';
-                    }
-                    if ($inscripcion->idTutorArea == $persona->idPersona) {
-                        $tipoTutor[] = 'Tutor de Área';
-                    }
+                if ($inscripciones->isEmpty()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No se encontraron inscripciones para este olimpista'
+                    ], 404);
                 }
 
-                // Verificar si hay pagos pendientes
-                $tienePagosPendientes = $inscripciones->contains(function ($inscripcion) {
-                    return $inscripcion->estadoInscripcion == 0;
+                // 3. Obtenemos los datos del olimpista
+                $olimpista = Olimpista::where('idPersona', $persona->idPersona)
+                    ->first();
+
+                // 4. Para cada inscripción, obtenemos el tutor responsable y el estado de pago
+                $inscripcionesCompletas = $inscripciones->map(function ($inscripcion) {
+                    // Obtener los datos del tutor responsable
+                    $tutorInfo = DB::table('tutores')
+                        ->join('personas', 'tutores.idPersona', '=', 'personas.idPersona')
+                        ->where('tutores.idPersona', $inscripcion->idTutorResponsable)
+                        ->select(
+                            'personas.nombre',
+                            'personas.apellido',
+                            'personas.carnetIdentidad',
+                            'personas.correoElectronico',
+                            'tutores.tipoTutor',
+                            'tutores.telefono'
+                        )
+                        ->first();
+
+                    return [
+                        'olimpiadaAreaCategoria' => [
+                            'area' => $inscripcion->olimpiadaAreaCategoria->area,
+                            'categoria' => $inscripcion->olimpiadaAreaCategoria->categoria
+                        ],
+                        'tutorResponsable' => $tutorInfo ? [
+                            'nombre' => $tutorInfo->nombre,
+                            'apellido' => $tutorInfo->apellido,
+                            'carnetIdentidad' => $tutorInfo->carnetIdentidad,
+                            'correoElectronico' => $tutorInfo->correoElectronico,
+                            'tipoTutor' => $tutorInfo->tipoTutor,
+                            'telefono' => $tutorInfo->telefono
+                        ] : null,
+                        'estadoInscripcion' => $inscripcion->estadoInscripcion,
+                        'tutorArea' => $inscripcion->idTutorArea ? Persona::find($inscripcion->idTutorArea) : null
+                    ];
                 });
 
-                return [
-                    'nombre' => $personaOlimpista->nombre,
-                    'apellido' => $personaOlimpista->apellido,
-                    'carnetIdentidad' => $personaOlimpista->carnetIdentidad,
-                    'tipoTutor' => implode(', ', array_unique($tipoTutor)),
-                    'estadoPago' => $tienePagosPendientes ? 'PAGO PENDIENTE' : 'PAGO REALIZADO'
-                ];
-            })->values();
+                return response()->json([
+                    'success' => true,
+                    'data' => [
+                        'olimpista' => [
+                            'nombre' => $persona->nombre,
+                            'apellido' => $persona->apellido,
+                            'carnetIdentidad' => $persona->carnetIdentidad,
+                            'correoElectronico' => $persona->correoElectronico,
+                            'fechaNacimiento' => $olimpista->fechaNacimiento,
+                            'departamento' => $olimpista->departamento,
+                            'provincia' => $olimpista->provincia,
+                            'curso' => $olimpista->curso,
+                            'colegio' => $olimpista->colegio
+                        ],
+                        'inscripciones' => $inscripcionesCompletas
+                    ]
+                ]);
+            } else {
+                // Caso tutor: buscamos las inscripciones donde esta persona es tutor (legal, responsable o área)
+                $inscripcionesTutor = Inscripcion::where(function($query) use ($persona) {
+                    $query->where('idTutorLegal', $persona->idPersona)
+                        ->orWhere('idTutorResponsable', $persona->idPersona)
+                        ->orWhere('idTutorArea', $persona->idPersona);
+                })
+                ->with([
+                    'olimpiadaAreaCategoria.area',
+                    'olimpiadaAreaCategoria.categoria',
+                    'olimpista.persona'
+                ])
+                ->get();
 
+                if ($inscripcionesTutor->isEmpty()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No se encontraron inscripciones asociadas a este tutor'
+                    ], 404);
+                }
+
+                // Obtener información del tutor
+                $tutor = Tutor::where('idPersona', $persona->idPersona)->first();
+
+                // Agrupar las inscripciones por olimpista
+                $inscripcionesAgrupadas = $inscripcionesTutor->groupBy('idOlimpista');
+
+                // Para cada olimpista, obtener la información completa
+                $olimpistasInfo = $inscripcionesAgrupadas->map(function ($inscripciones) use ($persona) {
+                    $primeraInscripcion = $inscripciones->first();
+                    $olimpista = $primeraInscripcion->olimpista;
+                    $personaOlimpista = $olimpista->persona;
+
+                    // Determinar el tipo de tutor para este olimpista
+                    $tipoTutor = [];
+                    foreach ($inscripciones as $inscripcion) {
+                        if ($inscripcion->idTutorLegal == $persona->idPersona) {
+                            $tipoTutor[] = 'Tutor Legal';
+                        }
+                        if ($inscripcion->idTutorResponsable == $persona->idPersona) {
+                            $tipoTutor[] = 'Tutor Responsable';
+                        }
+                        if ($inscripcion->idTutorArea == $persona->idPersona) {
+                            $tipoTutor[] = 'Tutor de Área';
+                        }
+                    }
+
+                    // Verificar si hay pagos pendientes
+                    $tienePagosPendientes = $inscripciones->contains(function ($inscripcion) {
+                        return $inscripcion->estadoInscripcion == 0;
+                    });
+
+                    return [
+                        'nombre' => $personaOlimpista->nombre,
+                        'apellido' => $personaOlimpista->apellido,
+                        'carnetIdentidad' => $personaOlimpista->carnetIdentidad,
+                        'tipoTutor' => implode(', ', array_unique($tipoTutor)),
+                        'estadoPago' => $tienePagosPendientes ? 'PAGO PENDIENTE' : 'PAGO REALIZADO'
+                    ];
+                })->values();
+
+                return response()->json([
+                    'success' => true,
+                    'data' => [
+                        'tutor' => [
+                            'nombre' => $persona->nombre,
+                            'apellido' => $persona->apellido,
+                            'carnetIdentidad' => $persona->carnetIdentidad,
+                            'correoElectronico' => $persona->correoElectronico,
+                            'telefono' => $tutor->telefono
+                        ],
+                        'olimpistas' => $olimpistasInfo
+                    ]
+                ]);
+            }
+
+        } catch (\Exception $e) {
             return response()->json([
-                'success' => true,
-                'data' => [
-                    'tutor' => [
-                        'nombre' => $persona->nombre,
-                        'apellido' => $persona->apellido,
-                        'carnetIdentidad' => $persona->carnetIdentidad,
-                        'correoElectronico' => $persona->correoElectronico,
-                        'telefono' => $tutor->telefono
-                    ],
-                    'olimpistas' => $olimpistasInfo
-                ]
-            ]);
+                'success' => false,
+                'message' => 'Error al consultar la inscripción: ' . $e->getMessage(),
+                'error' => $e->getTraceAsString()
+            ], 500);
         }
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Error al consultar la inscripción: ' . $e->getMessage(),
-            'error' => $e->getTraceAsString()
-        ], 500);
     }
-}
+
+    public function getInscripcionesConOlimpiadas()
+     {
+         $inscripciones = Inscripcion::with(['olimpista', 'OlimpiadaAreaCategoria.olimpiada'])
+             ->get();
+ 
+         $result = $inscripciones->map(function ($inscripcion) {
+             return [
+                 'idInscripcion' => $inscripcion->idInscripcion,
+                 'estadoInscripcion' => $inscripcion->estadoInscripcion,
+                 'olimpista' => [
+                     'nombre' => $inscripcion->olimpista->persona->nombre ?? '',
+                     'apellido' => $inscripcion->olimpista->persona->apellido ?? '',
+                     'carnet_identidad' => $inscripcion->olimpista->persona->carnetIdentidad ?? '',
+                 ],
+                 'idOlimpiada' => $inscripcion->OlimpiadaAreaCategoria->idOlimpiada ?? null,
+             ];
+         });
+         
+         return response()->json([
+            'success' => true,
+            'data' => $result,
+        ], 200);
+    }
 
 }

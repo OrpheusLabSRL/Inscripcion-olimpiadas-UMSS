@@ -66,7 +66,7 @@ Route::get('/viewGrados/{id}', [GradoController::class, 'show']);
 Route::post('/newInscription', [InscripcionController::class, 'store']);
 Route::get('/obtenerInscripciones/olimpiadas', [InscripcionController::class, 'getInscripcionesConOlimpiadas']);
 Route::post('/consultar-inscripcion-olimpista', [InscripcionController::class, 'consultarInscripcion']);
-Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class, 'consultar']);
+Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class, 'consultar']); 
 
 // Categoría - Grado
 Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
