@@ -12,9 +12,10 @@ import ProgressBar from "../components/ProgressBar/ProgressBar";
 //react
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
 import swal from "sweetalert";
+import { MdCleaningServices } from "react-icons/md";
 
 //api
 import { setNewInscription, getPersonData } from "../../../api/inscription.api";
@@ -23,7 +24,12 @@ export const RegisterTutor = () => {
   const [currentStep, sertCurrentStep] = useState(4);
   const [totalSteps, setTotalStep] = useState(4);
   const [isReadOnly, setIsReadOnly] = useState({});
+  const [tipoTutor, setTipoTutor] = useState([
+    { value: "Padre/Madre", label: "Papá/Mamá" },
+    { value: "Tutor Legal", label: "Tutor Legal" },
+  ]);
   const navigation = useNavigate();
+  const location = useLocation();
   const {
     register,
     handleSubmit,
@@ -42,11 +48,6 @@ export const RegisterTutor = () => {
     mode: "onChange",
   });
 
-  const tipoTutor = [
-    { value: "Padre/Madre", label: "Papá/Mamá" },
-    { value: "Tutor Legal", label: "Tutor Legal" },
-  ];
-
   const watchedNombre = watch("Nombre");
   const watchedApellido = watch("Apellido");
   const watchedTipoTutor = watch("Tipo_Tutor");
@@ -56,6 +57,7 @@ export const RegisterTutor = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
   }, []);
 
   useEffect(() => {
@@ -164,8 +166,6 @@ export const RegisterTutor = () => {
       });
     }
 
-    console.log("Los datos de inscripcion son: ", dataToSend);
-
     try {
       const resInscription = await setNewInscription(dataToSend);
       limpiarCamposLocalStorage();
@@ -191,15 +191,14 @@ export const RegisterTutor = () => {
 
   const autofill = async () => {
     try {
-      const personData = await getPersonData(
-        sessionStorage.getItem("CiResponsible")
-      );
+      const personData = await getPersonData(sessionStorage.getItem("CiLegal"));
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
         setValue("Email", personData.data.data.correoElectronico);
         setIsReadOnly((prev) => ({
           ...prev,
+          Ci: true,
           Nombre: true,
           Apellido: true,
           Email: true,
@@ -207,6 +206,12 @@ export const RegisterTutor = () => {
       }
 
       if (personData.data.data.tipoTutor) {
+        setTipoTutor([
+          ...tipoTutor,
+          { value: "Profesor", label: "Profesor" },
+          { value: "Estudiante", label: "Estudiante" },
+        ]);
+
         setValue("Tipo_Tutor", personData.data.data.tipoTutor);
         setValue("Numero_Celular", personData.data.data.telefono);
         setIsReadOnly((prev) => ({
@@ -216,8 +221,88 @@ export const RegisterTutor = () => {
         }));
       }
     } catch (error) {
-      console.log(error);
+      const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
+      const ciOlympian =
+        sessionStorage.getItem("CarnetIdentidadOlympian") || "";
+      const ciProfesorPrincipal = sessionStorage.getItem("CiPrincipal") || "";
+      const ciProfesorSecundario = sessionStorage.getItem("CiSecundaria") || "";
+      const ciLegal = sessionStorage.getItem("CiLegal") || "";
+
+      if (ciLegal == ciResponsible) {
+        setValue("Nombre", sessionStorage.getItem("NombreResponsible"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoResponsible"));
+        setValue("Email", sessionStorage.getItem("EmailResponsible"));
+        setValue("Numero_Celular", sessionStorage.getItem("NumeroResponsible"));
+
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Ci: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+          Numero_Celular: true,
+        }));
+        return;
+      }
+      if (ciLegal == ciOlympian) {
+        setValue("Nombre", sessionStorage.getItem("NombreOlympian"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoOlympian"));
+        setValue("Email", sessionStorage.getItem("EmailOlympian"));
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Ci: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+        }));
+      }
+      if (ciLegal == ciProfesorPrincipal) {
+        setValue("Nombre", sessionStorage.getItem("NombrePrincipal"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoPrincipal"));
+        setValue("Email", sessionStorage.getItem("EmailResponsible"));
+        setValue("Numero_Celular", sessionStorage.getItem("NumeroPrincipal"));
+
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Ci: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+          Numero_Celular: true,
+        }));
+        return;
+      }
+      if (ciLegal == ciProfesorSecundario) {
+        setValue("Nombre", sessionStorage.getItem("NombreSecundaria"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoSecundaria"));
+        setValue("Email", sessionStorage.getItem("EmailSecundaria"));
+        setValue("Numero_Celular", sessionStorage.getItem("NumeroSecundaria"));
+
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Ci: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+          Numero_Celular: true,
+        }));
+        return;
+      }
     }
+  };
+
+  const cleanFlieds = () => {
+    setValue("Nombre", "");
+    setValue("Apellido", "");
+    setValue("Tipo_Tutor", "");
+    setValue("Numero_Celular", "");
+    setValue("Email", "");
+    setValue("Ci", "");
+    setTipoTutor([
+      { value: "Padre/Madre", label: "Papá/Mamá" },
+      { value: "Tutor Legal", label: "Tutor Legal" },
+    ]);
+    setIsReadOnly({});
   };
 
   return (
@@ -234,6 +319,13 @@ export const RegisterTutor = () => {
             Si ya tiene datos registrados, ingrese su CI y se llenara
             automáticamente los campos.
           </h5>
+          <div className="container-clean-fields">
+            <p>Limpiar campos</p>
+            <MdCleaningServices
+              className="icon-clean-fields"
+              onClick={cleanFlieds}
+            />
+          </div>
         </div>
 
         <div className="input-1c">

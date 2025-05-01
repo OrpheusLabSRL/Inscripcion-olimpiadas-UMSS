@@ -72,7 +72,13 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
           ) : (
             <>
               <li>
-                <NavLink to={"/register"}>
+                <NavLink
+                  to={
+                    sessionStorage.getItem("pantallaActualRegistro")
+                      ? sessionStorage.getItem("pantallaActualRegistro")
+                      : "/register"
+                  }
+                >
                   <FaHome className="sidebar-icons" />{" "}
                   {isOpen ? "Inscripción" : ""}
                 </NavLink>

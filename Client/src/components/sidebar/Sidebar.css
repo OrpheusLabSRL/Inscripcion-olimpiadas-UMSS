@@ -80,6 +80,7 @@
 
 .sidebar ul li a.active {
   background: var(--tertiary-color);
+  color: #fff;
 }
 
 .btn-logout {

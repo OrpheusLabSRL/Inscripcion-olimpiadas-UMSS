@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import swal from "sweetalert";
 import { useForm } from "react-hook-form";
 import { IoArrowBackCircle } from "react-icons/io5";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 
 //api
 import { getCatalogoCompleto } from "../../../api/inscription.api";
@@ -41,7 +41,7 @@ export const RegisterOlympianArea = () => {
     });
 
   const navigation = useNavigate();
-
+  const location = useLocation();
   const {
     register,
     handleSubmit,
@@ -90,6 +90,10 @@ export const RegisterOlympianArea = () => {
       sessionStorage.removeItem("TutorArea2");
     };
     window.addEventListener("beforeunload", handleUnload);
+    sessionStorage.setItem(
+      "pantallaActualRegistro",
+      location.pathname
+    );
     return () => {
       window.removeEventListener("beforeunload", handleUnload);
     };

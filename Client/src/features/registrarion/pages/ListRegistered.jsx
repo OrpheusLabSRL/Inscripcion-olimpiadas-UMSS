@@ -40,6 +40,9 @@ export const ListRegistered = () => {
             className="btn-add-student"
             to="/register/olympian"
             state={{ from: location.pathname }}
+            onClick={() =>
+              sessionStorage.setItem("prevPage", location.pathname)
+            }
           />
         </div>
         <div className="container-list">

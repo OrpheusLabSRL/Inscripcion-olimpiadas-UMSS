@@ -58,6 +58,10 @@ export const RegisterResponsible = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    sessionStorage.setItem(
+      "pantallaActualRegistro",
+      location.pathname
+    );
   }, []);
 
   useEffect(() => {
@@ -147,6 +151,7 @@ export const RegisterResponsible = () => {
 
   const onSubmit = async (data) => {
     try {
+      sessionStorage.setItem("prevPage", location.pathname);
       navigation("/register/olympian", {
         state: { from: location.pathname },
         data,

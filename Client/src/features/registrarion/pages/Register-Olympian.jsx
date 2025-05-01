@@ -46,7 +46,7 @@ export const RegisterOlympian = () => {
 
   const navigation = useNavigate();
   const location = useLocation();
-  const previousPath = location.state?.from;
+  const previousPath = sessionStorage.getItem("prevPage");
 
   const {
     register,
@@ -133,6 +133,7 @@ export const RegisterOlympian = () => {
       sessionStorage.removeItem("colegiosFiltradas");
     };
     window.addEventListener("beforeunload", handleUnload);
+    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
     return () => {
       window.removeEventListener("beforeunload", handleUnload);
     };
@@ -164,12 +165,14 @@ export const RegisterOlympian = () => {
       const personData = await getPersonData(
         sessionStorage.getItem("CarnetIdentidadOlympian")
       );
+
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
         setValue("Email", personData.data.data.correoElectronico);
         setIsReadOnly((prev) => ({
           ...prev,
+          CarnetIdentidad: true,
           Nombre: true,
           Apellido: true,
           Email: true,
@@ -179,30 +182,56 @@ export const RegisterOlympian = () => {
       if (personData.data.data.fechaNacimiento) {
         setValue("FechaNacimiento", personData.data.data.fechaNacimiento);
         setValue("Departamento", personData.data.data.departamento);
-        setValue("Municipio", personData.data.data.provincia);
+        const provincias =
+          municipioPorDepartamento[personData.data.data.departamento] || [];
+        setMunicipiosFiltradas(provincias);
+        setValue("Municipio", personData.data.data.municipio);
+        const colegios =
+          colegioPorMunicipio[personData.data.data.municipio] || [];
+        setColegiosFiltradas(colegios);
         setValue("Colegio", personData.data.data.colegio);
         setValue("Curso", personData.data.data.curso);
         setIsReadOnly((prev) => ({
           ...prev,
+          CarnetIdentidad: true,
           FechaNacimiento: true,
           Departamento: true,
-          Provincia: true,
+          Municipio: true,
           Colegio: true,
           Curso: true,
         }));
       }
     } catch (error) {
-      console.log(error);
+      const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
+      const ciOlympian =
+        sessionStorage.getItem("CarnetIdentidadOlympian") || "";
+
+      if (ciResponsible == ciOlympian) {
+        setValue("Nombre", sessionStorage.getItem("NombreResponsible"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoResponsible"));
+        setValue("Email", sessionStorage.getItem("EmailResponsible"));
+        setIsReadOnly((prev) => ({
+          ...prev,
+          CarnetIdentidad: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+        }));
+        console.log(isReadOnly);
+      }
     }
   };
 
   const cleanFlieds = () => {
     setValue("Nombre", "");
     setValue("Apellido", "");
-    setValue("Tipo_Tutor", "");
-    setValue("Numero_Celular", "");
     setValue("Email", "");
-    setValue("Ci", "");
+    setValue("CarnetIdentidad", "");
+    setValue("FechaNacimiento", "");
+    setValue("Departamento", "");
+    setValue("Municipio", "");
+    setValue("Colegio", "");
+    setValue("Curso", "");
 
     setIsReadOnly({});
   };
