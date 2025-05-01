@@ -618,7 +618,7 @@ const RegisterExcel = () => {
           </div>
         )}
 
-        <div className="data-section">
+        <div className="data-section-excel">
           <div className="table-container">
             <table className="data-table">
               <thead>
