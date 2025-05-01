@@ -18,6 +18,8 @@ import AdminLayout from "./layouts/AdminLayout";
 import { RegisterResponsible } from "./features/registrarion/pages/RegisterResponsible";
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
+import Reports from "./features/administration/pages/Reports";
+
 import PaginaContacto from "./features/contacto/pages/PaginaContacto";
 import ConsultarInscripcion from "./features/consultar_inscripcion/pages/ConsultarInscripcion";
 import ResultadoConsulta from "./features/consultar_inscripcion/pages/ResultadoConsulta";
@@ -37,7 +39,7 @@ function App() {
     "/contacto",
     "/consultar-inscripcion",
     "/consultar-inscripcion/resultado",
-    "/consultar-inscripcion/resultado-tutor"
+    "/consultar-inscripcion/resultado-tutor",
   ];
   const showSidebar = !hideSidebarRoutes.includes(location.pathname);
 
@@ -72,23 +74,51 @@ function App() {
             <Route path="/register/tutor" element={<RegisterTutor />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
             <Route path="/register/excel" element={<RegisterExcel />} />
-            <Route path="/register/responsible" element={<RegisterResponsible />} />
-            <Route path="/register/olympian-area" element={<RegisterOlympianArea />} />
-            <Route path="/register/tutor-optional" element={<RegisterTutorOptional />} />
+            <Route
+              path="/register/responsible"
+              element={<RegisterResponsible />}
+            />
+            <Route
+              path="/register/olympian-area"
+              element={<RegisterOlympianArea />}
+            />
+            <Route
+              path="/register/tutor-optional"
+              element={<RegisterTutorOptional />}
+            />
             <Route path="/list-registered" element={<ListRegistered />} />
             <Route path="/contacto" element={<PaginaContacto />} />
-            <Route path="/consultar-inscripcion" element={<ConsultarInscripcion />} />
-            <Route path="/consultar-inscripcion/resultado" element={<ResultadoConsulta />} />
-            <Route path="/consultar-inscripcion/resultado-tutor" element={<ResultadoConsulta_Tutor />} />
+            <Route
+              path="/consultar-inscripcion"
+              element={<ConsultarInscripcion />}
+            />
+            <Route
+              path="/consultar-inscripcion/resultado"
+              element={<ResultadoConsulta />}
+            />
+            <Route
+              path="/consultar-inscripcion/resultado-tutor"
+              element={<ResultadoConsulta_Tutor />}
+            />
 
             {/* Rutas de administración */}
             <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Home />} />
-              <Route path="login" element={<Login />} />
+              <Route index element={<Login />} />
+              <Route path="home" element={<Home />} />
               <Route path="areas" element={<ManageArea />} />
               <Route path="categorias" element={<ManageCategoria />} />
               <Route path="olimpiadas" element={<ManageOlympiads />} />
               <Route path="view-base" element={<ManageViewBase />} />
+              <Route
+                path="reports"
+                element={
+                  <PrivateRoute
+                    element={<Reports />}
+                    allowedRoles={["admin"]}
+                    userRole={user.role}
+                  />
+                }
+              />
             </Route>
           </Routes>
         </div>

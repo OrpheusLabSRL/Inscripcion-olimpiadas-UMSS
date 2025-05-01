@@ -10,6 +10,7 @@ use App\Models\OlimpistaTutor;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\Olimpista;
+use Illuminate\Support\Facades\Log;
 
 class TutorController extends Controller
 {
@@ -221,6 +222,40 @@ class TutorController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error al obtener los datos del tutor',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function getAllTutors()
+    {
+        try {
+            $tutores = \DB::table('tutores')
+                ->leftJoin('personas', 'tutores.idPersona', '=', 'personas.idPersona')
+                // Simplify query to isolate error
+                // ->leftJoin('inscripciones', 'tutores.idPersona', '=', 'inscripciones.idTutorResponsable')
+                // ->leftJoin('olimpiadas_areas_categorias', 'inscripciones.idOlimpAreaCategoria', '=', 'olimpiadas_areas_categorias.idOlimpAreaCategoria')
+                // ->leftJoin('olimpistas', 'inscripciones.idOlimpista', '=', 'olimpistas.idPersona')
+                ->select(
+                    'personas.carnetIdentidad',
+                    'personas.nombre',
+                    'personas.apellido',
+                    'personas.correoElectronico',
+                    'tutores.tipoTutor',
+                    'tutores.telefono'
+                    // 'olimpistas.carnetIdentidad as carnetOlimpista',
+                    // 'olimpistas.nombre as nombreOlimpista',
+                    // 'olimpistas.apellido as apellidoOlimpista'
+                )
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $tutores
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener los tutores',
                 'error' => $e->getMessage()
             ], 500);
         }

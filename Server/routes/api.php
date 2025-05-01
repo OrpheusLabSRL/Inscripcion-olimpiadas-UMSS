@@ -30,8 +30,10 @@ Route::get('/persona/{carnet}/data', [PersonaController::class, 'getPersonData']
 // Olimpistas
 Route::post('/register', [OlimpistaController::class, 'store']);
 Route::get('/olimpista/{id}/areas', [InscripcionController::class, 'getAreaByOlimpista']);
+Route::get('/olimpistas', [OlimpistaController::class, 'getAllOlimpistas']);
 Route::get('/olimpista/{carnet_identidad}/habilitado', [InscripcionController::class, 'enableForIncription']);
 Route::get('/olimpista/{id}/tutores', [TutorController::class, 'getTutoresByOlimpista']);
+Route::get('/tutores/all', [TutorController::class, 'getAllTutors']);
 
 // Tutores
 Route::post('/tutores', [TutorController::class, 'store']);
@@ -66,7 +68,7 @@ Route::get('/viewGrados/{id}', [GradoController::class, 'show']);
 Route::post('/newInscription', [InscripcionController::class, 'store']);
 Route::get('/obtenerInscripciones/olimpiadas', [InscripcionController::class, 'getInscripcionesConOlimpiadas']);
 Route::post('/consultar-inscripcion-olimpista', [InscripcionController::class, 'consultarInscripcion']);
-Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class, 'consultar']);
+Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class, 'consultar']); 
 
 // Categoría - Grado
 Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);

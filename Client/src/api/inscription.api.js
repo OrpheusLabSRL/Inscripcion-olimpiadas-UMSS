@@ -67,3 +67,13 @@ export const getOlimpiadas = async () => {
   const response = await inscriptionApi.get("/viewOlimpiadas");
   return response.data;
 };
+
+export const getAllOlimpistas = async () => {
+  const response = await inscriptionApi.get("/olimpistas");
+  return response.data;
+};
+
+export const getAllTutors = async () => {
+  const response = await inscriptionApi.get("/tutores/all");
+  return response.data;
+};
