@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Inscripcion;
+use App\Models\Persona;
 use Illuminate\Http\Request;
 use App\Models\Olimpista;
 use Illuminate\Support\Facades\Log;
@@ -176,6 +177,53 @@ public function getOlimpistasByTutor($idTutorResponsable)
         }
     }
 
+    function getAreaOlimpistaByCi($carnet_identidad)
+    {
+        try {
+            
+    
+            $persona = Persona::where('carnetIdentidad', $carnet_identidad)->first();
+            if (!$persona) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Persona no encontrada'
+                ], 404);
+            }
+    
+            $olimpista = Olimpista::with(['inscripciones.OlimpiadaAreaCategoria.area'])
+                ->where('idPersona', $persona->idPersona)
+                ->first();
 
+            Log::info('Datos del Request:', $olimpista->toArray());
+
+            if (!$olimpista) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Olimpista no encontrado'
+                ], 404);
+            }
+    
+            $areas = $olimpista->inscripciones
+                ->map(function ($inscripcion) {
+                    return optional($inscripcion->OlimpiadaAreaCategoria->area)->idArea;
+                })
+                ->filter()
+                ->unique()
+                ->values();
+    
+            return response()->json([
+                'success' => true,
+                'data' => $areas
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error en getAreaOlimpista: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener el área del olimpista',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    
 
 }
