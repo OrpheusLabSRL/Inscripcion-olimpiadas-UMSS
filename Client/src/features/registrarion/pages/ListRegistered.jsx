@@ -24,6 +24,7 @@ export const ListRegistered = () => {
     const tutorId = sessionStorage.getItem("tutorInscripcionId");
     if (!tutorId) {
       console.error("ID del tutor no encontrado en sessionStorage.");
+      
       return;
     }
 

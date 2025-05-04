@@ -19,6 +19,7 @@ import Swal from "sweetalert2";
 
 //api
 import {
+  getAreasOlimpistaByCi,
   getCatalogoCompleto,
   getOlimpistaEnable,
 } from "../../../api/inscription.api";
@@ -114,11 +115,20 @@ export const RegisterOlympianArea = () => {
   }, []);
 
   useEffect(() => {
-    const areasFiltradas = filtrarAreasPorCurso(
-      sessionStorage.getItem("CursoOlympian"),
-      catalogo
-    );
-    setAreaInteres(areasFiltradas);
+    const getAreas = async () => {
+      const areasFiltradas = filtrarAreasPorCurso(
+        sessionStorage.getItem("CursoOlympian"),
+        catalogo
+      );
+      const areas = await getAreasOlimpistaByCi(
+        sessionStorage.getItem("CarnetIdentidadOlympian")
+      );
+
+      setAreaInteres(
+        areasFiltradas.filter((area) => area.value !== areas.data.data[0])
+      );
+    };
+    getAreas();
   }, [catalogo]);
 
   const onChooseArea = () => (e) => {
@@ -255,6 +265,11 @@ export const RegisterOlympianArea = () => {
       >
         <div className="input-2c">
           <h1>Datos de competición</h1>
+          <h5 className="message-recomendation">
+            Un olimpista puede participar en hasta dos áreas. Si desea
+            participar solo en una, deje sin seleccionar el campo de 'área de
+            interés secundaria'.
+          </h5>
         </div>
 
         <div className="container-clean-fields input-2c">
