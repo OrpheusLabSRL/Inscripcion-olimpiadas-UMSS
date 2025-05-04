@@ -241,10 +241,16 @@ export const RegisterTutor = () => {
       const ciLegal = sessionStorage.getItem("CiLegal") || "";
 
       if (ciLegal == ciResponsible) {
+        setTipoTutor([
+          ...tipoTutor,
+          { value: "Profesor", label: "Profesor" },
+          { value: "Estudiante", label: "Estudiante" },
+        ]);
         setValue("Nombre", sessionStorage.getItem("NombreResponsible"));
         setValue("Apellido", sessionStorage.getItem("ApellidoResponsible"));
         setValue("Email", sessionStorage.getItem("EmailResponsible"));
         setValue("Numero_Celular", sessionStorage.getItem("NumeroResponsible"));
+        setValue("Tipo_Tutor", sessionStorage.getItem("TipoTutorResponsible"));
 
         setIsReadOnly((prev) => ({
           ...prev,
@@ -253,6 +259,7 @@ export const RegisterTutor = () => {
           Apellido: true,
           Email: true,
           Numero_Celular: true,
+          Tipo_Tutor: true,
         }));
         return;
       }
@@ -269,10 +276,16 @@ export const RegisterTutor = () => {
         }));
       }
       if (ciLegal == ciProfesorPrincipal) {
+        setTipoTutor([
+          ...tipoTutor,
+          { value: "Profesor", label: "Profesor" },
+          { value: "Estudiante", label: "Estudiante" },
+        ]);
         setValue("Nombre", sessionStorage.getItem("NombrePrincipal"));
         setValue("Apellido", sessionStorage.getItem("ApellidoPrincipal"));
         setValue("Email", sessionStorage.getItem("EmailResponsible"));
         setValue("Numero_Celular", sessionStorage.getItem("NumeroPrincipal"));
+        setValue("Tipo_Tutor", "Profesor");
 
         setIsReadOnly((prev) => ({
           ...prev,
@@ -281,14 +294,21 @@ export const RegisterTutor = () => {
           Apellido: true,
           Email: true,
           Numero_Celular: true,
+          Tipo_Tutor: true,
         }));
         return;
       }
       if (ciLegal == ciProfesorSecundario) {
+        setTipoTutor([
+          ...tipoTutor,
+          { value: "Profesor", label: "Profesor" },
+          { value: "Estudiante", label: "Estudiante" },
+        ]);
         setValue("Nombre", sessionStorage.getItem("NombreSecundaria"));
         setValue("Apellido", sessionStorage.getItem("ApellidoSecundaria"));
         setValue("Email", sessionStorage.getItem("EmailSecundaria"));
         setValue("Numero_Celular", sessionStorage.getItem("NumeroSecundaria"));
+        setValue("Tipo_Tutor", "Profesor");
 
         setIsReadOnly((prev) => ({
           ...prev,
@@ -297,6 +317,7 @@ export const RegisterTutor = () => {
           Apellido: true,
           Email: true,
           Numero_Celular: true,
+          Tipo_Tutor: true,
         }));
         return;
       }
