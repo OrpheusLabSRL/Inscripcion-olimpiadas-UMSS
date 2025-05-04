@@ -35,12 +35,10 @@ class Inscripcion extends Model
     {
         return $this->belongsTo(Tutor::class, 'idTutorResponsable', 'idPersona');
     }
-
     public function tutorLegal()
     {
         return $this->belongsTo(Tutor::class, 'idTutorLegal', 'idPersona');
     }
-
     public function tutorArea()
     {
         return $this->belongsTo(Tutor::class, 'idTutorArea', 'idPersona');
@@ -62,7 +60,10 @@ class Inscripcion extends Model
             'idArea'            // FK en AreaCategoria hacia Area
         );
     }
-
+    public function boleta()
+    {
+        return $this->belongsTo(BoletaPago::class, 'codigoBoleta', 'codigoBoleta');
+    }
     public function olimpiada()
     {
         return $this->belongsTo(Olimpiada::class, 'idOlimpiada', 'idOlimpiada');

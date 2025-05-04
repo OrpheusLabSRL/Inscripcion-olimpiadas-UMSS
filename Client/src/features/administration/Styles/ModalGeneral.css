@@ -12,7 +12,7 @@
 }
 
 .modal-content {
-  background: white;
+  background: #ecefca;
   border-radius: 10px;
   padding: 2rem;
   width: 100%;
@@ -58,6 +58,7 @@
   padding: 0.6rem;
   border-radius: 6px;
   border: 1px solid #ccc;
+  background-color: #d8d7bc;
 }
 
 .form-row {
@@ -127,7 +128,7 @@
 }
 
 .area-categoria-box {
-  background-color: #f9fbfd;
+  background-color: #d8d7bc;
   border-radius: 16px;
   padding: 1rem 1.5rem;
   display: flex;

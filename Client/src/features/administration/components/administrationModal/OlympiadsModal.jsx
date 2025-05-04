@@ -26,7 +26,7 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
 
           setAgrupado(agrupadoPorArea);
         } catch (error) {
-          console.error("❌ Error al cargar áreas y categorías:", error);
+          console.error("Error al cargar áreas y categorías:", error);
         }
       }
     };
