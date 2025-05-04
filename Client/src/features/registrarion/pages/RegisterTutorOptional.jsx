@@ -200,11 +200,10 @@ export const RegisterTutorOptional = () => {
 
     setIsReadOnly({});
   };
-  
 
   return (
     <div className="container-form">
-      <NavLink to={"/Register/OlympianArea"} onClick={backPage}>
+      <NavLink to={"/register/olympian-area"} onClick={backPage}>
         <IoArrowBackCircle className="btn-back" />
       </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>

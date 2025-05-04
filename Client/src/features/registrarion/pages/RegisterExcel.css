@@ -217,7 +217,7 @@
   font-weight: bold;
 }
 
-.action-buttons {
+.action-buttons-excel {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;

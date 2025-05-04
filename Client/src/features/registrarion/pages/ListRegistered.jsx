@@ -18,12 +18,12 @@ import axios from "axios";
 export const ListRegistered = () => {
   const [dataOlympians, setDataOlympians] = useState([]);
   const location = useLocation();
-  const tutorId = localStorage.getItem("tutorInscripcionId");
+  const tutorId = sessionStorage.getItem("tutorInscripcionId");
 
   useEffect(() => {
-    const tutorId = localStorage.getItem("tutorInscripcionId");
+    const tutorId = sessionStorage.getItem("tutorInscripcionId");
     if (!tutorId) {
-      console.error("ID del tutor no encontrado en localStorage.");
+      console.error("ID del tutor no encontrado en sessionStorage.");
       return;
     }
 
@@ -39,7 +39,7 @@ export const ListRegistered = () => {
   }, []);
 
   const generarBoleta = async () => {
-    const tutorId = localStorage.getItem("tutorInscripcionId");
+    const tutorId = sessionStorage.getItem("tutorInscripcionId");
     if (!tutorId) {
       alert("No se encontró el ID del tutor.");
       return;
@@ -86,7 +86,10 @@ export const ListRegistered = () => {
               sessionStorage.setItem("prevPage", location.pathname)
             }
           />
-           <button className="btn-primary btn-next-page btn-add-student" onClick={generarBoleta}>
+          <button
+            className="btn-primary btn-next-page btn-add-student"
+            onClick={generarBoleta}
+          >
             Generar Boleta
           </button>
         </div>

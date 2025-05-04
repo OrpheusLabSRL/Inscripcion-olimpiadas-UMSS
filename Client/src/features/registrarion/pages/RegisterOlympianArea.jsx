@@ -122,31 +122,32 @@ export const RegisterOlympianArea = () => {
   }, [catalogo]);
 
   const onChooseArea = () => (e) => {
-    if (e.target.value !== "") {
-      const categoriasFiltradas = filtrarCategoriasPorCursoYArea(
-        sessionStorage.getItem("CursoOlympian"),
-        e.target.value,
-        catalogo
+    const categoriasFiltradas = filtrarCategoriasPorCursoYArea(
+      sessionStorage.getItem("CursoOlympian"),
+      e.target.value,
+      catalogo
+    );
+
+    if (e.target.name == "AreaPrincipal") {
+      sessionStorage.setItem(
+        "CategoriasFiltradas",
+        JSON.stringify(categoriasFiltradas)
       );
-
-      if (e.target.name == "AreaPrincipal") {
-        sessionStorage.setItem(
-          "CategoriasFiltradas",
-          JSON.stringify(categoriasFiltradas)
-        );
-        setCategoriasInteres(categoriasFiltradas);
-      } else {
-        sessionStorage.setItem(
-          "CategoriasFiltradasSecundaria",
-          JSON.stringify(categoriasFiltradas)
-        );
-        setCategoriasInteresSecundaria(categoriasFiltradas);
-      }
-
-      setValue(e.target.name, e.target.value);
+      setCategoriasInteres(categoriasFiltradas);
+      if (e.target.value == "")
+        sessionStorage.setItem("CategoriaPrincipal", "");
     } else {
-      setCategoriasInteres(null);
+      sessionStorage.setItem(
+        "CategoriasFiltradasSecundaria",
+        JSON.stringify(categoriasFiltradas)
+      );
+      setCategoriasInteresSecundaria(categoriasFiltradas);
+      if (e.target.value == "")
+        sessionStorage.setItem("CategoriaSecundaria", "");
     }
+
+    setValue(e.target.name, e.target.value);
+    console.log(e.target.value);
   };
 
   const onSubmit = async (data) => {
@@ -290,7 +291,12 @@ export const RegisterOlympianArea = () => {
           nameCategoria={"CategoriaSecundaria"}
           areas={areaInteres}
           categorias={categoriasInteresSecundaria}
-          mandatory={categoriasInteresSecundaria ? true : false}
+          mandatory={
+            categoriasInteresSecundaria &&
+            categoriasInteresSecundaria.length !== 0
+              ? true
+              : false
+          }
           asterisk={false}
           onChooseArea={onChooseArea()}
           setValue={setValue}

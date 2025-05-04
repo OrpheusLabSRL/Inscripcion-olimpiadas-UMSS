@@ -663,7 +663,7 @@ const RegisterExcel = () => {
           </div>
 
           {data.length > 0 && validationErrors.length === 0 && (
-            <div className="action-buttons">
+            <div className="action-buttons-excel">
               <button
                 className="action-btn register-btn"
                 onClick={handleRegister}
