@@ -1,31 +1,27 @@
-/* registerexcel.css - Versión ajustada para evitar conflicto con sidebar */
+/* registerexcel.css - Versión corregida */
 
-/* Contenedor principal - Ajustes clave: */
 .app-background {
   background-color: #94b4c1;
   min-height: 100vh;
   padding: 20px;
   display: flex;
-  justify-content: flex-start; /* Cambiado de center a flex-start */
-  align-items: flex-start; /* Cambiado de center a flex-start */
-  margin-left: 250px; /* Asegura espacio para UN sidebar */
-  width: calc(100% - 250px); /* Calcula el ancho restante */
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 250px;
+  width: calc(100% - 250px);
 }
 
-/* Contenedor del formulario - Ajustes: */
 .excel-container {
   background-color: white;
-  width: 90%; /* Ocupa todo el espacio disponible */
-  max-width: 1200px; /* Máximo ancho pero flexible */
+  width: 90%;
+  max-width: 1200px;
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  /* Se eliminó margin-left porque ya lo maneja .app-background */
-  overflow-x: auto; /* Scroll horizontal solo si es necesario */
+  overflow-x: auto;
 }
 
-/* ESTILOS EXISTENTES (conservan su formato original) */
 .excel-header {
   margin-bottom: 30px;
 }
@@ -177,20 +173,18 @@
   padding: 12px;
   border-bottom: 1px solid #dee2e6;
   color: #495057;
+  position: relative;
 }
 
 .data-table tr:hover {
   background-color: #f8f9fa;
 }
 
-.empty-cell {
-  background-color: #fff3cd;
-}
-error-cell {
+/* CORRECCIÓN: Se añadió el punto que faltaba en .error-cell */
+.error-cell {
   background-color: #ffcccc !important;
   color: #cc0000 !important;
   font-weight: bold;
-  position: relative;
 }
 
 .error-cell::after {
@@ -224,16 +218,6 @@ error-cell {
   margin-left: 5px;
 }
 
-.optional-empty {
-  background-color: #e9ecef;
-  color: #6c757d;
-  font-style: italic;
-}
-
-.optional-filled {
-  background-color: #e6f7ff;
-}
-
 .optional-error {
   background-color: #f8d7da;
   color: #721c24;
@@ -261,6 +245,7 @@ error-cell {
 .register-btn:hover {
   background-color: #1a2a38;
 }
+
 .action-btn.loading {
   opacity: 0.8;
   pointer-events: none;
@@ -305,13 +290,6 @@ error-cell {
   color: #2e7d32;
 }
 
-.info-message {
-  background-color: #e3f2fd;
-  color: #1565c0;
-  padding: 12px;
-  border-radius: 4px;
-  margin: 15px 0;
-}
 .empty-table-message {
   text-align: center;
   padding: 20px;
@@ -319,31 +297,6 @@ error-cell {
   font-style: italic;
 }
 
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-.data-table th, .data-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-.data-table th {
-  background-color: #f2f2f2;
-  position: sticky;
-  top: 0;
-}
-
-.table-container {
-  max-height: 500px;
-  overflow-y: auto;
-  margin-bottom: 20px;
-}
-
-/* MEDIA QUERIES AJUSTADAS */
 @media (max-width: 1024px) {
   .app-background {
     margin-left: 200px;
@@ -356,12 +309,12 @@ error-cell {
     margin-left: 0;
     width: 100%;
     padding: 15px;
-    padding-top: 80px; /* Espacio para header móvil */
+    padding-top: 80px;
   }
 
   .excel-container {
     padding: 15px;
-    margin: 0 auto; /* Centrado en móvil */
+    margin: 0 auto;
   }
 
   .excel-header h1 {
