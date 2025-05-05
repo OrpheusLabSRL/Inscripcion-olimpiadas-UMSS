@@ -42,6 +42,7 @@ Route::post('/tutores', [TutorController::class, 'store']);
 Route::get('/tutor/{id_tutor}/estudiantes', [OlimpistaController::class, 'getOlimpistasByTutor']);
 Route::get('/tutores/verificar', [TutorController::class, 'checkExistingTutor']);
 Route::get('/tutor/{id}', [TutorController::class, 'getTutorWithPersona']);
+Route::put('/tutor/{id}/inscripciones/update', [InscripcionController::class, 'finishRegister']);
 
 // Contacto
 Route::post('/contacto', [InformacionContactoController::class, 'store']);

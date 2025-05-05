@@ -65,7 +65,9 @@ class InscripcionController extends Controller
                     'idOlimpAreaCategoria' => $areaCategoria->idOlimpAreaCategoria,
                     'estadoInscripcion' => false,
                     'idTutorLegal' => $tutorLegal->idPersona,
-                    'idTutorArea' => $tutorArea ? $tutorArea->idPersona : null
+                    'idTutorArea' => $tutorArea ? $tutorArea->idPersona : null,
+                    'formaInscripcion' => $inscripcionData['formaInscripcion'],
+                    'registrandose' => $inscripcionData['registrandose'],
                 ]);
             }
 
@@ -412,5 +414,12 @@ class InscripcionController extends Controller
             'data' => $result,
         ], 200);
     }
+
+function finishRegister($idTutorResponsable)
+{
+    Inscripcion::where('idTutorResponsable', $idTutorResponsable)
+        ->update(['registrandose' => false]);
+}
+
 
 }

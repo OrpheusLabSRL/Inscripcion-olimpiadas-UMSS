@@ -81,6 +81,7 @@ public function getOlimpistasByTutor($idTutorResponsable)
                     'tipo_tutor' => $inscripcion->tutorArea->tipoTutor ?? null,
                     'carnetIdentidad' => $inscripcion->tutorArea->persona->carnetIdentidad ?? null,
                     'correo' => $inscripcion->tutorArea->persona->correoElectronico ?? null,
+                    'registrandose' => $inscripcion->registrandose ?? null,
                     
                     'tutor_legal' => [
                         'nombre' => $inscripcion->tutorLegal->persona->nombre ?? null,
@@ -187,7 +188,7 @@ public function getOlimpistasByTutor($idTutorResponsable)
                 return response()->json([
                     'success' => false,
                     'message' => 'Persona no encontrada'
-                ], 404);
+                ]);
             }
     
             $olimpista = Olimpista::with(['inscripciones.OlimpiadaAreaCategoria.area'])
@@ -200,7 +201,7 @@ public function getOlimpistasByTutor($idTutorResponsable)
                 return response()->json([
                     'success' => false,
                     'message' => 'Olimpista no encontrado'
-                ], 404);
+                ]);
             }
     
             $areas = $olimpista->inscripciones
