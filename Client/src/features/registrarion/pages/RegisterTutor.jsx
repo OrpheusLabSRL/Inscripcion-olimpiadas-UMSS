@@ -149,6 +149,8 @@ export const RegisterTutor = () => {
             area: sessionStorage.getItem("AreaPrincipal"),
             categoria: sessionStorage.getItem("CategoriaPrincipal"),
             existeTutor: sessionStorage.getItem("TutorArea1"),
+            formaInscripcion: "Manual",
+            registrandose: true,
             tutorArea: {
               nombre: sessionStorage.getItem("NombrePrincipal"),
               apellido: sessionStorage.getItem("ApellidoPrincipal"),
