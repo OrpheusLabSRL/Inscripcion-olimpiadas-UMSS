@@ -270,39 +270,41 @@ const RegisterExcel = () => {
                 setValidationErrors(allErrors);
                 setError(`Se encontraron ${allErrors.length} errores de validación. Revise los campos marcados en rojo.`);
                 
-                // Marcar celdas con error - SECCIÓN MODIFICADA
+                // Marcar celdas con error - VERSIÓN CORREGIDA
                 const newErrorCells = {};
                 allErrors.forEach(error => {
-                    // Manejar errores de validación estándar (CI, correos, etc.)
-                    const standardMatch = error.match(/Fila (\d+): (.*?):/);
-                    if (standardMatch) {
-                        const row = parseInt(standardMatch[1]) - 2;
-                        const column = standardMatch[2].trim();
+                    // Extraer número de fila
+                    const rowMatch = error.match(/Fila (\d+):/);
+                    if (!rowMatch) return;
+                    const row = parseInt(rowMatch[1]) - 2;
+    
+                    // 1. Manejar errores de ÁREA
+                    if (error.includes('AREA es requerida') || 
+                        error.includes('El área') || 
+                        error.includes('Área no especificada')) {
+                        newErrorCells[`${row}-9`] = true;
+                    }
+    
+                    // 2. Manejar errores de CATEGORÍA
+                    if (error.includes('CATEGORIA es requerida') || 
+                        error.includes('La categoría') || 
+                        error.includes('Categoría no especificada')) {
+                        newErrorCells[`${row}-10`] = true;
+                    }
+    
+                    // 3. Manejar errores de combinación
+                    if (error.includes('no está disponible para el área')) {
+                        newErrorCells[`${row}-9`] = true;
+                        newErrorCells[`${row}-10`] = true;
+                    }
+    
+                    // 4. Manejar otros errores (CI, correos, etc.)
+                    const columnMatch = error.match(/Fila \d+: (.*?):/);
+                    if (columnMatch) {
+                        const column = columnMatch[1].trim();
                         const colIndex = headers.findIndex(h => h.includes(column));
                         if (colIndex >= 0) {
                             newErrorCells[`${row}-${colIndex}`] = true;
-                        }
-                    }
-                    
-                    // Manejar TODOS los errores relacionados con ÁREA y CATEGORÍA
-                    const rowMatch = error.match(/Fila (\d+):/);
-                    if (rowMatch) {
-                        const row = parseInt(rowMatch[1]) - 2;
-                        
-                        // Errores específicos de ÁREA
-                        if (error.includes('AREA es requerida') || 
-                            error.includes('El área') || 
-                            error.includes('Área no especificada') ||
-                            error.includes('no está disponible para el área')) {
-                            newErrorCells[`${row}-9`] = true;
-                        }
-                        
-                        // Errores específicos de CATEGORÍA
-                        if (error.includes('CATEGORIA es requerida') || 
-                            error.includes('La categoría') || 
-                            error.includes('Categoría no especificada') ||
-                            error.includes('no está disponible para el área')) {
-                            newErrorCells[`${row}-10`] = true;
                         }
                     }
                 });
