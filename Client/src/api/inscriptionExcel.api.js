@@ -29,6 +29,7 @@ export const registerFromExcel = async (responsibleData, excelData) => {
         const response = await inscriptionApi.post("/register-from-excel", {
             responsible: responsibleData,
             olimpistas: excelData,
+            formaInscripcion: "Excel",
         });
         return response.data;
     } catch (error) {

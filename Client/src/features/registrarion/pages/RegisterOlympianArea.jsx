@@ -116,17 +116,21 @@ export const RegisterOlympianArea = () => {
 
   useEffect(() => {
     const getAreas = async () => {
-      const areasFiltradas = filtrarAreasPorCurso(
+      let areasFiltradas = filtrarAreasPorCurso(
         sessionStorage.getItem("CursoOlympian"),
         catalogo
       );
+
       const areas = await getAreasOlimpistaByCi(
         sessionStorage.getItem("CarnetIdentidadOlympian")
       );
 
-      setAreaInteres(
-        areasFiltradas.filter((area) => area.value !== areas.data.data[0])
-      );
+      if (areas.data.success != false) {
+        areasFiltradas = areasFiltradas.filter(
+          (area) => area.value !== areas.data?.data[0]
+        );
+      }
+      setAreaInteres(areasFiltradas);
     };
     getAreas();
   }, [catalogo]);
