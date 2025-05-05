@@ -86,19 +86,19 @@ const RegisterExcel = () => {
         const cellErrors = {};
         
         data.forEach((row, rowIndex) => {
-            // Validar CI Olimpista (columna 0)
+            // Validar CI Olimpista (columna 0) - 6 a 12 caracteres alfanuméricos
             if (!row[0] || !row[0].toString().match(/^[a-zA-Z0-9]{6,12}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (OLIMPISTA) debe tener entre 6 y 12 caracteres alfanuméricos`);
                 cellErrors[`${rowIndex}-0`] = true;
             }
             
-            // Validar CI Tutor Legal (columna 11)
+            // Validar CI Tutor Legal (columna 11) - 6 a 12 caracteres alfanuméricos
             if (!row[11] || !row[11].toString().match(/^[a-zA-Z0-9]{6,12}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (TUTOR LEGAL) debe tener entre 6 y 12 caracteres alfanuméricos`);
                 cellErrors[`${rowIndex}-11`] = true;
             }
             
-            // Validar CI Profesor (columna 17) solo si existe
+            // Validar CI Profesor (columna 17) solo si existe - 6 a 12 caracteres alfanuméricos
             if (row[17] && !row[17].toString().match(/^[a-zA-Z0-9]{6,12}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (PROFESOR) debe tener entre 6 y 12 caracteres alfanuméricos`);
                 cellErrors[`${rowIndex}-17`] = true;
@@ -125,7 +125,7 @@ const RegisterExcel = () => {
                 cellErrors[`${rowIndex}-20`] = true;
             }
             
-            // Validar Celulares (columnas 15, 21)
+            // Validar Celulares (columnas 15, 21) - exactamente 8 dígitos
             if (!row[15] || !row[15].toString().match(/^\d{8}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CELULAR (TUTOR LEGAL) debe tener exactamente 8 dígitos`);
                 cellErrors[`${rowIndex}-15`] = true;
@@ -159,18 +159,6 @@ const RegisterExcel = () => {
             if (!row[8]) {
                 errors.push(`Fila ${rowIndex + 2}: CURSO (OLIMPISTA) es requerido`);
                 cellErrors[`${rowIndex}-8`] = true;
-            }
-
-            // Validar Área (columna 9)
-            if (!row[9]) {
-                errors.push(`Fila ${rowIndex + 2}: AREA es requerida`);
-                cellErrors[`${rowIndex}-9`] = true;
-            }
-
-            // Validar Categoría (columna 10)
-            if (!row[10]) {
-                errors.push(`Fila ${rowIndex + 2}: CATEGORIA es requerida`);
-                cellErrors[`${rowIndex}-10`] = true;
             }
             
             // Validar campos de PROFESOR (deben estar todos llenos o todos vacíos)
@@ -253,7 +241,7 @@ const RegisterExcel = () => {
                 return rowData;
             });
     
-            // 1. Validar contra la base de datos primero
+            // 1. Validar contra la base de datos primero (para área y categoría)
             const dbValidation = await validateExcelData(normalizedData);
             const dbErrors = dbValidation.errors || [];
     
@@ -270,41 +258,31 @@ const RegisterExcel = () => {
                 setValidationErrors(allErrors);
                 setError(`Se encontraron ${allErrors.length} errores de validación. Revise los campos marcados en rojo.`);
                 
-                // Marcar celdas con error - VERSIÓN CORREGIDA
+                // Marcar celdas con error
                 const newErrorCells = {};
                 allErrors.forEach(error => {
-                    // Extraer número de fila
-                    const rowMatch = error.match(/Fila (\d+):/);
-                    if (!rowMatch) return;
-                    const row = parseInt(rowMatch[1]) - 2;
-    
-                    // 1. Manejar errores de ÁREA
-                    if (error.includes('AREA es requerida') || 
-                        error.includes('El área') || 
-                        error.includes('Área no especificada')) {
-                        newErrorCells[`${row}-9`] = true;
-                    }
-    
-                    // 2. Manejar errores de CATEGORÍA
-                    if (error.includes('CATEGORIA es requerida') || 
-                        error.includes('La categoría') || 
-                        error.includes('Categoría no especificada')) {
-                        newErrorCells[`${row}-10`] = true;
-                    }
-    
-                    // 3. Manejar errores de combinación
-                    if (error.includes('no está disponible para el área')) {
-                        newErrorCells[`${row}-9`] = true;
-                        newErrorCells[`${row}-10`] = true;
-                    }
-    
-                    // 4. Manejar otros errores (CI, correos, etc.)
-                    const columnMatch = error.match(/Fila \d+: (.*?):/);
-                    if (columnMatch) {
-                        const column = columnMatch[1].trim();
+                    // Manejar errores de validación estándar
+                    const match = error.match(/Fila (\d+): (.*?):/);
+                    if (match) {
+                        const row = parseInt(match[1]) - 2;
+                        const column = match[2].trim();
                         const colIndex = headers.findIndex(h => h.includes(column));
                         if (colIndex >= 0) {
                             newErrorCells[`${row}-${colIndex}`] = true;
+                        }
+                    }
+                    
+                    // Manejar errores específicos de área y categoría
+                    if (error.includes('El área') || error.includes('La categoría') || error.includes('no está disponible para el área')) {
+                        const rowMatch = error.match(/Fila (\d+):/);
+                        if (rowMatch) {
+                            const row = parseInt(rowMatch[1]) - 2;
+                            if (error.includes('El área') || error.includes('no está disponible para el área')) {
+                                newErrorCells[`${row}-9`] = true;
+                            }
+                            if (error.includes('La categoría') || error.includes('no está disponible para el área')) {
+                                newErrorCells[`${row}-10`] = true;
+                            }
                         }
                     }
                 });
@@ -321,6 +299,7 @@ const RegisterExcel = () => {
             setIsLoading(false);
         }
     };
+
     const handleRegister = async () => {
         if (data.length === 0) {
             swal("Error", "No hay datos para registrar", "error");
