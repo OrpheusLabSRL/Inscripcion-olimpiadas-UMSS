@@ -10,10 +10,91 @@ use App\Models\OlimpiadaAreaCategoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Carbon;
 
 class ExcelController extends Controller
 {
+    public function validateExcelData(Request $request)
+    {
+        try {
+            $olimpistasData = $request->input('olimpistas');
+            $errors = [];
+    
+            // Obtener todas las áreas y categorías válidas
+            $areasValidas = DB::table('areas')->pluck('nombreArea')->toArray();
+            $categoriasValidas = DB::table('categorias')->pluck('nombreCategoria')->toArray();
+    
+            foreach ($olimpistasData as $rowIndex => $row) {
+                $rowNumber = $rowIndex + 2; // +2 porque la fila 1 es encabezado y el array empieza en 0
+                
+                // Validar área (columna 9)
+                if (empty($row[9])) {
+                    $errors[] = "Fila $rowNumber: AREA es requerida";
+                    continue;
+                }
+    
+                // Verificar que el área exista (comparación case insensitive)
+                $areaEncontrada = false;
+                foreach ($areasValidas as $areaValida) {
+                    if (strcasecmp(trim($row[9]), $areaValida) === 0) {
+                        $areaEncontrada = true;
+                        $row[9] = $areaValida; // Normalizar a como está en la BD
+                        break;
+                    }
+                }
+    
+                if (!$areaEncontrada) {
+                    $errors[] = "Fila $rowNumber: El área '{$row[9]}' no existe en el sistema";
+                    continue;
+                }
+    
+                // Validar categoría (columna 10)
+                if (empty($row[10])) {
+                    $errors[] = "Fila $rowNumber: CATEGORIA es requerida";
+                    continue;
+                }
+    
+                // Verificar que la categoría exista (comparación case insensitive)
+                $categoriaEncontrada = false;
+                foreach ($categoriasValidas as $categoriaValida) {
+                    if (strcasecmp(trim($row[10]), $categoriaValida) === 0) {
+                        $categoriaEncontrada = true;
+                        $row[10] = $categoriaValida; // Normalizar a como está en la BD
+                        break;
+                    }
+                }
+    
+                if (!$categoriaEncontrada) {
+                    $errors[] = "Fila $rowNumber: La categoría '{$row[10]}' no existe en el sistema";
+                    continue;
+                }
+    
+                // Verificar combinación área-categoría
+                $combinationExists = DB::table('olimpiadas_areas_categorias')
+                    ->join('areas', 'olimpiadas_areas_categorias.idArea', '=', 'areas.idArea')
+                    ->join('categorias', 'olimpiadas_areas_categorias.idCategoria', '=', 'categorias.idCategoria')
+                    ->where('areas.nombreArea', $row[9])
+                    ->where('categorias.nombreCategoria', $row[10])
+                    ->exists();
+    
+                if (!$combinationExists) {
+                    $errors[] = "Fila $rowNumber: La categoría '{$row[10]}' no está disponible para el área '{$row[9]}'";
+                }
+            }
+    
+            return response()->json([
+                'success' => empty($errors),
+                'errors' => $errors
+            ]);
+    
+        } catch (\Exception $e) {
+            Log::error('Error en validateExcelData: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al validar datos'
+            ], 500);
+        }
+    }
+
     public function registerFromExcel(Request $request)
     {
         DB::beginTransaction();
@@ -21,45 +102,11 @@ class ExcelController extends Controller
             $responsibleData = $request->input('responsible');
             $olimpistasData = $request->input('olimpistas');
 
-            // 1. Validar datos del responsable
             if (empty($responsibleData['Ci'])) {
                 throw new \Exception('Carnet de identidad del responsable es requerido');
             }
 
-            // 2. Validar todas las combinaciones área-categoría primero
-            $errors = [];
-            foreach ($olimpistasData as $index => $data) {
-                try {
-                    if (empty($data[9])) {
-                        throw new \Exception("Área no especificada");
-                    }
-
-                    if (empty($data[10])) {
-                        throw new \Exception("Categoría no especificada");
-                    }
-
-                    $combinationExists = OlimpiadaAreaCategoria::whereHas('area', function($q) use ($data) {
-                            $q->where('nombreArea', $data[9]);
-                        })
-                        ->whereHas('categoria', function($q) use ($data) {
-                            $q->where('nombreCategoria', $data[10]);
-                        })
-                        ->where('estado', 1)
-                        ->exists();
-
-                    if (!$combinationExists) {
-                        throw new \Exception("Área o categoría no disponible en esta olimpiada");
-                    }
-                } catch (\Exception $e) {
-                    $errors[] = "Fila " . ($index + 1) . ": " . $e->getMessage();
-                }
-            }
-
-            if (!empty($errors)) {
-                throw new \Exception(implode("\n", $errors));
-            }
-
-            // 3. Registrar persona responsable
+            // Registrar persona responsable
             $responsiblePerson = Persona::updateOrCreate(
                 ['carnetIdentidad' => $responsibleData['Ci']],
                 [
@@ -69,7 +116,7 @@ class ExcelController extends Controller
                 ]
             );
 
-            // 4. Registrar tutor responsable
+            // Registrar tutor responsable
             $responsibleTutor = Tutor::updateOrCreate(
                 ['idPersona' => $responsiblePerson->idPersona],
                 [
@@ -80,8 +127,21 @@ class ExcelController extends Controller
 
             $registeredOlimpistas = [];
             
-            foreach ($olimpistasData as $index => $data) {
-                // 5. Registrar persona olimpista
+            foreach ($olimpistasData as $data) {
+                // Validar combinación área-categoría antes de registrar
+                $combination = OlimpiadaAreaCategoria::whereHas('area', function($q) use ($data) {
+                        $q->where('nombreArea', $data[9]);
+                    })
+                    ->whereHas('categoria', function($q) use ($data) {
+                        $q->where('nombreCategoria', $data[10]);
+                    })
+                    ->first();
+
+                if (!$combination) {
+                    throw new \Exception("La categoría '{$data[10]}' no está disponible para el área '{$data[9]}'");
+                }
+
+                // Registrar persona olimpista
                 $olimpistaPerson = Persona::updateOrCreate(
                     ['carnetIdentidad' => $data[0]],
                     [
@@ -91,8 +151,8 @@ class ExcelController extends Controller
                     ]
                 );
 
-                // 6. Registrar olimpista
-                $olimpista = Olimpista::updateOrCreate(
+                // Registrar olimpista
+                Olimpista::updateOrCreate(
                     ['idPersona' => $olimpistaPerson->idPersona],
                     [
                         'fechaNacimiento' => $data[3] ?? null,
@@ -103,7 +163,7 @@ class ExcelController extends Controller
                     ]
                 );
 
-                // 7. Registrar tutor legal
+                // Registrar tutor legal
                 $tutorLegalPerson = Persona::updateOrCreate(
                     ['carnetIdentidad' => $data[11]],
                     [
@@ -113,17 +173,15 @@ class ExcelController extends Controller
                     ]
                 );
 
-                $tipoTutorLegal = !empty($data[16]) ? $this->normalizarTipoTutor($data[16]) : 'TUTOR LEGAL';
-
                 $tutorLegal = Tutor::updateOrCreate(
                     ['idPersona' => $tutorLegalPerson->idPersona],
                     [
-                        'tipoTutor' => $tipoTutorLegal,
+                        'tipoTutor' => $this->normalizarTipoTutor($data[16] ?? 'TUTOR LEGAL'),
                         'telefono' => $data[15] ?? null
                     ]
                 );
 
-                // 8. Registrar tutor de área (opcional)
+                // Registrar tutor de área (opcional)
                 $tutorArea = null;
                 if (!empty($data[17])) {
                     $tutorAreaPerson = Persona::updateOrCreate(
@@ -144,17 +202,7 @@ class ExcelController extends Controller
                     );
                 }
 
-                // 9. Obtener combinación área-categoría (ya validada)
-                $combination = OlimpiadaAreaCategoria::whereHas('area', function($q) use ($data) {
-                        $q->where('nombreArea', $data[9]);
-                    })
-                    ->whereHas('categoria', function($q) use ($data) {
-                        $q->where('nombreCategoria', $data[10]);
-                    })
-                    ->where('estado', 1)
-                    ->first();
-
-                // 10. Crear inscripción
+                // Crear inscripción
                 $inscripcionData = [
                     'idOlimpista' => $olimpistaPerson->idPersona,
                     'idOlimpAreaCategoria' => $combination->idOlimpAreaCategoria,
@@ -167,19 +215,15 @@ class ExcelController extends Controller
                     $inscripcionData['idTutorArea'] = $tutorArea->idPersona;
                 }
                 
-                $inscripcion = Inscripcion::create($inscripcionData);
-
-                $registeredOlimpistas[] = $olimpista;
+                Inscripcion::create($inscripcionData);
+                $registeredOlimpistas[] = $olimpistaPerson->idPersona;
             }
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Inscripciones registradas correctamente',
-                'data' => [
-                    'olimpistas_registrados' => count($registeredOlimpistas)
-                ]
+                'message' => count($registeredOlimpistas) . ' olimpistas registrados correctamente'
             ]);
 
         } catch (\Exception $e) {
@@ -210,16 +254,13 @@ class ExcelController extends Controller
     public function getAvailableCombinations()
     {
         try {
-            $combinations = OlimpiadaAreaCategoria::with(['area', 'categoria', 'olimpiada'])
+            $combinations = OlimpiadaAreaCategoria::with(['area', 'categoria'])
                 ->where('estado', 1)
                 ->get()
                 ->map(function($item) {
                     return [
-                        'id' => $item->idOlimpAreaCategoria,
                         'area' => $item->area->nombreArea,
-                        'categoria' => $item->categoria->nombreCategoria,
-                        'olimpiada' => $item->olimpiada->nombreOlimpiada,
-                        'version' => $item->olimpiada->version
+                        'categoria' => $item->categoria->nombreCategoria
                     ];
                 });
 
@@ -230,7 +271,7 @@ class ExcelController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al obtener combinaciones: ' . $e->getMessage()
+                'message' => 'Error al obtener combinaciones'
             ], 500);
         }
     }

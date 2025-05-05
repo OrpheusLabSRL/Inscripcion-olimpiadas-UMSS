@@ -24,6 +24,18 @@ inscriptionApi.interceptors.response.use(
     }
 );
 
+export const validateExcelData = async (excelData) => {
+    try {
+        const response = await inscriptionApi.post("/validate-excel-data", {
+            olimpistas: excelData,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error validating Excel data:", error);
+        throw error;
+    }
+};
+
 export const registerFromExcel = async (responsibleData, excelData) => {
     try {
         const response = await inscriptionApi.post("/register-from-excel", {
@@ -33,7 +45,7 @@ export const registerFromExcel = async (responsibleData, excelData) => {
         return response.data;
     } catch (error) {
         console.error("Error registering from Excel:", error);
-        throw new Error(error.message || "Error al registrar las inscripciones");
+        throw error;
     }
 };
 

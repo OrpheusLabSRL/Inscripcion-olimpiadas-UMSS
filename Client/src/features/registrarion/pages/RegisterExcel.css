@@ -186,11 +186,35 @@
 .empty-cell {
   background-color: #fff3cd;
 }
-
-.error-cell {
-  background-color: #f8d7da;
-  color: #721c24;
+error-cell {
+  background-color: #ffcccc !important;
+  color: #cc0000 !important;
   font-weight: bold;
+  position: relative;
+}
+
+.error-cell::after {
+  content: "⚠";
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #cc0000;
+}
+
+.empty-cell {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.optional-empty {
+  background-color: #e9ecef;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.optional-filled {
+  background-color: #e6f7ff;
 }
 
 .optional-field {
