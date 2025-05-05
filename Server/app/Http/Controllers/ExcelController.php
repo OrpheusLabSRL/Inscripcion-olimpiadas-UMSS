@@ -26,7 +26,40 @@ class ExcelController extends Controller
                 throw new \Exception('Carnet de identidad del responsable es requerido');
             }
 
-            // 2. Registrar persona responsable
+            // 2. Validar todas las combinaciones área-categoría primero
+            $errors = [];
+            foreach ($olimpistasData as $index => $data) {
+                try {
+                    if (empty($data[9])) {
+                        throw new \Exception("Área no especificada");
+                    }
+
+                    if (empty($data[10])) {
+                        throw new \Exception("Categoría no especificada");
+                    }
+
+                    $combinationExists = OlimpiadaAreaCategoria::whereHas('area', function($q) use ($data) {
+                            $q->where('nombreArea', $data[9]);
+                        })
+                        ->whereHas('categoria', function($q) use ($data) {
+                            $q->where('nombreCategoria', $data[10]);
+                        })
+                        ->where('estado', 1)
+                        ->exists();
+
+                    if (!$combinationExists) {
+                        throw new \Exception("Área o categoría no disponible en esta olimpiada");
+                    }
+                } catch (\Exception $e) {
+                    $errors[] = "Fila " . ($index + 1) . ": " . $e->getMessage();
+                }
+            }
+
+            if (!empty($errors)) {
+                throw new \Exception(implode("\n", $errors));
+            }
+
+            // 3. Registrar persona responsable
             $responsiblePerson = Persona::updateOrCreate(
                 ['carnetIdentidad' => $responsibleData['Ci']],
                 [
@@ -36,7 +69,7 @@ class ExcelController extends Controller
                 ]
             );
 
-            // 3. Registrar tutor responsable
+            // 4. Registrar tutor responsable
             $responsibleTutor = Tutor::updateOrCreate(
                 ['idPersona' => $responsiblePerson->idPersona],
                 [
@@ -46,137 +79,97 @@ class ExcelController extends Controller
             );
 
             $registeredOlimpistas = [];
-            $erroresRegistro = [];
             
             foreach ($olimpistasData as $index => $data) {
-                try {
-                    // 4. Validar datos mínimos del olimpista
-                    if (empty($data[0])) {
-                        throw new \Exception("Carnet de identidad del olimpista es requerido");
-                    }
+                // 5. Registrar persona olimpista
+                $olimpistaPerson = Persona::updateOrCreate(
+                    ['carnetIdentidad' => $data[0]],
+                    [
+                        'nombre' => $data[1] ?? 'Sin nombre',
+                        'apellido' => $data[2] ?? 'Sin apellido',
+                        'correoElectronico' => $data[4] ?? null
+                    ]
+                );
 
-                    // 5. La fecha ya viene convertida desde el frontend (YYYY-MM-DD)
-                    $fechaNacimiento = $data[3] ?? null;
-                    
-                    if (!$fechaNacimiento) {
-                        throw new \Exception("Fecha de nacimiento es requerida");
-                    }
+                // 6. Registrar olimpista
+                $olimpista = Olimpista::updateOrCreate(
+                    ['idPersona' => $olimpistaPerson->idPersona],
+                    [
+                        'fechaNacimiento' => $data[3] ?? null,
+                        'departamento' => $data[5] ?? 'Sin departamento',
+                        'municipio' => $data[6] ?? 'Sin municipio',
+                        'colegio' => $data[7] ?? 'Sin colegio',
+                        'curso' => $data[8] ?? 'Sin curso'
+                    ]
+                );
 
-                    // 6. Registrar persona olimpista
-                    $olimpistaPerson = Persona::updateOrCreate(
-                        ['carnetIdentidad' => $data[0]],
+                // 7. Registrar tutor legal
+                $tutorLegalPerson = Persona::updateOrCreate(
+                    ['carnetIdentidad' => $data[11]],
+                    [
+                        'nombre' => $data[12] ?? 'Sin nombre',
+                        'apellido' => $data[13] ?? 'Sin apellido',
+                        'correoElectronico' => $data[14] ?? null
+                    ]
+                );
+
+                $tipoTutorLegal = !empty($data[16]) ? $this->normalizarTipoTutor($data[16]) : 'TUTOR LEGAL';
+
+                $tutorLegal = Tutor::updateOrCreate(
+                    ['idPersona' => $tutorLegalPerson->idPersona],
+                    [
+                        'tipoTutor' => $tipoTutorLegal,
+                        'telefono' => $data[15] ?? null
+                    ]
+                );
+
+                // 8. Registrar tutor de área (opcional)
+                $tutorArea = null;
+                if (!empty($data[17])) {
+                    $tutorAreaPerson = Persona::updateOrCreate(
+                        ['carnetIdentidad' => $data[17]],
                         [
-                            'nombre' => $data[1] ?? 'Sin nombre',
-                            'apellido' => $data[2] ?? 'Sin apellido',
-                            'correoElectronico' => $data[4] ?? null
+                            'nombre' => $data[18] ?? 'Sin nombre',
+                            'apellido' => $data[19] ?? 'Sin apellido',
+                            'correoElectronico' => $data[20] ?? null
                         ]
                     );
 
-                    // 7. Registrar olimpista
-                    $olimpista = Olimpista::updateOrCreate(
-                        ['idPersona' => $olimpistaPerson->idPersona],
+                    $tutorArea = Tutor::updateOrCreate(
+                        ['idPersona' => $tutorAreaPerson->idPersona],
                         [
-                            'fechaNacimiento' => $fechaNacimiento,
-                            'departamento' => $data[5] ?? 'Sin departamento',
-                            'municipio' => $data[6] ?? 'Sin municipio',
-                            'colegio' => $data[7] ?? 'Sin colegio',
-                            'curso' => $data[8] ?? 'Sin curso'
+                            'tipoTutor' => 'PROFESOR',
+                            'telefono' => $data[21] ?? null
                         ]
                     );
-
-                    // 8. Registrar tutor legal
-                    if (empty($data[11])) {
-                        throw new \Exception("Carnet de identidad del tutor legal es requerido");
-                    }
-
-                    $tutorLegalPerson = Persona::updateOrCreate(
-                        ['carnetIdentidad' => $data[11]],
-                        [
-                            'nombre' => $data[12] ?? 'Sin nombre',
-                            'apellido' => $data[13] ?? 'Sin apellido',
-                            'correoElectronico' => $data[14] ?? null
-                        ]
-                    );
-
-                    $tipoTutorLegal = !empty($data[16]) ? $this->normalizarTipoTutor($data[16]) : 'TUTOR LEGAL';
-
-                    $tutorLegal = Tutor::updateOrCreate(
-                        ['idPersona' => $tutorLegalPerson->idPersona],
-                        [
-                            'tipoTutor' => $tipoTutorLegal,
-                            'telefono' => $data[15] ?? null
-                        ]
-                    );
-
-                    // 9. Registrar tutor de área (opcional)
-                    $tutorArea = null;
-                    if (!empty($data[17])) {
-                        $tutorAreaPerson = Persona::updateOrCreate(
-                            ['carnetIdentidad' => $data[17]],
-                            [
-                                'nombre' => $data[18] ?? 'Sin nombre',
-                                'apellido' => $data[19] ?? 'Sin apellido',
-                                'correoElectronico' => $data[20] ?? null
-                            ]
-                        );
-
-                        $tutorArea = Tutor::updateOrCreate(
-                            ['idPersona' => $tutorAreaPerson->idPersona],
-                            [
-                                'tipoTutor' => 'PROFESOR',
-                                'telefono' => $data[21] ?? null
-                            ]
-                        );
-                    }
-
-                    // 10. Obtener combinación área-categoría
-                    if (empty($data[9])) {
-                        throw new \Exception("Área no especificada");
-                    }
-
-                    if (empty($data[10])) {
-                        throw new \Exception("Categoría no especificada");
-                    }
-
-                    $combination = OlimpiadaAreaCategoria::whereHas('area', function($q) use ($data) {
-                            $q->where('nombreArea', $data[9]);
-                        })
-                        ->whereHas('categoria', function($q) use ($data) {
-                            $q->where('nombreCategoria', $data[10]);
-                        })
-                        ->where('estado', 1)
-                        ->first();
-
-                    if (!$combination) {
-                        throw new \Exception("Combinación de Área y Categoría no encontrada");
-                    }
-
-                    // 11. SOLUCIÓN CORREGIDA: Crear inscripción usando idPersona
-                    $inscripcionData = [
-                        'idOlimpista' => $olimpistaPerson->idPersona,
-                        'idOlimpAreaCategoria' => $combination->idOlimpAreaCategoria,
-                        'idTutorResponsable' => $responsibleTutor->idPersona,
-                        'idTutorLegal' => $tutorLegal->idPersona,
-                        'estadoInscripcion' => 0 // 0 para PENDIENTE, 1 para PAGADO (o según tu esquema)
-                    ];
-                    
-                    if ($tutorArea) {
-                        $inscripcionData['idTutorArea'] = $tutorArea->idPersona;
-                    }
-                    
-                    $inscripcion = Inscripcion::create($inscripcionData);
-
-                    if (!$inscripcion) {
-                        throw new \Exception("Error al crear la inscripción");
-                    }
-
-                    $registeredOlimpistas[] = $olimpista;
-
-                } catch (\Exception $e) {
-                    $erroresRegistro[] = "Fila " . ($index + 1) . ": " . $e->getMessage();
-                    Log::error("Error registrando fila $index: " . $e->getMessage());
-                    continue;
                 }
+
+                // 9. Obtener combinación área-categoría (ya validada)
+                $combination = OlimpiadaAreaCategoria::whereHas('area', function($q) use ($data) {
+                        $q->where('nombreArea', $data[9]);
+                    })
+                    ->whereHas('categoria', function($q) use ($data) {
+                        $q->where('nombreCategoria', $data[10]);
+                    })
+                    ->where('estado', 1)
+                    ->first();
+
+                // 10. Crear inscripción
+                $inscripcionData = [
+                    'idOlimpista' => $olimpistaPerson->idPersona,
+                    'idOlimpAreaCategoria' => $combination->idOlimpAreaCategoria,
+                    'idTutorResponsable' => $responsibleTutor->idPersona,
+                    'idTutorLegal' => $tutorLegal->idPersona,
+                    'estadoInscripcion' => 0
+                ];
+                
+                if ($tutorArea) {
+                    $inscripcionData['idTutorArea'] = $tutorArea->idPersona;
+                }
+                
+                $inscripcion = Inscripcion::create($inscripcionData);
+
+                $registeredOlimpistas[] = $olimpista;
             }
 
             DB::commit();
@@ -185,8 +178,7 @@ class ExcelController extends Controller
                 'success' => true,
                 'message' => 'Inscripciones registradas correctamente',
                 'data' => [
-                    'olimpistas_registrados' => count($registeredOlimpistas),
-                    'errores' => $erroresRegistro
+                    'olimpistas_registrados' => count($registeredOlimpistas)
                 ]
             ]);
 
@@ -195,7 +187,7 @@ class ExcelController extends Controller
             Log::error('Error en registerFromExcel: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Error al registrar inscripciones: ' . $e->getMessage()
+                'message' => $e->getMessage()
             ], 500);
         }
     }

@@ -33,7 +33,7 @@ export const registerFromExcel = async (responsibleData, excelData) => {
         return response.data;
     } catch (error) {
         console.error("Error registering from Excel:", error);
-        throw error;
+        throw new Error(error.message || "Error al registrar las inscripciones");
     }
 };
 
