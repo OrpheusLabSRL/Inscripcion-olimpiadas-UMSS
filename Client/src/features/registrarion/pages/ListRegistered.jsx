@@ -8,6 +8,7 @@ import { NextPage } from "../../../components/Buttons/NextPage";
 //react
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 
 //api
 import {
@@ -78,11 +79,21 @@ export const ListRegistered = () => {
   };
 
   const finishRegister = async () => {
-    try {
-      await finishRegistering(tutorId);
-      setRegistering(false);
-    } catch (error) {
-      console.error("Error al finalizar el registro:", error);
+    const confirmacion = await Swal.fire({
+      title: "¿Estás seguro que quieres finalizar el registro?",
+      text: "Ya no podra registrar mas estudiantes y podra generar la boleta de pago.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, aceptar",
+      cancelButtonText: "Cancelar",
+    });
+    if (confirmacion.isConfirmed) {
+      try {
+        await finishRegistering(tutorId);
+        setRegistering(false);
+      } catch (error) {
+        console.error("Error al finalizar el registro:", error);
+      }
     }
   };
 
@@ -95,7 +106,9 @@ export const ListRegistered = () => {
 
           <NextPage
             value="+ Agregar Estudiante"
-            className={`btn-add-student ${registering ? "" : "btn-add-student-disabled"}`}
+            className={`btn-add-student ${
+              registering ? "" : "btn-add-student-disabled"
+            }`}
             to="/register/olympian"
             state={{ from: location.pathname }}
             disabled={!registering}
