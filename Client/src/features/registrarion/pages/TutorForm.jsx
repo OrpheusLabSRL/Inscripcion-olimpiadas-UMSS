@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../Styles/TutorForm.css";
 
@@ -7,6 +7,7 @@ import { registerTutor, checkExistingTutor } from "../../../api/TutorForm.api";
 import { NextPage } from "../../../components/Buttons/NextPage";
 import { GenericCard } from "../../../components/cards/GenericCard";
 import Logo from "../../../assets/images/O-Sansi.jpeg";
+
 
 export const TutorForm = () => {
   const location = useLocation();
