@@ -17,7 +17,7 @@ import axios from "axios";
 
 export const ListRegistered = () => {
   const [dataOlympians, setDataOlympians] = useState([]);
-  const [tutorId, setTutorId] = useState(null); // ✅ Usamos estado para guardar el ID
+  const [tutorId, setTutorId] = useState(null); 
   const location = useLocation();
 
   useEffect(() => {
@@ -28,14 +28,13 @@ export const ListRegistered = () => {
       return;
     }
 
-    setTutorId(storedTutorId); // ✅ Guardamos el ID en estado
+    setTutorId(storedTutorId); 
 
     const getStudents = async () => {
       try {
         const res = await getDataOlympian(storedTutorId);
         setDataOlympians(res.data.data);
 
-        // ✅ Eliminar el ID del sessionStorage solo después de guardarlo en estado
         sessionStorage.removeItem("tutorInscripcionId");
       } catch (error) {
         console.error("Error en la petición:", error);
