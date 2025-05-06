@@ -71,13 +71,64 @@ const RegisterExcel = () => {
     };
 
     const validateProfessorFields = (row, rowIndex) => {
-        const professorFields = [row[17], row[18], row[19], row[20], row[21]];
-        const hasSomeFields = professorFields.some(field => field && field.trim() !== "");
-        const hasAllFields = professorFields.every(field => field && field.trim() !== "");
-        
+        const professorFields = [
+            { value: row[17], name: "CARNET DE IDENTIDAD (PROFESOR)" },
+            { value: row[18], name: "NOMBRE(S) (PROFESOR)" },
+            { value: row[19], name: "APELLIDO(S) (PROFESOR)" },
+            { value: row[20], name: "CORREO ELECTRONICO (PROFESOR)" },
+            { value: row[21], name: "CELULAR (PROFESOR)" }
+        ];
+
+        const hasSomeFields = professorFields.some(f => 
+            f.value && f.value.toString().trim() !== "" && f.value.toString().trim() !== "-"
+        );
+        const hasAllFields = professorFields.every(f => 
+            f.value && f.value.toString().trim() !== "" && f.value.toString().trim() !== "-"
+        );
+
         if (hasSomeFields && !hasAllFields) {
-            return `Fila ${rowIndex + 2}: Los campos de PROFESOR deben estar todos completos o todos vacíos`;
+            const missingFields = professorFields
+                .filter(f => !f.value || f.value.toString().trim() === "" || f.value.toString().trim() === "-")
+                .map(f => f.name);
+
+            return {
+                error: `Fila ${rowIndex + 2}: Los campos de PROFESOR deben estar todos completos o todos vacíos. Faltan: ${missingFields.join(', ')}`,
+                cells: professorFields.map((_, i) => `${rowIndex}-${17 + i}`)
+            };
         }
+
+        // Validación individual de campos de profesor cuando están completos
+        if (hasAllFields) {
+            const errors = [];
+            const cells = [];
+
+            // Validar CI Profesor
+            if (!professorFields[0].value.toString().match(/^[a-zA-Z0-9]{6,12}$/)) {
+                errors.push(`CARNET DE IDENTIDAD (PROFESOR) debe tener entre 6 y 12 caracteres alfanuméricos`);
+                cells.push(`${rowIndex}-17`);
+            }
+
+            // Validar correo profesor
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!professorFields[3].value || !emailRegex.test(professorFields[3].value.toString())) {
+                errors.push(`CORREO ELECTRONICO (PROFESOR) no es válido`);
+                cells.push(`${rowIndex}-20`);
+            }
+
+            // Validar celular profesor
+            if (!professorFields[4].value || !professorFields[4].value.toString().match(/^\d{8}$/)) {
+                errors.push(`CELULAR (PROFESOR) debe tener exactamente 8 dígitos`);
+                cells.push(`${rowIndex}-21`);
+            }
+
+            if (errors.length > 0) {
+                return {
+                    error: `Fila ${rowIndex + 2}: ${errors.join('; ')}`,
+                    cells: cells
+                };
+            }
+        }
+
         return null;
     };
 
@@ -87,19 +138,22 @@ const RegisterExcel = () => {
         
         data.forEach((row, rowIndex) => {
             // Validar CI Olimpista (columna 0) - 6 a 12 caracteres alfanuméricos
-            if (!row[0] || !row[0].toString().match(/^[a-zA-Z0-9]{6,12}$/)) {
+            const ciOlimpista = row[0]?.toString().trim();
+            if (!ciOlimpista || !ciOlimpista.match(/^[a-zA-Z0-9]{6,12}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (OLIMPISTA) debe tener entre 6 y 12 caracteres alfanuméricos`);
                 cellErrors[`${rowIndex}-0`] = true;
             }
             
             // Validar CI Tutor Legal (columna 11) - 6 a 12 caracteres alfanuméricos
-            if (!row[11] || !row[11].toString().match(/^[a-zA-Z0-9]{6,12}$/)) {
+            const ciTutor = row[11]?.toString().trim();
+            if (!ciTutor || !ciTutor.match(/^[a-zA-Z0-9]{6,12}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (TUTOR LEGAL) debe tener entre 6 y 12 caracteres alfanuméricos`);
                 cellErrors[`${rowIndex}-11`] = true;
             }
             
             // Validar CI Profesor (columna 17) solo si existe - 6 a 12 caracteres alfanuméricos
-            if (row[17] && !row[17].toString().match(/^[a-zA-Z0-9]{6,12}$/)) {
+            const ciProfesor = row[17]?.toString().trim();
+            if (ciProfesor && ciProfesor !== "-" && !ciProfesor.match(/^[a-zA-Z0-9]{6,12}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (PROFESOR) debe tener entre 6 y 12 caracteres alfanuméricos`);
                 cellErrors[`${rowIndex}-17`] = true;
             }
@@ -120,7 +174,7 @@ const RegisterExcel = () => {
                 errors.push(`Fila ${rowIndex + 2}: CORREO ELECTRONICO (TUTOR LEGAL) no es válido`);
                 cellErrors[`${rowIndex}-14`] = true;
             }
-            if (row[20] && !emailRegex.test(row[20].toString())) {
+            if (row[20] && row[20] !== "-" && !emailRegex.test(row[20].toString())) {
                 errors.push(`Fila ${rowIndex + 2}: CORREO ELECTRONICO (PROFESOR) no es válido`);
                 cellErrors[`${rowIndex}-20`] = true;
             }
@@ -130,7 +184,7 @@ const RegisterExcel = () => {
                 errors.push(`Fila ${rowIndex + 2}: CELULAR (TUTOR LEGAL) debe tener exactamente 8 dígitos`);
                 cellErrors[`${rowIndex}-15`] = true;
             }
-            if (row[21] && !row[21].toString().match(/^\d{8}$/)) {
+            if (row[21] && row[21] !== "-" && !row[21].toString().match(/^\d{8}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CELULAR (PROFESOR) debe tener exactamente 8 dígitos`);
                 cellErrors[`${rowIndex}-21`] = true;
             }
@@ -155,22 +209,31 @@ const RegisterExcel = () => {
                 cellErrors[`${rowIndex}-16`] = true;
             }
             
-            // Validar y normalizar Curso (columna 8)
+            // Validar Curso (columna 8)
             if (!row[8]) {
                 errors.push(`Fila ${rowIndex + 2}: CURSO (OLIMPISTA) es requerido`);
                 cellErrors[`${rowIndex}-8`] = true;
             }
             
-            // Validar campos de PROFESOR (deben estar todos llenos o todos vacíos)
+            // Validar Área (columna 9)
+            if (!row[9]) {
+                errors.push(`Fila ${rowIndex + 2}: AREA es requerida`);
+                cellErrors[`${rowIndex}-9`] = true;
+            }
+            
+            // Validar Categoría (columna 10)
+            if (!row[10]) {
+                errors.push(`Fila ${rowIndex + 2}: CATEGORIA es requerida`);
+                cellErrors[`${rowIndex}-10`] = true;
+            }
+            
+            // Validar campos de PROFESOR
             const professorError = validateProfessorFields(row, rowIndex);
             if (professorError) {
-                errors.push(professorError);
-                // Marcar todos los campos de profesor como error
-                for (let i = 17; i <= 21; i++) {
-                    if (row[i]) {
-                        cellErrors[`${rowIndex}-${i}`] = true;
-                    }
-                }
+                errors.push(professorError.error);
+                professorError.cells.forEach(cell => {
+                    cellErrors[cell] = true;
+                });
             }
         });
         
@@ -183,7 +246,7 @@ const RegisterExcel = () => {
             return "error-cell";
         }
         if (cellIndex >= 17 && cellIndex <= 21) {
-            if (!cellValue) return "optional-empty";
+            if (!cellValue || cellValue === "-") return "optional-empty";
             return "optional-filled";
         }
         if (!cellValue && cellIndex < 17) return "empty-cell";
@@ -241,10 +304,10 @@ const RegisterExcel = () => {
                 return rowData;
             });
     
-            // 1. Validar contra la base de datos primero (para área y categoría)
+            // 1. Validar contra la base de datos primero
             const dbValidation = await validateExcelData(normalizedData);
             const dbErrors = dbValidation.errors || [];
-    
+            
             // 2. Validar el resto de campos
             const frontendErrors = validateData(normalizedData);
             
@@ -258,34 +321,67 @@ const RegisterExcel = () => {
                 setValidationErrors(allErrors);
                 setError(`Se encontraron ${allErrors.length} errores de validación. Revise los campos marcados en rojo.`);
                 
-                // Marcar celdas con error
+                // Mapeo completo de campos a índices de columna
+                const fieldToColumnMap = {
+                    'CARNET DE IDENTIDAD (OLIMPISTA)': 0,
+                    'NOMBRE(S) (OLIMPISTA)': 1,
+                    'APELLIDO(S) (OLIMPISTA)': 2,
+                    'FECHA DE NACIMIENTO (OLIMPISTA)': 3,
+                    'CORREO ELECTRONICO (OLIMPISTA)': 4,
+                    'DEPARTAMENTO (OLIMPISTA)': 5,
+                    'MUNICIPIO (OLIMPISTA)': 6,
+                    'COLEGIO (OLIMPISTA)': 7,
+                    'CURSO (OLIMPISTA)': 8,
+                    'AREA': 9,
+                    'CATEGORIA': 10,
+                    'CARNET DE IDENTIDAD (TUTOR LEGAL)': 11,
+                    'NOMBRE(S) (TUTOR LEGAL)': 12,
+                    'APELLIDO(S) (TUTOR LEGAL)': 13,
+                    'CORREO ELECTRONICO (TUTOR LEGAL)': 14,
+                    'CELULAR (TUTOR LEGAL)': 15,
+                    'TIPO DE TUTOR': 16,
+                    'CARNET DE IDENTIDAD (PROFESOR)*': 17,
+                    'NOMBRE(S) (PROFESOR)*': 18,
+                    'APELLIDO(S) (PROFESOR)*': 19,
+                    'CORREO ELECTRONICO (PROFESOR)*': 20,
+                    'CELULAR (PROFESOR)*': 21
+                };
+    
+                // Procesar todos los errores para marcar celdas
                 const newErrorCells = {};
                 allErrors.forEach(error => {
-                    // Manejar errores de validación estándar
-                    const match = error.match(/Fila (\d+): (.*?):/);
-                    if (match) {
-                        const row = parseInt(match[1]) - 2;
-                        const column = match[2].trim();
-                        const colIndex = headers.findIndex(h => h.includes(column));
-                        if (colIndex >= 0) {
-                            newErrorCells[`${row}-${colIndex}`] = true;
-                        }
-                    }
-                    
-                    // Manejar errores específicos de área y categoría
-                    if (error.includes('El área') || error.includes('La categoría') || error.includes('no está disponible para el área')) {
-                        const rowMatch = error.match(/Fila (\d+):/);
-                        if (rowMatch) {
-                            const row = parseInt(rowMatch[1]) - 2;
-                            if (error.includes('El área') || error.includes('no está disponible para el área')) {
-                                newErrorCells[`${row}-9`] = true;
+                    const rowMatch = error.match(/Fila (\d+):/);
+                    if (rowMatch) {
+                        const row = parseInt(rowMatch[1]) - 2;
+                        
+                        // Buscar coincidencia exacta del campo en el error
+                        for (const [field, colIndex] of Object.entries(fieldToColumnMap)) {
+                            if (error.includes(field)) {
+                                newErrorCells[`${row}-${colIndex}`] = true;
+                                break;
                             }
-                            if (error.includes('La categoría') || error.includes('no está disponible para el área')) {
-                                newErrorCells[`${row}-10`] = true;
+                        }
+                        
+                        // Manejo especial para errores de área y categoría
+                        if (error.includes('El área') || error.includes('no está disponible para el área')) {
+                            newErrorCells[`${row}-9`] = true;
+                        }
+                        if (error.includes('La categoría') || error.includes('no está disponible para el área')) {
+                            newErrorCells[`${row}-10`] = true;
+                        }
+                        
+                        // Manejo especial para errores de profesor
+                        if (error.includes('PROFESOR')) {
+                            // Marcar todos los campos de profesor si es error de completitud
+                            if (error.includes('deben estar todos completos')) {
+                                for (let i = 17; i <= 21; i++) {
+                                    newErrorCells[`${row}-${i}`] = true;
+                                }
                             }
                         }
                     }
                 });
+                
                 setErrorCells(newErrorCells);
             } else {
                 setSuccess("Archivo cargado correctamente. Revise los datos antes de registrar.");

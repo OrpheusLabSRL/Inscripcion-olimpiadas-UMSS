@@ -167,7 +167,10 @@
   top: 0;
   color: #213448;
   font-weight: 600;
+  z-index: 100; /* Añadido para que la cabecera no se vuelva transparente */
+  backdrop-filter: blur(5px); /* Añadido para mejor visualización al hacer scroll */
 }
+
 
 .data-table td {
   padding: 12px;
@@ -185,6 +188,7 @@
   background-color: #ffcccc !important;
   color: #cc0000 !important;
   font-weight: bold;
+  position: relative;
 }
 
 .error-cell::after {
@@ -194,6 +198,7 @@
   top: 50%;
   transform: translateY(-50%);
   color: #cc0000;
+  font-weight: bold;
 }
 
 .empty-cell {
