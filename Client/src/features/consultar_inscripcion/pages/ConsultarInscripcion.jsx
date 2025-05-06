@@ -167,7 +167,7 @@ const ConsultarInscripcion = () => {
           >
             <option value="">Seleccione su rol</option>
             <option value="olimpista">Olimpista</option>
-            <option value="tutor">Tutor</option>
+            <option value="tutor">Tutor/Responsable Legal</option>
           </select>
           {errors.rol && <div className="error-message">{errors.rol}</div>}
         </div>

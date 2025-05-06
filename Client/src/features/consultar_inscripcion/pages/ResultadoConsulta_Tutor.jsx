@@ -36,6 +36,16 @@ const ResultadoConsulta_Tutor = () => {
     return estado === "PAGO REALIZADO" ? "realizado" : "pendiente";
   };
 
+  // Agrupar olimpistas por codigoBoleta
+  const olimpistasAgrupados = olimpistas.reduce((grupos, olimpista) => {
+    const codigoBoleta = olimpista.codigoBoleta || 'sin-boleta';
+    if (!grupos[codigoBoleta]) {
+      grupos[codigoBoleta] = [];
+    }
+    grupos[codigoBoleta].push(olimpista);
+    return grupos;
+  }, {});
+
   return (
     <>
       <HeaderProp />
@@ -59,48 +69,56 @@ const ResultadoConsulta_Tutor = () => {
             </p>
           </div>
 
-          <div className="olimpistas-table">
-            <h3>Olimpistas Asociados</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>Carnet de Identidad</th>
-                  <th>Tipo de Tutor</th>
-                  <th>Materia</th>
-                  <th>Categoría</th>
-                  <th>Estado de Pago</th>
-                </tr>
-              </thead>
-              <tbody>
-                {olimpistas.map((olimpista) => (
-                  <tr key={olimpista.idInscripcion}>
-                    <td>{olimpista.nombre}</td>
-                    <td>{olimpista.apellido}</td>
-                    <td>{olimpista.carnetIdentidad}</td>
-                    <td>{olimpista.tipoTutor}</td>
-                    <td>{olimpista.materia || "No especificada"}</td>
-                    <td>{olimpista.categoria || "No especificada"}</td>
-                    <td
-                      className={`estado-pago ${getEstadoPagoClass(
-                        olimpista.estadoPago
-                      )}`}
-                    >
-                      {olimpista.estadoPago}
-                    </td>
+          {Object.entries(olimpistasAgrupados).map(([codigoBoleta, olimpistasGrupo]) => (
+            <div key={codigoBoleta} className="olimpistas-table">
+              <h3>
+                {codigoBoleta === 'sin-boleta' 
+                  ? 'Olimpistas sin boleta de pago' 
+                  : `Olimpistas con boleta ${codigoBoleta}`}
+              </h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Carnet de Identidad</th>
+                    <th>Tipo de Tutor</th>
+                    <th>Materia</th>
+                    <th>Categoría</th>
+                    <th>Estado de Pago</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {olimpistasGrupo.map((olimpista) => (
+                    <tr key={olimpista.idInscripcion}>
+                      <td>{olimpista.nombre}</td>
+                      <td>{olimpista.apellido}</td>
+                      <td>{olimpista.carnetIdentidad}</td>
+                      <td>{olimpista.tipoTutor}</td>
+                      <td>{olimpista.materia || "No especificada"}</td>
+                      <td>{olimpista.categoria || "No especificada"}</td>
+                      <td
+                        className={`estado-pago ${getEstadoPagoClass(
+                          olimpista.estadoPago
+                        )}`}
+                      >
+                        {olimpista.estadoPago}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
 
-          <button
-            onClick={() => navigate("/consultar-inscripcion")}
-            className="btn-consulta volver-button"
-          >
-            Volver a consultar
-          </button>
+          <div className="boton-volver-container">
+            <button
+              className="btn-consulta back-button"
+              onClick={() => navigate("/consultar-inscripcion")}
+            >
+              Volver a consultar
+            </button>
+          </div>
         </div>
       </div>
     </>
