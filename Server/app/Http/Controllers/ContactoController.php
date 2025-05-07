@@ -49,7 +49,7 @@ class ContactoController extends Controller
             Log::info('Iniciando envío de correo...');
             
             try {
-                Mail::to('201904903@est.umss.edu.bo')->send(new ContactoMail($datos));
+                Mail::to('orpheuslab011@gmail.com')->send(new ContactoMail($datos));
                 Log::info('Correo enviado exitosamente');
             } catch (Swift_TransportException $e) {
                 Log::error('Error de transporte SMTP:', [

@@ -11,7 +11,8 @@ import ManageArea from "./features/administration/pages/ManageArea";
 import ManageCategoria from "./features/administration/pages/ManageCategoria";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageViewBase from "./features/administration/pages/ManageViewBaseData";
-import Home from "./features/administration/pages/Home";
+import HomeAdministration from "./features/administration/pages/Home";
+import PanelOlympiad from "./features/administration/pages/PanelOlympiad";
 import Login from "./features/administration/pages/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
@@ -109,11 +110,12 @@ function App() {
             {/* Rutas de administración */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Login />} />
-              <Route path="home" element={<Home />} />
+              <Route path="home" element={<HomeAdministration />} />
               <Route path="areas" element={<ManageArea />} />
               <Route path="categorias" element={<ManageCategoria />} />
               <Route path="olimpiadas" element={<ManageOlympiads />} />
               <Route path="view-base" element={<ManageViewBase />} />
+              <Route path="panelOlympiad" element={<PanelOlympiad />} />
               <Route
                 path="reports"
                 element={

@@ -149,7 +149,7 @@ const OlympiadsTable = () => {
                   >
                     <CiCircleInfo />
                   </button>
-                  <button
+                  {/*<button
                     onClick={() => handleEdit(item)}
                     style={{
                       background: "none",
@@ -160,7 +160,7 @@ const OlympiadsTable = () => {
                     }}
                   >
                     <MdEdit />
-                  </button>
+                  </button>*/}
                 </td>
               </tr>
             ))
