@@ -1,25 +1,21 @@
-/* registerexcel.css - Versión corregida */
-
 .app-background {
-  background-color: #94b4c1;
+  background-color: #94B4C1;
   min-height: 100vh;
   padding: 20px;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-left: 250px;
-  width: calc(100% - 250px);
+  justify-content: center;
+  align-items: center;
 }
 
 .excel-container {
   background-color: white;
-  width: 90%;
   max-width: 1200px;
+  width: 100%;
+  margin: 20px;
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  overflow-x: auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .excel-header {
@@ -167,43 +163,33 @@
   top: 0;
   color: #213448;
   font-weight: 600;
-  z-index: 100; /* Añadido para que la cabecera no se vuelva transparente */
-  backdrop-filter: blur(5px); /* Añadido para mejor visualización al hacer scroll */
 }
-
 
 .data-table td {
   padding: 12px;
   border-bottom: 1px solid #dee2e6;
   color: #495057;
-  position: relative;
 }
 
 .data-table tr:hover {
   background-color: #f8f9fa;
 }
 
-/* CORRECCIÓN: Se añadió el punto que faltaba en .error-cell */
-.error-cell {
-  background-color: #ffcccc !important;
-  color: #cc0000 !important;
-  font-weight: bold;
-  position: relative;
-}
-
-.error-cell::after {
-  content: "⚠";
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #cc0000;
-  font-weight: bold;
-}
-
 .empty-cell {
   background-color: #fff3cd;
-  color: #856404;
+}
+
+.error-cell {
+  background-color: #f8d7da;
+  color: #721c24;
+  font-weight: bold;
+}
+
+.optional-field {
+  font-size: 0.8em;
+  color: #6c757d;
+  font-weight: normal;
+  margin-left: 5px;
 }
 
 .optional-empty {
@@ -214,13 +200,6 @@
 
 .optional-filled {
   background-color: #e6f7ff;
-}
-
-.optional-field {
-  font-size: 0.8em;
-  color: #6c757d;
-  font-weight: normal;
-  margin-left: 5px;
 }
 
 .optional-error {
@@ -251,94 +230,27 @@
   background-color: #1a2a38;
 }
 
-.action-btn.loading {
-  opacity: 0.8;
-  pointer-events: none;
-}
-
-.spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
-  margin-right: 8px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.alert-message {
-  padding: 12px;
-  border-radius: 4px;
-  margin: 15px 0;
-  display: flex;
-  align-items: center;
-}
-
-.alert-message i {
-  margin-right: 8px;
-}
-
-.error-message {
-  background-color: #ffebee;
-  color: #c62828;
-}
-
-.success-message {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-}
-
-.empty-table-message {
-  text-align: center;
-  padding: 20px;
-  color: #666;
-  font-style: italic;
-}
-
-@media (max-width: 1024px) {
-  .app-background {
-    margin-left: 200px;
-    width: calc(100% - 200px);
-  }
-}
-
 @media (max-width: 768px) {
-  .app-background {
-    margin-left: 0;
-    width: 100%;
-    padding: 15px;
-    padding-top: 80px;
-  }
-
   .excel-container {
     padding: 15px;
-    margin: 0 auto;
   }
-
+  
   .excel-header h1 {
     font-size: 20px;
   }
-
+  
   .download-section {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-
+  
   .table-container {
     max-height: 400px;
     font-size: 12px;
   }
-
-  .data-table th,
-  .data-table td {
+  
+  .data-table th, .data-table td {
     padding: 8px;
   }
 
