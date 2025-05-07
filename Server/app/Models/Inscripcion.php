@@ -18,7 +18,9 @@ class Inscripcion extends Model
         'idOlimpAreaCategoria',
         'estadoInscripcion',
         'idTutorLegal',
-        'idTutorArea'
+        'idTutorArea',
+        "formaInscripcion",
+        "registrandose"
     ];
 
     public function olimpista()

@@ -20,6 +20,7 @@ class ExcelController extends Controller
         try {
             $responsibleData = $request->input('responsible');
             $olimpistasData = $request->input('olimpistas');
+            $formaInscripcion = $request->input('formaInscripcion');
 
             // 1. Validar datos del responsable
             if (empty($responsibleData['Ci'])) {
@@ -157,7 +158,8 @@ class ExcelController extends Controller
                         'idOlimpAreaCategoria' => $combination->idOlimpAreaCategoria,
                         'idTutorResponsable' => $responsibleTutor->idPersona,
                         'idTutorLegal' => $tutorLegal->idPersona,
-                        'estadoInscripcion' => 0 // 0 para PENDIENTE, 1 para PAGADO (o según tu esquema)
+                        'estadoInscripcion' => 0, // 0 para PENDIENTE, 1 para PAGADO (o según tu esquema)
+                        'formaInscripcion' => $formaInscripcion
                     ];
                     
                     if ($tutorArea) {

@@ -94,52 +94,64 @@ export const RegisterTutor = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    const dataToSend = {
-      olimpista: {
-        nombre: localStorage.getItem("NombreOlympian"),
-        apellido: localStorage.getItem("ApellidoOlympian"),
-        correo_electronico: localStorage.getItem("EmailOlympian"),
-        carnet_identidad: localStorage.getItem("CarnetIdentidadOlympian"),
-        curso: localStorage.getItem("CursoOlympian"),
-        fecha_nacimiento: localStorage.getItem("FechaNacimientoOlympian"),
-        colegio: localStorage.getItem("ColegioOlympian"),
-        departamento: localStorage.getItem("DepartamentoOlympian"),
-        provincia: localStorage.getItem("ProvinciaOlympian"),
-      },
-      responsable: localStorage.getItem("tutorInscripcionId")
-        ? { id_persona: localStorage.getItem("tutorInscripcionId") }
-        : {
-            nombre: localStorage.getItem("NombreResponsible"),
-            apellido: localStorage.getItem("ApellidoResponsible"),
-            tipo_tutor: localStorage.getItem("TipoTutorResponsible"),
-            correo_electronico: localStorage.getItem("EmailResponsible"),
-            telefono: localStorage.getItem("NumeroResponsible"),
-            carnet_identidad: localStorage.getItem("CiResponsible"),
-          },
-      tutor_legal: {
-        nombre: localStorage.getItem("NombreLegal"),
-        apellido: localStorage.getItem("ApellidoLegal"),
-        tipo_tutor: localStorage.getItem("TipoTutorLegal"),
-        correo_electronico: localStorage.getItem("EmailLegal"),
-        telefono: localStorage.getItem("NumeroLegal"),
-        carnet_identidad: localStorage.getItem("CiLegal"),
-      },
-      inscripciones: [
-        {
-          area: localStorage.getItem("AreaPrincipal"),
-          categoria: localStorage.getItem("CategoriaPrincipal"),
-          existeTutor: localStorage.getItem("TutorArea1"),
-          tutorArea: {
-            nombre: localStorage.getItem("NombrePrincipal"),
-            apellido: localStorage.getItem("ApellidoPrincipal"),
-            tipo_tutor: localStorage.getItem("TipoTutorPrincipal"),
-            correo_electronico: localStorage.getItem("EmailPrincipal"),
-            telefono: localStorage.getItem("NumeroPrincipal"),
-            carnet_identidad: localStorage.getItem("CiPrincipal"),
-          },
+    const confirmacion = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Se registraran los datos ingresados.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, aceptar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (confirmacion.isConfirmed) {
+      const dataToSend = {
+        olimpista: {
+          nombre: sessionStorage.getItem("NombreOlympian"),
+          apellido: sessionStorage.getItem("ApellidoOlympian"),
+          correo_electronico: sessionStorage.getItem("EmailOlympian"),
+          carnet_identidad: sessionStorage.getItem("CarnetIdentidadOlympian"),
+          curso: sessionStorage.getItem("CursoOlympian"),
+          fecha_nacimiento: sessionStorage.getItem("FechaNacimientoOlympian"),
+          colegio: sessionStorage.getItem("ColegioOlympian"),
+          departamento: sessionStorage.getItem("DepartamentoOlympian"),
+          municipio: sessionStorage.getItem("MunicipioOlympian"),
         },
-      ],
-    };
+        responsable: sessionStorage.getItem("tutorInscripcionId")
+          ? { id_persona: sessionStorage.getItem("tutorInscripcionId") }
+          : {
+              nombre: sessionStorage.getItem("NombreResponsible"),
+              apellido: sessionStorage.getItem("ApellidoResponsible"),
+              tipo_tutor: sessionStorage.getItem("TipoTutorResponsible"),
+              correo_electronico: sessionStorage.getItem("EmailResponsible"),
+              telefono: sessionStorage.getItem("NumeroResponsible"),
+              carnet_identidad: sessionStorage.getItem("CiResponsible"),
+            },
+        tutor_legal: {
+          nombre: sessionStorage.getItem("NombreLegal"),
+          apellido: sessionStorage.getItem("ApellidoLegal"),
+          tipo_tutor: sessionStorage.getItem("TipoTutorLegal"),
+          correo_electronico: sessionStorage.getItem("EmailLegal"),
+          telefono: sessionStorage.getItem("NumeroLegal"),
+          carnet_identidad: sessionStorage.getItem("CiLegal"),
+        },
+        inscripciones: [
+          {
+            area: sessionStorage.getItem("AreaPrincipal"),
+            categoria: sessionStorage.getItem("CategoriaPrincipal"),
+            existeTutor: sessionStorage.getItem("TutorArea1"),
+            formaInscripcion: "Manual",
+            registrandose: true,
+            tutorArea: {
+              nombre: sessionStorage.getItem("NombrePrincipal"),
+              apellido: sessionStorage.getItem("ApellidoPrincipal"),
+              tipo_tutor: "Profesor",
+              correo_electronico: sessionStorage.getItem("EmailPrincipal"),
+              telefono: sessionStorage.getItem("NumeroPrincipal"),
+              carnet_identidad: sessionStorage.getItem("CiPrincipal"),
+            },
+          },
+        ],
+      };
 
     if (localStorage.getItem("AreaSecundaria")) {
       dataToSend.inscripciones.push({
