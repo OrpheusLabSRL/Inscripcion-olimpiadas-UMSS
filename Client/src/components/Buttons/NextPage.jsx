@@ -14,7 +14,6 @@ export const NextPage = ({
   to = "",
   state,
   type,
-  disabled = false,
 }) => {
   return (
     <NavLink to={to} state={state} style={{ textDecoration: "none" }}>
@@ -25,7 +24,6 @@ export const NextPage = ({
         id={id}
         label={label}
         type={type}
-        disabled={disabled}
       />
     </NavLink>
   );

@@ -10,8 +10,6 @@ return new class extends Migration {
         Schema::create('inscripciones', function (Blueprint $table) {
             $table->id('idInscripcion');
             $table->boolean('estadoInscripcion')->default(false);
-            $table->string('formaInscripcion', 20);
-            $table->boolean('registrandose')->default(true);
             $table->timestamps();
 
             $table->unsignedBigInteger('idOlimpista');

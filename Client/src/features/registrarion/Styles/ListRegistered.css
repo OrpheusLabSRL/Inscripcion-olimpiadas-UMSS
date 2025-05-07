@@ -23,23 +23,3 @@
 .btn-add-student {
   width: 170px;
 }
-
-.btn-generar-boleta {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-}
-
-.btn-add-student-container {
-  display: flex;
-}
-
-.btn-add-student-disabled {
-  background-color: #0000004d;
-  color: #fff;
-  cursor: not-allowed;
-}
-
-.btn-add-student-disabled:hover {
-  background-color: #0000004d;
-}
