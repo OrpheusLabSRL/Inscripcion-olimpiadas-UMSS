@@ -18,7 +18,6 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
   const navigation = useNavigate();
 
   const cerrarSesion = () => {
-    sessionStorage.clear();
     navigation("/");
   };
 
@@ -34,68 +33,58 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/7330cc38170480eadf5800dd915ae76c4a5737cb"
             alt="LOGO O SANSI"
           />
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/7330cc38170480eadf5800dd915ae76c4a5737cb"
+            alt="LOGO O SANSI"
+          />
           {isOpen && <h2 className="sidebar-title">Oh! SanSi</h2>}
         </div>
         <ul>
           {admin ? (
             <>
               <li>
-                <Link to="/admin/home">
-                  <FaHome className="sidebar-icons" />
-                  {isOpen ? "Inicio" : ""}
-                </Link>
-              </li>
-              <li>
                 <Link to="/admin/olimpiadas">
-                  <GiAchievement className="sidebar-icons" />{" "}
+                  <FaHome className="sidebar-icons" />{" "}
                   {isOpen ? "Olimpiadas" : ""}
                 </Link>
               </li>
-              {/*<li>
+              <li>
                 <Link to="/admin/base-data">
                   <IoDocumentTextOutline className="sidebar-icons" />{" "}
                   {isOpen ? "Datos base" : ""}
                 </Link>
-              </li>*/}
-              <li>
-                <NavLink>
-                  <HiOutlineClipboardDocumentList className="sidebar-icons" />{" "}
-                  {isOpen ? "Exámenes" : ""}
-                </NavLink>
               </li>
               <li>
-                <Link to="/admin/reports">
+                <Link>
+                  <HiOutlineClipboardDocumentList className="sidebar-icons" />{" "}
+                  {isOpen ? "Exámenes" : ""}
+                </Link>
+              </li>
+              <li>
+                <Link>
                   <HiOutlineClipboardDocument className="sidebar-icons" />{" "}
                   {isOpen ? "Reportes" : ""}
                 </Link>
               </li>
               <li>
-                <NavLink>
+                <Link>
                   <FaRegCalendarAlt className="sidebar-icons" />{" "}
                   {isOpen ? "Calendario" : ""}
-                </NavLink>
+                </Link>
               </li>
             </>
           ) : (
             <>
               <li>
-                <NavLink
-                  to={
-                    sessionStorage.getItem("pantallaActualRegistro")
-                      ? sessionStorage.getItem("pantallaActualRegistro")
-                      : "/register"
-                  }
-                  className={({ isActive }) => (isActive ? 'active-link' : '')}
-                >
-                  <FaHome className="sidebar-icons" />{" "}
-                  {isOpen ? "Inscripción" : ""}
-                </NavLink>
+                <Link>
+                  <FaHome className="sidebar-icons" /> {isOpen ? "Inicio" : ""}
+                </Link>
               </li>
               <li>
-                <NavLink to={"/contacto"}>
+                <Link>
                   <IoDocumentTextOutline className="sidebar-icons" />{" "}
                   {isOpen ? "Contacto" : ""}
-                </NavLink>
+                </Link>
               </li>
             </>
           )}
@@ -111,11 +100,22 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
               />
             }{" "}
             {isOpen ? <span onClick={cerrarSesion}>Cerrar Sesion</span> : ""}
+            {
+              <IoLogInOutline
+                style={{ fontSize: "25px" }}
+                className="sidebar-icons"
+                onClick={cerrarSesion}
+              />
+            }{" "}
+            {isOpen ? <span onClick={cerrarSesion}>Cerrar Sesion</span> : ""}
           </a>
         </div>
       </div>
 
       <button className="toggle-btn" onClick={() => setIsOpen(!isOpen)}>
+        <FaArrowRightArrowLeft style={{ fontSize: "18px" }} />
+
+        {isOpen ? <span style={{ margin: "10px" }}>Contraer menú</span> : ""}
         <FaArrowRightArrowLeft style={{ fontSize: "18px" }} />
 
         {isOpen ? <span style={{ margin: "10px" }}>Contraer menú</span> : ""}

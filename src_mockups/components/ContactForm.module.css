@@ -1,0 +1,106 @@
+.pageContainer {
+  padding: 86px 200px;
+}
+
+.headerContainer {
+  display: flex;
+  align-items: flex-start; /* Alineación con la parte superior del formulario */
+  margin-bottom: 0px; /* Eliminamos el margen inferior */
+
+}
+
+.title {
+  color: #1e293b;
+  margin-bottom: 40px; /* Mismo espacio que en Datos de Olimpista */
+  font-family: Inter, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 36px;
+}
+
+.formContainer {
+  background-color: #fff;
+  border-radius: 25px;
+  padding: 10px 40px 40px 40px; /* Reducido de 40px a 20px solo en la parte superior */
+  box-shadow:
+    0 4px 6px #0000001a,
+    0 2px 4px #0000001a;
+  max-width: 1000px;
+  margin: 0 auto;
+  margin-top: -40px; /* Ajuste para alinear con el botón de volver */
+  margin-left: 60px; /* Espacio para el botón de volver */
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
+  width: 100%;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.halfWidth {
+  grid-column: 1 / 2;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.submitButton {
+  color: #fff;
+  cursor: pointer;
+  background-color: #2563eb;
+  border: none;
+  border-radius: 6px;
+  width: 202px;
+  height: 43px;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  box-shadow: 0 4px 4px #00000040;
+}
+
+@media (width <= 991px) {
+  .pageContainer {
+    padding: 86px 20px;
+  }
+  
+  .formContainer {
+    margin-left: 40px;
+  }
+}
+
+@media (width <= 640px) {
+  .pageContainer {
+    padding: 20px;
+  }
+
+  .headerContainer {
+    margin-bottom: 20px;
+  }
+  
+  .formContainer {
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .halfWidth {
+    grid-column: 1 / -1;
+  }
+}

@@ -1,0 +1,26 @@
+.layout {
+  background-color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  padding: 86px 200px;
+}
+
+@media (width <= 991px) {
+  .content {
+    padding: 86px 20px;
+  }
+}
+
+@media (width <= 640px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .content {
+    padding: 20px;
+  }
+}

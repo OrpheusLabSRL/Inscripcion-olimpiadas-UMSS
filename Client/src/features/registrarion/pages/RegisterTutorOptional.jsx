@@ -5,17 +5,15 @@ import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { Validator } from "../utils/ValidationRules";
 
 //react
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
-import { MdCleaningServices } from "react-icons/md";
 
 //api
 import { getPersonData } from "../../../api/inscription.api";
 
 export const RegisterTutorOptional = () => {
-  const [isReadOnly, setIsReadOnly] = useState({});
   const location = useLocation();
   const navigation = useNavigate();
   const { area } = location.state;
@@ -29,24 +27,28 @@ export const RegisterTutorOptional = () => {
     defaultValues: {
       Nombre:
         area == "AreaPrincipal"
-          ? sessionStorage.getItem("NombrePrincipal") || ""
-          : sessionStorage.getItem("NombreSecundaria") || "",
+          ? localStorage.getItem("NombrePrincipal") || ""
+          : localStorage.getItem("NombreSecundaria") || "",
       Apellido:
         area == "AreaPrincipal"
-          ? sessionStorage.getItem("ApellidoPrincipal") || ""
-          : sessionStorage.getItem("ApellidoSecundaria") || "",
+          ? localStorage.getItem("ApellidoPrincipal") || ""
+          : localStorage.getItem("ApellidoSecundaria") || "",
+      Tipo_Tutor:
+        area == "AreaPrincipal"
+          ? localStorage.getItem("TipoTutorPrincipal") || ""
+          : localStorage.getItem("TipoTutorSecundaria") || "",
       Numero_Celular:
         area == "AreaPrincipal"
-          ? sessionStorage.getItem("NumeroPrincipal") || ""
-          : sessionStorage.getItem("NumeroSecundaria") || "",
+          ? localStorage.getItem("NumeroPrincipal") || ""
+          : localStorage.getItem("NumeroSecundaria") || "",
       Email:
         area == "AreaPrincipal"
-          ? sessionStorage.getItem("EmailPrincipal") || ""
-          : sessionStorage.getItem("EmailSecundaria") || "",
+          ? localStorage.getItem("EmailPrincipal") || ""
+          : localStorage.getItem("EmailSecundaria") || "",
       Ci:
         area == "AreaPrincipal"
-          ? sessionStorage.getItem("CiPrincipal") || ""
-          : sessionStorage.getItem("CiSecundaria") || "",
+          ? localStorage.getItem("CiPrincipal") || ""
+          : localStorage.getItem("CiSecundaria") || "",
     },
     mode: "onChange",
   });
@@ -58,58 +60,59 @@ export const RegisterTutorOptional = () => {
 
   const watchedNombre = watch("Nombre");
   const watchedApellido = watch("Apellido");
+  const watchedTipoTutor = watch("Tipo_Tutor");
   const watchedEmail = watch("Email");
   const watchedTelefono = watch("Numero_Celular");
   const watchedCarnetIdentidad = watch("Ci");
 
   useEffect(() => {
-    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
-  }, []);
-
-  useEffect(() => {
     area == "AreaPrincipal"
-      ? sessionStorage.setItem("NombrePrincipal", watchedNombre)
-      : sessionStorage.setItem("NombreSecundaria", watchedNombre);
+      ? localStorage.setItem("NombrePrincipal", watchedNombre)
+      : localStorage.setItem("NombreSecundaria", watchedNombre);
   }, [watchedNombre]);
 
   useEffect(() => {
     area == "AreaPrincipal"
-      ? sessionStorage.setItem("ApellidoPrincipal", watchedApellido)
-      : sessionStorage.setItem("ApellidoSecundaria", watchedApellido);
+      ? localStorage.setItem("ApellidoPrincipal", watchedApellido)
+      : localStorage.setItem("ApellidoSecundaria", watchedApellido);
   }, [watchedApellido]);
 
   useEffect(() => {
     area == "AreaPrincipal"
-      ? sessionStorage.setItem("EmailPrincipal", watchedEmail)
-      : sessionStorage.setItem("EmailSecundaria", watchedEmail);
+      ? localStorage.setItem("TipoTutorPrincipal", watchedTipoTutor)
+      : localStorage.setItem("TipoTutorSecundaria", watchedTipoTutor);
+  }, [watchedTipoTutor]);
+
+  useEffect(() => {
+    area == "AreaPrincipal"
+      ? localStorage.setItem("EmailPrincipal", watchedEmail)
+      : localStorage.setItem("EmailSecundaria", watchedEmail);
   }, [watchedEmail]);
 
   useEffect(() => {
     area == "AreaPrincipal"
-      ? sessionStorage.setItem("NumeroPrincipal", watchedTelefono)
-      : sessionStorage.setItem("NumeroSecundaria", watchedTelefono);
+      ? localStorage.setItem("NumeroPrincipal", watchedTelefono)
+      : localStorage.setItem("NumeroSecundaria", watchedTelefono);
   }, [watchedTelefono]);
 
   useEffect(() => {
     area == "AreaPrincipal"
-      ? sessionStorage.setItem("CiPrincipal", watchedCarnetIdentidad)
-      : sessionStorage.setItem("CiSecundaria", watchedCarnetIdentidad);
-    if (watchedCarnetIdentidad.length >= 7) {
-      autofill();
-    }
+      ? localStorage.setItem("CiPrincipal", watchedCarnetIdentidad)
+      : localStorage.setItem("CiSecundaria", watchedCarnetIdentidad);
   }, [watchedCarnetIdentidad]);
 
   const onSubmit = async (data) => {
     area == "AreaPrincipal"
-      ? sessionStorage.setItem("TutorArea1", true)
-      : sessionStorage.setItem("TutorArea2", true);
-    navigation("/register/olympian-area");
+      ? localStorage.setItem("TutorArea1", true)
+      : localStorage.setItem("TutorArea2", true);
+    navigation("/Register/OlympianArea");
   };
 
   const backPage = () => {
     const campos = {
       nombre: watchedNombre,
       apellido: watchedApellido,
+      tipoTutor: watchedTipoTutor,
       email: watchedEmail,
       telefono: watchedTelefono,
       ci: watchedCarnetIdentidad,
@@ -121,116 +124,55 @@ export const RegisterTutorOptional = () => {
 
     if (algunCampoVacio) {
       area === "AreaPrincipal"
-        ? sessionStorage.removeItem("TutorArea1")
-        : sessionStorage.removeItem("TutorArea2");
+        ? localStorage.removeItem("TutorArea1")
+        : localStorage.removeItem("TutorArea2");
     }
   };
 
   const autofill = async () => {
     try {
-      const ci =
-        area == "AreaPrincipal"
-          ? sessionStorage.getItem("CiPrincipal", watchedCarnetIdentidad)
-          : sessionStorage.getItem("CiSecundaria", watchedCarnetIdentidad);
-      const personData = await getPersonData(ci);
+      const personData = await getPersonData(
+        localStorage.getItem("CiResponsible")
+      );
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
         setValue("Email", personData.data.data.correoElectronico);
-        setIsReadOnly((prev) => ({
-          ...prev,
-          Nombre: true,
-          Apellido: true,
-          Email: true,
-        }));
       }
 
-      if (personData.data.data.telefono) {
+      if (personData.data.data.tipoTutor) {
+        setValue("Tipo_Tutor", personData.data.data.tipoTutor);
         setValue("Numero_Celular", personData.data.data.telefono);
-        setIsReadOnly((prev) => ({
-          ...prev,
-          Numero_Celular: true,
-        }));
       }
     } catch (error) {
-      const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
-      const ciOlympian =
-        sessionStorage.getItem("CarnetIdentidadOlympian") || "";
-      const ciProfesor =
-        area == "AreaPrincipal"
-          ? sessionStorage.getItem("CiPrincipal") || ""
-          : sessionStorage.getItem("CiSecundaria") || "";
-
-      if (ciResponsible == ciProfesor) {
-        setValue("Nombre", sessionStorage.getItem("NombreResponsible"));
-        setValue("Apellido", sessionStorage.getItem("ApellidoResponsible"));
-        setValue("Email", sessionStorage.getItem("EmailResponsible"));
-        setValue("Numero_Celular", sessionStorage.getItem("NumeroResponsible"));
-
-        setIsReadOnly((prev) => ({
-          ...prev,
-          Ci: true,
-          Nombre: true,
-          Apellido: true,
-          Email: true,
-          Numero_Celular: true,
-        }));
-      } else if (ciProfesor == ciOlympian) {
-        setValue("Nombre", sessionStorage.getItem("NombreOlympian"));
-        setValue("Apellido", sessionStorage.getItem("ApellidoOlympian"));
-        setValue("Email", sessionStorage.getItem("EmailOlympian"));
-        setIsReadOnly((prev) => ({
-          ...prev,
-          Ci: true,
-          Nombre: true,
-          Apellido: true,
-          Email: true,
-        }));
-      }
+      console.log(error);
     }
-  };
-
-  const cleanFlieds = () => {
-    setValue("Nombre", "");
-    setValue("Apellido", "");
-    setValue("Tipo_Tutor", "");
-    setValue("Numero_Celular", "");
-    setValue("Email", "");
-    setValue("Ci", "");
-
-    setIsReadOnly({});
   };
 
   return (
     <div className="container-form">
-      <NavLink to={"/register/olympian-area"} onClick={backPage}>
+      <NavLink to={"/Register/OlympianArea"} onClick={backPage}>
         <IoArrowBackCircle className="btn-back" />
       </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
-          <h1>Registro de profesor de área</h1>
+          <h1>Registro de datos de tutor de área</h1>
           <h5 className="message-recomendation">
-            Si ya tiene datos registrados, ingrese su CI y se llenara
-            automáticamente los campos.
+            Si ya tiene datos registrados, ingrese su CI y presione el botón
+            "Autocompletar" para llenar automáticamente los campos.
           </h5>
-          <div className="container-clean-fields">
-            <p>Limpiar campos</p>
-            <MdCleaningServices
-              className="icon-clean-fields"
-              onClick={cleanFlieds}
-            />
-          </div>
         </div>
 
         <div className="input-1c">
           <Input
             label={"Carnet de identidad"}
-            placeholder="Ingrese número de CI del profesor"
+            placeholder="Ingrese número de CI del tutor"
             mandatory="true"
             name="Ci"
-            isReadOnly={isReadOnly}
+            autofill={autofill}
             value={watchedCarnetIdentidad}
             onChange={(e) => setValue("Ci", e.target.value)}
+            s
             register={register}
             validationRules={Validator.ci}
             errors={errors}
@@ -240,10 +182,9 @@ export const RegisterTutorOptional = () => {
         <div className="input-1c">
           <Input
             label={"Nombre(s)"}
-            placeholder="Ingrese nombre(s) del profesor"
+            placeholder="Ingrese nombre(s) del tutor"
             mandatory="true"
             name="Nombre"
-            isReadOnly={isReadOnly}
             value={watchedNombre}
             onChange={(e) => setValue("Nombre", e.target.value)}
             register={register}
@@ -255,14 +196,28 @@ export const RegisterTutorOptional = () => {
         <div className="input-1c">
           <Input
             label={"Apellido(s)"}
-            placeholder="Ingrese apellido(s) del profesor"
+            placeholder="Ingrese apellido(s) del tutor"
             mandatory="true"
             name="Apellido"
-            isReadOnly={isReadOnly}
             value={watchedApellido}
             onChange={(e) => setValue("Apellido", e.target.value)}
             register={register}
             validationRules={Validator.apellido}
+            errors={errors}
+          />
+        </div>
+
+        <div className="input-1c">
+          <Select
+            label={"Tipo de tutor"}
+            placeholder="Seleccione tipo"
+            mandatory="true"
+            options={tipoTutor}
+            name="Tipo_Tutor"
+            value={watchedTipoTutor}
+            onChange={(e) => setValue("Tipo_Tutor", e.target.value)}
+            register={register}
+            validationRules={Validator.tipo_tutor}
             errors={errors}
           />
         </div>
@@ -273,7 +228,6 @@ export const RegisterTutorOptional = () => {
             placeholder="Ingrese número de celular"
             mandatory="true"
             name="Numero_Celular"
-            isReadOnly={isReadOnly}
             value={watchedTelefono}
             onChange={(e) => setValue("Numero_Celular", e.target.value)}
             register={register}
@@ -282,13 +236,12 @@ export const RegisterTutorOptional = () => {
           />
         </div>
 
-        <div className="input-2c">
+        <div className="input-1c">
           <Input
             label={"Correo Electronico"}
             placeholder="ejemplo@correo.com"
             mandatory="true"
             name="Email"
-            isReadOnly={isReadOnly}
             value={watchedEmail}
             onChange={(e) => setValue("Email", e.target.value)}
             register={register}
