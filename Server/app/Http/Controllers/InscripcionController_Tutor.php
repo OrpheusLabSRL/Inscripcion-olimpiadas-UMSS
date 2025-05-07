@@ -142,7 +142,6 @@ class InscripcionController_Tutor extends Controller
                         'inscripciones.idTutorResponsable',
                         'inscripciones.idTutorLegal',
                         'inscripciones.idTutorArea',
-                        'inscripciones.codigoBoleta',
                         'areas.nombreArea as materia',
                         'categorias.nombreCategoria as categoria'
                     )
@@ -176,8 +175,7 @@ class InscripcionController_Tutor extends Controller
                         'tipoTutor' => implode(', ', $tiposTutor),
                         'materia' => $inscripcion->materia,
                         'categoria' => $inscripcion->categoria,
-                        'estadoPago' => $inscripcion->estadoInscripcion == 1 ? 'PAGO REALIZADO' : 'PAGO PENDIENTE',
-                        'codigoBoleta' => $inscripcion->codigoBoleta
+                        'estadoPago' => $inscripcion->estadoInscripcion == 1 ? 'PAGO REALIZADO' : 'PAGO PENDIENTE'
                     ];
                 });
 
