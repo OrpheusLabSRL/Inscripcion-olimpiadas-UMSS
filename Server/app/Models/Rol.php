@@ -1,24 +1,30 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Models;
 
-class CreateRolTable extends Migration
+use Illuminate\Database\Eloquent\Model;
+
+class Rol extends Model
 {
-    public function up()
-    {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id('idRol');
-            $table->string('nombreRol', 30)->nullable();
-            $table->string('descripcionRol', 250)->nullable();
-            $table->boolean('estadoRol')->nullable();
-            $table->timestamps();
-        });
-    }
+    // Nombre de la tabla
+    protected $table = 'roles';
 
-    public function down()
+    // Clave primaria personalizada
+    protected $primaryKey = 'idRol';
+
+    // Atributos que se pueden asignar masivamente
+    protected $fillable = [
+        'nombreRol',
+        'descripcionRol',
+        'estadoRol',
+    ];
+
+    // Manejar timestamps automáticamente
+    public $timestamps = true;
+
+    // Relación: Un Rol puede tener muchos Usuarios
+    public function usuarios()
     {
-        Schema::dropIfExists('roles');
+        return $this->hasMany(Usuario::class, 'idRol', 'idRol');
     }
 }

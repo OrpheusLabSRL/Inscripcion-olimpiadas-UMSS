@@ -75,7 +75,7 @@ import React, { useState } from "react";
            break;
          case "correo":
            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-             error = "Email no válido";
+             error = "El correo no es válido";
            }
            break;
          case "celular":
@@ -190,8 +190,8 @@ import React, { useState } from "react";
              </div>
  
                <div className="info-content">
-                 <h3>LLAMANOS</h3>
-                 <p>+591 72738789</p>
+                 <h3>ESCRIBENOS</h3>
+                 <p>ohsansi@umss.edu</p>
                </div>
              </div>
  
@@ -201,7 +201,7 @@ import React, { useState } from "react";
              </div>
                <div className="info-content">
                  <h3>UBICACION</h3>
-                 <p>La ubicacion de la u</p>
+                 <p>El Departamento de Sistemas e Informática de la Universidad Mayor de San Simón (UMSS)-Calle Sucre y parque la Torre </p>
                </div>
              </div>
  

@@ -6,30 +6,59 @@ import "../Styles/General.css";
 
 const AreaList = () => {
   const navigate = useNavigate();
+
   const goBack = () => {
-    navigate("/admin/base-data");
+    navigate("/admin/view-base");
   };
 
   return (
-    <div className="area-container" style={{ padding: "2rem" }}>
+    <div
+      className="area-container"
+      style={{
+        padding: "2rem",
+        backgroundColor: "#a2bfcb",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          marginBottom: "1.5rem",
           color: "black",
         }}
       >
-        <div>
-          <BackButton onClick={goBack} className="back-button">
-            Volver
-          </BackButton>
-          <h1>Áreas</h1>
-          <p>Gestiona las áreas principales de competencia</p>
-        </div>
+        <BackButton onClick={goBack} className="back-button">
+          Volver
+        </BackButton>
+
+        <h1
+          style={{
+            marginTop: "1rem",
+            marginBottom: "0.5rem",
+            color: "#213448",
+          }}
+        >
+          Áreas
+        </h1>
+        <p>Gestiona las áreas principales de competencia</p>
       </div>
 
-      <AreasTable />
+      <div
+        style={{
+          backgroundColor: "#ecefca",
+          padding: "2rem",
+          borderRadius: "12px",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+          overflowX: "auto",
+          flexGrow: 1,
+          width: "90%",
+          maxWidth: "1200px",
+          margin: "0 auto",
+        }}
+      >
+        <AreasTable />
+      </div>
     </div>
   );
 };

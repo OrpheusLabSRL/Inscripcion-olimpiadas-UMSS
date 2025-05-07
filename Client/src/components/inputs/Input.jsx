@@ -13,6 +13,7 @@ export const Input = ({
   errors = null,
   mandatory = false,
   autofill = null,
+  isReadOnly = {},
 }) => {
   return (
     <div className="config-input">
@@ -26,7 +27,6 @@ export const Input = ({
           )}
         </label>
       )}
-
       <input
         type={type}
         className={className}
@@ -34,6 +34,7 @@ export const Input = ({
         name={name}
         placeholder={placeholder}
         {...(register ? register(name, validationRules) : {})}
+        readOnly={isReadOnly[name] ? true : false}
         autoComplete="off"
       />
       {errors && errors[name] && (

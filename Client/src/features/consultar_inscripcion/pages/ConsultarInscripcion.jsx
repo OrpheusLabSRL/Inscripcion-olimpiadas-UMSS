@@ -10,107 +10,104 @@ const ConsultarInscripcion = () => {
   const [ci, setCi] = useState("");
   const [rol, setRol] = useState("");
   const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (setter, name) => (e) => {
-    const value = e.target.value;
-    setter(value);
-    if (touched[name]) {
-      validateField(name, value);
-    }
-  };
+  const validateForm = () => {
+    const newErrors = {};
+    let isValid = true;
 
-  const validateField = (name, value) => {
-    const newErrors = { ...errors };
-    switch (name) {
-      case "correo":
-        if (!value) {
-          newErrors.correo = "El correo es requerido";
-        } else if (!/\S+@\S+\.\S+/.test(value)) {
-          newErrors.correo = "El correo no es válido";
-        } else {
-          delete newErrors.correo;
-        }
-        break;
-      case "ci":
-        if (!value) {
-          newErrors.ci = "El carnet de identidad es requerido";
-        } else if (!/^\d+$/.test(value)) {
-          newErrors.ci = "El carnet debe contener solo números";
-        } else {
-          delete newErrors.ci;
-        }
-        break;
-      case "rol":
-        if (!value) {
-          newErrors.rol = "Seleccione su rol";
-        } else {
-          delete newErrors.rol;
-        }
-        break;
-      default:
-        break;
+    if (!ci.trim()) {
+      newErrors.ci = "El carnet de identidad es requerido";
+      isValid = false;
+    } else if (!/^\d+$/.test(ci)) {
+      newErrors.ci = "El carnet debe contener solo números";
+      isValid = false;
     }
+
+    if (!correo.trim()) {
+      newErrors.correo = "El correo es requerido";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(correo)) {
+      newErrors.correo = "El correo no es válido";
+      isValid = false;
+    }
+
+    if (!rol) {
+      newErrors.rol = "Seleccione su rol";
+      isValid = false;
+    }
+
     setErrors(newErrors);
-  };
-
-  const handleBlur = (name) => () => {
-    setTouched((prev) => ({ ...prev, [name]: true }));
-    validateField(name, name === "correo" ? correo : name === "ci" ? ci : rol);
+    return isValid;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
+
+    // Validar el formulario antes de enviar
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      const endpoint = rol === 'tutor' 
-        ? 'http://localhost:8000/api/consultar-inscripcion-tutor'
-        : 'http://localhost:8000/api/consultar-inscripcion-olimpista';
-
-      console.log('Enviando datos al servidor:', {
-        ci,
-        correo,
-        rol,
-        url: endpoint
-      });
+      const endpoint =
+        rol === "tutor"
+          ? "http://localhost:8000/api/consultar-inscripcion-tutor"
+          : "http://localhost:8000/api/consultar-inscripcion-olimpista";
 
       const response = await axios.post(endpoint, {
         carnetIdentidad: ci,
         correoElectronico: correo,
-        rol: rol
-      });
-
-      console.log('Respuesta completa del servidor:', {
-        status: response.status,
-        statusText: response.statusText,
-        headers: response.headers,
-        data: response.data
+        rol: rol,
       });
 
       if (response.data.success) {
-        const redirectPath = rol === 'tutor' 
-          ? '/consultar-inscripcion/resultado-tutor'
-          : '/consultar-inscripcion/resultado';
-          
-        navigate(redirectPath, { 
+        const redirectPath =
+          rol === "tutor"
+            ? "/consultar-inscripcion/resultado-tutor"
+            : "/consultar-inscripcion/resultado";
+
+        navigate(redirectPath, {
           state: { resultado: response.data },
-          replace: true 
+          replace: true,
         });
       } else {
-        setError(response.data.message || 'No se encontraron resultados');
+        setError(response.data.message || "No se encontraron resultados");
       }
     } catch (err) {
-      console.error('Error en la consulta:', err);
-      if (err.response) {
-        setError(err.response.data.message || 'Error al consultar la inscripción');
+      if (err.response?.data?.errors) {
+        // Si hay errores de validación del servidor
+        const serverErrors = err.response.data.errors;
+        const newErrors = {};
+
+        if (serverErrors.carnetIdentidad) {
+          newErrors.ci = serverErrors.carnetIdentidad[0];
+        }
+        if (serverErrors.correoElectronico) {
+          newErrors.correo = serverErrors.correoElectronico[0];
+        }
+        if (serverErrors.rol) {
+          newErrors.rol = serverErrors.rol[0];
+        }
+
+        setErrors(newErrors);
+      } else if (err.response) {
+        setError(
+          err.response.data.message || "Error al consultar la inscripción"
+        );
       } else if (err.request) {
-        setError('No se pudo conectar con el servidor. Por favor, verifica que el servidor Laravel esté corriendo.');
+        setError(
+          "No se pudo conectar con el servidor. Por favor, verifica que el servidor Laravel esté corriendo."
+        );
       } else {
-        setError('Error al procesar la solicitud');
+        setError("Error al procesar la solicitud");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,65 +116,68 @@ const ConsultarInscripcion = () => {
       <HeaderProp />
       <form className="consultar-form" onSubmit={handleSubmit} noValidate>
         <h2>Consultar Estado de Inscripción</h2>
-        
+
         <div className="form-group">
-          <label htmlFor="ci">Carnet de Identidad</label>
+          <label htmlFor="ci">
+            Carnet de Identidad <span className="required-field">*</span>
+          </label>
           <input
             type="text"
             id="ci"
             value={ci}
-            onChange={handleChange(setCi, "ci")}
-            onBlur={handleBlur("ci")}
-            className={touched.ci && errors.ci ? "invalid-input" : ""}
+            onChange={(e) => setCi(e.target.value)}
+            className={errors.ci ? "invalid-input" : ""}
             required
             placeholder="Ingrese su carnet de identidad"
             aria-required="true"
           />
-          {touched.ci && errors.ci && (
-            <div className="error-message">{errors.ci}</div>
-          )}
+          {errors.ci && <div className="error-message">{errors.ci}</div>}
         </div>
 
         <div className="form-group">
-          <label htmlFor="correo">Correo Electrónico</label>
+          <label htmlFor="correo">
+            Correo Electrónico <span className="required-field">*</span>
+          </label>
           <input
             type="email"
             id="correo"
             value={correo}
-            onChange={handleChange(setCorreo, "correo")}
-            onBlur={handleBlur("correo")}
-            className={touched.correo && errors.correo ? "invalid-input" : ""}
+            onChange={(e) => setCorreo(e.target.value)}
+            className={errors.correo ? "invalid-input" : ""}
             required
             placeholder="Ingrese su correo electrónico"
             aria-required="true"
           />
-          {touched.correo && errors.correo && (
+          {errors.correo && (
             <div className="error-message">{errors.correo}</div>
           )}
         </div>
 
         <div className="form-group">
-          <label htmlFor="rol">Rol</label>
+          <label htmlFor="rol">
+            Rol <span className="required-field">*</span>
+          </label>
           <select
             id="rol"
             value={rol}
-            onChange={handleChange(setRol, "rol")}
-            onBlur={handleBlur("rol")}
-            className={touched.rol && errors.rol ? "invalid-input" : ""}
+            onChange={(e) => setRol(e.target.value)}
+            className={errors.rol ? "invalid-input" : ""}
             required
             aria-required="true"
           >
             <option value="">Seleccione su rol</option>
             <option value="olimpista">Olimpista</option>
-            <option value="tutor">Tutor</option>
+            <option value="tutor">Tutor/Responsable Legal</option>
           </select>
-          {touched.rol && errors.rol && (
-            <div className="error-message">{errors.rol}</div>
-          )}
+          {errors.rol && <div className="error-message">{errors.rol}</div>}
         </div>
 
-        <button type="submit" className="submit-button" disabled={loading}>
-          {loading ? 'Consultando...' : 'Consultar'}
+        <button
+          type="submit"
+          className="btn-consulta submit-button"
+          disabled={loading}
+        >
+          {loading ? "Consultando..." : "CONSULTAR"}
         </button>
 
         {error && <div className="error-message">{error}</div>}

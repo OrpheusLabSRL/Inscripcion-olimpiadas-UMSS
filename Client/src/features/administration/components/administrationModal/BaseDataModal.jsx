@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Dropdown from "../../components/Dropdown.jsx";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
 import "../../Styles/ModalGeneral.css";
 import "../../Styles/Dropdown.css";
@@ -8,26 +7,31 @@ import {
   getOlimpiadas,
   getAreas,
   getCategoriaGrado,
+  getAreasCategoriasPorOlimpiada,
   asignarAreasYCategorias,
+  deleteAreasCategoriasPorOlimpiada,
 } from "../../../../api/Administration.api";
 
-const ManageBaseDataModal = ({ isOpen, onClose }) => {
+const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
   const [version, setVersion] = useState("");
+  const [versionLabel, setVersionLabel] = useState("");
   const [selectedAreas, setSelectedAreas] = useState([]);
   const [selectedCategorias, setSelectedCategorias] = useState({});
-  const [olimpiadas, setOlimpiadas] = useState([]);
   const [areas, setAreas] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [errors, setErrors] = useState({});
+  const [initialState, setInitialState] = useState({
+    areas: [],
+    categorias: {},
+  });
 
   useEffect(() => {
     if (!isOpen) return;
 
     const fetchData = async () => {
       try {
-        const olimpiadasData = await getOlimpiadas();
-        const areasData = await getAreas();
-        const categoriaGradoData = await getCategoriaGrado();
+        const [olimpiadasData, areasData, categoriaGradoData] =
+          await Promise.all([getOlimpiadas(), getAreas(), getCategoriaGrado()]);
 
         const categoriaMap = new Map();
         categoriaGradoData.forEach((entry) => {
@@ -41,22 +45,63 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
               grados: [],
             });
           }
-
           if (grado) {
             categoriaMap.get(cat.idCategoria).grados.push(grado);
           }
         });
 
-        setCategorias(Array.from(categoriaMap.values()));
-        setOlimpiadas(olimpiadasData.data || []);
         setAreas(areasData || []);
+        setCategorias(Array.from(categoriaMap.values()));
+
+        const selectedOlimpiad = olimpiadasData.data.find(
+          (o) => o.idOlimpiada === selectedVersion
+        );
+        if (selectedOlimpiad) {
+          setVersionLabel(selectedOlimpiad.version);
+        }
+
+        setVersion(selectedVersion);
       } catch (error) {
-        console.error("Error al cargar datos base:", error);
+        console.error("Error cargando datos base:", error);
       }
     };
 
     fetchData();
-  }, [isOpen]);
+  }, [isOpen, selectedVersion]);
+
+  useEffect(() => {
+    const cargarAsignacionesPrevias = async () => {
+      if (!version) return;
+
+      try {
+        const response = await getAreasCategoriasPorOlimpiada(version);
+        const data = Array.isArray(response) ? response : response.data || [];
+
+        const areasAsignadas = data.map((area) => area.idArea);
+        const categoriasAsignadas = {};
+
+        data.forEach((area) => {
+          categoriasAsignadas[area.idArea] = area.categorias.map(
+            (cat) => cat.idCategoria
+          );
+        });
+
+        setSelectedAreas(areasAsignadas);
+        setSelectedCategorias(categoriasAsignadas);
+
+        setInitialState({
+          areas: areasAsignadas,
+          categorias: categoriasAsignadas,
+        });
+      } catch (error) {
+        console.error("Error cargando áreas y categorías existentes:", error);
+      }
+    };
+
+    if (isOpen && version) {
+      cargarAsignacionesPrevias();
+    }
+  }, [isOpen, version]);
 
   const handleCategoriaChange = (areaId, values) => {
     setSelectedCategorias((prev) => ({
@@ -71,9 +116,13 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
 
   const handleReset = () => {
     setVersion("");
+    setVersionLabel("");
     setSelectedAreas([]);
     setSelectedCategorias({});
+    setAreas([]);
+    setCategorias([]);
     setErrors({});
+    setInitialState({ areas: [], categorias: {} });
     onClose();
   };
 
@@ -83,7 +132,7 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
     const newErrors = {};
     if (!version) newErrors.version = "Debe seleccionar una versión";
     if (selectedAreas.length === 0)
-      newErrors.areas = "Debe seleccionar al menos una área";
+      newErrors.areas = "Debe seleccionar al menos un área";
 
     selectedAreas.forEach((areaId) => {
       if (
@@ -99,7 +148,7 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
     if (Object.keys(newErrors).length > 0) return;
 
     const confirmacion = window.confirm(
-      "¿Está seguro de finalizar esta configuración?"
+      "¿Está seguro de guardar esta configuración?"
     );
     if (!confirmacion) return;
 
@@ -115,8 +164,13 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
     });
 
     try {
-      await asignarAreasYCategorias(combinaciones);
-      alert("¡Configuración guardada exitosamente!");
+      await deleteAreasCategoriasPorOlimpiada(version);
+
+      if (combinaciones.length > 0) {
+        await asignarAreasYCategorias(combinaciones);
+      }
+
+      alert("¡Configuración actualizada exitosamente!");
       handleReset();
       window.location.reload();
     } catch (error) {
@@ -138,36 +192,24 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
         </button>
 
         <form onSubmit={handleSubmit}>
-          <h3 className="section-title">
-            Seleccionar la Versión de la Olimpiada
+          <h3 className="section-title" style={{ color: "#000" }}>
+            Versión Seleccionada
           </h3>
-          <div className="dropdown-container">
-            <Dropdown
-              size="large"
-              name="version"
-              placeholder="Seleccione la versión de la Olimpiada"
-              options={olimpiadas.map((o) => ({
-                value: o.idOlimpiada,
-                label: `Versión ${o.version}`,
-              }))}
-              value={version}
-              onChange={(e) => {
-                setVersion(e.target.value);
-                setErrors((prev) => ({ ...prev, version: "" }));
-              }}
-              error={!!errors.version}
-              errorMessage={errors.version}
-            />
+          <div
+            style={{
+              padding: "0.75rem 1rem",
+              borderRadius: "8px",
+              backgroundColor: "#d8d7bc",
+              fontWeight: "600",
+              marginBottom: "1rem",
+            }}
+          >
+            {versionLabel ? `Versión ${versionLabel}` : "Versión no disponible"}
           </div>
 
-          <p className="note" style={{ fontSize: "0.9rem" }}>
-            <a href="#" style={{ color: "#2563eb" }}>
-              Nota: Si desea añadir o modificar una nueva área o categoría
-              contactarse con un administrador
-            </a>
-          </p>
-
-          <h3 className="section-title">Áreas de la Olimpiada</h3>
+          <h3 className="section-title" style={{ color: "#000" }}>
+            Áreas de la Olimpiada
+          </h3>
           <div className="dropdown-container">
             <div className="dropdown-wrapper large">
               <MultiSelectDropdown
@@ -187,10 +229,11 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
                 errorMessage={errors.areas}
               />
             </div>
-            {errors.areas && <p className="error-message">{errors.areas}</p>}
           </div>
 
-          <h3 className="section-title">Categorías de la Olimpiada</h3>
+          <h3 className="section-title" style={{ color: "#000" }}>
+            Categorías de la Olimpiada
+          </h3>
 
           {selectedAreas.map((areaId) => {
             const area = areas.find((a) => a.idArea === areaId);
@@ -225,7 +268,7 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
                     <MultiSelectDropdown
                       label=""
                       name={`categorias-${areaId}`}
-                      placeholder="Seleccione las Categoría de la Área"
+                      placeholder="Seleccione las Categorías del Área"
                       options={categoriasOptions}
                       selectedValues={selectedCategorias[areaId] || []}
                       onChange={(values) =>
@@ -251,21 +294,19 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
                     >
                       {categoriasSeleccionadas.map((cat) => (
                         <li key={cat.idCategoria}>
+                          <strong>{cat.nombreCategoria}</strong>{" "}
                           {cat.grados && cat.grados.length > 0 && (
-                            <>
-                              <strong>{cat.nombreCategoria}</strong>{" "}
-                              <span style={{ color: "#666" }}>
-                                (
-                                {cat.grados
-                                  .map(
-                                    (g) =>
-                                      `${g.numeroGrado}° de ${g.nivel}` ||
-                                      g.nombreGrado
-                                  )
-                                  .join(", ")}
+                            <span style={{ color: "#666" }}>
+                              (
+                              {cat.grados
+                                .map(
+                                  (g) =>
+                                    `${g.numeroGrado}° de ${g.nivel}` ||
+                                    g.nombreGrado
                                 )
-                              </span>
-                            </>
+                                .join(", ")}
+                              )
+                            </span>
                           )}
                         </li>
                       ))}
@@ -281,7 +322,7 @@ const ManageBaseDataModal = ({ isOpen, onClose }) => {
             style={{ justifyContent: "flex-end", marginTop: "2rem" }}
           >
             <button type="submit" className="save-button">
-              REGISTRAR
+              Guardar
             </button>
           </div>
         </form>

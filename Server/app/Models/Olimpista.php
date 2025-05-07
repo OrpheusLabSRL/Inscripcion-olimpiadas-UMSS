@@ -14,7 +14,7 @@ class Olimpista extends Model
     protected $fillable = [
         'fechaNacimiento',
         'departamento',
-        'provincia',
+        'municipio',
         'curso',
         'colegio',
         'idPersona'
@@ -26,7 +26,7 @@ class Olimpista extends Model
         return $this->belongsTo(Persona::class, 'idPersona');
     }
 
-    // Relación con Inscripciones (un clímpista puede tener muchas inscripciones)
+    // Relación con Inscripciones (un olimpista puede tener muchas inscripciones)
     public function inscripciones()
     {
         return $this->hasMany(Inscripcion::class, 'idOlimpista');

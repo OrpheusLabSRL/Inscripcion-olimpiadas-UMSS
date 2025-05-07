@@ -18,15 +18,14 @@ class OlimpiadaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nombreOlimpiada' => 'required|string|max:100|unique:olimpiadas,nombreOlimpiada',
+            'nombreOlimpiada' => 'required|string|max:100',
             'version' => 'required|integer|min:1',
             'fechaInicioOlimpiada' => 'required|date',
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
         ]);
 
-        $validated['estadoOlimpiada'] = true;
+        $validated['estadoOlimpiada'] = false;
         $validated['idUsuario'] = 1;
-
         $olimpiada = Olimpiada::create($validated);
 
         return response()->json([
@@ -52,6 +51,24 @@ class OlimpiadaController extends Controller
 
         return response()->json([
             'message' => 'Olimpiada actualizada correctamente',
+            'data' => $olimpiada
+        ]);
+    }
+
+    // API - Cambiar estado de una olimpiada
+    public function cambiarEstado(Request $request, $id)
+    {
+        $olimpiada = Olimpiada::findOrFail($id);
+
+        $request->validate([
+            'estadoOlimpiada' => 'required|boolean',
+        ]);
+
+        $olimpiada->estadoOlimpiada = $request->estadoOlimpiada;
+        $olimpiada->save();
+
+        return response()->json([
+            'message' => 'Estado actualizado correctamente',
             'data' => $olimpiada
         ]);
     }

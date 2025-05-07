@@ -16,7 +16,6 @@ class ContactoController extends Controller
             Log::info('=== INICIO DE ENVÍO DE CORREO ===');
             Log::info('Datos recibidos:', $request->all());
 
-            // Validar los datos
             $request->validate([
                 'nombre' => 'required|string',
                 'correo' => 'required|email',
@@ -50,17 +49,8 @@ class ContactoController extends Controller
             Log::info('Iniciando envío de correo...');
             
             try {
-                // Cambiar temporalmente el driver a 'log' para depuración
-                config(['mail.default' => 'log']);
-                
-                Mail::to('201904903@est.umss.edu.bo')->send(new ContactoMail($datos));
-                
+                Mail::to('orpheuslab011@gmail.com')->send(new ContactoMail($datos));
                 Log::info('Correo enviado exitosamente');
-
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Correo enviado exitosamente'
-                ]);
             } catch (Swift_TransportException $e) {
                 Log::error('Error de transporte SMTP:', [
                     'error' => $e->getMessage(),
@@ -69,6 +59,11 @@ class ContactoController extends Controller
                 ]);
                 throw $e;
             }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Correo enviado exitosamente'
+            ]);
         } catch (\Exception $e) {
             Log::error('Error al enviar correo:', [
                 'error' => $e->getMessage(),

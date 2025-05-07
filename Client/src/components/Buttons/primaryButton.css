@@ -11,10 +11,10 @@
 .btn-tag {
   border-radius: 5px;
   font-size: var(--btn-font-primary);
-  background: linear-gradient(45deg, #333a73, #387adf);
   color: #fff;
   cursor: pointer;
   padding: 5px;
+  background-color: var(--primary-color);
 }
 
 .config-btn-primary > label {
@@ -23,7 +23,8 @@
 }
 
 .btn-primary:hover {
-  background-color: #387adf;
+  background-color: var(--tertiary-color);
+  color: #000;
 }
 
 /*TAGS*/

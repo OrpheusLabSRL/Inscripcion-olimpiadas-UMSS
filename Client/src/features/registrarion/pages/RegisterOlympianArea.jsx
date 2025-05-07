@@ -6,16 +6,22 @@ import "../Styles/RegisterOlympianArea.css";
 import { AreaCategoriaElement } from "../components/AreaCategoriaElement/AreaCategoriaElement";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { NextPage } from "../../../components/Buttons/NextPage";
+import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
 import { useEffect, useState } from "react";
 import swal from "sweetalert";
 import { useForm } from "react-hook-form";
 import { IoArrowBackCircle } from "react-icons/io5";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { MdCleaningServices } from "react-icons/md";
+import Swal from "sweetalert2";
 
 //api
-import { getCatalogoCompleto } from "../../../api/inscription.api";
+import {
+  getCatalogoCompleto,
+  getOlimpistaEnable,
+} from "../../../api/inscription.api";
 
 //util
 import {
@@ -24,21 +30,23 @@ import {
 } from "../utils/MethodsArea";
 
 export const RegisterOlympianArea = () => {
+  const [currentStep, sertCurrentStep] = useState(3);
+  const [totalSteps, setTotalStep] = useState(4);
   const [catalogo, setCatalogo] = useState([]);
   const [areaInteres, setAreaInteres] = useState([]);
   const [categoriasInteres, setCategoriasInteres] = useState(() => {
-    const stored = localStorage.getItem("CategoriasFiltradas");
+    const stored = sessionStorage.getItem("CategoriasFiltradas");
     return stored ? JSON.parse(stored) : null;
   });
 
   const [categoriasInteresSecundaria, setCategoriasInteresSecundaria] =
     useState(() => {
-      const stored = localStorage.getItem("CategoriasFiltradasSecundaria");
+      const stored = sessionStorage.getItem("CategoriasFiltradasSecundaria");
       return stored ? JSON.parse(stored) : null;
     });
 
   const navigation = useNavigate();
-
+  const location = useLocation();
   const {
     register,
     handleSubmit,
@@ -47,10 +55,10 @@ export const RegisterOlympianArea = () => {
     setValue,
   } = useForm({
     defaultValues: {
-      AreaPrincipal: localStorage.getItem("AreaPrincipal") || "",
-      CategoriaPrincipal: localStorage.getItem("CategoriaPrincipal") || "",
-      AreaSecundaria: localStorage.getItem("AreaSecundaria") || "",
-      CategoriaSecundaria: localStorage.getItem("CategoriaSecundaria") || "",
+      AreaPrincipal: sessionStorage.getItem("AreaPrincipal") || "",
+      CategoriaPrincipal: sessionStorage.getItem("CategoriaPrincipal") || "",
+      AreaSecundaria: sessionStorage.getItem("AreaSecundaria") || "",
+      CategoriaSecundaria: sessionStorage.getItem("CategoriaSecundaria") || "",
     },
     mode: "onChange",
   });
@@ -61,32 +69,33 @@ export const RegisterOlympianArea = () => {
   const watchedCategoriaSecundaria = watch("CategoriaSecundaria");
 
   useEffect(() => {
-    localStorage.setItem("AreaPrincipal", watchedAreaPrincipal);
+    sessionStorage.setItem("AreaPrincipal", watchedAreaPrincipal);
   }, [watchedAreaPrincipal]);
 
   useEffect(() => {
-    localStorage.setItem("CategoriaPrincipal", watchedCategoriaPrincipal);
+    sessionStorage.setItem("CategoriaPrincipal", watchedCategoriaPrincipal);
   }, [watchedCategoriaPrincipal]);
   useEffect(() => {
-    localStorage.setItem("AreaSecundaria", watchedAreaSecundaria);
+    sessionStorage.setItem("AreaSecundaria", watchedAreaSecundaria);
   }, [watchedAreaSecundaria]);
 
   useEffect(() => {
-    localStorage.setItem("CategoriaSecundaria", watchedCategoriaSecundaria);
+    sessionStorage.setItem("CategoriaSecundaria", watchedCategoriaSecundaria);
   }, [watchedCategoriaSecundaria]);
 
   useEffect(() => {
     const handleUnload = () => {
-      localStorage.removeItem("AreaPrincipal");
-      localStorage.removeItem("CategoriaPrincipal");
-      localStorage.removeItem("AreaSecundaria");
-      localStorage.removeItem("CategoriaSecundaria");
-      localStorage.removeItem("CategoriasFiltradas");
-      localStorage.removeItem("CategoriasFiltradasSecundaria");
-      localStorage.removeItem("TutorArea1");
-      localStorage.removeItem("TutorArea2");
+      sessionStorage.removeItem("AreaPrincipal");
+      sessionStorage.removeItem("CategoriaPrincipal");
+      sessionStorage.removeItem("AreaSecundaria");
+      sessionStorage.removeItem("CategoriaSecundaria");
+      sessionStorage.removeItem("CategoriasFiltradas");
+      sessionStorage.removeItem("CategoriasFiltradasSecundaria");
+      sessionStorage.removeItem("TutorArea1");
+      sessionStorage.removeItem("TutorArea2");
     };
     window.addEventListener("beforeunload", handleUnload);
+    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
     return () => {
       window.removeEventListener("beforeunload", handleUnload);
     };
@@ -106,38 +115,39 @@ export const RegisterOlympianArea = () => {
 
   useEffect(() => {
     const areasFiltradas = filtrarAreasPorCurso(
-      localStorage.getItem("CursoOlympian"),
+      sessionStorage.getItem("CursoOlympian"),
       catalogo
     );
     setAreaInteres(areasFiltradas);
   }, [catalogo]);
 
   const onChooseArea = () => (e) => {
-    if (e.target.value !== "") {
-      const categoriasFiltradas = filtrarCategoriasPorCursoYArea(
-        localStorage.getItem("CursoOlympian"),
-        e.target.value,
-        catalogo
+    const categoriasFiltradas = filtrarCategoriasPorCursoYArea(
+      sessionStorage.getItem("CursoOlympian"),
+      e.target.value,
+      catalogo
+    );
+
+    if (e.target.name == "AreaPrincipal") {
+      sessionStorage.setItem(
+        "CategoriasFiltradas",
+        JSON.stringify(categoriasFiltradas)
       );
-
-      if (e.target.name == "AreaPrincipal") {
-        localStorage.setItem(
-          "CategoriasFiltradas",
-          JSON.stringify(categoriasFiltradas)
-        );
-        setCategoriasInteres(categoriasFiltradas);
-      } else {
-        localStorage.setItem(
-          "CategoriasFiltradasSecundaria",
-          JSON.stringify(categoriasFiltradas)
-        );
-        setCategoriasInteresSecundaria(categoriasFiltradas);
-      }
-
-      setValue(e.target.name, e.target.value);
+      setCategoriasInteres(categoriasFiltradas);
+      if (e.target.value == "")
+        sessionStorage.setItem("CategoriaPrincipal", "");
     } else {
-      setCategoriasInteres(null);
+      sessionStorage.setItem(
+        "CategoriasFiltradasSecundaria",
+        JSON.stringify(categoriasFiltradas)
+      );
+      setCategoriasInteresSecundaria(categoriasFiltradas);
+      if (e.target.value == "")
+        sessionStorage.setItem("CategoriaSecundaria", "");
     }
+
+    setValue(e.target.name, e.target.value);
+    console.log(e.target.value);
   };
 
   const onSubmit = async (data) => {
@@ -173,20 +183,21 @@ export const RegisterOlympianArea = () => {
         );
         return;
       }
-
-      // if (areasOlimpista.length == 2) {
-      //   swal(
-      //     "No se puede registrar mas de 2 áreas",
-      //     "Ya se registro en 2 áreas",
-      //     "warning"
-      //   );
-      //   return;
-      // }
-
-      // await setNewInscription(dataAreas);
-      // const updatedAreas = await getAreasOlimpista(data.id_olimpista);
-      // setAreasOlimpista(updatedAreas.data.data.areas);
-
+      const resEnable = await getOlimpistaEnable(
+        sessionStorage.getItem("CarnetIdentidadOlympian")
+      );
+      if (
+        resEnable?.data?.data?.inscripciones_actuales == 1 &&
+        data.AreaPrincipal &&
+        data.AreaSecundaria
+      ) {
+        swal(
+          "No se puede inscribir en mas de 2 áreas",
+          "El olimpista solo puede inscribirse en una área mas",
+          "warning"
+        );
+        return;
+      }
       navigation("/register/tutor-legal", data);
     } catch (error) {
       console.log(error);
@@ -194,17 +205,64 @@ export const RegisterOlympianArea = () => {
     }
   };
 
+  const cleanFlieds = () => {
+    setValue("AreaPrincipal", "");
+    setValue("CategoriaPrincipal", "");
+    setValue("AreaSecundaria", "");
+    setValue("CategoriaSecundaria", "");
+    setCategoriasInteres([]);
+    setCategoriasInteresSecundaria(null);
+  };
+
+  const cancelInscription = async () => {
+    const confirmacion = await Swal.fire({
+      title: "¿Estás seguro que quieres salir?",
+      text: "Se perderan los datos ingresados.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, aceptar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (confirmacion.isConfirmed) {
+      limpiarCamposLocalStorage();
+      navigation(
+        sessionStorage.getItem("tutorInscripcionId")
+          ? "/register/listRegistered"
+          : "/register"
+      );
+    }
+  };
+
+  const limpiarCamposLocalStorage = () => {
+    const campoAConservar = sessionStorage.getItem("tutorInscripcionId");
+    sessionStorage.clear();
+    if (campoAConservar !== null)
+      sessionStorage.setItem("tutorInscripcionId", campoAConservar);
+  };
+
   return (
-    <>
+    <div className="container-form">
+      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <NavLink to={"/register/olympian"}>
         <IoArrowBackCircle className="btn-back" />
       </NavLink>
+
       <form
         className="container-area-form-register"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="input-2c">
           <h1>Datos de competición</h1>
+        </div>
+
+        <div className="container-clean-fields input-2c">
+          <p>Limpiar campos</p>
+          <MdCleaningServices
+            className="icon-clean-fields"
+            onClick={cleanFlieds}
+          />
         </div>
 
         <AreaCategoriaElement
@@ -233,7 +291,12 @@ export const RegisterOlympianArea = () => {
           nameCategoria={"CategoriaSecundaria"}
           areas={areaInteres}
           categorias={categoriasInteresSecundaria}
-          mandatory={categoriasInteresSecundaria ? true : false}
+          mandatory={
+            categoriasInteresSecundaria &&
+            categoriasInteresSecundaria.length !== 0
+              ? true
+              : false
+          }
           asterisk={false}
           onChooseArea={onChooseArea()}
           setValue={setValue}
@@ -244,13 +307,13 @@ export const RegisterOlympianArea = () => {
         />
 
         <div className="container-btn-back-olympian input-1c">
-          <NextPage to={"/"} value="Cancelar" />
+          <NextPage value="Cancelar" onClick={cancelInscription} />
         </div>
 
         <div className="container-btn-next-olympian input-1c">
           <PrimaryButton type="submit" value="Siguiente" />
         </div>
       </form>
-    </>
+    </div>
   );
 };

@@ -26,7 +26,7 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
 
           setAgrupado(agrupadoPorArea);
         } catch (error) {
-          console.error("❌ Error al cargar áreas y categorías:", error);
+          console.error("Error al cargar áreas y categorías:", error);
         }
       }
     };
@@ -35,6 +35,15 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
   }, [olimpiada]);
 
   if (!isOpen || !olimpiada) return null;
+
+  // 👉 Agrupar grados de 3 en 3
+  const agruparGrados = (grados) => {
+    const grupos = [];
+    for (let i = 0; i < grados.length; i += 3) {
+      grupos.push(grados.slice(i, i + 3));
+    }
+    return grupos;
+  };
 
   return (
     <div className="modal-overlay">
@@ -78,47 +87,71 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
           className="area-categorias-container"
           style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
         >
-          {Object.entries(agrupado).map(([areaId, area]) => (
+          {Object.keys(agrupado).length > 0 ? (
+            Object.entries(agrupado).map(([areaId, area]) => (
+              <div
+                className="area-categoria-box"
+                key={areaId}
+                style={{
+                  padding: "0.6rem 0.8rem",
+                  border: "1px solid #ccc",
+                  borderRadius: "6px",
+                  backgroundColor: "#D8D7BC",
+                }}
+              >
+                <div className="area-info" style={{ marginBottom: "0.4rem" }}>
+                  <strong>Área:</strong> {area.nombreArea}
+                </div>
+                <div className="categoria-info">
+                  <strong>Categorías:</strong>
+                  <ul style={{ margin: "0.4rem 0 0", paddingLeft: "1.2rem" }}>
+                    {area.categorias.map((cat) => (
+                      <li
+                        key={cat.idCategoria}
+                        style={{ marginBottom: "0.25rem" }}
+                      >
+                        {cat.nombreCategoria}
+                        {cat.grados && cat.grados.length > 0 && (
+                          <>
+                            {" "}
+                            (
+                            {agruparGrados(cat.grados).map((grupo, index) => (
+                              <React.Fragment key={index}>
+                                {grupo
+                                  .map(
+                                    (grado) =>
+                                      `${grado.numeroGrado}° ${grado.nivel}`
+                                  )
+                                  .join(", ")}
+                                {index <
+                                  agruparGrados(cat.grados).length - 1 && (
+                                  <br />
+                                )}
+                              </React.Fragment>
+                            ))}
+                            )
+                          </>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))
+          ) : (
             <div
-              className="area-categoria-box"
-              key={areaId}
               style={{
-                padding: "0.6rem 0.8rem",
-                border: "1px solid #ccc",
+                padding: "1rem",
+                backgroundColor: "#D8D7BC",
                 borderRadius: "6px",
-                backgroundColor: "#f9f9f9",
+                textAlign: "center",
+                color: "#666",
+                fontStyle: "italic",
               }}
             >
-              <div className="area-info" style={{ marginBottom: "0.4rem" }}>
-                <strong>Área:</strong> {area.nombreArea}
-              </div>
-              <div className="categoria-info">
-                <strong>Categorías:</strong>
-                <ul style={{ margin: "0.4rem 0 0", paddingLeft: "1.2rem" }}>
-                  {area.categorias.map((cat) => (
-                    <li
-                      key={cat.idCategoria}
-                      style={{ marginBottom: "0.25rem" }}
-                    >
-                      {cat.nombreCategoria}
-                      {cat.grados && cat.grados.length > 0 && (
-                        <>
-                          {" "}
-                          (
-                          {cat.grados
-                            .map(
-                              (grado) => `${grado.numeroGrado}° ${grado.nivel}`
-                            )
-                            .join(", ")}
-                          )
-                        </>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              No existen Áreas ni Categorías registradas en esta Olimpiada.
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>

@@ -13,6 +13,7 @@ const AreasTable = () => {
         setAreas(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error al obtener áreas:", error);
+        setAreas([]);
       } finally {
         setLoading(false);
       }
@@ -20,10 +21,6 @@ const AreasTable = () => {
 
     fetchAreas();
   }, []);
-
-  if (loading) return <p>Cargando áreas...</p>;
-
-  if (areas.length === 0) return <p>No hay áreas registradas.</p>;
 
   return (
     <table className="data-table">
@@ -36,22 +33,32 @@ const AreasTable = () => {
         </tr>
       </thead>
       <tbody>
-        {areas.map((area) => (
-          <tr key={area.idArea}>
-            <td>{area.nombreArea}</td>
-            <td>{area.descripcionArea || "—"}</td>
-            <td>Bs. {parseFloat(area.costoArea).toFixed(2)}</td>
-            <td>
-              <span
-                className={`badge badge-${
-                  area.estadoArea ? "success" : "danger"
-                }`}
-              >
-                {area.estadoArea ? "Activo" : "Inactivo"}
-              </span>
-            </td>
+        {loading ? (
+          <tr>
+            <td colSpan="4">Cargando áreas...</td>
           </tr>
-        ))}
+        ) : areas.length > 0 ? (
+          areas.map((area) => (
+            <tr key={area.idArea}>
+              <td>{area.nombreArea}</td>
+              <td>{area.descripcionArea || "—"}</td>
+              <td>Bs. {parseFloat(area.costoArea).toFixed(2)}</td>
+              <td>
+                <span
+                  className={`badge badge-${
+                    area.estadoArea ? "success" : "danger"
+                  }`}
+                >
+                  {area.estadoArea ? "Activo" : "Inactivo"}
+                </span>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="4">No hay áreas registradas.</td>
+          </tr>
+        )}
       </tbody>
     </table>
   );
