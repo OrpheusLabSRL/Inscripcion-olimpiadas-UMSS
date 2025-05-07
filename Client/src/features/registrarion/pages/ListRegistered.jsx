@@ -4,6 +4,7 @@ import "../Styles/ListRegistered.css";
 //Components
 import { ListElement } from "../components/ListElement/ListElement";
 import { NextPage } from "../../../components/Buttons/NextPage";
+import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 
 //react
 import { useEffect, useState } from "react";
@@ -18,31 +19,33 @@ import {
 
 //axios
 import axios from "axios";
-import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 
 export const ListRegistered = () => {
   const [dataOlympians, setDataOlympians] = useState([]);
   const [registering, setRegistering] = useState(true);
+  const [tutorId, setTutorId] = useState(null);
   const location = useLocation();
-  const tutorId = sessionStorage.getItem("tutorInscripcionId");
 
   useEffect(() => {
-    const tutorId = sessionStorage.getItem("tutorInscripcionId");
-    if (!tutorId) {
-      console.error("ID del tutor no encontrado en sessionStorage.");
+    const storedTutorId = sessionStorage.getItem("tutorInscripcionId");
 
+    if (!storedTutorId) {
+      console.error("ID del tutor no encontrado en sessionStorage.");
       return;
     }
 
+    setTutorId(storedTutorId);
+
     const getStudents = async () => {
       try {
-        const res = await getDataOlympian(tutorId);
+        const res = await getDataOlympian(storedTutorId);
         setRegistering(res.data.data[0].inscripciones[0].registrandose);
         setDataOlympians(res.data.data);
       } catch (error) {
         console.error("Error en la petición:", error);
       }
     };
+
     getStudents();
   }, []);
 
@@ -56,7 +59,7 @@ export const ListRegistered = () => {
       const response = await axios.get(
         `http://localhost:8000/boletas/generar/${tutorId}`,
         {
-          responseType: "blob", // Esperamos un archivo
+          responseType: "blob",
         }
       );
 
@@ -81,12 +84,13 @@ export const ListRegistered = () => {
   const finishRegister = async () => {
     const confirmacion = await Swal.fire({
       title: "¿Estás seguro que quieres finalizar el registro?",
-      text: "Ya no podra registrar mas estudiantes y podra generar la boleta de pago.",
+      text: "Ya no podrá registrar más estudiantes y podrá generar la boleta de pago.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Sí, aceptar",
       cancelButtonText: "Cancelar",
     });
+
     if (confirmacion.isConfirmed) {
       try {
         await finishRegistering(tutorId);
@@ -103,7 +107,6 @@ export const ListRegistered = () => {
       <div className="container-list-registered">
         <div className="list-header">
           <h1>Estudiantes Registrados</h1>
-
           <NextPage
             value="+ Agregar Estudiante"
             className={`btn-add-student ${
@@ -116,7 +119,14 @@ export const ListRegistered = () => {
               sessionStorage.setItem("prevPage", location.pathname)
             }
           />
+          <button
+            className="btn-primary btn-next-page btn-add-student"
+            onClick={generarBoleta}
+          >
+            Generar Boleta
+          </button>
         </div>
+
         <div className="container-list">
           {dataOlympians.map((estudiante) => (
             <ListElement data={estudiante} key={estudiante.id_olimpista} />
