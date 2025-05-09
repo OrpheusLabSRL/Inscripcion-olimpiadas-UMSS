@@ -1,32 +1,23 @@
-/* registerexcel.css - Versión ajustada para evitar conflicto con sidebar */
-
-/* Contenedor principal - Ajustes clave: */
 .app-background {
-  background-color: #94b4c1;
+  background-color: #94B4C1;
   min-height: 100vh;
   padding: 20px;
   display: flex;
-  justify-content: flex-start; /* Cambiado de center a flex-start */
-  align-items: flex-start; /* Cambiado de center a flex-start */
-  margin-left: 250px; /* Asegura espacio para UN sidebar */
-  width: calc(100% - 250px); /* Calcula el ancho restante */
+  justify-content: center;
+  align-items: center;
 }
 
-/* Contenedor del formulario - Ajustes: */
 .excel-container {
   background-color: white;
-  width: 90%; /* Ocupa todo el espacio disponible */
-  max-width: 1200px; /* Máximo ancho pero flexible */
+  max-width: 1200px;
+  width: 100%;
+  margin: 20px;
   padding: 30px;
-  margin: 50px auto;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  /* Se eliminó margin-left porque ya lo maneja .app-background */
-  overflow-x: auto; /* Scroll horizontal solo si es necesario */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ESTILOS EXISTENTES (conservan su formato original) */
 .excel-header {
   margin-bottom: 30px;
 }
@@ -144,7 +135,7 @@
   margin-bottom: 0;
 }
 
-.data-section-excel {
+.data-section {
   margin-top: 30px;
   position: relative;
 }
@@ -217,7 +208,7 @@
   font-weight: bold;
 }
 
-.action-buttons-excel {
+.action-buttons {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
@@ -238,127 +229,28 @@
 .register-btn:hover {
   background-color: #1a2a38;
 }
-.action-btn.loading {
-  opacity: 0.8;
-  pointer-events: none;
-}
-
-.spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
-  margin-right: 8px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.alert-message {
-  padding: 12px;
-  border-radius: 4px;
-  margin: 15px 0;
-  display: flex;
-  align-items: center;
-}
-
-.alert-message i {
-  margin-right: 8px;
-}
-
-.error-message {
-  background-color: #ffebee;
-  color: #c62828;
-}
-
-.success-message {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-}
-
-.info-message {
-  background-color: #e3f2fd;
-  color: #1565c0;
-  padding: 12px;
-  border-radius: 4px;
-  margin: 15px 0;
-}
-.empty-table-message {
-  text-align: center;
-  padding: 20px;
-  color: #666;
-  font-style: italic;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-.data-table th,
-.data-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-.data-table th {
-  background-color: #f2f2f2;
-  position: sticky;
-  top: 0;
-}
-
-.table-container {
-  max-height: 500px;
-  overflow-y: auto;
-  margin-bottom: 20px;
-}
-
-/* MEDIA QUERIES AJUSTADAS */
-@media (max-width: 1024px) {
-  .app-background {
-    margin-left: 200px;
-    width: calc(100% - 200px);
-  }
-}
 
 @media (max-width: 768px) {
-  .app-background {
-    margin-left: 0;
-    width: 100%;
-    padding: 15px;
-    padding-top: 80px; /* Espacio para header móvil */
-  }
-
   .excel-container {
     padding: 15px;
-    margin: 0 auto; /* Centrado en móvil */
   }
-
+  
   .excel-header h1 {
     font-size: 20px;
   }
-
+  
   .download-section {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-
+  
   .table-container {
     max-height: 400px;
     font-size: 12px;
   }
-
-  .data-table th,
-  .data-table td {
+  
+  .data-table th, .data-table td {
     padding: 8px;
   }
 

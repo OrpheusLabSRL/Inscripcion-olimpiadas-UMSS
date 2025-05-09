@@ -24,12 +24,23 @@ inscriptionApi.interceptors.response.use(
     }
 );
 
+export const validateExcelData = async (excelData) => {
+    try {
+        const response = await inscriptionApi.post("/validate-excel-data", {
+            olimpistas: excelData,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error validating Excel data:", error);
+        throw error;
+    }
+};
+
 export const registerFromExcel = async (responsibleData, excelData) => {
     try {
         const response = await inscriptionApi.post("/register-from-excel", {
             responsible: responsibleData,
             olimpistas: excelData,
-            formaInscripcion: "Excel",
         });
         return response.data;
     } catch (error) {
