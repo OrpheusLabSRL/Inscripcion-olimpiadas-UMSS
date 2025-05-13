@@ -66,11 +66,8 @@ export const OCRValidation = () => {
       const codigo = extractCodigoBoleta(text);
       setCodigoBoleta(codigo);
 
-      if (codigo) {
-        await checkCodigoBoleta(codigo);
-      } else {
-        setBoletaExists(false);
-      }
+      // Remove automatic backend check here
+      // User will click button to check
     } catch (error) {
       setOcrResult("Error al procesar la imagen: " + error.message);
       setBoletaExists(false);
@@ -103,6 +100,11 @@ export const OCRValidation = () => {
         <div style={{marginTop: "10px"}}>
           <strong>Código de Boleta detectado:</strong> {codigoBoleta}
         </div>
+      )}
+      {codigoBoleta && (
+        <button onClick={() => checkCodigoBoleta(codigoBoleta)} style={{marginTop: "10px"}}>
+          Comprobar Boleta
+        </button>
       )}
       {boletaExists !== null && (
         <div style={{marginTop: "10px", color: boletaExists ? "green" : "red"}}>
