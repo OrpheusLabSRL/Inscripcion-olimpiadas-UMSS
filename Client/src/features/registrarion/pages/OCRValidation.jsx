@@ -25,6 +25,12 @@ export const OCRValidation = () => {
     return match ? match[1].trim() : null;
   };
 
+  const extractPayerName = (text) => {
+    const regex = /recibi de:\s*([A-Z\s]+)/i;
+    const match = text.match(regex);
+    return match ? match[1].trim() : null;
+  };
+
   const checkCodigoBoleta = async (codigo) => {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/boletaPago/check", {
@@ -32,7 +38,10 @@ export const OCRValidation = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ codigoBoleta: codigo }),
+        body: JSON.stringify({ 
+          codigoBoleta: codigo,
+          payerName: extractPayerName(ocrResult)
+        }),
       });
       const data = await response.json();
       setBoletaExists(data.exists);
