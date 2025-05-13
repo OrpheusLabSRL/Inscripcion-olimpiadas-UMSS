@@ -70,13 +70,6 @@ const OlympiadsTable = () => {
       const tieneAsignaciones =
         data.length > 0 && data.some((area) => area.categorias.length > 0);
 
-      if (!tieneAsignaciones) {
-        alert(
-          "No puedes activar esta olimpiada. No tiene áreas ni categorías registradas."
-        );
-        return;
-      }
-
       await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
       await fetchOlimpiads();
     } catch (error) {

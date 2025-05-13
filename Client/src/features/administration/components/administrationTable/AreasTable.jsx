@@ -28,35 +28,23 @@ const AreasTable = () => {
         <tr>
           <th scope="col">Nombre</th>
           <th scope="col">Descripción</th>
-          <th scope="col">Costo</th>
-          <th scope="col">Estado</th>
         </tr>
       </thead>
       <tbody>
         {loading ? (
           <tr>
-            <td colSpan="4">Cargando áreas...</td>
+            <td colSpan="2">Cargando áreas...</td>
           </tr>
         ) : areas.length > 0 ? (
           areas.map((area) => (
             <tr key={area.idArea}>
               <td>{area.nombreArea}</td>
               <td>{area.descripcionArea || "—"}</td>
-              <td>Bs. {parseFloat(area.costoArea).toFixed(2)}</td>
-              <td>
-                <span
-                  className={`badge badge-${
-                    area.estadoArea ? "success" : "danger"
-                  }`}
-                >
-                  {area.estadoArea ? "Activo" : "Inactivo"}
-                </span>
-              </td>
             </tr>
           ))
         ) : (
           <tr>
-            <td colSpan="4">No hay áreas registradas.</td>
+            <td colSpan="2">No hay áreas registradas.</td>
           </tr>
         )}
       </tbody>

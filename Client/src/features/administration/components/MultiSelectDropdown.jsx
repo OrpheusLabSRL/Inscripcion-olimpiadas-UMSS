@@ -10,6 +10,7 @@ const MultiSelectDropdown = ({
   placeholder = "Seleccione una opción",
   error = false,
   errorMessage = "",
+  size = "medium", // 'small', 'medium', 'large'
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -39,24 +40,20 @@ const MultiSelectDropdown = ({
     .join(", ");
 
   return (
-    <div className="multi-dropdown-container" ref={dropdownRef}>
+    <div className={`dropdown-container ${error ? "error" : ""}`}>
       {label && (
-        <label
-          className="multi-dropdown-label"
-          style={error ? { color: "#dc2626" } : {}}
-        >
+        <label className={`dropdown-label ${size === "large" ? "large" : ""}`}>
           {label}
         </label>
       )}
 
       <div
-        className={`multi-dropdown-header ${error ? "error-border" : ""}`}
+        className={`dropdown-wrapper ${size} ${error ? "error-border" : ""}`}
         onClick={() => setIsOpen(!isOpen)}
-        style={{
-          color: selectedLabels ? "inherit" : error ? "#dc2626" : "#666",
-        }}
       >
-        {selectedLabels || placeholder}
+        <span className="dropdown-selected">
+          {selectedLabels || placeholder}
+        </span>
         <span className="dropdown-arrow">{isOpen ? "▲" : "▼"}</span>
       </div>
 
@@ -64,15 +61,17 @@ const MultiSelectDropdown = ({
         <div className="multi-dropdown-options">
           {options.map((option) => (
             <label key={option.value} className="multi-dropdown-item">
-              <span className="custom-circle">
+              <div className="checkbox-container">
                 <input
                   type="checkbox"
                   name={name}
                   value={option.value}
                   checked={selectedValues.includes(option.value)}
                   onChange={() => toggleOption(option.value)}
+                  className="hidden-checkbox"
                 />
-              </span>
+                <span className="custom-checkbox"></span>
+              </div>
               <span className="multi-label">{option.label}</span>
             </label>
           ))}

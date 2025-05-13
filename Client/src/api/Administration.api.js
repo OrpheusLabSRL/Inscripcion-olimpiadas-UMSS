@@ -60,6 +60,10 @@ export const getAreas = async () => {
   return response.data;
 };
 
+export const createArea = async (data) => {
+  return await inscriptionApi.post("/registrarAreas", data);
+};
+
 /* =======================
    GRADOS
 ======================= */
