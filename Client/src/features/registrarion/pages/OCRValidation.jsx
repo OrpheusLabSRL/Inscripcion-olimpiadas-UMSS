@@ -26,9 +26,29 @@ export const OCRValidation = () => {
   };
 
   const extractPayerName = (text) => {
-    const regex = /recibi de:\s*([A-Z\s]+)/i;
+    // Extract text after "Recibi de:" up to "Por concepto de" or end of line
+    const regex = /recibi de:\s*([A-Z\s]+?)(?:\s+por concepto de|$)/i;
     const match = text.match(regex);
     return match ? match[1].trim() : null;
+  };
+  
+  const splitPayerName = (name) => {
+    if (!name) return { lastNames: null, firstNames: null };
+    const parts = name.trim().split(/\s+/);
+    let lastNames = "";
+    let firstNames = "";
+    if (parts.length === 1) {
+      lastNames = parts[0];
+      firstNames = "";
+    } else if (parts.length === 2) {
+      lastNames = parts[0];
+      firstNames = parts[1];
+    } else {
+      // Assume first two words are last names, rest are first names
+      lastNames = parts.slice(0, 2).join(" ");
+      firstNames = parts.slice(2).join(" ");
+    }
+    return { lastNames, firstNames };
   };
 
   const checkCodigoBoleta = async (codigo) => {
@@ -110,6 +130,19 @@ export const OCRValidation = () => {
           <strong>Código de Boleta detectado:</strong> {codigoBoleta}
         </div>
       )}
+      {ocrResult && (() => {
+        const payerName = extractPayerName(ocrResult);
+        const { lastNames, firstNames } = splitPayerName(payerName);
+        return (
+          <div style={{marginTop: "10px"}}>
+            <strong>Nombre detectado:</strong> {payerName ? payerName : "No detectado"}
+            <br />
+            <strong>Apellidos:</strong> {lastNames ? lastNames : "N/A"}
+            <br />
+            <strong>Nombres:</strong> {firstNames ? firstNames : "N/A"}
+          </div>
+        );
+      })()}
       {codigoBoleta && (
         <button onClick={() => checkCodigoBoleta(codigoBoleta)} style={{marginTop: "10px"}}>
           Comprobar Boleta
