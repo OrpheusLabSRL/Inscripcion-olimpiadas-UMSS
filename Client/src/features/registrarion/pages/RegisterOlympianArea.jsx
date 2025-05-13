@@ -19,6 +19,7 @@ import Swal from "sweetalert2";
 
 //api
 import {
+  getAreasOlimpistaByCi,
   getCatalogoCompleto,
   getOlimpistaEnable,
 } from "../../../api/inscription.api";
@@ -114,39 +115,53 @@ export const RegisterOlympianArea = () => {
   }, []);
 
   useEffect(() => {
-    const areasFiltradas = filtrarAreasPorCurso(
-      sessionStorage.getItem("CursoOlympian"),
-      catalogo
-    );
-    setAreaInteres(areasFiltradas);
-  }, [catalogo]);
-
-  const onChooseArea = () => (e) => {
-    if (e.target.value !== "") {
-      const categoriasFiltradas = filtrarCategoriasPorCursoYArea(
+    const getAreas = async () => {
+      let areasFiltradas = filtrarAreasPorCurso(
         sessionStorage.getItem("CursoOlympian"),
-        e.target.value,
         catalogo
       );
 
-      if (e.target.name == "AreaPrincipal") {
-        sessionStorage.setItem(
-          "CategoriasFiltradas",
-          JSON.stringify(categoriasFiltradas)
-        );
-        setCategoriasInteres(categoriasFiltradas);
-      } else {
-        sessionStorage.setItem(
-          "CategoriasFiltradasSecundaria",
-          JSON.stringify(categoriasFiltradas)
-        );
-        setCategoriasInteresSecundaria(categoriasFiltradas);
-      }
+      const areas = await getAreasOlimpistaByCi(
+        sessionStorage.getItem("CarnetIdentidadOlympian")
+      );
 
-      setValue(e.target.name, e.target.value);
+      if (areas.data.success != false) {
+        areasFiltradas = areasFiltradas.filter(
+          (area) => area.value !== areas.data?.data[0]
+        );
+      }
+      setAreaInteres(areasFiltradas);
+    };
+    getAreas();
+  }, [catalogo]);
+
+  const onChooseArea = () => (e) => {
+    const categoriasFiltradas = filtrarCategoriasPorCursoYArea(
+      sessionStorage.getItem("CursoOlympian"),
+      e.target.value,
+      catalogo
+    );
+
+    if (e.target.name == "AreaPrincipal") {
+      sessionStorage.setItem(
+        "CategoriasFiltradas",
+        JSON.stringify(categoriasFiltradas)
+      );
+      setCategoriasInteres(categoriasFiltradas);
+      if (e.target.value == "")
+        sessionStorage.setItem("CategoriaPrincipal", "");
     } else {
-      setCategoriasInteres(null);
+      sessionStorage.setItem(
+        "CategoriasFiltradasSecundaria",
+        JSON.stringify(categoriasFiltradas)
+      );
+      setCategoriasInteresSecundaria(categoriasFiltradas);
+      if (e.target.value == "")
+        sessionStorage.setItem("CategoriaSecundaria", "");
     }
+
+    setValue(e.target.name, e.target.value);
+    console.log(e.target.value);
   };
 
   const onSubmit = async (data) => {
@@ -254,6 +269,11 @@ export const RegisterOlympianArea = () => {
       >
         <div className="input-2c">
           <h1>Datos de competición</h1>
+          <h5 className="message-recomendation">
+            Un olimpista puede participar en hasta dos áreas. Si desea
+            participar solo en una, deje sin seleccionar el campo de 'área de
+            interés secundaria'.
+          </h5>
         </div>
 
         <div className="container-clean-fields input-2c">
@@ -290,7 +310,12 @@ export const RegisterOlympianArea = () => {
           nameCategoria={"CategoriaSecundaria"}
           areas={areaInteres}
           categorias={categoriasInteresSecundaria}
-          mandatory={categoriasInteresSecundaria ? true : false}
+          mandatory={
+            categoriasInteresSecundaria &&
+            categoriasInteresSecundaria.length !== 0
+              ? true
+              : false
+          }
           asterisk={false}
           onChooseArea={onChooseArea()}
           setValue={setValue}

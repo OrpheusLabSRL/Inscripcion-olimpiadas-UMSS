@@ -1,219 +1,215 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
 /* Contenedor principal que ocupa toda la pantalla y centra el formulario */
 .pagina-contacto-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding-top: 120px; /* Espacio para el header */
-    background-color: #94B4C1;
-    box-sizing: border-box;
-  }
-  
-  /* Contenedor del formulario con ancho fijo y centrado */
-  .contacto-form-wrapper {
-    background-color: white;
-    padding: 40px 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-    box-sizing: border-box;
-  }
-  
-  /* Título centrado */
-  .contacto-form-wrapper h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #2563EB;
-    font-size: 22px;
-    font-family: 'Poppins', sans-serif; 
-  }
-  
-  /* Estilos base del formulario */
-  .contacto-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    font-family: 'Poppins', sans-serif; 
-  }
-  
-  input, select {
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-  
-  .valid-input {
-    border-color: #10b981;
-  }
-  
-  .invalid-input {
-    border-color: #ef4444;
-  }
-  
-  .error-message {
-    color: #ef4444;
-    font-size: 13px;
-    margin-top: 4px;
-  }
-  
-  label {
-    font-size: 14px;
-    margin-bottom: 6px;
-    font-weight: 500;
-    font-family: 'Inter', sans-serif;
-    
-  }
-  
-  .required {
-    color: red;
-  }
-  
-  .submit-button {
-    background-color: #547792;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .submit-button:hover {
-    background-color: #456a7a;
-  }
-  
-  .form-buttons {
-    display: flex;
-    justify-content: center;
-  }
-  select {
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background-color: #e0e0e0; 
-    color: #333;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-    appearance: none; 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-    box-sizing: border-box;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2210%22%20height%3D%227%22%20viewBox%3D%220%200%2010%207%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M1%201L5%205L9%201%22%20stroke%3D%22%23666%22%20stroke-width%3D%222%22/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-    font-family: 'Inter', sans-serif;
-  }
-  
-  select:hover {
-    background-color: #cfcfcf;
-    border-color: #999;
-  }
-  option {
-    font-family: 'Inter', sans-serif;
-  }
-
-.consultar-inscripcion-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #94B4C1;
-    padding-top: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding-top: 120px; /* Espacio para el header */
+  background-color: #94b4c1;
+  box-sizing: border-box;
 }
 
-.consultar-form {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 0 auto;
-    width: 100%;
+/* Contenedor del formulario con ancho fijo y centrado */
+.contacto-form-wrapper {
+  background-color: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
 }
 
-.consultar-form h2 {
-    color: #000000;
-    text-align: center;
-    margin-bottom: 2rem;
+/* Título centrado */
+.contacto-form-wrapper h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2563eb;
+  font-size: 22px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Estilos base del formulario */
+.contacto-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  font-family: "Poppins", sans-serif;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: var(--text-primary);
+input,
+select {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
-.form-group input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-size: 1rem;
+.valid-input {
+  border-color: #10b981;
 }
 
-.submit-button {
-    background-color: #547792;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s;
-}
-
-.submit-button:hover {
-    background-color: #456a7a;
+.invalid-input {
+  border-color: #ef4444;
 }
 
 .error-message {
-    color: #dc3545;
-    margin-top: 1rem;
-    text-align: center;
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-family: "Inter", sans-serif;
+}
+
+.required {
+  color: red;
+}
+
+.submit-button {
+  background-color: #547792;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.submit-button:hover {
+  background-color: #456a7a;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+select {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #e0e0e0;
+  color: #333;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2210%22%20height%3D%227%22%20viewBox%3D%220%200%2010%207%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M1%201L5%205L9%201%22%20stroke%3D%22%23666%22%20stroke-width%3D%222%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  font-family: "Inter", sans-serif;
+}
+
+
+option {
+  font-family: "Inter", sans-serif;
+}
+
+.consultar-inscripcion-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #94b4c1;
+  padding-top: 120px;
+}
+
+.consultar-form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.consultar-form h2 {
+  color: #000000;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.submit-button {
+  background-color: #547792;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #456a7a;
+}
+
+.error-message {
+  color: #dc3545;
+  margin-top: 1rem;
+  text-align: center;
 }
 
 .required-field {
-    color: #ff0000;
-    margin-left: 4px;
+  color: #ff0000;
+  margin-left: 4px;
 }
 
 select {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-size: 1rem;
-    background-color: white;
-    cursor: pointer;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: white;
+  cursor: pointer;
 }
 
 select:focus {
-    outline: none;
-    border-color: #547792;
-    box-shadow: 0 0 0 2px rgba(84, 119, 146, 0.2);
+  outline: none;
+  border-color: #547792;
+  box-shadow: 0 0 0 2px rgba(84, 119, 146, 0.2);
 }
 
 .resultado-container {

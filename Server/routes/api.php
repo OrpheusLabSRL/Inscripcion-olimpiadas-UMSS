@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CategoriaController;
@@ -18,8 +17,9 @@ use App\Http\Controllers\OlimpiadaAreaCategoriaController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\BoletaPagoController;
 
-// Ruta protegida
+// Ruta protegida para obtener el usuario autenticado
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -30,16 +30,19 @@ Route::get('/persona/{carnet}/data', [PersonaController::class, 'getPersonData']
 // Olimpistas
 Route::post('/register', [OlimpistaController::class, 'store']);
 Route::get('/olimpista/{id}/areas', [InscripcionController::class, 'getAreaByOlimpista']);
+Route::get('/olimpista/{carnet_identidad}/areasByCi', [OlimpistaController::class, 'getAreaOlimpistaByCi']);
 Route::get('/olimpistas', [OlimpistaController::class, 'getAllOlimpistas']);
 Route::get('/olimpista/{carnet_identidad}/habilitado', [InscripcionController::class, 'enableForIncription']);
 Route::get('/olimpista/{id}/tutores', [TutorController::class, 'getTutoresByOlimpista']);
 Route::get('/tutores/all', [TutorController::class, 'getAllTutors']);
+
 
 // Tutores
 Route::post('/tutores', [TutorController::class, 'store']);
 Route::get('/tutor/{id_tutor}/estudiantes', [OlimpistaController::class, 'getOlimpistasByTutor']);
 Route::get('/tutores/verificar', [TutorController::class, 'checkExistingTutor']);
 Route::get('/tutor/{id}', [TutorController::class, 'getTutorWithPersona']);
+Route::put('/tutor/{id}/inscripciones/update', [InscripcionController::class, 'finishRegister']);
 
 // Contacto
 Route::post('/contacto', [InformacionContactoController::class, 'store']);
@@ -77,7 +80,9 @@ Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
 // Categoría - Área - Olimpiada
 Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'index']);
 Route::post('/newAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'store']);
-Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']); // ✅ Solo una vez
+Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);
+
+Route::get('/boletas/generar/{idTutor}', [BoletaPagoController::class, 'generarBoleta']);
 
 // Excel
 Route::post('/register-from-excel', [ExcelController::class, 'registerFromExcel']);

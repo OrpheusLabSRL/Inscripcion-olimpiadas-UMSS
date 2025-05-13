@@ -25,6 +25,9 @@ export const getDataOlympian = (id_tutor) =>
 export const getAreasOlimpista = (id) =>
   inscriptionApi.get(`/olimpista/${id}/areas`);
 
+export const getAreasOlimpistaByCi = (ci) =>
+  inscriptionApi.get(`/olimpista/${ci}/areasByCi`);
+
 export const getTutoresOlimpista = (id) =>
   inscriptionApi.get(`/olimpista/${id}/tutores`);
 
@@ -36,6 +39,9 @@ export const getPersonData = (carnet) =>
 
 export const setNewInscription = (data) =>
   inscriptionApi.post("/newInscription", data);
+
+export const finishRegistering = (id) =>
+  inscriptionApi.put(`/tutor/${id}/inscripciones/update`);
 
 // ============================
 // Tutores
