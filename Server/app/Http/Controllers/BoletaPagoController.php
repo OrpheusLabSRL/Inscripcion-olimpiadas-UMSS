@@ -68,9 +68,29 @@ class BoletaPagoController extends Controller
     public function generarPago(Request $request)
     {
         $codigoBoleta = $request->input('codigoBoleta');
+        $payerName = $request->input('payerName');
         $codigoBoleta = intval(trim($codigoBoleta));
-        \Log::info('Checking codigoBoleta: ' . $codigoBoleta);
-        $exists = BoletaPago::find($codigoBoleta) !== null;
+        \Log::info('Checking codigoBoleta: ' . $codigoBoleta . ', payerName: ' . $payerName);
+
+        // Parse payerName into last name(s) and first name(s)
+        $payerName = strtoupper(trim($payerName));
+        $nameParts = preg_split('/\s+/', $payerName);
+        if (count($nameParts) < 2) {
+            return response()->json(['exists' => false]);
+        }
+        // Assuming last names come first, then first names
+        $lastName = $nameParts[0];
+        $firstName = $nameParts[count($nameParts) - 1];
+
+        // Query to check if boleta exists with matching codigoBoleta and payer name
+        $exists = \DB::table('boletas_pagos')
+            ->join('tutores', 'boletas_pagos.idTutor', '=', 'tutores.idPersona')
+            ->join('personas', 'tutores.idPersona', '=', 'personas.idPersona')
+            ->where('boletas_pagos.codigoBoleta', $codigoBoleta)
+            ->where('personas.apellido', 'like', $lastName . '%')
+            ->where('personas.nombre', 'like', $firstName . '%')
+            ->exists();
+
         return response()->json(['exists' => $exists]);
     }
 }
