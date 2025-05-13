@@ -68,6 +68,8 @@ class BoletaPagoController extends Controller
     public function generarPago(Request $request)
     {
         $codigoBoleta = $request->input('codigoBoleta');
+        $codigoBoleta = intval(trim($codigoBoleta));
+        \Log::info('Checking codigoBoleta: ' . $codigoBoleta);
         $exists = BoletaPago::find($codigoBoleta) !== null;
         return response()->json(['exists' => $exists]);
     }

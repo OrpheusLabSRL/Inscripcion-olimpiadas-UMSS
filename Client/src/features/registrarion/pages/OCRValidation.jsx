@@ -20,9 +20,9 @@ export const OCRValidation = () => {
   };
 
   const extractCodigoBoleta = (text) => {
-    const regex = /Nro\. Control:\s*(\d+)/i;
+    const regex = /nro\.?\s*control:?\s*(\d+)/i;
     const match = text.match(regex);
-    return match ? match[1] : null;
+    return match ? match[1].trim() : null;
   };
 
   const checkCodigoBoleta = async (codigo) => {
