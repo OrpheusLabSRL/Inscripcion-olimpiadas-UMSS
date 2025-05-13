@@ -83,6 +83,8 @@ Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaControlle
 
 Route::get('/boletas/generar/{idTutor}', [BoletaPagoController::class, 'generarBoleta']);
 
+Route::post('/boletaPago/check', [BoletaPagoController::class, 'generarPago']);
+
 // Excel
 Route::post('/register-from-excel', [ExcelController::class, 'registerFromExcel']);
 Route::post('/validate-excel-data', [ExcelController::class, 'validateExcelData']);
