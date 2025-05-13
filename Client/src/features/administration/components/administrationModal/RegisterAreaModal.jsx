@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { FiX, FiSave, FiDollarSign, FiAlertCircle } from "react-icons/fi";
+import {
+  FiX,
+  FiSave,
+  FiDollarSign,
+  FiAlertCircle,
+  FiCheckCircle,
+} from "react-icons/fi";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
 import "../../Styles/ModalGeneral.css";
 import "../../Styles/Dropdown.css";
@@ -9,7 +15,6 @@ import {
   getCategoriaGrado,
   getAreasCategoriasPorOlimpiada,
   asignarAreasYCategorias,
-  deleteAreasCategoriasPorOlimpiada,
 } from "../../../../api/Administration.api";
 import { toast } from "react-toastify";
 
@@ -29,17 +34,19 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleReset = () => {
+    if (isSubmitting) return;
     setVersion("");
     setSelectedArea(null);
     setSelectedCategorias([]);
     setCostoArea("");
     setErrors({});
-    setInitialState({ areas: [], categorias: {} });
     onClose();
   };
 
   useEffect(() => {
     if (!isOpen) return;
+
+    let isMounted = true;
 
     const fetchData = async () => {
       setIsLoading(true);
@@ -49,6 +56,8 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
           getAreas(),
           getCategoriaGrado(),
         ]);
+
+        if (!isMounted) return;
 
         const categoriaMap = new Map();
         categoriaGradoData.forEach((entry) => {
@@ -71,24 +80,34 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
         setCategorias(Array.from(categoriaMap.values()));
         setVersion(selectedVersion);
       } catch (error) {
-        console.error("Error cargando datos base:", error);
-        toast.error("Error al cargar los datos iniciales");
+        if (isMounted) {
+          console.error("Error cargando datos base:", error);
+          toast.error("Error al cargar los datos iniciales");
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
 
     fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [isOpen, selectedVersion]);
 
   useEffect(() => {
-    const cargarAsignacionesPrevias = async () => {
-      if (!version) return;
+    if (!isOpen || !version) return;
 
+    let isMounted = true;
+
+    const cargarAsignacionesPrevias = async () => {
       setIsLoading(true);
       try {
         const response = await getAreasCategoriasPorOlimpiada(version);
         const data = Array.isArray(response) ? response : response.data || [];
+
+        if (!isMounted) return;
 
         const areasAsignadas = data.map((area) => area.idArea);
         const categoriasAsignadas = {};
@@ -104,16 +123,20 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
           categorias: categoriasAsignadas,
         });
       } catch (error) {
-        console.error("Error cargando áreas y categorías existentes:", error);
-        toast.error("Error al cargar asignaciones previas");
+        if (isMounted) {
+          console.error("Error cargando áreas y categorías existentes:", error);
+          toast.error("Error al cargar asignaciones previas");
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
 
-    if (isOpen && version) {
-      cargarAsignacionesPrevias();
-    }
+    cargarAsignacionesPrevias();
+
+    return () => {
+      isMounted = false;
+    };
   }, [isOpen, version]);
 
   const handleSubmit = async (e) => {
@@ -133,77 +156,61 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
     setIsSubmitting(true);
 
     try {
-      const confirmacion = await new Promise((resolve) => {
-        toast.info(
-          <div>
-            <p>¿Está seguro de guardar esta configuración?</p>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <button
-                onClick={() => {
-                  toast.dismiss();
-                  resolve(true);
-                }}
-                style={{
-                  padding: "5px 10px",
-                  background: "#3182ce",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                }}
-              >
-                Confirmar
-              </button>
-              <button
-                onClick={() => {
-                  toast.dismiss();
-                  resolve(false);
-                }}
-                style={{
-                  padding: "5px 10px",
-                  background: "#e53e3e",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                }}
-              >
-                Cancelar
-              </button>
-            </div>
-          </div>,
-          {
-            autoClose: false,
-            closeButton: false,
-          }
+      const areaNombre = areas.find(
+        (a) => a.idArea == selectedArea
+      )?.nombreArea;
+      const confirmacion = window.confirm(
+        `¿Agregar el área ${areaNombre} con ${selectedCategorias.length} categorías?`
+      );
+      if (!confirmacion) {
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Filtrar categorías no asignadas
+      const categoriasExistentes = initialState.categorias[selectedArea] || [];
+      const nuevasCategorias = selectedCategorias.filter(
+        (catId) => !categoriasExistentes.includes(parseInt(catId))
+      );
+
+      if (nuevasCategorias.length === 0) {
+        alert(
+          "Todas las categorías seleccionadas ya están asignadas a esta área"
         );
-      });
+        setIsSubmitting(false);
+        return;
+      }
 
-      if (!confirmacion) return;
-
-      const combinaciones = selectedCategorias.map((idCategoria) => ({
+      const combinaciones = nuevasCategorias.map((idCategoria) => ({
         idOlimpiada: parseInt(version),
         idArea: parseInt(selectedArea),
         idCategoria: parseInt(idCategoria),
         costo: parseFloat(costoArea),
       }));
 
-      await deleteAreasCategoriasPorOlimpiada(version);
-      if (combinaciones.length > 0) {
-        await asignarAreasYCategorias(combinaciones);
-      }
+      await asignarAreasYCategorias(combinaciones);
 
-      toast.success("¡Configuración actualizada exitosamente!");
+      // Mensaje de éxito con alert
+      alert(
+        `✅ Asignación exitosa!\n\n` +
+          `Se agregaron ${nuevasCategorias.length} categoría(s) al área ${areaNombre}\n` +
+          `Versión: ${selectedVersion}`
+      );
+
       handleReset();
       if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Error al guardar los datos:", error);
-      toast.error(
-        error.response?.data?.message || "Error al guardar los datos"
+      alert(
+        "❌ Error al guardar\n\n" +
+          (error.response?.data?.message ||
+            error.message ||
+            "Error en el servidor")
       );
     } finally {
       setIsSubmitting(false);
     }
   };
-
   if (!isOpen) return null;
 
   const areasNoAsignadas = areas.filter(
@@ -220,12 +227,13 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h3 className="modal-title">Asignar Área y Categorías</h3>
+          <h3 className="modal-title">Agregar Área y Categorías</h3>
           <button
             type="button"
             className="close-button"
             onClick={handleReset}
             aria-label="Cerrar modal"
+            disabled={isSubmitting}
           >
             <FiX />
           </button>
@@ -266,7 +274,7 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                         setErrors((prev) => ({ ...prev, area: "" }));
                         setSelectedCategorias([]);
                       }}
-                      disabled={noHayMasAreas}
+                      disabled={noHayMasAreas || isSubmitting}
                     >
                       <option value="">-- Seleccione un área --</option>
                       {areasNoAsignadas.map((a) => (
@@ -308,6 +316,7 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                         }}
                         placeholder="Ej: 50.00"
                         className="form-input"
+                        disabled={isSubmitting}
                       />
                     </div>
                     {errors.costo && (
@@ -347,6 +356,7 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                       setSelectedCategorias(values);
                       setErrors((prev) => ({ ...prev, categorias: "" }));
                     }}
+                    disabled={isSubmitting}
                   />
                   {errors.categorias && (
                     <p className="error-message">
@@ -403,13 +413,17 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
               <button
                 type="submit"
                 className="save-button"
-                disabled={noHayMasAreas || isSubmitting}
+                disabled={
+                  noHayMasAreas ||
+                  isSubmitting ||
+                  selectedCategorias.length === 0
+                }
               >
                 {isSubmitting ? (
                   <>Guardando...</>
                 ) : (
                   <>
-                    <FiSave /> Guardar
+                    <FiSave /> Agregar
                   </>
                 )}
               </button>

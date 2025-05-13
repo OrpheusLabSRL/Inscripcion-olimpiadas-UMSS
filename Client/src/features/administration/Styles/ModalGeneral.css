@@ -1,3 +1,4 @@
+/* === Overlay general del modal === */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -11,6 +12,7 @@
   z-index: 1000;
 }
 
+/* === Contenedor principal del modal === */
 .modal-content {
   background: #ecefca;
   border-radius: 10px;
@@ -24,6 +26,19 @@
   color: black;
 }
 
+/* === Encabezado del modal === */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
 .close-button {
   position: absolute;
   top: 0.8rem;
@@ -35,30 +50,11 @@
   color: #333;
 }
 
-.modal-title {
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-}
-
+/* === Formulario general === */
 .form-group {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
-}
-
-.modal-content label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #444;
-  margin-bottom: 0.3rem;
-}
-
-.form-group input {
-  padding: 0.6rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: #d8d7bc;
 }
 
 .form-row {
@@ -66,26 +62,49 @@
   justify-content: space-between;
   gap: 2rem;
 }
-
 .form-row .form-group {
   flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
+/* === Inputs === */
+.form-input,
+.form-group input,
+textarea.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: #d8d7bc;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+textarea.form-input {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* === Labels === */
+.modal-content label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 0.3rem;
+}
+
+/* === Acciones del modal === */
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
   margin-top: 1.5rem;
-}
-
-.modal-button {
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
 }
 
 .cancel-button,
@@ -100,6 +119,11 @@
 .cancel-button {
   background: #f1f1f1;
   color: #333;
+  border: 1px solid #d9d9d9;
+}
+
+.cancel-button:hover {
+  background: #e0e0e0;
 }
 
 .save-button {
@@ -107,20 +131,55 @@
   color: white;
 }
 
+/* === Errores === */
 .input-error {
-  border: 2px solid #dc2626;
-  background-color: #ffecec;
+  border: 2px solid #dc2626 !important;
+  background-color: #ffecec !important;
 }
 
-.error-message {
+.input-error:focus {
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+}
+
+.error-message,
+.has-error .error-message {
   color: #dc2626;
   font-size: 0.85rem;
   margin-top: 0.25rem;
   background: #ffecec;
   padding: 0.4rem;
   border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
+/* === Contador de caracteres === */
+.char-counter {
+  text-align: right;
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+/* === Spinner de carga === */
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === Contenedores de área y categoría === */
 .area-categorias-container {
   display: flex;
   flex-direction: column;
@@ -133,8 +192,8 @@
   padding: 1rem 1.5rem;
   display: flex;
   justify-content: space-between;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
   align-items: flex-start;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .area-info,
@@ -150,99 +209,37 @@
   list-style: disc;
 }
 
-/* Agregar a ModalGeneral.css */
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
 .required-field {
   color: #ff4d4f;
 }
 
-.has-error .error-message {
-  color: #ff4d4f;
-  font-size: 0.85rem;
-  margin-top: 0.25rem;
+.toast-success-message,
+.toast-error-message {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 10px;
 }
 
-.char-counter {
-  text-align: right;
-  font-size: 0.75rem;
-  color: #666;
-  margin-top: 0.25rem;
+.toast-icon {
+  font-size: 1.5rem;
 }
 
-.spinner {
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
+.toast-icon.success {
+  color: #38a169;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.toast-icon.error {
+  color: #e53e3e;
 }
 
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1.5rem;
+.toast-details {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-top: 4px;
 }
 
-.cancel-button {
-  padding: 0.5rem 1rem;
-  background: #f0f0f0;
-  color: #333;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.cancel-button:hover {
-  background: #e0e0e0;
-}
-
-/* Agrega esto a tu ModalGeneral.css */
-
-.form-input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-  font-family: inherit;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #1890ff;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-}
-
-/* Para el textarea específicamente */
-textarea.form-input {
-  min-height: 80px;
-  resize: vertical;
-}
-
-.input-error {
-  border-color: #ff4d4f !important;
-}
-
-.input-error:focus {
-  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+/* Loading toast */
+.Toastify__toast--loading {
+  background-color: #f7fafc !important;
+  color: #2d3748 !important;
 }

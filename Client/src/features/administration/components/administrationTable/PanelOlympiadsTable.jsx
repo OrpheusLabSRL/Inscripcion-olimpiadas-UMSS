@@ -115,11 +115,9 @@ export default function PanelOlympiadsTable({
 
                       <td className="text-right cost-column">
                         {hasCategories ? (
-                          area.categorias.map((c) => (
-                            <div key={`cost-${c.idCategoria}`}>
-                              Bs {parseFloat(c.costo).toFixed(2)}
-                            </div>
-                          ))
+                          <div>
+                            Bs {parseFloat(area.categorias[0].costo).toFixed(2)}
+                          </div>
                         ) : (
                           <span>-</span>
                         )}

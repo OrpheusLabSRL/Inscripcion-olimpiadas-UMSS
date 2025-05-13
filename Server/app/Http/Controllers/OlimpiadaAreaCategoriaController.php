@@ -100,10 +100,12 @@ class OlimpiadaAreaCategoriaController extends Controller
         return response()->json($resultados);
     }
 
-    public function eliminarPorOlimpiada($idOlimpiada)
+   public function eliminarPorOlimpiadaYArea($idOlimpiada, $idArea)
     {
-        OlimpiadaAreaCategoria::where('idOlimpiada', $idOlimpiada)->delete();
+        OlimpiadaAreaCategoria::where('idOlimpiada', $idOlimpiada)
+            ->where('idArea', $idArea)
+            ->delete();
 
-        return response()->json(['message' => 'Todas las combinaciones eliminadas correctamente.']);
+        return response()->json(['message' => 'Combinaciones del área eliminadas correctamente.']);
     }
 }

@@ -31,11 +31,13 @@ export const getAreasCategoriasPorOlimpiada = async (idOlimpiada) => {
     `/viewAreaCategoria/olimpiada/${idOlimpiada}`
   );
 };
-export const deleteAreasCategoriasPorOlimpiada = (idOlimpiada) => {
+
+export const deleteAreaCategoriaByOlimpiadaAndArea = (idOlimpiada, idArea) => {
   return inscriptionApi.delete(
-    `/olimpiada-area-categoria/eliminar-por-olimpiada/${idOlimpiada}`
+    `/eliminarOlimpiadas/${idOlimpiada}/area/${idArea}`
   );
 };
+
 export const updateOlimpiadaEstado = async (idOlimpiada, nuevoEstado) => {
   return await inscriptionApi.put(`/editarOlimpiadas/${idOlimpiada}/estado`, {
     estadoOlimpiada: nuevoEstado,

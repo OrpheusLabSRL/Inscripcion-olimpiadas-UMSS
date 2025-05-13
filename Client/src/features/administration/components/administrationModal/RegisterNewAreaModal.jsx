@@ -109,7 +109,7 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
               value={formData.nombreArea}
               onChange={handleChange}
               className={`form-input ${errors.nombreArea ? "input-error" : ""}`}
-              placeholder="Ej: Recursos Humanos"
+              placeholder="Ej: Matematicas, Quimica, etc."
               maxLength="50"
             />
             {errors.nombreArea && (

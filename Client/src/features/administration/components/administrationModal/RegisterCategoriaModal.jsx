@@ -9,7 +9,7 @@ import {
   getCategoriaGrado,
   getAreasCategoriasPorOlimpiada,
   asignarAreasYCategorias,
-  deleteAreasCategoriasPorOlimpiada,
+  deleteAreaCategoriaByOlimpiadaAndArea, // <--- USAR este
 } from "../../../../api/Administration.api";
 
 const RegisterCategoriaModal = ({
@@ -88,8 +88,6 @@ const RegisterCategoriaModal = ({
           categoriasAsignadas[area.idArea] = area.categorias.map(
             (cat) => cat.idCategoria
           );
-
-          // Tomamos el primer costo encontrado en el área
           if (area.categorias.length > 0) {
             costos[area.idArea] = area.categorias[0].costo;
           }
@@ -161,6 +159,7 @@ const RegisterCategoriaModal = ({
           "Debe seleccionar al menos una categoría";
       }
     });
+    console.log("newErrors", version);
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
@@ -175,7 +174,7 @@ const RegisterCategoriaModal = ({
       const costo = parseFloat(costoPorArea[idArea]) || 0;
       (selectedCategorias[idArea] || []).forEach((idCategoria) => {
         combinaciones.push({
-          idOlimpiada: parseInt(version),
+          idOlimpiada: version,
           idArea,
           idCategoria,
           costo,
@@ -184,7 +183,11 @@ const RegisterCategoriaModal = ({
     });
 
     try {
-      await deleteAreasCategoriasPorOlimpiada(version);
+      // SOLO ELIMINA POR ÁREA
+      for (const idArea of selectedAreas) {
+        await deleteAreaCategoriaByOlimpiadaAndArea(version, idArea);
+      }
+
       if (combinaciones.length > 0) {
         await asignarAreasYCategorias(combinaciones);
       }
