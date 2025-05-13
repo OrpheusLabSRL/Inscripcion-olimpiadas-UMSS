@@ -186,6 +186,9 @@
 
 .action-button .button-icon {
   font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .action-button.primary {
