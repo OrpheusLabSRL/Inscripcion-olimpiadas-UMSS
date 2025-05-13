@@ -54,6 +54,7 @@ Route::delete('/olimpiada-area-categoria/eliminar-por-olimpiada/{idOlimpiada}', 
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);
+Route::post('/registrarAreas', [AreaController::class, 'store']);
 Route::get('/catalogoCompleto', [AreaController::class, 'getProgramaCompleto']);
 
 // Categorías
