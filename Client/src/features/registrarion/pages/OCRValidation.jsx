@@ -39,12 +39,14 @@ export const OCRValidation = () => {
         <PrimaryButton type="submit" value="Procesar OCR" />
       </form>
       {ocrResult && (
-        <div className="ocr-result">
-          <h2>Resultado OCR:</h2>
-          <pre>{ocrResult}</pre>
+        <div className="ocr-result-panel" style={{marginTop: "20px", padding: "10px", border: "1px solid #ccc", borderRadius: "4px", backgroundColor: "#f9f9f9", maxHeight: "300px", overflowY: "auto"}}>
+          <h2>Texto extraído:</h2>
+          <div className="ocr-result-text" style={{whiteSpace: "pre-wrap", fontFamily: "monospace"}}>
+            {ocrResult}
+          </div>
         </div>
       )}
-      <button className="back-button" onClick={handleBack}>Volver</button>
+      <button className="back-button" onClick={handleBack} style={{marginTop: "20px"}}>Volver</button>
     </div>
   );
 };
