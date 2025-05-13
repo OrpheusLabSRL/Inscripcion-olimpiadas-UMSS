@@ -64,4 +64,11 @@ class BoletaPagoController extends Controller
             return response()->json(['message' => 'Error interno al generar la boleta.'], 500);
         }
     }
+
+    public function generarPago(Request $request)
+    {
+        $codigoBoleta = $request->input('codigoBoleta');
+        $exists = BoletaPago::find($codigoBoleta) !== null;
+        return response()->json(['exists' => $exists]);
+    }
 }
