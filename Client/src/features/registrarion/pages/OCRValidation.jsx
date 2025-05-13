@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
-import "../Styles/ocrvalidation.css";
+import "../Styles/OCRValidation.css";
 
-export const OcrValidation = () => {
+export const OCRValidation = () => {
   const [file, setFile] = useState(null);
   const [ocrResult, setOcrResult] = useState("");
   const navigate = useNavigate();

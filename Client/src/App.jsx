@@ -26,6 +26,7 @@ import ResultadoConsulta from "./features/consultar_inscripcion/pages/ResultadoC
 import ResultadoConsulta_Tutor from "./features/consultar_inscripcion/pages/ResultadoConsulta_Tutor";
 import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
+import { OCRValidation } from "./features/registrarion/pages/ocrvalidation";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
@@ -76,6 +77,7 @@ function App() {
             <Route path="/register/tutor-legal" element={<RegisterTutor />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
             <Route path="/register/excel" element={<RegisterExcel />} />
+            <Route path="/comprobar-boleta" element={<OCRValidation />} />
             <Route
               path="/register/responsible"
               element={<RegisterResponsible />}
