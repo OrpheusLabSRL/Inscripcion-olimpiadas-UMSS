@@ -27,7 +27,7 @@ export const OCRValidation = () => {
 
   const checkCodigoBoleta = async (codigo) => {
     try {
-      const response = await fetch("/api/boletaPago/check", {
+      const response = await fetch("http://127.0.0.1:8000/api/boletaPago/check", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
