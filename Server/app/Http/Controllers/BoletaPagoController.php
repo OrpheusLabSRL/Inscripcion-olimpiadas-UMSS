@@ -72,23 +72,32 @@ class BoletaPagoController extends Controller
         $codigoBoleta = intval(trim($codigoBoleta));
         \Log::info('Checking codigoBoleta: ' . $codigoBoleta . ', payerName: ' . $payerName);
 
-        // Parse payerName into last name(s) and first name(s)
-        $payerName = strtoupper(trim($payerName));
-        $nameParts = preg_split('/\s+/', $payerName);
+        // Normalize strings: lowercase and remove accents
+        $normalize = function ($str) {
+            $str = mb_strtolower($str, 'UTF-8');
+            $str = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $str);
+            return $str;
+        };
+
+        $payerNameNormalized = $normalize($payerName);
+        $nameParts = preg_split('/\s+/', $payerNameNormalized);
         if (count($nameParts) < 2) {
             return response()->json(['exists' => false]);
         }
-        // Assuming last names come first, then first names
-        $lastName = $nameParts[0];
-        $firstName = $nameParts[count($nameParts) - 1];
 
-        // Query to check if boleta exists with matching codigoBoleta and payer name
+        // Query to check if boleta exists with matching codigoBoleta and payer name parts
         $exists = \DB::table('boletas_pagos')
             ->join('tutores', 'boletas_pagos.idTutor', '=', 'tutores.idPersona')
             ->join('personas', 'tutores.idPersona', '=', 'personas.idPersona')
             ->where('boletas_pagos.codigoBoleta', $codigoBoleta)
-            ->where('personas.apellido', 'like', $lastName . '%')
-            ->where('personas.nombre', 'like', $firstName . '%')
+            ->where(function ($query) use ($nameParts) {
+                foreach ($nameParts as $part) {
+                    $query->where(function ($q) use ($part) {
+                        $q->whereRaw('LOWER(personas.apellido) LIKE ?', ["%{$part}%"])
+                          ->orWhereRaw('LOWER(personas.nombre) LIKE ?', ["%{$part}%"]);
+                    });
+                }
+            })
             ->exists();
 
         return response()->json(['exists' => $exists]);
