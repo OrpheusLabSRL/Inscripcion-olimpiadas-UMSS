@@ -28,6 +28,8 @@ export const RegisterTutor = () => {
   const [tipoTutor, setTipoTutor] = useState([
     { value: "Padre/Madre", label: "Papá/Mamá" },
     { value: "Tutor Legal", label: "Tutor Legal" },
+    { value: "Profesor", label: "Profesor" },
+    { value: "Estudiante", label: "Estudiante" },
   ]);
   const navigation = useNavigate();
   const location = useLocation();
@@ -115,6 +117,7 @@ export const RegisterTutor = () => {
 
     if (confirmacion.isConfirmed) {
       const dataToSend = {
+        codigoInscripcion: sessionStorage.getItem("codigoInscripcion") || "",
         olimpista: {
           nombre: sessionStorage.getItem("NombreOlympian"),
           apellido: sessionStorage.getItem("ApellidoOlympian"),
@@ -180,8 +183,6 @@ export const RegisterTutor = () => {
           },
         });
       }
-
-      console.log("dataToSend", dataToSend);
 
       try {
         const resInscription = await setNewInscription(dataToSend);
