@@ -1,3 +1,4 @@
+/* === Tabla === */
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -13,43 +14,57 @@
   color: black;
 }
 
-.badge-success {
-  background-color: #d4f8d4;
-  color: #1a7f1a;
+/* === Badges de estado === */
+.badge-success,
+.badge-danger {
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
   font-size: 0.8rem;
+  display: inline-block;
+  font-weight: 500;
 }
 
-.add-button {
+.badge-success {
+  background-color: #d4f8d4;
+  color: #1a7f1a;
+}
+
+.badge-danger {
+  background-color: #ffe0e0;
+  color: #e63946;
+}
+
+/* === Botones generales === */
+.add-button,
+.btn-registrar {
   background-color: #2563eb;
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   border: none;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.badge-success {
-  background-color: #d4f8d4;
-  color: #1a7f1a;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-  font-size: 0.8rem;
+.btn-registrar {
+  padding: 0.5rem 1.2rem;
+  font-size: 0.95rem;
+  border-radius: 6px;
 }
 
-.badge-danger {
-  background-color: #ffe0e0;
-  color: #e63946;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-  font-size: 0.8rem;
+.add-button:hover,
+.btn-registrar:hover {
+  background-color: #1e40af;
 }
 
+/* === Contenedor principal === */
 .manage-container {
   padding: 20px;
 }
 
+/* === Botón para volver === */
 .back-button {
   background-color: transparent;
   border: none;
@@ -63,21 +78,4 @@
 
 .back-button:hover {
   color: #007bff;
-}
-
-.btn-registrar {
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 0.5rem 1.2rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.btn-registrar:hover {
-  background-color: #1e40af;
 }

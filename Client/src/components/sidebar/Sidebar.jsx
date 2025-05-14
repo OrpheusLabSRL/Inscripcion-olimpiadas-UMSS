@@ -1,18 +1,18 @@
 //React
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+
 //Icons
-import { FaHome } from "react-icons/fa";
-import { IoDocumentTextOutline } from "react-icons/io5";
-import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
-import { HiOutlineClipboardDocument } from "react-icons/hi2";
-import { FaRegCalendarAlt } from "react-icons/fa";
-import { IoLogInOutline } from "react-icons/io5";
+import { FaHome, FaRegCalendarAlt, FaRegEdit } from "react-icons/fa";
+import { IoDocumentTextOutline, IoLogInOutline } from "react-icons/io5";
+import {
+  HiOutlineClipboardDocumentList,
+  HiOutlineClipboardDocument,
+} from "react-icons/hi2";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { GiAchievement } from "react-icons/gi";
 
 //css
 import "./Sidebar.css";
-import { useNavigate } from "react-router-dom";
 
 export default function Sidebar({ isOpen, setIsOpen, admin }) {
   const navigation = useNavigate();
@@ -47,31 +47,31 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
               </li>
               <li>
                 <Link to="/admin/olimpiadas">
-                  <GiAchievement className="sidebar-icons" />{" "}
+                  <GiAchievement className="sidebar-icons" />
                   {isOpen ? "Olimpiadas" : ""}
                 </Link>
               </li>
-              {/*<li>
-                <Link to="/admin/base-data">
-                  <IoDocumentTextOutline className="sidebar-icons" />{" "}
-                  {isOpen ? "Datos base" : ""}
+              <li>
+                <Link to="/admin/panelOlympiad">
+                  <FaRegEdit className="sidebar-icons" />
+                  {isOpen ? "Gestionar" : ""}
                 </Link>
-              </li>*/}
+              </li>
               <li>
                 <NavLink>
-                  <HiOutlineClipboardDocumentList className="sidebar-icons" />{" "}
+                  <HiOutlineClipboardDocumentList className="sidebar-icons" />
                   {isOpen ? "Exámenes" : ""}
                 </NavLink>
               </li>
               <li>
                 <Link to="/admin/reports">
-                  <HiOutlineClipboardDocument className="sidebar-icons" />{" "}
+                  <HiOutlineClipboardDocument className="sidebar-icons" />
                   {isOpen ? "Reportes" : ""}
                 </Link>
               </li>
               <li>
                 <NavLink>
-                  <FaRegCalendarAlt className="sidebar-icons" />{" "}
+                  <FaRegCalendarAlt className="sidebar-icons" />
                   {isOpen ? "Calendario" : ""}
                 </NavLink>
               </li>
@@ -85,15 +85,15 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                       ? sessionStorage.getItem("pantallaActualRegistro")
                       : "/register"
                   }
-                  className={({ isActive }) => (isActive ? 'active-link' : '')}
+                  className={({ isActive }) => (isActive ? "active-link" : "")}
                 >
-                  <FaHome className="sidebar-icons" />{" "}
+                  <FaHome className="sidebar-icons" />
                   {isOpen ? "Inscripción" : ""}
                 </NavLink>
               </li>
               <li>
-                <NavLink to={"/contacto"}>
-                  <IoDocumentTextOutline className="sidebar-icons" />{" "}
+                <NavLink to="/contacto">
+                  <IoDocumentTextOutline className="sidebar-icons" />
                   {isOpen ? "Contacto" : ""}
                 </NavLink>
               </li>
@@ -103,13 +103,11 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
 
         <div className="btn-logout">
           <a>
-            {
-              <IoLogInOutline
-                style={{ fontSize: "25px" }}
-                className="sidebar-icons"
-                onClick={cerrarSesion}
-              />
-            }{" "}
+            <IoLogInOutline
+              style={{ fontSize: "25px" }}
+              className="sidebar-icons"
+              onClick={cerrarSesion}
+            />
             {isOpen ? <span onClick={cerrarSesion}>Cerrar Sesion</span> : ""}
           </a>
         </div>
@@ -117,7 +115,6 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
 
       <button className="toggle-btn" onClick={() => setIsOpen(!isOpen)}>
         <FaArrowRightArrowLeft style={{ fontSize: "18px" }} />
-
         {isOpen ? <span style={{ margin: "10px" }}>Contraer menú</span> : ""}
       </button>
     </>

@@ -20,6 +20,7 @@ class OlimpiadaAreaCategoria extends Model
         'idArea',
         'idCategoria',
         'estado',
+        'costo',
     ];
 
     public function olimpiada()

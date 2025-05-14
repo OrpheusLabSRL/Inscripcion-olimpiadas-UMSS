@@ -1,3 +1,4 @@
+/* ========== Contenedor principal ========== */
 .dropdown-container {
   margin-bottom: 1rem;
   width: 100%;
@@ -6,112 +7,211 @@
   font-family: inherit;
 }
 
+/* ========== Etiqueta ========== */
 .dropdown-label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
   font-size: 1rem;
+  color: #333;
 }
-
 .dropdown-label.large {
   font-size: 1.2rem;
 }
 
+/* ========== Encabezado (wrapper) ========== */
 .dropdown-wrapper {
   background-color: #e2e2e2;
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  user-select: none;
-  cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid #d1d5db;
+  transition: border-color 0.2s;
 }
-
+.dropdown-wrapper:hover {
+  border-color: #9ca3af;
+}
 .dropdown-wrapper.small {
   font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
 }
-
-.dropdown-wrapper.large {
+.dropdown-wrapper.medium {
   font-size: 1rem;
 }
+.dropdown-wrapper.large {
+  font-size: 1.1rem;
+  padding: 0.9rem 1.2rem;
+}
 
+.dropdown-selected {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ========== Flecha ========== */
 .dropdown-arrow {
   margin-left: 10px;
   font-size: 0.8rem;
+  color: #666;
+  transition: transform 0.2s;
 }
 
-.dropdown-list,
+/* ========== Opciones desplegables ========== */
 .multi-dropdown-options {
   background-color: #e2e2e2;
   position: absolute;
   width: 100%;
   z-index: 99;
-  max-height: 300px;
+  max-height: 350px;
   overflow-y: auto;
   margin-top: 4px;
+  padding: 8px 0;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-option,
+/* ========== Ítems de opción ========== */
 .multi-dropdown-item {
-  padding: 0.6rem 1rem;
+  padding: 6px 16px;
   font-size: 14px;
   cursor: pointer;
   transition: background 0.2s ease;
   display: flex;
   align-items: center;
 }
-
-.dropdown-option:hover,
 .multi-dropdown-item:hover {
   background-color: #ccc;
 }
+.multi-dropdown-item:hover .custom-checkbox {
+  border-color: #3182ce;
+}
 
-.custom-circle {
-  width: 18px;
-  height: 18px;
-  border: 2px solid black;
-  border-radius: 50%;
+/* ========== Checkbox personalizado ========== */
+.checkbox-container {
+  position: relative;
   margin-right: 10px;
-  position: relative;
 }
-
-.custom-circle input[type="checkbox"] {
-  all: unset;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  cursor: pointer;
+.hidden-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
-
-.custom-circle input[type="checkbox"]:checked::before {
+.custom-checkbox {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #555;
+  border-radius: 50%;
+  background: white;
+  transition: all 0.2s ease;
+}
+.hidden-checkbox:checked ~ .custom-checkbox {
+  background-color: #3182ce;
+  border-color: #3182ce;
+}
+.hidden-checkbox:checked ~ .custom-checkbox::after {
   content: "";
   position: absolute;
   top: 4px;
   left: 4px;
   width: 6px;
   height: 6px;
-  background-color: black;
+  background-color: white;
   border-radius: 50%;
 }
 
+/* ========== Texto de las opciones ========== */
 .multi-label {
   flex: 1;
+  margin-left: 8px;
 }
 
+/* ========== Estilos para categorías en opciones ========== */
+.category-option {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  padding: 6px 0;
+}
+.category-name {
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.category-grades {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* ========== Categorías seleccionadas ========== */
+.selected-categories-container {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+.selected-categories-title {
+  font-size: 0.8rem;
+  color: #495057;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.selected-categories-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.selected-category-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 0.8rem;
+}
+.selected-category-item:last-child {
+  border-bottom: none;
+}
+
+/* ========== Reutilizados ========== */
+.grade-list {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-top: 4px;
+}
+.form-group {
+  margin-bottom: 16px;
+}
+
+/* ========== Errores ========== */
 .error-border {
   border: 2px solid #dc2626 !important;
   background-color: #ffecec !important;
-  border-radius: 6px;
 }
-
 .error-message {
   color: #dc2626;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   margin-top: 0.25rem;
   background: #ffecec;
   padding: 0.4rem 0.75rem;
   border-radius: 5px;
+}
+
+.has-error .dropdown-wrapper {
+  border-color: #ff4444;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.multi-dropdown-options {
+  max-height: 200px;
+  overflow-y: auto;
 }

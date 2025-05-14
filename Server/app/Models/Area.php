@@ -17,8 +17,7 @@ class Area extends Model
     protected $fillable = [
         'nombreArea',
         'descripcionArea',
-        'costoArea',
-        'estadoArea',
+    
     ];
 
     public function combinaciones()
@@ -35,6 +34,6 @@ class Area extends Model
         'idCategoria',  // FK en la tabla pivot a Categoria
         'idArea',        // PK en el modelo Area
         'idCategoria'    // PK en el modelo Categoria
-    )->withPivot('estado');
+    )->withPivot('estado', 'costo'); 
 }
 }
