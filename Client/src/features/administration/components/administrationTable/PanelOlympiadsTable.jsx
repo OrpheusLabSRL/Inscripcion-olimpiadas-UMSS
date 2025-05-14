@@ -163,15 +163,25 @@ export default function PanelOlympiadsTable({
             onClose={() => setIsNewAreaModalOpen(false)}
             onSuccess={handleNewAreaSuccess}
           />
-          <div className="info-card">
+          <div
+            className="info-card"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              padding: "20px",
+            }}
+          >
             <h4>Registrar nueva área</h4>
-            <p>
+            <p style={{ marginBottom: "20px" }}>
               Para registrar una nueva área que no existe en el sistema, haz
               clic en el botón "Registrar Nueva Área".
             </p>
             <button
               className="action-button success"
               onClick={() => setIsNewAreaModalOpen(true)}
+              style={{ width: "fit-content" }}
             >
               <FiPlus className="button-icon" />
               Registrar Nueva Área

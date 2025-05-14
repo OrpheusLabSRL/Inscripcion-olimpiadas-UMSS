@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  FiX,
-  FiSave,
-  FiDollarSign,
-  FiAlertCircle,
-  FiCheckCircle,
-} from "react-icons/fi";
+import { FiX, FiSave, FiDollarSign, FiAlertCircle } from "react-icons/fi";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
 import "../../Styles/ModalGeneral.css";
 import "../../Styles/Dropdown.css";
@@ -90,7 +84,6 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
     };
 
     fetchData();
-
     return () => {
       isMounted = false;
     };
@@ -133,7 +126,6 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
     };
 
     cargarAsignacionesPrevias();
-
     return () => {
       isMounted = false;
     };
@@ -143,7 +135,6 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
     e.preventDefault();
 
     const newErrors = {};
-    if (!version) newErrors.version = "Versión requerida";
     if (!selectedArea) newErrors.area = "Seleccione un área";
     if (selectedCategorias.length === 0)
       newErrors.categorias = "Seleccione al menos una categoría";
@@ -151,7 +142,13 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
       newErrors.costo = "Ingrese un costo válido";
 
     setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
+
+    if (Object.keys(newErrors).length > 0) {
+      toast.error(
+        "Por favor completa correctamente el formulario antes de continuar."
+      );
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -159,6 +156,7 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
       const areaNombre = areas.find(
         (a) => a.idArea == selectedArea
       )?.nombreArea;
+
       const confirmacion = window.confirm(
         `¿Agregar el área ${areaNombre} con ${selectedCategorias.length} categorías?`
       );
@@ -167,7 +165,6 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
         return;
       }
 
-      // Filtrar categorías no asignadas
       const categoriasExistentes = initialState.categorias[selectedArea] || [];
       const nuevasCategorias = selectedCategorias.filter(
         (catId) => !categoriasExistentes.includes(parseInt(catId))
@@ -190,11 +187,8 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
 
       await asignarAreasYCategorias(combinaciones);
 
-      // Mensaje de éxito con alert
       alert(
-        `✅ Asignación exitosa!\n\n` +
-          `Se agregaron ${nuevasCategorias.length} categoría(s) al área ${areaNombre}\n` +
-          `Versión: ${selectedVersion}`
+        `✅ Asignación exitosa!\n\nSe agregaron ${nuevasCategorias.length} categoría(s) al área ${areaNombre}\nVersión: ${selectedVersion}`
       );
 
       handleReset();
@@ -211,6 +205,7 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
       setIsSubmitting(false);
     }
   };
+
   if (!isOpen) return null;
 
   const areasNoAsignadas = areas.filter(
@@ -262,12 +257,12 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                 </div>
               ) : (
                 <>
-                  <div
-                    className={`form-group ${errors.area ? "has-error" : ""}`}
-                  >
+                  <div className="form-group">
                     <label className="form-label">Área</label>
                     <select
-                      className="form-select"
+                      className={`form-select ${
+                        errors.area ? "input-error" : ""
+                      }`}
                       value={selectedArea || ""}
                       onChange={(e) => {
                         setSelectedArea(e.target.value);
@@ -299,9 +294,7 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                     </div>
                   )}
 
-                  <div
-                    className={`form-group ${errors.costo ? "has-error" : ""}`}
-                  >
+                  <div className="form-group">
                     <label className="form-label">Costo del Área (Bs)</label>
                     <div className="input-with-icon">
                       <FiDollarSign className="input-icon" />
@@ -315,7 +308,9 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                           setErrors((prev) => ({ ...prev, costo: "" }));
                         }}
                         placeholder="Ej: 50.00"
-                        className="form-input"
+                        className={`form-input ${
+                          errors.costo ? "input-error" : ""
+                        }`}
                         disabled={isSubmitting}
                       />
                     </div>
@@ -332,70 +327,33 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
             {selectedArea && (
               <div className="form-section">
                 <h4 className="section-subtitle">Selección de Categorías</h4>
-                <div
-                  className={`form-group ${
-                    errors.categorias ? "has-error" : ""
-                  }`}
-                >
-                  <MultiSelectDropdown
-                    label=""
-                    name="categorias"
-                    placeholder="Seleccione las categorías..."
-                    options={categorias.map((c) => ({
-                      value: c.idCategoria,
-                      label: `${c.nombreCategoria}${
-                        c.grados && c.grados.length > 0
-                          ? ` (${c.grados
-                              .map((g) => `${g.numeroGrado}° ${g.nivel}`)
-                              .join(", ")})`
-                          : ""
-                      }`,
-                    }))}
-                    selectedValues={selectedCategorias}
-                    onChange={(values) => {
-                      setSelectedCategorias(values);
-                      setErrors((prev) => ({ ...prev, categorias: "" }));
-                    }}
-                    disabled={isSubmitting}
-                  />
+                <div className="form-group">
+                  <div className={errors.categorias ? "input-error" : ""}>
+                    <MultiSelectDropdown
+                      name="categorias"
+                      placeholder="Seleccione las categorías..."
+                      options={categorias.map((c) => ({
+                        value: c.idCategoria,
+                        label: `${c.nombreCategoria}${
+                          c.grados && c.grados.length > 0
+                            ? ` (${c.grados
+                                .map((g) => `${g.numeroGrado}° ${g.nivel}`)
+                                .join(", ")})`
+                            : ""
+                        }`,
+                      }))}
+                      selectedValues={selectedCategorias}
+                      onChange={(values) => {
+                        setSelectedCategorias(values);
+                        setErrors((prev) => ({ ...prev, categorias: "" }));
+                      }}
+                      disabled={isSubmitting}
+                    />
+                  </div>
                   {errors.categorias && (
                     <p className="error-message">
                       <FiAlertCircle /> {errors.categorias}
                     </p>
-                  )}
-
-                  {selectedCategorias.length > 0 && (
-                    <div className="selected-categories-container">
-                      <h5 className="selected-categories-title">
-                        Categorías seleccionadas:
-                      </h5>
-                      <ul className="selected-categories-list">
-                        {categorias
-                          .filter((c) =>
-                            selectedCategorias.includes(c.idCategoria)
-                          )
-                          .map((categoria) => (
-                            <li
-                              key={categoria.idCategoria}
-                              className="selected-category-item"
-                            >
-                              <div className="category-name">
-                                {categoria.nombreCategoria}
-                              </div>
-                              {categoria.grados &&
-                                categoria.grados.length > 0 && (
-                                  <div className="grade-list">
-                                    {categoria.grados
-                                      .map(
-                                        (g) => `${g.numeroGrado}° ${g.nivel}`
-                                      )
-                                      .join(", ")}
-                                  </div>
-                                )}
-                            </li>
-                          ))}
-                      </ul>
-                    </div>
                   )}
                 </div>
               </div>
@@ -420,7 +378,7 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                 }
               >
                 {isSubmitting ? (
-                  <>Guardando...</>
+                  "Guardando..."
                 ) : (
                   <>
                     <FiSave /> Agregar

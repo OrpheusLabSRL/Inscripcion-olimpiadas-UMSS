@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FiAlertCircle } from "react-icons/fi";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
 import "../../Styles/ModalGeneral.css";
 import "../../Styles/Dropdown.css";
@@ -9,7 +10,7 @@ import {
   getCategoriaGrado,
   getAreasCategoriasPorOlimpiada,
   asignarAreasYCategorias,
-  deleteAreaCategoriaByOlimpiadaAndArea, // <--- USAR este
+  deleteAreaCategoriaByOlimpiadaAndArea,
 } from "../../../../api/Administration.api";
 
 const RegisterCategoriaModal = ({
@@ -158,11 +159,18 @@ const RegisterCategoriaModal = ({
         newErrors[`categorias-${areaId}`] =
           "Debe seleccionar al menos una categoría";
       }
+
+      const costo = costoPorArea[areaId];
+      if (costo === undefined || isNaN(costo) || parseFloat(costo) < 0) {
+        newErrors[`costo-${areaId}`] = "Costo inválido";
+      }
     });
-    console.log("newErrors", version);
 
     setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
+    if (Object.keys(newErrors).length > 0) {
+      alert("Por favor corrige los errores antes de guardar.");
+      return;
+    }
 
     const confirmacion = window.confirm(
       "¿Está seguro de guardar esta configuración?"
@@ -183,7 +191,6 @@ const RegisterCategoriaModal = ({
     });
 
     try {
-      // SOLO ELIMINA POR ÁREA
       for (const idArea of selectedAreas) {
         await deleteAreaCategoriaByOlimpiadaAndArea(version, idArea);
       }
@@ -261,6 +268,9 @@ const RegisterCategoriaModal = ({
                         [areaId]: e.target.value,
                       }))
                     }
+                    className={`form-input ${
+                      errors[`costo-${areaId}`] ? "input-error" : ""
+                    }`}
                     style={{
                       marginLeft: "1rem",
                       padding: "0.3rem",
@@ -268,10 +278,15 @@ const RegisterCategoriaModal = ({
                     }}
                   />
                 </label>
+                {errors[`costo-${areaId}`] && (
+                  <p className="error-message">
+                    <FiAlertCircle /> {errors[`costo-${areaId}`]}
+                  </p>
+                )}
 
                 <div
                   className={`dropdown-wrapper large ${
-                    errors[`categorias-${areaId}`] ? "error-border" : ""
+                    errors[`categorias-${areaId}`] ? "input-error" : ""
                   }`}
                   style={{ marginTop: "1rem" }}
                 >
@@ -287,7 +302,7 @@ const RegisterCategoriaModal = ({
 
                 {errors[`categorias-${areaId}`] && (
                   <p className="error-message">
-                    {errors[`categorias-${areaId}`]}
+                    <FiAlertCircle /> {errors[`categorias-${areaId}`]}
                   </p>
                 )}
 
