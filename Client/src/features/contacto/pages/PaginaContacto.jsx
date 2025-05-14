@@ -222,7 +222,7 @@ import React, { useState } from "react";
            {submitError && <div className="error-message">{submitError}</div>}
            {submitSuccess && <div className="success-message">{submitSuccess}</div>}
            
-           <h2>CONTACTANOS</h2>
+           <h2 name="titulo-contacto">Contactanos</h2>
            <form onSubmit={handleSubmit} className="contacto-form" noValidate>
              <div className="form-group">
                <label htmlFor="nombreCompleto">

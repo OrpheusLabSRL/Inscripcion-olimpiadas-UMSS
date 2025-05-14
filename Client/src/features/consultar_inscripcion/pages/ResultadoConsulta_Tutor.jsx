@@ -46,6 +46,8 @@ const ResultadoConsulta_Tutor = () => {
     return grupos;
   }, {});
 
+
+
   return (
     <>
       <HeaderProp />
@@ -74,7 +76,7 @@ const ResultadoConsulta_Tutor = () => {
               <h3>
                 {codigoBoleta === 'sin-boleta' 
                   ? 'Olimpistas sin boleta de pago' 
-                  : `Olimpistas con boleta ${codigoBoleta}`}
+                  : `Olimpistas correspondientes a la boleta con código: ${codigoBoleta}`}
               </h3>
               <table>
                 <thead>
@@ -111,6 +113,14 @@ const ResultadoConsulta_Tutor = () => {
             </div>
           ))}
 
+          <div className="boton-volver-container">
+            <button
+              className="btn-consulta back-button"
+              onClick={() => navigate("/consultar-inscripcion")}
+            >
+              Volver a consultar
+            </button>
+          </div>
           <div className="boton-volver-container">
             <button
               className="btn-consulta back-button"

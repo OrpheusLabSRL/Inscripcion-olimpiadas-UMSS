@@ -63,7 +63,7 @@ class InscripcionController_Tutor extends Controller
                         'correoElectronico' => $persona->correoElectronico,
                         'fechaNacimiento' => $olimpista->fechaNacimiento,
                         'departamento' => $olimpista->departamento,
-                        'provincia' => $olimpista->provincia,
+                        'municipio' => $olimpista->municipio,
                         'curso' => $olimpista->curso,
                         'colegio' => $olimpista->colegio,
                         'estadoPago' => $inscripcion->estadoInscripcion == 1 ? 'PAGO REALIZADO' : 'PAGO PENDIENTE',
@@ -88,7 +88,7 @@ class InscripcionController_Tutor extends Controller
                             'correoElectronico' => $persona->correoElectronico,
                             'fechaNacimiento' => $olimpista->fechaNacimiento,
                             'departamento' => $olimpista->departamento,
-                            'provincia' => $olimpista->provincia,
+                            'municipio' => $olimpista->municipio,
                             'curso' => $olimpista->curso,
                             'colegio' => $olimpista->colegio
                         ],

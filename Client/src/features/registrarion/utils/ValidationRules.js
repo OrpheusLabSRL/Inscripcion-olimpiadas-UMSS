@@ -5,7 +5,7 @@ export const Validator = {
       message: "El nombre es requerido",
     },
     pattern: {
-      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfabeticos",
     },
     maxLength: {
@@ -29,7 +29,7 @@ export const Validator = {
       message: "El apellido es requerido",
     },
     pattern: {
-      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfabeticos",
     },
     maxLength: {
@@ -67,7 +67,7 @@ export const Validator = {
       message: "El carnet de identidad es requerido",
     },
     pattern: {
-      value: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfanumericos",
     },
     maxLength: {
@@ -90,7 +90,7 @@ export const Validator = {
       message: "El nombre del colegio es requerido",
     },
     pattern: {
-      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfabeticos",
     },
     maxLength: {
@@ -114,7 +114,7 @@ export const Validator = {
       message: "El curso es requerido",
     },
     pattern: {
-      value: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfanumericos",
     },
     maxLength: {
@@ -138,7 +138,7 @@ export const Validator = {
       message: "El departamento es requerido",
     },
     pattern: {
-      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfabeticos",
     },
     maxLength: {
@@ -159,24 +159,15 @@ export const Validator = {
   municipio: {
     required: {
       value: true,
-      message: "La provincia es requerido",
-    },
-    pattern: {
-      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
-      message: "Solo se permiten caracteres alfabeticos",
+      message: "El municipio es requerido",
     },
     maxLength: {
       value: 30,
-      message: "La provincia no debe ser mayor a 30 caracteres",
+      message: "El municipio no debe ser mayor a 30 caracteres",
     },
     minLength: {
       value: 2,
-      message: "La provincia debe tener al menos 2 caracteres",
-    },
-    validate: {
-      noMultipleSpaces: (value) =>
-        !/\s{2,}/.test(value) ||
-        "No se permiten múltiples espacios en blanco consecutivos",
+      message: "El municipio debe tener al menos 2 caracteres",
     },
   },
 
@@ -202,7 +193,7 @@ export const Validator = {
       message: "El area es requerido",
     },
     pattern: {
-      value: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfanumericos",
     },
     maxLength: {
@@ -226,7 +217,7 @@ export const Validator = {
       message: "La categoria es requerido",
     },
     pattern: {
-      value: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfanumericos",
     },
     maxLength: {
@@ -250,7 +241,7 @@ export const Validator = {
       message: "El numero es requerido",
     },
     pattern: {
-      value: /^[0-9ñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[0-9ñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfabeticos",
     },
     maxLength: {
@@ -274,7 +265,7 @@ export const Validator = {
       message: "A quien pertenece el correo es requerido",
     },
     pattern: {
-      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfabeticos",
     },
     maxLength: {
@@ -298,7 +289,7 @@ export const Validator = {
       message: "A quien pertenece el número es requerido",
     },
     pattern: {
-      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfabeticos",
     },
     maxLength: {
@@ -322,7 +313,7 @@ export const Validator = {
       message: "El tipo de tutor es requerido",
     },
     pattern: {
-      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`’Üü]*$/,
+      value: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ .,;'"`'Üü]*$/,
       message: "Solo se permiten caracteres alfabeticos",
     },
     maxLength: {
