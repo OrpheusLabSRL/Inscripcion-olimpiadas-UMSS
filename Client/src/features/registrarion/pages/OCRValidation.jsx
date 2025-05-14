@@ -22,21 +22,25 @@ export const OCRValidation = () => {
   };
 
   const extractCodigoBoleta = (text) => {
-    const regex = /nro\.?\s*control:?\s*(\d+)/i;
+    // More flexible extraction of codigo boleta allowing noise around "nro control"
+    const regex = /nro[^0-9]*control[^0-9]*[:\s]*([\d]+)/i;
     const match = text.match(regex);
     return match ? match[1].trim() : null;
   };
 
   const extractPayerName = (text) => {
-    // Extract text after "Recibi de:" up to "Por concepto de" or end of line
-    const regex = /recibi de:\s*([A-Z\s]+?)(?:\s+por concepto de|$)/i;
-    const match = text.match(regex);
+    // More flexible extraction of payer name allowing noise around "Recibi de"
+    // Normalize accents to non-accented characters for consistent matching
+    const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const regex = /recibi de[^A-Z]*([A-Z\s]+?)(?:\s+por concepto de|$)/i;
+    const match = normalizedText.match(regex);
     return match ? match[1].trim() : null;
   };
 
   const extractMontoTotal = (text) => {
-    // Extract monto total after "Total:Bs" with optional spaces and decimal
-    const regex = /total:bs\s*([\d.,]+)/i;
+    // More flexible extraction of monto total, allowing for noise around "Total" and "Bs"
+    // Match pattern with optional characters around "Total" and "Bs" and capture number
+    const regex = /total[^0-9]*bs[^0-9]*([\d.,]+)/i;
     const match = text.match(regex);
     if (match) {
       // Convert to float, replace comma with dot if needed
@@ -134,11 +138,39 @@ export const OCRValidation = () => {
   // Removed duplicate declaration of checkCodigoBoleta to fix redeclaration error
 
   const confirmarPago = async (codigo) => {
+    if (!codigo) {
+      alert("Código de boleta no detectado. Por favor, procese una imagen válida.");
+      return;
+    }
     if (boletaPaid) {
       alert("La boleta ya fue pagada.");
       return;
     }
     try {
+      // Check boleta existence and payment status before confirming payment
+      const checkResponse = await fetch("http://127.0.0.1:8000/api/boletaPago/check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          codigoBoleta: codigo,
+          payerName: extractPayerName(ocrResult),
+          montoTotal: montoTotal
+        }),
+      });
+      const checkData = await checkResponse.json();
+      if (!checkData.exists) {
+        alert("La boleta no existe en la base de datos. No se puede confirmar el pago.");
+        setBoletaExists(false);
+        return;
+      }
+      if (checkData.paid) {
+        alert("La boleta ya fue pagada.");
+        setBoletaPaid(true);
+        return;
+      }
+      // Proceed to confirm payment
       const response = await fetch("http://127.0.0.1:8000/api/boletaPago/confirmarPago", {
         method: "POST",
         headers: {
@@ -165,22 +197,22 @@ export const OCRValidation = () => {
           <input type="file" accept="image/*" onChange={handleFileChange} style={{padding: "0.5rem", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "white", color: "black", fontWeight: "600", fontSize: "1rem", cursor: "pointer", height: "40px", width: "660px"}} />
           <PrimaryButton type="submit" value={processing ? "Procesando..." : "Procesar Imagen"} disabled={processing} style={{width: "150px", height: "40px", backgroundColor: "#1e40af", borderColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer"}} />
         </form>
-        {codigoBoleta && (
-          <div style={{marginTop: "10px", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: "0.5rem"}}>
-            <strong>Código de Boleta detectado:</strong> <span>{codigoBoleta}</span>
+        {ocrResult && (
+          <div style={{marginTop: "10px", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", gap: "0.5rem"}}>
+            <div><strong>Código de Boleta detectado:</strong> <span>{codigoBoleta ? codigoBoleta : "N/A"}</span></div>
+            <div><strong>Apellidos:</strong> {(() => {
+              const payerName = extractPayerName(ocrResult);
+              const { lastNames } = splitPayerName(payerName);
+              return lastNames ? lastNames : "N/A";
+            })()}</div>
+            <div><strong>Nombres:</strong> {(() => {
+              const payerName = extractPayerName(ocrResult);
+              const { firstNames } = splitPayerName(payerName);
+              return firstNames ? firstNames : "N/A";
+            })()}</div>
+            <div><strong>Monto Total:</strong> {montoTotal ? montoTotal + " Bs." : "N/A"}</div>
           </div>
         )}
-          {ocrResult && (() => {
-            const payerName = extractPayerName(ocrResult);
-            const { lastNames, firstNames } = splitPayerName(payerName);
-            return (
-              <div style={{marginTop: "10px", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", gap: "0.5rem"}}>
-                <div><strong>Apellidos:</strong> {lastNames ? lastNames : "N/A"}</div>
-                <div><strong>Nombres:</strong> {firstNames ? firstNames : "N/A"}</div>
-                <div><strong>Monto Total:</strong> {montoTotal ? montoTotal + " Bs." : "N/A"}</div>
-              </div>
-            );
-          })()}
         {codigoBoleta && (
           <>
             <button onClick={() => confirmarPago(codigoBoleta)} style={{marginTop: "10px", marginRight: "10px", width: "150px", height: "40px", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer", verticalAlign: "middle"}}>
