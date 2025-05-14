@@ -1,16 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
 :root {
-  --primary-color: #547792;     
-  --primary-hover: #547792;    
-  --background: #94B4C1;         
+  --primary-color: #0EA5E9;     
+  --primary-hover: #0EA5E9;    
+  --background: #F0F9FF;         
   --white: #ffffff;            
   
-  
-  --text-primary: #1e293b;       
+  --text-primary: #000000;       
   --text-secondary: #64748b;     
   --text-light: #94a3b8;        
   
   --border-color: #e2e8f0;      
-  --border-radius: 8px;          
+  --border-radius: 10px;          
   
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -30,9 +32,9 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #94B4C1;
+  background-color: var(--background);
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .contact-main-container {
@@ -44,12 +46,12 @@
   top: 0;
   left: 0;
   padding: 0;
-  background-color: #94B4C1;
+  background-color: #F0F9FF;
 }
 
 .contact-sidebar {
   flex: 0 0 30%;
-  background-color: #547792;
+  background-color: #0EA5E9;
   color: var(--white);
   padding: 0 20px;
   display: flex;
@@ -116,13 +118,14 @@
   width: 100%;
 }
 
-.contacto-form-wrapper h2 {
-  color: #547792 !important;
-  margin-bottom: 40px;
-  font-size: 32px;
-  font-weight: bold;
+.contacto-form-wrapper h2,
+.titulo-contacto {
+  color: #000000 !important;
   text-align: center;
-  width: 100%;
+  margin-bottom: 2rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 24px;
 }
 
 .form-group {
@@ -135,27 +138,30 @@
 
 .form-group label {
   margin-bottom: 8px;
-  font-weight: bold;
+  font-weight: 400px;
   font-size: var(--h5-size);
   color: var(--text-primary);
   width: 100%;
+  font-family: 'Poppins', sans-serif;
 }
 
 .required {
   color: #dc2626;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 16px 20px;
-  border: 1px solid var(--border-color);
+  padding: 12px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.3s;
-  box-sizing: border-box;
-  background-color: #f5f7fa;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  transition: border-color 0.3s ease;
+  background-color: white;
   margin: 0;
 }
 
@@ -181,28 +187,22 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #547792;
-  box-shadow: 0 0 0 2px rgba(84, 119, 146, 0.1);
+  border-color: #0EA5E9;
 }
 
 .valid-input {
   border-color: #10b981 !important;
-  box-shadow: 0 0 0 1px #10b981;
 }
 
 .invalid-input {
   border-color: #ef4444 !important;
-  box-shadow: 0 0 0 1px #ef4444;
 }
 
 .error-message {
-  background-color: #ffebee;
-  border-left: 4px solid #f44336;
-  padding: 12px;
-  margin: 16px 0;
-  border-radius: 4px;
-  color: #d32f2f;
-  font-size: var(--error-size);
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 4px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .success-message {
@@ -222,27 +222,29 @@
 }
 
 .submit-button {
-  padding: var(--high-button) var(--broad-button);
-  background-color: #547792 !important;
-  color: var(--white) !important;
+  background-color: #0EA5E9;
+  color: white;
+  padding: 6px 16px;
   border: none;
-  border-radius: 8px;
-  font-size: var(--h5-size);
-  font-weight: bold;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
-  height: 48px;
   width: 100%;
-  max-width: 400px;
+  height: 40px;
+  line-height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
 }
 
 .submit-button:hover {
-  background-color: #547792 !important;
+  background-color: #0EA5E9;
 }
+
 #descripcion {
   font-family: 'Inter', sans-serif;
 }

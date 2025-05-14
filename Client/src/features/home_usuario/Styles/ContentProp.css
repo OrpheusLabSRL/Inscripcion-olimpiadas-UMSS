@@ -2,10 +2,12 @@
 
 
 .content-container {
+  background-color: #F0F9FF;
+  min-height: 100vh;
+  padding: 20px;
   width: 100vw;
   max-width: 100%;
   margin: var(--high-button) 0 var(--broad-button) 0; /* Usando las variables para los márgenes */
-  padding: 0;
   flex: 1;
   box-sizing: border-box;
 }
@@ -20,7 +22,7 @@ section {
 
 .event-description {
   height: 400px;
-  background-color: rgba(226, 226, 226, 0.7);
+  background-color: #F0F9FF;
   padding: var(--high-button);
   transition: all 0.5s ease;
   display: flex;
@@ -32,7 +34,7 @@ section {
 }
 
 .event-description.active {
-  background-color: var(--primary-color); /* Usando el color primario */
+  background-color: #F0F9FF;
 }
 
 .event-description h2,
@@ -49,7 +51,7 @@ section {
   font-size: var(--h6-siz); /* Usando la variable de tamaño de fuente */
   width: 337px;
   height: 52px;
-  background-color: var(--primary-color); /* Usando el color primario */
+  background-color: #F0F9FF;
   color: #ffffff;
   padding: 0.5rem 1rem;
   border-radius: 8px;
@@ -116,7 +118,7 @@ section {
 
 .areas-competence {
   min-height: 980px;
-  background-color: #ffffff;
+  background-color: #F0F9FF;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -124,9 +126,10 @@ section {
 }
 
 .areas-competence h2 {
-  font-size: var(--h2-size); /* Usando la variable de tamaño de fuente */
+  font-size: var(--h2-size);
   color: #333;
   margin-bottom: var(--high-button);
+  margin-top: 60px; /* Añadido margen superior */
 }
 
 .competence-grid {
@@ -140,7 +143,7 @@ section {
 }
 
 .category-card {
-  background-color: #ffffff;
+  background-color: white;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -181,7 +184,7 @@ section {
 .competence-rules {
   width: 100%;
   max-width: 800px;
-  background-color: #f8f9fa;
+  background-color: white;
   padding: var(--high-button);
   border-radius: 12px;
   margin-top: var(--high-button);
@@ -226,7 +229,7 @@ section {
 
 .registration-process {
   min-height: 293px;
-  background-color: #ffffff;
+  background-color: #F0F9FF;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -302,7 +305,8 @@ section {
 
 .how-to-register {
   min-height: 771px;
-  background-color: #ffffff;
+  background-color: #F0F9FF;
+
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -118,7 +118,7 @@ export const ListElement = ({ data }) => {
                 <span className="data-value">{data.departamento}</span>
               </div>
               <div className="data-item">
-                <span className="data-label">Provincia:</span>
+                <span className="data-label">Municipio:</span>
                 <span className="data-value">{data.municipio}</span>
               </div>
               <div className="data-item">

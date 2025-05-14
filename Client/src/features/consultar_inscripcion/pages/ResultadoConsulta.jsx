@@ -100,8 +100,8 @@ const ResultadoConsulta = () => {
                 <td>{persona?.departamento || "No disponible"}</td>
               </tr>
               <tr>
-                <td className="label">Provincia:</td>
-                <td>{persona?.provincia || "No disponible"}</td>
+                <td className="label">Municipio:</td>
+                <td>{persona?.municipio || "No disponible"}</td>
               </tr>
             </>
           )}
