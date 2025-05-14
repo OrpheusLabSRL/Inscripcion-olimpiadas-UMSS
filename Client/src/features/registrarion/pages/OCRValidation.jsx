@@ -154,54 +154,48 @@ export const OCRValidation = () => {
 
   return (
     <div className="ocrvalidation-container">
-      <h1>Validación OCR</h1>
-      <p>Suba una imagen o documento para validar mediante OCR.</p>
-      <form onSubmit={handleSubmit} className="ocrvalidation-form">
-        <input type="file" accept="image/*" onChange={handleFileChange} />
-        <PrimaryButton type="submit" value={processing ? "Procesando..." : "Procesar OCR"} disabled={processing} />
-      </form>
-      {ocrResult && (
-        <div className="ocr-result-panel" style={{marginTop: "20px", padding: "10px", border: "1px solid #ccc", borderRadius: "4px", backgroundColor: "#f9f9f9", maxHeight: "300px", overflowY: "auto"}}>
-          <h2>Texto extraído:</h2>
-          <div className="ocr-result-text" style={{whiteSpace: "pre-wrap", fontFamily: "monospace"}}>
-            {ocrResult}
+      <h1>Subir foto del comprobante de pago</h1>
+      <p>Suba una imagen para validar mediante OCR.</p>
+      <div className="ocrvalidation-panel" style={{marginTop: "20px"}}>
+        <form onSubmit={handleSubmit} className="ocrvalidation-form" style={{display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start", justifyContent: "center", marginBottom: "20px", width: "660px"}}>
+          <input type="file" accept="image/*" onChange={handleFileChange} style={{padding: "0.5rem", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "white", color: "black", fontWeight: "600", fontSize: "1rem", cursor: "pointer", height: "40px", width: "660px"}} />
+          <PrimaryButton type="submit" value={processing ? "Procesando..." : "Procesar Imagen"} disabled={processing} style={{width: "150px", height: "40px", backgroundColor: "#1e40af", borderColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer"}} />
+        </form>
+        {codigoBoleta && (
+          <div style={{marginTop: "10px", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: "0.5rem"}}>
+            <strong>Código de Boleta detectado:</strong> <span>{codigoBoleta}</span>
           </div>
-        </div>
-      )}
-      {codigoBoleta && (
-        <div style={{marginTop: "10px"}}>
-          <strong>Código de Boleta detectado:</strong> {codigoBoleta}
-        </div>
-      )}
-      {ocrResult && (() => {
-        const payerName = extractPayerName(ocrResult);
-        const { lastNames, firstNames } = splitPayerName(payerName);
-        return (
-          <div style={{marginTop: "10px"}}>
-            <strong>Nombre detectado:</strong> {payerName ? payerName : "No detectado"}
-            <br />
-            <strong>Apellidos:</strong> {lastNames ? lastNames : "N/A"}
-            <br />
-            <strong>Nombres:</strong> {firstNames ? firstNames : "N/A"}
+        )}
+          {ocrResult && (() => {
+            const payerName = extractPayerName(ocrResult);
+            const { lastNames, firstNames } = splitPayerName(payerName);
+            return (
+              <div style={{marginTop: "10px", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", gap: "0.5rem"}}>
+                <div><strong>Apellidos:</strong> {lastNames ? lastNames : "N/A"}</div>
+                <div><strong>Nombres:</strong> {firstNames ? firstNames : "N/A"}</div>
+                <div><strong>Monto Total:</strong> {montoTotal ? montoTotal + " Bs." : "N/A"}</div>
+              </div>
+            );
+          })()}
+        {codigoBoleta && (
+          <>
+            <button onClick={() => checkCodigoBoleta(codigoBoleta)} style={{marginTop: "10px", marginRight: "10px", width: "150px", height: "40px", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer", verticalAlign: "middle"}}>
+              Comprobar Boleta
+            </button>
+            <button onClick={() => confirmarPago(codigoBoleta)} style={{marginTop: "10px", width: "150px", height: "40px", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "#2563eb", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer", verticalAlign: "middle"}} disabled={boletaExists && boletaPaid}>
+              Confirmar Pago
+            </button>
+          </>
+        )}
+        {boletaExists !== null && (
+          <div style={{marginTop: "10px", color: boletaExists ? "green" : "red"}}>
+            {boletaExists ? (boletaPaid ? "La boleta ya fue pagada." : "La boleta existe en la base de datos.") : "La boleta NO existe en la base de datos."}
           </div>
-        );
-      })()}
-      {codigoBoleta && (
-        <>
-          <button onClick={() => checkCodigoBoleta(codigoBoleta)} style={{marginTop: "10px", marginRight: "10px"}}>
-            Comprobar Boleta
-          </button>
-          <button onClick={() => confirmarPago(codigoBoleta)} style={{marginTop: "10px"}} disabled={boletaExists && boletaPaid}>
-            Confirmar Pago
-          </button>
-        </>
-      )}
-      {boletaExists !== null && (
-        <div style={{marginTop: "10px", color: boletaExists ? "green" : "red"}}>
-          {boletaExists ? (boletaPaid ? "La boleta ya fue pagada." : "La boleta existe en la base de datos.") : "La boleta NO existe en la base de datos."}
-        </div>
-      )}
-      <button className="back-button" onClick={handleBack} style={{marginTop: "20px"}}>Volver</button>
+        )}
+        <button className="back-button" onClick={handleBack} style={{marginTop: "20px", width: "150px", height: "40px", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer"}}>
+          Volver
+        </button>
+      </div>
     </div>
   );
 };
