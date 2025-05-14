@@ -195,8 +195,6 @@ public function getOlimpistasByTutor($idTutorResponsable)
                 ->where('idPersona', $persona->idPersona)
                 ->first();
 
-            Log::info('Datos del Request:', $olimpista->toArray());
-
             if (!$olimpista) {
                 return response()->json([
                     'success' => false,

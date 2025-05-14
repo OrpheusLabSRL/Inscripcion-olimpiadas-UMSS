@@ -148,7 +148,7 @@ export const RegisterTutor = () => {
           {
             area: sessionStorage.getItem("AreaPrincipal"),
             categoria: sessionStorage.getItem("CategoriaPrincipal"),
-            existeTutor: sessionStorage.getItem("TutorArea1"),
+            existeTutor: sessionStorage.getItem("TutorArea1") === "true",
             formaInscripcion: "Manual",
             registrandose: true,
             tutorArea: {
@@ -180,6 +180,8 @@ export const RegisterTutor = () => {
           },
         });
       }
+
+      console.log("dataToSend", dataToSend);
 
       try {
         const resInscription = await setNewInscription(dataToSend);

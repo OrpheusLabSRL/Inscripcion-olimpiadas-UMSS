@@ -2,7 +2,8 @@
   position: fixed;
   top: 0;
   height: 95vh;
-  background: var(--quaternary-color);
+  /* background: var(--quaternary-color); */
+  background: var(--white);
   color: rgb(0, 0, 0);
   padding: 25px;
   transition: all 1s;

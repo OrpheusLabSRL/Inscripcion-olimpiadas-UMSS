@@ -9,6 +9,7 @@ use App\Models\Tutor;
 use Illuminate\Http\Request;
 use App\Models\Olimpista;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InscripcionController extends Controller
 {
@@ -24,6 +25,9 @@ class InscripcionController extends Controller
         ]);
 
         DB::beginTransaction();
+
+        Log::info('Usuario creado correctamente', [$request]);
+
 
         try {
             // 1. Procesar el olimpista
@@ -49,7 +53,9 @@ class InscripcionController extends Controller
             foreach ($request->inscripciones as $inscripcionData) {
                 // Procesar tutor de área si existe
                 $tutorArea = null;
-                if ($request->has('existeTutor') && $request->existeTutor === true  && isset($inscripcionData['tutorArea'])) {
+                if (isset($inscripcionData['existeTutor']) &&
+                    filter_var($inscripcionData['existeTutor'], FILTER_VALIDATE_BOOLEAN) &&
+                    isset($inscripcionData['tutorArea'])) {
                     $personaTutorArea = $this->buscarOCrearPersona($inscripcionData['tutorArea']);
                     $tutorArea = $this->buscarOCrearTutor($personaTutorArea->idPersona, $inscripcionData['tutorArea']);
                 }
