@@ -1,0 +1,276 @@
+/* ==== Containers ==== */
+.manage-docente-container,
+.manage-olympiad-container {
+  padding: 20px;
+}
+
+.panel-container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* ==== Selectors ==== */
+.selector,
+.selector-container {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.selector-label {
+  font-weight: 500;
+}
+
+.selector select,
+.selector-select {
+  padding: 8px 12px;
+  font-size: 16px;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* ==== Section Header ==== */
+.section-header,
+.areas-title-container,
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.section-title,
+.panel-title {
+  font-size: 1.5rem;
+  margin: 0;
+  color: #333;
+}
+
+/* ==== Buttons ==== */
+.btn,
+.open-modal-button,
+.action-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.btn {
+  background-color: #4285f4;
+  color: white;
+}
+
+.btn-primary:hover,
+.open-modal-button:hover,
+.action-button.primary:hover {
+  background-color: #3367d6;
+}
+
+.open-modal-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.action-button.primary {
+  background: #4285f4;
+  color: white;
+}
+
+.action-button.success {
+  background: #34a853;
+  color: white;
+}
+
+.action-button.success:hover {
+  background: #2d9248;
+}
+
+.action-button .button-icon {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==== Tabs ==== */
+.tabs-container {
+  display: flex;
+  background: #f5f5f5;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.tab-button {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  font-weight: 500;
+  color: #666;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  background: #fff;
+  color: #4285f4;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ==== Tables ==== */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.data-table,
+.tabla-area-categoria table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.data-table th,
+.tabla-area-categoria th {
+  background-color: #f8f9fa;
+  padding: 12px 15px;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #e9ecef;
+  text-align: left;
+}
+
+.data-table td,
+.tabla-area-categoria td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: top;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.empty-row td {
+  text-align: center;
+  padding: 30px;
+  color: #6c757d;
+}
+
+/* ==== Categories ==== */
+.categories-column {
+  min-width: 250px;
+}
+
+.category-item {
+  margin-bottom: 12px;
+}
+
+.category-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.grade-list {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 2px;
+}
+
+.no-categories {
+  color: #dc3545;
+  font-style: italic;
+}
+
+/* ==== Status Badges ==== */
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-badge.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* ==== Edit Button ==== */
+.edit-button {
+  background: none;
+  border: none;
+  color: #4285f4;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.edit-button:hover {
+  background: #f0f7ff;
+}
+
+.edit-button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+/* ==== Forms ==== */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.form-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* ==== Info Cards ==== */
+.new-area-section {
+  padding: 20px 0;
+}
+
+.info-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.info-card h4 {
+  margin-top: 0;
+  color: #333;
+}
+
+.info-card p {
+  color: #666;
+  margin-bottom: 20px;
+}

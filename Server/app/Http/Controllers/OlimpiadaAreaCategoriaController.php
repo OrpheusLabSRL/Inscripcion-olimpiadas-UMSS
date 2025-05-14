@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\OlimpiadaAreaCategoria;
+use Illuminate\Support\Facades\Validator;
 
 class OlimpiadaAreaCategoriaController extends Controller
 {
@@ -19,10 +20,11 @@ class OlimpiadaAreaCategoriaController extends Controller
         $data = $request->all();
 
         foreach ($data as $item) {
-            $validator = \Validator::make($item, [
+            $validator = Validator::make($item, [
                 'idOlimpiada' => 'required|exists:olimpiadas,idOlimpiada',
                 'idArea' => 'required|exists:areas,idArea',
                 'idCategoria' => 'required|exists:categorias,idCategoria',
+                'costo' => 'required|numeric|min:0',
             ]);
 
             if ($validator->fails()) {
@@ -40,6 +42,7 @@ class OlimpiadaAreaCategoriaController extends Controller
                 ],
                 [
                     'estado' => true,
+                    'costo' => $item['costo'],
                 ]
             );
         }
@@ -62,19 +65,21 @@ class OlimpiadaAreaCategoriaController extends Controller
     public function porOlimpiada($idOlimpiada)
     {
         $combinaciones = OlimpiadaAreaCategoria::where('idOlimpiada', $idOlimpiada)
-            ->with(['area', 'categoria.grados']) // ← incluye grados relacionados
+            ->with(['area', 'categoria.grados'])
             ->get()
             ->groupBy('idArea');
-    
+
         $resultados = [];
-    
+
         foreach ($combinaciones as $idArea => $grupo) {
             $area = $grupo->first()->area;
-    
-            $categorias = $grupo->pluck('categoria')->map(function ($cat) {
+
+            $categorias = $grupo->map(function ($combinacion) {
+                $cat = $combinacion->categoria;
                 return [
                     'idCategoria' => $cat->idCategoria,
                     'nombreCategoria' => $cat->nombreCategoria,
+                    'costo' => $combinacion->costo,
                     'grados' => $cat->grados->map(function ($grado) {
                         return [
                             'idGrado' => $grado->idGrado,
@@ -84,22 +89,23 @@ class OlimpiadaAreaCategoriaController extends Controller
                     })
                 ];
             });
-    
+
             $resultados[] = [
                 'idArea' => $area->idArea,
                 'nombreArea' => $area->nombreArea,
                 'categorias' => $categorias,
             ];
         }
-    
+
         return response()->json($resultados);
     }
-    
-    public function eliminarPorOlimpiada($idOlimpiada)
-    {
-        OlimpiadaAreaCategoria::where('idOlimpiada', $idOlimpiada)->delete();
 
-        return response()->json(['message' => 'Todas las combinaciones eliminadas correctamente.']);
+   public function eliminarPorOlimpiadaYArea($idOlimpiada, $idArea)
+    {
+        OlimpiadaAreaCategoria::where('idOlimpiada', $idOlimpiada)
+            ->where('idArea', $idArea)
+            ->delete();
+
+        return response()->json(['message' => 'Combinaciones del área eliminadas correctamente.']);
     }
-    
 }

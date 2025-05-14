@@ -31,11 +31,13 @@ export const getAreasCategoriasPorOlimpiada = async (idOlimpiada) => {
     `/viewAreaCategoria/olimpiada/${idOlimpiada}`
   );
 };
-export const deleteAreasCategoriasPorOlimpiada = (idOlimpiada) => {
+
+export const deleteAreaCategoriaByOlimpiadaAndArea = (idOlimpiada, idArea) => {
   return inscriptionApi.delete(
-    `/olimpiada-area-categoria/eliminar-por-olimpiada/${idOlimpiada}`
+    `/eliminarOlimpiadas/${idOlimpiada}/area/${idArea}`
   );
 };
+
 export const updateOlimpiadaEstado = async (idOlimpiada, nuevoEstado) => {
   return await inscriptionApi.put(`/editarOlimpiadas/${idOlimpiada}/estado`, {
     estadoOlimpiada: nuevoEstado,
@@ -58,6 +60,10 @@ export const getCategorias = async () => {
 export const getAreas = async () => {
   const response = await inscriptionApi.get("/viewAreas");
   return response.data;
+};
+
+export const createArea = async (data) => {
+  return await inscriptionApi.post("/registrarAreas", data);
 };
 
 /* =======================

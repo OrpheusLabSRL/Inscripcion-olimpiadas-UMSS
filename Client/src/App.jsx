@@ -11,7 +11,8 @@ import ManageArea from "./features/administration/pages/ManageArea";
 import ManageCategoria from "./features/administration/pages/ManageCategoria";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageViewBase from "./features/administration/pages/ManageViewBaseData";
-import Home from "./features/administration/pages/Home";
+import HomeAdministration from "./features/administration/pages/Home";
+import PanelOlympiad from "./features/administration/pages/PanelOlympiad";
 import Login from "./features/administration/pages/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
@@ -26,6 +27,7 @@ import ResultadoConsulta from "./features/consultar_inscripcion/pages/ResultadoC
 import ResultadoConsulta_Tutor from "./features/consultar_inscripcion/pages/ResultadoConsulta_Tutor";
 import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
+import { OCRValidation } from "./features/registrarion/pages/ocrvalidation";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
@@ -76,6 +78,7 @@ function App() {
             <Route path="/register/tutor-legal" element={<RegisterTutor />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
             <Route path="/register/excel" element={<RegisterExcel />} />
+            <Route path="/comprobar-boleta" element={<OCRValidation />} />
             <Route
               path="/register/responsible"
               element={<RegisterResponsible />}
@@ -109,11 +112,12 @@ function App() {
             {/* Rutas de administración */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Login />} />
-              <Route path="home" element={<Home />} />
+              <Route path="home" element={<HomeAdministration />} />
               <Route path="areas" element={<ManageArea />} />
               <Route path="categorias" element={<ManageCategoria />} />
               <Route path="olimpiadas" element={<ManageOlympiads />} />
               <Route path="view-base" element={<ManageViewBase />} />
+              <Route path="panelOlympiad" element={<PanelOlympiad />} />
               <Route
                 path="reports"
                 element={

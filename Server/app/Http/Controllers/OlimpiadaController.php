@@ -40,7 +40,7 @@ class OlimpiadaController extends Controller
         $olimpiada = Olimpiada::findOrFail($id);
 
         $request->validate([
-            'nombreOlimpiada' => 'required|string|max:100|unique:olimpiadas,nombreOlimpiada,' . $id . ',idOlimpiada',
+            'nombreOlimpiada' => 'required|string|max:100,' . $id . ',idOlimpiada',
             'version' => 'required|integer|min:1',
             'fechaInicioOlimpiada' => 'required|date',
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',

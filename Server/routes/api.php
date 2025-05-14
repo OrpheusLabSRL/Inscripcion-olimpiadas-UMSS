@@ -53,10 +53,11 @@ Route::get('/viewOlimpiadas', [OlimpiadaController::class, 'mostrarOlimpiada']);
 Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::put('/editarOlimpiadas/{id}/estado', [OlimpiadaController::class, 'cambiarEstado']);
-Route::delete('/olimpiada-area-categoria/eliminar-por-olimpiada/{idOlimpiada}', [OlimpiadaAreaCategoriaController::class, 'eliminarPorOlimpiada']);
+
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);
+Route::post('/registrarAreas', [AreaController::class, 'store']);
 Route::get('/catalogoCompleto', [AreaController::class, 'getProgramaCompleto']);
 
 // Categorías
@@ -80,8 +81,14 @@ Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
 Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'index']);
 Route::post('/newAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'store']);
 Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);
+Route::delete('/eliminarOlimpiadas/{idOlimpiada}/area/{idArea}', [OlimpiadaAreaCategoriaController::class, 'eliminarPorOlimpiadaYArea']);
+
+
 
 Route::get('/boletas/generar/{idTutor}/{codigoInscripcion}/get', [BoletaPagoController::class, 'generarBoleta']);
+
+Route::post('/boletaPago/check', [BoletaPagoController::class, 'generarPago']);
+Route::post('/boletaPago/confirmarPago', [BoletaPagoController::class, 'confirmarPago']);
 
 // Excel
 Route::post('/register-from-excel', [ExcelController::class, 'registerFromExcel']);

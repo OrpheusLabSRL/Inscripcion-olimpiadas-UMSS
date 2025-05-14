@@ -20,7 +20,8 @@ class InscripcionController extends Controller
             'olimpista' => 'required|array',
             'responsable' => 'required|array',
             'tutor_legal' => 'required|array',
-            'inscripciones' => 'required|array'
+            'inscripciones' => 'required|array',
+            'inscripciones.*.formaInscripcion' => 'required|string'
         ]);
 
         DB::beginTransaction();

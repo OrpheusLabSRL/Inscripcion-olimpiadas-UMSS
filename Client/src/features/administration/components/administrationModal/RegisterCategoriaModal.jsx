@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FiAlertCircle } from "react-icons/fi";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
 import "../../Styles/ModalGeneral.css";
 import "../../Styles/Dropdown.css";
@@ -9,14 +10,19 @@ import {
   getCategoriaGrado,
   getAreasCategoriasPorOlimpiada,
   asignarAreasYCategorias,
-  //deleteAreasCategoriasPorOlimpiada,
+  deleteAreaCategoriaByOlimpiadaAndArea,
 } from "../../../../api/Administration.api";
 
-const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
+const RegisterCategoriaModal = ({
+  isOpen,
+  onClose,
+  selectedVersion,
+  selectedAreaId,
+}) => {
   const [version, setVersion] = useState("");
-  const [versionLabel, setVersionLabel] = useState("");
   const [selectedAreas, setSelectedAreas] = useState([]);
   const [selectedCategorias, setSelectedCategorias] = useState({});
+  const [costoPorArea, setCostoPorArea] = useState({});
   const [areas, setAreas] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [errors, setErrors] = useState({});
@@ -30,8 +36,11 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
 
     const fetchData = async () => {
       try {
-        const [olimpiadasData, areasData, categoriaGradoData] =
-          await Promise.all([getOlimpiadas(), getAreas(), getCategoriaGrado()]);
+        const [_, areasData, categoriaGradoData] = await Promise.all([
+          getOlimpiadas(),
+          getAreas(),
+          getCategoriaGrado(),
+        ]);
 
         const categoriaMap = new Map();
         categoriaGradoData.forEach((entry) => {
@@ -52,22 +61,17 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
 
         setAreas(areasData || []);
         setCategorias(Array.from(categoriaMap.values()));
-
-        const selectedOlimpiad = olimpiadasData.data.find(
-          (o) => o.idOlimpiada === selectedVersion
-        );
-        if (selectedOlimpiad) {
-          setVersionLabel(selectedOlimpiad.version);
-        }
-
         setVersion(selectedVersion);
+        if (selectedAreaId) {
+          setSelectedAreas([selectedAreaId]);
+        }
       } catch (error) {
         console.error("Error cargando datos base:", error);
       }
     };
 
     fetchData();
-  }, [isOpen, selectedVersion]);
+  }, [isOpen, selectedVersion, selectedAreaId]);
 
   useEffect(() => {
     const cargarAsignacionesPrevias = async () => {
@@ -79,20 +83,33 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
 
         const areasAsignadas = data.map((area) => area.idArea);
         const categoriasAsignadas = {};
+        const costos = {};
 
         data.forEach((area) => {
           categoriasAsignadas[area.idArea] = area.categorias.map(
             (cat) => cat.idCategoria
           );
+          if (area.categorias.length > 0) {
+            costos[area.idArea] = area.categorias[0].costo;
+          }
         });
-
-        setSelectedAreas(areasAsignadas);
-        setSelectedCategorias(categoriasAsignadas);
 
         setInitialState({
           areas: areasAsignadas,
           categorias: categoriasAsignadas,
         });
+
+        if (!selectedAreaId) {
+          setSelectedAreas(areasAsignadas);
+          setSelectedCategorias(categoriasAsignadas);
+        } else {
+          setSelectedCategorias({
+            [selectedAreaId]: categoriasAsignadas[selectedAreaId] || [],
+          });
+          setCostoPorArea({
+            [selectedAreaId]: costos[selectedAreaId] || "0.00",
+          });
+        }
       } catch (error) {
         console.error("Error cargando áreas y categorías existentes:", error);
       }
@@ -101,7 +118,7 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
     if (isOpen && version) {
       cargarAsignacionesPrevias();
     }
-  }, [isOpen, version]);
+  }, [isOpen, version, selectedAreaId]);
 
   const handleCategoriaChange = (areaId, values) => {
     setSelectedCategorias((prev) => ({
@@ -116,13 +133,13 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
 
   const handleReset = () => {
     setVersion("");
-    setVersionLabel("");
     setSelectedAreas([]);
     setSelectedCategorias({});
     setAreas([]);
     setCategorias([]);
     setErrors({});
     setInitialState({ areas: [], categorias: {} });
+    setCostoPorArea({});
     onClose();
   };
 
@@ -142,10 +159,18 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
         newErrors[`categorias-${areaId}`] =
           "Debe seleccionar al menos una categoría";
       }
+
+      const costo = costoPorArea[areaId];
+      if (costo === undefined || isNaN(costo) || parseFloat(costo) < 0) {
+        newErrors[`costo-${areaId}`] = "Costo inválido";
+      }
     });
 
     setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
+    if (Object.keys(newErrors).length > 0) {
+      alert("Por favor corrige los errores antes de guardar.");
+      return;
+    }
 
     const confirmacion = window.confirm(
       "¿Está seguro de guardar esta configuración?"
@@ -154,23 +179,27 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
 
     const combinaciones = [];
     selectedAreas.forEach((idArea) => {
+      const costo = parseFloat(costoPorArea[idArea]) || 0;
       (selectedCategorias[idArea] || []).forEach((idCategoria) => {
         combinaciones.push({
-          idOlimpiada: parseInt(version),
+          idOlimpiada: version,
           idArea,
           idCategoria,
+          costo,
         });
       });
     });
 
     try {
-      await deleteAreasCategoriasPorOlimpiada(version);
+      for (const idArea of selectedAreas) {
+        await deleteAreaCategoriaByOlimpiadaAndArea(version, idArea);
+      }
 
       if (combinaciones.length > 0) {
         await asignarAreasYCategorias(combinaciones);
       }
 
-      alert("¡Configuración actualizada exitosamente!");
+      alert("¡Categoría registrada exitosamente!");
       handleReset();
       window.location.reload();
     } catch (error) {
@@ -193,55 +222,25 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
 
         <form onSubmit={handleSubmit}>
           <h3 className="section-title" style={{ color: "#000" }}>
-            Versión Seleccionada
-          </h3>
-          <div
-            style={{
-              padding: "0.75rem 1rem",
-              borderRadius: "8px",
-              backgroundColor: "#d8d7bc",
-              fontWeight: "600",
-              marginBottom: "1rem",
-            }}
-          >
-            {versionLabel ? `Versión ${versionLabel}` : "Versión no disponible"}
-          </div>
-
-          <h3 className="section-title" style={{ color: "#000" }}>
-            Áreas de la Olimpiada
-          </h3>
-          <div className="dropdown-container">
-            <div className="dropdown-wrapper large">
-              <MultiSelectDropdown
-                label=""
-                name="areas"
-                placeholder="Seleccione las Áreas de la Olimpiada"
-                options={areas.map((a) => ({
-                  value: a.idArea,
-                  label: a.nombreArea,
-                }))}
-                selectedValues={selectedAreas}
-                onChange={(values) => {
-                  setSelectedAreas(values);
-                  setErrors((prev) => ({ ...prev, areas: "" }));
-                }}
-                error={!!errors.areas}
-                errorMessage={errors.areas}
-              />
-            </div>
-          </div>
-
-          <h3 className="section-title" style={{ color: "#000" }}>
             Categorías de la Olimpiada
           </h3>
 
           {selectedAreas.map((areaId) => {
             const area = areas.find((a) => a.idArea === areaId);
-            const categoriasOptions = categorias.map((c) => ({
+            const yaAsignadas = initialState.categorias[areaId] || [];
+            const categoriasDisponibles = categorias.filter(
+              (cat) => !yaAsignadas.includes(cat.idCategoria)
+            );
+            const categoriasOptions = categoriasDisponibles.map((c) => ({
               value: c.idCategoria,
-              label: c.nombreCategoria,
+              label:
+                c.nombreCategoria +
+                (c.grados?.length > 0
+                  ? ` (${c.grados
+                      .map((g) => `${g.numeroGrado}° ${g.nivel}`)
+                      .join(", ")})`
+                  : ""),
             }));
-
             const categoriasSeleccionadas = categorias.filter((c) =>
               selectedCategorias[areaId]?.includes(c.idCategoria)
             );
@@ -249,70 +248,92 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
             return (
               <div
                 key={areaId}
-                className="field-group inline"
+                className="field-group"
                 style={{ marginBottom: "1.5rem" }}
               >
-                <label
-                  className="dropdown-label"
-                  style={{ minWidth: "120px", marginRight: "1rem" }}
-                >
-                  {area?.nombreArea}
-                  <span style={{ color: "red", marginLeft: "0.25rem" }}>*</span>
+                <label className="dropdown-label">
+                  Área: <strong>{area?.nombreArea}</strong>
                 </label>
-                <div style={{ flex: 1 }}>
-                  <div
-                    className={`dropdown-wrapper large ${
-                      errors[`categorias-${areaId}`] ? "error-border" : ""
+
+                <label style={{ marginTop: "0.5rem" }}>
+                  Costo por categoría (Bs):
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={costoPorArea[areaId] || ""}
+                    onChange={(e) =>
+                      setCostoPorArea((prev) => ({
+                        ...prev,
+                        [areaId]: e.target.value,
+                      }))
+                    }
+                    className={`form-input ${
+                      errors[`costo-${areaId}`] ? "input-error" : ""
                     }`}
-                  >
-                    <MultiSelectDropdown
-                      label=""
-                      name={`categorias-${areaId}`}
-                      placeholder="Seleccione las Categorías del Área"
-                      options={categoriasOptions}
-                      selectedValues={selectedCategorias[areaId] || []}
-                      onChange={(values) =>
-                        handleCategoriaChange(areaId, values)
-                      }
-                    />
-                  </div>
+                    style={{
+                      marginLeft: "1rem",
+                      padding: "0.3rem",
+                      width: "120px",
+                    }}
+                  />
+                </label>
+                {errors[`costo-${areaId}`] && (
+                  <p className="error-message">
+                    <FiAlertCircle /> {errors[`costo-${areaId}`]}
+                  </p>
+                )}
 
-                  {errors[`categorias-${areaId}`] && (
-                    <p className="error-message">
-                      {errors[`categorias-${areaId}`]}
-                    </p>
-                  )}
-
-                  {categoriasSeleccionadas.length > 0 && (
-                    <ul
-                      style={{
-                        margin: "0.5rem 0 0 0",
-                        fontSize: "0.85rem",
-                        color: "#333",
-                        paddingLeft: "1rem",
-                      }}
-                    >
-                      {categoriasSeleccionadas.map((cat) => (
-                        <li key={cat.idCategoria}>
-                          <strong>{cat.nombreCategoria}</strong>{" "}
-                          {cat.grados && cat.grados.length > 0 && (
-                            <span style={{ color: "#666" }}>
-                              (
-                              {cat.grados
-                                .map(
-                                  (g) =>
-                                    `${g.numeroGrado}° de ${g.nivel}` ||
-                                    g.nombreGrado
-                                )
-                                .join(", ")}
-                              )
-                            </span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                <div
+                  className={`dropdown-wrapper large ${
+                    errors[`categorias-${areaId}`] ? "input-error" : ""
+                  }`}
+                  style={{ marginTop: "1rem" }}
+                >
+                  <MultiSelectDropdown
+                    label=""
+                    name={`categorias-${areaId}`}
+                    placeholder="Seleccione las Categorías del Área"
+                    options={categoriasOptions}
+                    selectedValues={selectedCategorias[areaId] || []}
+                    onChange={(values) => handleCategoriaChange(areaId, values)}
+                  />
                 </div>
+
+                {errors[`categorias-${areaId}`] && (
+                  <p className="error-message">
+                    <FiAlertCircle /> {errors[`categorias-${areaId}`]}
+                  </p>
+                )}
+
+                {categoriasSeleccionadas.length > 0 && (
+                  <ul
+                    style={{
+                      marginTop: "0.75rem",
+                      paddingLeft: "1.25rem",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    {categoriasSeleccionadas.map((cat) => (
+                      <li key={cat.idCategoria}>
+                        <strong>{cat.nombreCategoria}</strong>{" "}
+                        {cat.grados?.length > 0 && (
+                          <span style={{ color: "#666" }}>
+                            (
+                            {cat.grados
+                              .map(
+                                (g) =>
+                                  `${g.numeroGrado}° ${g.nivel}` ||
+                                  g.nombreGrado
+                              )
+                              .join(", ")}
+                            )
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             );
           })}
@@ -331,4 +352,4 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
   );
 };
 
-export default ManageBaseDataModal;
+export default RegisterCategoriaModal;
