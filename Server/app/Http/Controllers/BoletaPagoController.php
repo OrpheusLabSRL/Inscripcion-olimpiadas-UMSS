@@ -33,8 +33,10 @@ class BoletaPagoController extends Controller
                 return response()->json(['message' => 'No hay inscripciones pendientes.'], 404);
             }
 
-            // Calcular monto total
-            $monto = $inscripciones->count() * 15;
+            // Calcular monto total sumando el costo de cada área
+            $monto = $inscripciones->sum(function($inscripcion) {
+                return $inscripcion->OlimpiadaAreaCategoria->area->costoArea ?? 0;
+            });
 
             // Crear boleta de pago
             $boleta = BoletaPago::create([
