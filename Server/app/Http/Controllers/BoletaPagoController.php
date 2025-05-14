@@ -82,6 +82,11 @@ class BoletaPagoController extends Controller
         };
 
         $payerNameNormalized = $normalize($payerName);
+        // Remove punctuation and extra spaces from payerNameNormalized
+        $payerNameNormalized = preg_replace('/[^\p{L}\p{N}\s]/u', '', $payerNameNormalized);
+        $payerNameNormalized = preg_replace('/\s+/', ' ', $payerNameNormalized);
+        $payerNameNormalized = trim($payerNameNormalized);
+
         $nameParts = preg_split('/\s+/', $payerNameNormalized);
         if (count($nameParts) < 2) {
             return response()->json(['exists' => false]);
@@ -95,6 +100,7 @@ class BoletaPagoController extends Controller
             ->where('boletas_pagos.montoTotal', $montoTotal)
             ->where(function ($query) use ($nameParts) {
                 foreach ($nameParts as $part) {
+                    $part = strtolower($part);
                     $query->where(function ($q) use ($part) {
                         $q->whereRaw('LOWER(personas.apellido) LIKE ?', ["%{$part}%"])
                           ->orWhereRaw('LOWER(personas.nombre) LIKE ?', ["%{$part}%"]);
