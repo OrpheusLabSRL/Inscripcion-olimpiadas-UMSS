@@ -1,31 +1,24 @@
-.container-form-inputs {
-  background-color: #fff;
-  color: #000;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  max-width: 900px;
-  margin: 50px auto;
-  border-radius: 10px;
-  box-shadow: 0px 5px 10px #00000014;
-  padding: 30px;
-  column-gap: 20px;
+.ocrvalidation-container {
+  padding: 2rem;
+  background-color: #a2bfcb;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
 }
 
-.input-1c {
-  grid-column: span 1;
-}
-
-.input-2c {
-  grid-column: span 2;
-}
-
-.container-btn-next button {
-  background-color: var(--tertiary-color);
-}
-
-.btn-back {
-  font-size: 50px;
-  position: absolute;
-  top: 20px;
-  margin-left: 20px;
+.ocrvalidation-panel {
+  background-color: #ecefca;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  max-height: calc(100vh - 4rem);
+  box-sizing: border-box;
 }
