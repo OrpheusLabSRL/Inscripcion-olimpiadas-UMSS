@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import "../../Styles/ModalGeneral.css";
 import { createArea, getAreas } from "../../../../api/Administration.api";
-import { toast } from "react-toastify";
 
 const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -13,7 +12,6 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [existingAreas, setExistingAreas] = useState([]);
 
-  // Cargar áreas existentes para validar nombre único
   useEffect(() => {
     if (isOpen) {
       getAreas()
@@ -47,7 +45,7 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
       descripcionArea: "",
     });
     setErrors({});
-    onClose(); // Volver a pantalla anterior
+    onClose();
   };
 
   const validateForm = () => {
@@ -82,9 +80,14 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error("Se deben llenar todos los campos obligatorios.");
+      alert("Se deben llenar todos los campos obligatorios.");
       return;
     }
+
+    const confirmacion = window.confirm(
+      "¿Está seguro de guardar esta configuración?"
+    );
+    if (!confirmacion) return;
 
     setIsSubmitting(true);
 
@@ -94,14 +97,12 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
         descripcionArea: formData.descripcionArea.trim(),
       });
 
-      toast.success("Área registrada exitosamente.");
+      alert("Área registrada exitosamente.");
       handleReset();
       if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Error al registrar área:", error);
-      toast.error(
-        error.response?.data?.message || "No se pudo registrar el área"
-      );
+      alert(error.response?.data?.message || "No se pudo registrar el área");
     } finally {
       setIsSubmitting(false);
     }

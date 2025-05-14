@@ -1,3 +1,56 @@
+/* ERRORES VISIBLES */
+.input-error {
+  border: 2px solid #ff4444 !important;
+  background-color: #fff0f0 !important;
+}
+
+.has-error .dropdown-wrapper {
+  border: 2px solid #ff4444 !important;
+  background-color: #fff0f0 !important;
+}
+
+.error-message {
+  color: #ff4444;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: #fff0f0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.error-message svg {
+  margin-right: 0.5rem;
+  min-width: 16px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Para asegurar que los errores sean visibles */
+.form-group.has-error {
+  margin-bottom: 1.5rem;
+}
+
+/* Input con icono */
+.input-with-icon.input-error {
+  border: none !important;
+}
+.input-with-icon.input-error input {
+  border: 2px solid #ff4444 !important;
+  background-color: #fff0f0 !important;
+}
+
 /* === Overlay general del modal === */
 .modal-overlay {
   position: fixed;
@@ -131,29 +184,6 @@ textarea.form-input {
   color: white;
 }
 
-/* === Errores === */
-.input-error {
-  border: 2px solid #dc2626 !important;
-  background-color: #ffecec !important;
-}
-
-.input-error:focus {
-  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
-}
-
-.error-message,
-.has-error .error-message {
-  color: #dc2626;
-  font-size: 0.85rem;
-  margin-top: 0.25rem;
-  background: #ffecec;
-  padding: 0.4rem;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
 /* === Contador de caracteres === */
 .char-counter {
   text-align: right;
@@ -242,4 +272,11 @@ textarea.form-input {
 .Toastify__toast--loading {
   background-color: #f7fafc !important;
   color: #2d3748 !important;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
 }

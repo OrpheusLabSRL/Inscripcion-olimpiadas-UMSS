@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { FiAlertCircle } from "react-icons/fi";
 import "../Styles/Dropdown.css";
 
 const MultiSelectDropdown = ({
@@ -10,7 +11,9 @@ const MultiSelectDropdown = ({
   placeholder = "Seleccione una opción",
   error = false,
   errorMessage = "",
-  size = "medium", // 'small', 'medium', 'large'
+  size = "medium",
+  className = "",
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -40,7 +43,10 @@ const MultiSelectDropdown = ({
     .join(", ");
 
   return (
-    <div className={`dropdown-container ${error ? "error" : ""}`}>
+    <div
+      className={`dropdown-container ${error ? "has-error" : ""} ${className}`}
+      ref={dropdownRef}
+    >
       {label && (
         <label className={`dropdown-label ${size === "large" ? "large" : ""}`}>
           {label}
@@ -48,8 +54,10 @@ const MultiSelectDropdown = ({
       )}
 
       <div
-        className={`dropdown-wrapper ${size} ${error ? "error-border" : ""}`}
-        onClick={() => setIsOpen(!isOpen)}
+        className={`dropdown-wrapper ${size} ${error ? "input-error" : ""} ${
+          disabled ? "disabled" : ""
+        }`}
+        onClick={() => !disabled && setIsOpen(!isOpen)}
       >
         <span className="dropdown-selected">
           {selectedLabels || placeholder}
@@ -57,7 +65,7 @@ const MultiSelectDropdown = ({
         <span className="dropdown-arrow">{isOpen ? "▲" : "▼"}</span>
       </div>
 
-      {isOpen && (
+      {isOpen && !disabled && (
         <div className="multi-dropdown-options">
           {options.map((option) => (
             <label key={option.value} className="multi-dropdown-item">
@@ -78,7 +86,12 @@ const MultiSelectDropdown = ({
         </div>
       )}
 
-      {error && <p className="error-message">{errorMessage}</p>}
+      {error && errorMessage && (
+        <p className="error-message">
+          <FiAlertCircle style={{ marginRight: "4px" }} />
+          {errorMessage}
+        </p>
+      )}
     </div>
   );
 };

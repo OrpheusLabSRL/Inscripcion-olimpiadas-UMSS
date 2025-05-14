@@ -201,3 +201,17 @@
   padding: 0.4rem 0.75rem;
   border-radius: 5px;
 }
+
+.has-error .dropdown-wrapper {
+  border-color: #ff4444;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.multi-dropdown-options {
+  max-height: 200px;
+  overflow-y: auto;
+}

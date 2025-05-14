@@ -199,7 +199,7 @@ const RegisterCategoriaModal = ({
         await asignarAreasYCategorias(combinaciones);
       }
 
-      alert("¡Configuración actualizada exitosamente!");
+      alert("¡Categoría registrada exitosamente!");
       handleReset();
       window.location.reload();
     } catch (error) {
