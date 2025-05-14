@@ -132,6 +132,13 @@ class TutorController extends Controller
                      ->where('carnetIdentidad', $request->carnet)
                      ->first();
 
+        if (!$tutor) {
+            return response()->json([
+                'exists' => false,
+                'message' => 'No se encontró un tutor con esos datos'
+            ]);
+        }
+
         $inscripcion = Inscripcion::where('idTutorResponsable', $tutor->idPersona)->first();
 
         if ($inscripcion) {

@@ -167,7 +167,7 @@ export const RegisterTutor = () => {
         dataToSend.inscripciones.push({
           area: sessionStorage.getItem("AreaSecundaria"),
           categoria: sessionStorage.getItem("CategoriaSecundaria"),
-          existeTutor: sessionStorage.getItem("TutorArea2") === "true",
+          existeTutor: sessionStorage.getItem("TutorArea2"),
           formaInscripcion: "Manual",
           registrandose: true,
           tutorArea: {

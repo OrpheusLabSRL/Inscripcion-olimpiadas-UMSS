@@ -87,6 +87,9 @@ Route::delete('/eliminarOlimpiadas/{idOlimpiada}/area/{idArea}', [OlimpiadaAreaC
 
 Route::get('/boletas/generar/{idTutor}', [BoletaPagoController::class, 'generarBoleta']);
 
+Route::post('/boletaPago/check', [BoletaPagoController::class, 'generarPago']);
+Route::post('/boletaPago/confirmarPago', [BoletaPagoController::class, 'confirmarPago']);
+
 // Excel
 Route::post('/register-from-excel', [ExcelController::class, 'registerFromExcel']);
 Route::post('/validate-excel-data', [ExcelController::class, 'validateExcelData']);

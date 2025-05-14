@@ -20,7 +20,8 @@ class InscripcionController extends Controller
             'olimpista' => 'required|array',
             'responsable' => 'required|array',
             'tutor_legal' => 'required|array',
-            'inscripciones' => 'required|array'
+            'inscripciones' => 'required|array',
+            'inscripciones.*.formaInscripcion' => 'required|string'
         ]);
 
         DB::beginTransaction();
@@ -72,8 +73,8 @@ class InscripcionController extends Controller
                     'estadoInscripcion' => false,
                     'idTutorLegal' => $tutorLegal->idPersona,
                     'idTutorArea' => $tutorArea ? $tutorArea->idPersona : null,
-                    'formaInscripcion' => $inscripcionData['formaInscripcion'],
-                    'registrandose' => $inscripcionData['registrandose'],
+                    'formaInscripcion' => $inscripcionData['formaInscripcion'] ?? null,
+                    'registrandose' => $inscripcionData['registrandose'] ?? null,
                 ]);
             }
 
