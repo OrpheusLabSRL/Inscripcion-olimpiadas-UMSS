@@ -134,6 +134,10 @@ export const OCRValidation = () => {
   // Removed duplicate declaration of checkCodigoBoleta to fix redeclaration error
 
   const confirmarPago = async (codigo) => {
+    if (boletaPaid) {
+      alert("La boleta ya fue pagada.");
+      return;
+    }
     try {
       const response = await fetch("http://127.0.0.1:8000/api/boletaPago/confirmarPago", {
         method: "POST",
@@ -179,10 +183,7 @@ export const OCRValidation = () => {
           })()}
         {codigoBoleta && (
           <>
-            <button onClick={() => checkCodigoBoleta(codigoBoleta)} style={{marginTop: "10px", marginRight: "10px", width: "150px", height: "40px", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer", verticalAlign: "middle"}}>
-              Comprobar Boleta
-            </button>
-            <button onClick={() => confirmarPago(codigoBoleta)} style={{marginTop: "10px", width: "150px", height: "40px", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "#2563eb", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer", verticalAlign: "middle"}} disabled={boletaExists && boletaPaid}>
+            <button onClick={() => confirmarPago(codigoBoleta)} style={{marginTop: "10px", marginRight: "10px", width: "150px", height: "40px", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer", verticalAlign: "middle"}}>
               Confirmar Pago
             </button>
           </>
