@@ -132,9 +132,10 @@ class ExcelController extends Controller
             );
 
             $registeredOlimpistas = [];
+            $duplicates = [];
             
+            // Primera pasada: verificar duplicados
             foreach ($olimpistasData as $data) {
-                // Validar combinación área-categoría antes de registrar
                 $combination = OlimpiadaAreaCategoria::whereHas('area', function($q) use ($data) {
                         $q->where('nombreArea', $data[9]);
                     })
@@ -146,6 +147,44 @@ class ExcelController extends Controller
                 if (!$combination) {
                     throw new \Exception("La categoría '{$data[10]}' no está disponible para el área '{$data[9]}'");
                 }
+
+                $existing = Inscripcion::where('idOlimpista', function($query) use ($data) {
+                        $query->select('idPersona')
+                            ->from('personas')
+                            ->where('carnetIdentidad', $data[0]);
+                    })
+                    ->where('idOlimpAreaCategoria', $combination->idOlimpAreaCategoria)
+                    ->first();
+
+                if ($existing) {
+                    $persona = Persona::where('carnetIdentidad', $data[0])->first();
+                    $duplicates[] = [
+                        'ci' => $data[0],
+                        'nombre' => $persona ? $persona->nombre . ' ' . $persona->apellido : 'Desconocido',
+                        'area' => $data[9],
+                        'categoria' => $data[10]
+                    ];
+                }
+            }
+
+            if (!empty($duplicates)) {
+                return response()->json([
+                    'success' => false,
+                    'has_duplicates' => true,
+                    'duplicates' => $duplicates,
+                    'message' => 'Se encontraron olimpistas ya inscritos en las mismas áreas y categorías'
+                ]);
+            }
+
+            // Segunda pasada: registrar si no hay duplicados
+            foreach ($olimpistasData as $data) {
+                $combination = OlimpiadaAreaCategoria::whereHas('area', function($q) use ($data) {
+                        $q->where('nombreArea', $data[9]);
+                    })
+                    ->whereHas('categoria', function($q) use ($data) {
+                        $q->where('nombreCategoria', $data[10]);
+                    })
+                    ->first();
 
                 // Registrar persona olimpista
                 $olimpistaPerson = Persona::updateOrCreate(
