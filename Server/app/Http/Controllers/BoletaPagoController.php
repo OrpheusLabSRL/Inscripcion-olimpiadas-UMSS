@@ -88,7 +88,7 @@ class BoletaPagoController extends Controller
         }
 
         // Query to check if boleta exists with matching codigoBoleta, payer name parts, and montoTotal
-        $exists = \DB::table('boletas_pagos')
+        $boleta = \DB::table('boletas_pagos')
             ->join('tutores', 'boletas_pagos.idTutor', '=', 'tutores.idPersona')
             ->join('personas', 'tutores.idPersona', '=', 'personas.idPersona')
             ->where('boletas_pagos.codigoBoleta', $codigoBoleta)
@@ -101,8 +101,31 @@ class BoletaPagoController extends Controller
                     });
                 }
             })
-            ->exists();
+            ->select('boletas_pagos.estadoBoletaPago')
+            ->first();
 
-        return response()->json(['exists' => $exists]);
+        if (!$boleta) {
+            return response()->json(['exists' => false, 'paid' => false]);
+        }
+
+        $isPaid = $boleta->estadoBoletaPago == 1;
+
+        return response()->json(['exists' => true, 'paid' => $isPaid]);
+    }
+
+    public function confirmarPago(Request $request)
+    {
+        $codigoBoleta = $request->input('codigoBoleta');
+        $boleta = BoletaPago::where('codigoBoleta', $codigoBoleta)->first();
+
+        if (!$boleta) {
+            return response()->json(['message' => 'Boleta no encontrada.'], 404);
+        }
+
+        $boleta->estadoBoletaPago = 1;
+        $boleta->fechaPago = now()->toDateString();
+        $boleta->save();
+
+        return response()->json(['message' => 'Pago confirmado exitosamente.']);
     }
 }
