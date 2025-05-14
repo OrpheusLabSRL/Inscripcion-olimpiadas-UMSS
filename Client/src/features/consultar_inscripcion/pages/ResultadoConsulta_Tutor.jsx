@@ -113,14 +113,7 @@ const ResultadoConsulta_Tutor = () => {
             </div>
           ))}
 
-          <div className="boton-volver-container">
-            <button
-              className="btn-consulta back-button"
-              onClick={() => navigate("/consultar-inscripcion")}
-            >
-              Volver a consultar
-            </button>
-          </div>
+          
           <div className="boton-volver-container">
             <button
               className="btn-consulta back-button"
