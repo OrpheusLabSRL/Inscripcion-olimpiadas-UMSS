@@ -132,6 +132,10 @@ class BoletaPagoController extends Controller
         $boleta->fechaPago = now()->toDateString();
         $boleta->save();
 
+        // Actualizar estadoInscripcion a 1 en la tabla inscripciones para las inscripciones con este codigoBoleta
+        Inscripcion::where('codigoBoleta', $codigoBoleta)
+            ->update(['estadoInscripcion' => 1]);
+
         return response()->json(['message' => 'Pago confirmado exitosamente.']);
     }
 }
