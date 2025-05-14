@@ -81,8 +81,10 @@ export const OCRValidation = () => {
       });
       const data = await response.json();
       setBoletaExists(data.exists);
+      setBoletaPaid(data.paid);
     } catch (error) {
       setBoletaExists(false);
+      setBoletaPaid(false);
     }
   };
 
@@ -127,6 +129,29 @@ export const OCRValidation = () => {
     navigate("/register");
   };
 
+  const [boletaPaid, setBoletaPaid] = useState(false);
+
+  // Removed duplicate declaration of checkCodigoBoleta to fix redeclaration error
+
+  const confirmarPago = async (codigo) => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/boletaPago/confirmarPago", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ codigoBoleta: codigo }),
+      });
+      const data = await response.json();
+      alert(data.message);
+      if (data.message === "Pago confirmado exitosamente.") {
+        setBoletaPaid(true);
+      }
+    } catch (error) {
+      alert("Error al confirmar el pago: " + error.message);
+    }
+  };
+
   return (
     <div className="ocrvalidation-container">
       <h1>Validación OCR</h1>
@@ -162,13 +187,18 @@ export const OCRValidation = () => {
         );
       })()}
       {codigoBoleta && (
-        <button onClick={() => checkCodigoBoleta(codigoBoleta)} style={{marginTop: "10px"}}>
-          Comprobar Boleta
-        </button>
+        <>
+          <button onClick={() => checkCodigoBoleta(codigoBoleta)} style={{marginTop: "10px", marginRight: "10px"}}>
+            Comprobar Boleta
+          </button>
+          <button onClick={() => confirmarPago(codigoBoleta)} style={{marginTop: "10px"}} disabled={boletaExists && boletaPaid}>
+            Confirmar Pago
+          </button>
+        </>
       )}
       {boletaExists !== null && (
         <div style={{marginTop: "10px", color: boletaExists ? "green" : "red"}}>
-          {boletaExists ? "La boleta existe en la base de datos." : "La boleta NO existe en la base de datos."}
+          {boletaExists ? (boletaPaid ? "La boleta ya fue pagada." : "La boleta existe en la base de datos.") : "La boleta NO existe en la base de datos."}
         </div>
       )}
       <button className="back-button" onClick={handleBack} style={{marginTop: "20px"}}>Volver</button>
