@@ -211,7 +211,7 @@ class ExcelController extends Controller
                     'idTutorResponsable' => $responsibleTutor->idPersona,
                     'idTutorLegal' => $tutorLegal->idPersona,
                     'estadoInscripcion' => 0,
-                    'formaInscripcion' => 'Excel' // Añadido aquí el campo requerido
+                    'formaInscripcion' => 'Excel'
                 ];
                 
                 if ($tutorArea) {
@@ -226,7 +226,10 @@ class ExcelController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => count($registeredOlimpistas) . ' olimpistas registrados correctamente'
+                'message' => count($registeredOlimpistas) . ' olimpistas registrados correctamente',
+                'data' => [
+                    'tutor_responsable_id' => $responsibleTutor->idPersona
+                ]
             ]);
 
         } catch (\Exception $e) {

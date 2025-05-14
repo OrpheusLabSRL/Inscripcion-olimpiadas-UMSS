@@ -33,7 +33,6 @@ const RegisterExcel = () => {
         "CORREO ELECTRONICO (PROFESOR)*",
         "CELULAR (PROFESOR)*"
     ]);
-
     const [fileName, setFileName] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
@@ -54,21 +53,17 @@ const RegisterExcel = () => {
 
     const convertExcelDate = (excelDate) => {
         if (!excelDate) return "";
-        
         if (typeof excelDate === 'string' && excelDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
             return excelDate;
         }
-        
         if (typeof excelDate === 'number') {
             const date = new Date((excelDate - (25567 + 2)) * 86400 * 1000);
             return date.toISOString().split('T')[0];
         }
-        
         if (typeof excelDate === 'string' && excelDate.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
             const [day, month, year] = excelDate.split('/');
             return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
         }
-        
         return excelDate;
     };
 
@@ -80,49 +75,37 @@ const RegisterExcel = () => {
             { value: row[20], name: "CORREO ELECTRONICO (PROFESOR)" },
             { value: row[21], name: "CELULAR (PROFESOR)" }
         ];
-
         const hasSomeFields = professorFields.some(f => 
             f.value && f.value.toString().trim() !== "" && f.value.toString().trim() !== "-"
         );
         const hasAllFields = professorFields.every(f => 
             f.value && f.value.toString().trim() !== "" && f.value.toString().trim() !== "-"
         );
-
         if (hasSomeFields && !hasAllFields) {
             const missingFields = professorFields
                 .filter(f => !f.value || f.value.toString().trim() === "" || f.value.toString().trim() === "-")
                 .map(f => f.name);
-
             return {
                 error: `Fila ${rowIndex + 2}: Los campos de PROFESOR deben estar todos completos o todos vacíos. Faltan: ${missingFields.join(', ')}`,
                 cells: professorFields.map((_, i) => `${rowIndex}-${17 + i}`)
             };
         }
-
-        // Validación individual de campos de profesor cuando están completos
         if (hasAllFields) {
             const errors = [];
             const cells = [];
-
-            // Validar CI Profesor
             if (!professorFields[0].value.toString().match(/^[a-zA-Z0-9]{6,12}$/)) {
                 errors.push(`CARNET DE IDENTIDAD (PROFESOR) debe tener entre 6 y 12 caracteres alfanuméricos`);
                 cells.push(`${rowIndex}-17`);
             }
-
-            // Validar correo profesor
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!professorFields[3].value || !emailRegex.test(professorFields[3].value.toString())) {
                 errors.push(`CORREO ELECTRONICO (PROFESOR) no es válido`);
                 cells.push(`${rowIndex}-20`);
             }
-
-            // Validar celular profesor
             if (!professorFields[4].value || !professorFields[4].value.toString().match(/^\d{8}$/)) {
                 errors.push(`CELULAR (PROFESOR) debe tener exactamente 8 dígitos`);
                 cells.push(`${rowIndex}-21`);
             }
-
             if (errors.length > 0) {
                 return {
                     error: `Fila ${rowIndex + 2}: ${errors.join('; ')}`,
@@ -130,16 +113,13 @@ const RegisterExcel = () => {
                 };
             }
         }
-
         return null;
     };
 
     const validateData = (data) => {
         const errors = [];
         const cellErrors = {};
-        
         data.forEach((row, rowIndex) => {
-            // Validar campos obligatorios (columnas 0-16 excepto las que ya tienen validación específica)
             const requiredFields = [
                 {index: 0, name: "CARNET DE IDENTIDAD (OLIMPISTA)"},
                 {index: 1, name: "NOMBRE(S) (OLIMPISTA)"},
@@ -150,42 +130,31 @@ const RegisterExcel = () => {
                 {index: 12, name: "NOMBRE(S) (TUTOR LEGAL)"},
                 {index: 13, name: "APELLIDO(S) (TUTOR LEGAL)"}
             ];
-
             requiredFields.forEach(field => {
                 if (!row[field.index] || row[field.index].toString().trim() === "") {
                     errors.push(`Fila ${rowIndex + 2}: ${field.name} es requerido`);
                     cellErrors[`${rowIndex}-${field.index}`] = true;
                 }
             });
-
-            // Validar CI Olimpista (columna 0) - 6 a 12 caracteres alfanuméricos
             const ciOlimpista = row[0]?.toString().trim();
             if (!ciOlimpista || !ciOlimpista.match(/^[a-zA-Z0-9]{6,12}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (OLIMPISTA) debe tener entre 6 y 12 caracteres alfanuméricos`);
                 cellErrors[`${rowIndex}-0`] = true;
             }
-            
-            // Validar CI Tutor Legal (columna 11) - 6 a 12 caracteres alfanuméricos
             const ciTutor = row[11]?.toString().trim();
             if (!ciTutor || !ciTutor.match(/^[a-zA-Z0-9]{6,12}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (TUTOR LEGAL) debe tener entre 6 y 12 caracteres alfanuméricos`);
                 cellErrors[`${rowIndex}-11`] = true;
             }
-            
-            // Validar CI Profesor (columna 17) solo si existe - 6 a 12 caracteres alfanuméricos
             const ciProfesor = row[17]?.toString().trim();
             if (ciProfesor && ciProfesor !== "-" && !ciProfesor.match(/^[a-zA-Z0-9]{6,12}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CARNET DE IDENTIDAD (PROFESOR) debe tener entre 6 y 12 caracteres alfanuméricos`);
                 cellErrors[`${rowIndex}-17`] = true;
             }
-            
-            // Validar Fecha de Nacimiento (columna 3)
             if (!row[3] || !row[3].toString().match(/^\d{4}-\d{2}-\d{2}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: FECHA DE NACIMIENTO (OLIMPISTA) debe estar en formato DD/MM/YYYY en el Excel`);
                 cellErrors[`${rowIndex}-3`] = true;
             }
-            
-            // Validar Correos (columnas 4, 14, 20)
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!row[4] || !emailRegex.test(row[4].toString())) {
                 errors.push(`Fila ${rowIndex + 2}: CORREO ELECTRONICO (OLIMPISTA) no es válido`);
@@ -199,8 +168,6 @@ const RegisterExcel = () => {
                 errors.push(`Fila ${rowIndex + 2}: CORREO ELECTRONICO (PROFESOR) no es válido`);
                 cellErrors[`${rowIndex}-20`] = true;
             }
-            
-            // Validar Celulares (columnas 15, 21) - exactamente 8 dígitos
             if (!row[15] || !row[15].toString().match(/^\d{8}$/)) {
                 errors.push(`Fila ${rowIndex + 2}: CELULAR (TUTOR LEGAL) debe tener exactamente 8 dígitos`);
                 cellErrors[`${rowIndex}-15`] = true;
@@ -209,11 +176,8 @@ const RegisterExcel = () => {
                 errors.push(`Fila ${rowIndex + 2}: CELULAR (PROFESOR) debe tener exactamente 8 dígitos`);
                 cellErrors[`${rowIndex}-21`] = true;
             }
-            
-            // Validar y normalizar Tipo Tutor (columna 16)
             if (row[16]) {
                 const tipoTutor = row[16].toString().toUpperCase().trim();
-                
                 if (tipoTutor.match(/^(MAMA\/PAPA|MAMÁ\/PAPÁ|MAMA\/PAPÁ|MAMÁ\/PAPA)$/i)) {
                     row[16] = "MAMÁ/PAPÁ";
                 } 
@@ -229,26 +193,18 @@ const RegisterExcel = () => {
                 errors.push(`Fila ${rowIndex + 2}: TIPO DE TUTOR es requerido`);
                 cellErrors[`${rowIndex}-16`] = true;
             }
-            
-            // Validar Curso (columna 8)
             if (!row[8]) {
                 errors.push(`Fila ${rowIndex + 2}: CURSO (OLIMPISTA) es requerido`);
                 cellErrors[`${rowIndex}-8`] = true;
             }
-            
-            // Validar Área (columna 9)
             if (!row[9]) {
                 errors.push(`Fila ${rowIndex + 2}: AREA es requerida`);
                 cellErrors[`${rowIndex}-9`] = true;
             }
-            
-            // Validar Categoría (columna 10)
             if (!row[10]) {
                 errors.push(`Fila ${rowIndex + 2}: CATEGORIA es requerida`);
                 cellErrors[`${rowIndex}-10`] = true;
             }
-            
-            // Validar campos de PROFESOR (opcionales pero deben estar todos llenos o todos vacíos)
             const professorError = validateProfessorFields(row, rowIndex);
             if (professorError) {
                 errors.push(professorError.error);
@@ -257,7 +213,6 @@ const RegisterExcel = () => {
                 });
             }
         });
-        
         setErrorCells(cellErrors);
         return errors;
     };
@@ -277,37 +232,30 @@ const RegisterExcel = () => {
     const handleFileUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-    
         setError("");
         setSuccess("");
         setData([]);
         setValidationErrors([]);
         setErrorCells({});
         setIsLoading(true);
-    
         try {
             if (!file.name.match(/\.(xlsx|xls)$/i)) {
                 throw new Error("Solo se permiten archivos Excel (.xlsx, .xls)");
             }
-    
             const workbook = XLSX.read(await file.arrayBuffer());
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-    
             const jsonData = XLSX.utils.sheet_to_json(worksheet, {
                 header: 1,
                 range: 1,
                 defval: "",
                 blankrows: false,
             });
-    
             const filteredData = jsonData.filter((row) =>
                 row.some((cell) => cell !== "")
             );
-    
             if (filteredData.length === 0) {
                 throw new Error("El archivo no contiene datos válidos");
             }
-    
             const normalizedData = filteredData.map((row) => {
                 const rowData = Array(22).fill("");
                 row.forEach((cell, i) => {
@@ -324,25 +272,15 @@ const RegisterExcel = () => {
                 });
                 return rowData;
             });
-    
-            // 1. Validar contra la base de datos primero
             const dbValidation = await validateExcelData(normalizedData);
             const dbErrors = dbValidation.errors || [];
-            
-            // 2. Validar el resto de campos
             const frontendErrors = validateData(normalizedData);
-            
-            // Combinar todos los errores
             const allErrors = [...dbErrors, ...frontendErrors];
-            
             setData(normalizedData);
             setFileName(file.name);
-    
             if (allErrors.length > 0) {
                 setValidationErrors(allErrors);
                 setError(`Se encontraron ${allErrors.length} errores de validación. Revise los campos marcados en rojo.`);
-                
-                // Mapeo completo de campos a índices de columna
                 const fieldToColumnMap = {
                     'CARNET DE IDENTIDAD (OLIMPISTA)': 0,
                     'NOMBRE(S) (OLIMPISTA)': 1,
@@ -367,33 +305,24 @@ const RegisterExcel = () => {
                     'CORREO ELECTRONICO (PROFESOR)*': 20,
                     'CELULAR (PROFESOR)*': 21
                 };
-    
-                // Procesar todos los errores para marcar celdas
                 const newErrorCells = {};
                 allErrors.forEach(error => {
                     const rowMatch = error.match(/Fila (\d+):/);
                     if (rowMatch) {
                         const row = parseInt(rowMatch[1]) - 2;
-                        
-                        // Buscar coincidencia exacta del campo en el error
                         for (const [field, colIndex] of Object.entries(fieldToColumnMap)) {
                             if (error.includes(field)) {
                                 newErrorCells[`${row}-${colIndex}`] = true;
                                 break;
                             }
                         }
-                        
-                        // Manejo especial para errores de área y categoría
                         if (error.includes('El área') || error.includes('no está disponible para el área')) {
                             newErrorCells[`${row}-9`] = true;
                         }
                         if (error.includes('La categoría') || error.includes('no está disponible para el área')) {
                             newErrorCells[`${row}-10`] = true;
                         }
-                        
-                        // Manejo especial para errores de profesor
                         if (error.includes('PROFESOR')) {
-                            // Marcar todos los campos de profesor si es error de completitud
                             if (error.includes('deben estar todos completos')) {
                                 for (let i = 17; i <= 21; i++) {
                                     newErrorCells[`${row}-${i}`] = true;
@@ -402,12 +331,10 @@ const RegisterExcel = () => {
                         }
                     }
                 });
-                
                 setErrorCells(newErrorCells);
             } else {
                 setSuccess("Archivo cargado correctamente. Revise los datos antes de registrar.");
             }
-    
         } catch (err) {
             console.error("Error procesando archivo:", err);
             setError(err.message || "Error al procesar el archivo");
@@ -422,9 +349,7 @@ const RegisterExcel = () => {
             swal("Error", "No hay datos para registrar", "error");
             return;
         }
-
         setIsLoading(true);
-
         try {
             const responsibleData = {
                 Nombre: sessionStorage.getItem("NombreResponsible"),
@@ -434,17 +359,37 @@ const RegisterExcel = () => {
                 Email: sessionStorage.getItem("EmailResponsible"),
                 Ci: sessionStorage.getItem("CiResponsible"),
             };
-
             const response = await registerFromExcel(responsibleData, data);
-
+            
             if (response.success) {
-                swal({
-                    title: "Éxito",
+                // Guardar el ID del tutor en sessionStorage
+                sessionStorage.setItem("tutorInscripcionId", response.data.tutor_responsable_id);
+                
+                // Limpiar solo los datos temporales, manteniendo el ID del tutor
+                const camposAConservar = {
+                    tutorInscripcionId: response.data.tutor_responsable_id
+                };
+                sessionStorage.clear();
+                sessionStorage.setItem("tutorInscripcionId", camposAConservar.tutorInscripcionId);
+                
+                // Mostrar confirmación y redirigir
+                await swal({
+                    title: "¡Registro exitoso!",
                     text: response.message,
                     icon: "success",
                 });
-                setData([]);
-                setFileName("");
+                
+                // Redirigir a ListRegistered con el estado necesario
+                navigation("/register/listRegistered", {
+                    state: {
+                        freshRegistration: true,
+                        tutorData: {
+                            id: response.data.tutor_responsable_id,
+                            nombre: responsibleData.Nombre,
+                            apellido: responsibleData.Apellido
+                        }
+                    }
+                });
             } else {
                 throw new Error(response.message || "Error en el registro");
             }
@@ -467,13 +412,11 @@ const RegisterExcel = () => {
                 setIsOpen={() => {}}
                 admin={!location.pathname.startsWith("/admin") ? false : true}
             />
-            
             <div className="main active">
                 <NavLink to={"/register/responsible"}>
                     <IoArrowBackCircle className="btn-back" />
                 </NavLink>
                 <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
-
                 <div className="content-area">
                     <div className="excel-container">
                         <div className="excel-header">
@@ -492,7 +435,6 @@ const RegisterExcel = () => {
                                 </button>
                             </div>
                         </div>
-
                         <div className="upload-section">
                             <h2>Sube tu archivo en formato .xlsx</h2>
                             <div className="file-input-container">
@@ -510,10 +452,8 @@ const RegisterExcel = () => {
                                 {fileName && <span className="file-name">{fileName}</span>}
                             </div>
                         </div>
-
                         {error && <div className="error-message">{error}</div>}
                         {success && <div className="success-message">{success}</div>}
-
                         {validationErrors.length > 0 && (
                             <div className="validation-errors">
                                 <h3>Errores de validación:</h3>
@@ -527,7 +467,6 @@ const RegisterExcel = () => {
                                 </ul>
                             </div>
                         )}
-
                         <div className="data-section-excel">
                             <div className="table-container">
                                 <table className="data-table">
@@ -562,7 +501,6 @@ const RegisterExcel = () => {
                                     </tbody>
                                 </table>
                             </div>
-
                             {data.length > 0 && validationErrors.length === 0 && (
                                 <div className="action-buttons-excel">
                                     <button
