@@ -63,62 +63,73 @@ public function getOlimpistasByTutor($idTutorResponsable)
             ], 200);
         }
 
-        $olimpistasAgrupados = $inscripciones->groupBy('idOlimpista');
+        $inscripcionesAgrupadas = $inscripciones->groupBy('codigoInscripcion');
 
-        $resultado = $olimpistasAgrupados->map(function ($inscripcionesGrupo) {
-            $primeraInscripcion = $inscripcionesGrupo->first();
-            $olimpista = $primeraInscripcion->olimpista;
-            $persona = $olimpista->persona;
+        $resultado = $inscripcionesAgrupadas->map(function ($grupoInscripciones, $codigo) {
+            // Agrupar por idOlimpista dentro del grupo actual
+            $olimpistasAgrupados = $grupoInscripciones->groupBy('idOlimpista');
 
-            $inscripciones = $inscripcionesGrupo->map(function ($inscripcion) {
+            $olimpistas = $olimpistasAgrupados->map(function ($inscripcionesGrupo) {
+                $primeraInscripcion = $inscripcionesGrupo->first();
+                $olimpista = $primeraInscripcion->olimpista;
+                $persona = $olimpista->persona;
+
+                $inscripciones = $inscripcionesGrupo->map(function ($inscripcion) {
+                    return [
+                        'id_inscripcion' => $inscripcion->idInscripcion,
+                        'nombre_area' => $inscripcion->olimpiadaAreaCategoria->area->nombreArea ?? null,
+                        'nombre_categoria' => $inscripcion->olimpiadaAreaCategoria->categoria->nombreCategoria ?? null,
+                        'nombre_tutor_area' => $inscripcion->tutorArea->persona->nombre ?? null,
+                        'apellido_tutor_area' => $inscripcion->tutorArea->persona->apellido ?? null,
+                        'telefono' => $inscripcion->tutorArea->telefono ?? null,
+                        'tipo_tutor' => $inscripcion->tutorArea->tipoTutor ?? null,
+                        'carnetIdentidad' => $inscripcion->tutorArea->persona->carnetIdentidad ?? null,
+                        'correo' => $inscripcion->tutorArea->persona->correoElectronico ?? null,
+                        'registrandose' => $inscripcion->registrandose ?? null,
+                        'codigoInscripcion' => $inscripcion->codigoInscripcion ?? null,
+
+                        'tutor_legal' => [
+                            'nombre' => $inscripcion->tutorLegal->persona->nombre ?? null,
+                            'apellido' => $inscripcion->tutorLegal->persona->apellido ?? null,
+                            'telefono' => $inscripcion->tutorLegal->telefono ?? null,
+                            'tipo_tutor' => $inscripcion->tutorLegal->tipoTutor ?? null,
+                            'carnetIdentidad' => $inscripcion->tutorLegal->persona->carnetIdentidad ?? null,
+                            'correo' => $inscripcion->tutorLegal->persona->correoElectronico ?? null,
+                        ],
+                    ];
+                });
+
+                $responsableInscripcion = [
+                    'nombre' => $primeraInscripcion->tutorResponsable->persona->nombre ?? null,
+                    'apellido' => $primeraInscripcion->tutorResponsable->persona->apellido ?? null,
+                    'telefono' => $primeraInscripcion->tutorResponsable->telefono ?? null,
+                    'tipo_tutor' => $primeraInscripcion->tutorResponsable->tipoTutor ?? null,
+                    'carnetIdentidad' => $primeraInscripcion->tutorResponsable->persona->carnetIdentidad ?? null,
+                    'correo' => $primeraInscripcion->tutorResponsable->persona->correoElectronico ?? null,
+                ];
+
                 return [
-                    'id_inscripcion' => $inscripcion->idInscripcion,
-                    'nombre_area' => $inscripcion->olimpiadaAreaCategoria->area->nombreArea ?? null,
-                    'nombre_categoria' => $inscripcion->olimpiadaAreaCategoria->categoria->nombreCategoria ?? null,
-                    'nombre_tutor_area' => $inscripcion->tutorArea->persona->nombre ?? null,
-                    'apellido_tutor_area' => $inscripcion->tutorArea->persona->apellido ?? null,
-                    'telefono' => $inscripcion->tutorArea->telefono ?? null,
-                    'tipo_tutor' => $inscripcion->tutorArea->tipoTutor ?? null,
-                    'carnetIdentidad' => $inscripcion->tutorArea->persona->carnetIdentidad ?? null,
-                    'correo' => $inscripcion->tutorArea->persona->correoElectronico ?? null,
-                    'registrandose' => $inscripcion->registrandose ?? null,
-                    
-                    'tutor_legal' => [
-                        'nombre' => $inscripcion->tutorLegal->persona->nombre ?? null,
-                        'apellido' => $inscripcion->tutorLegal->persona->apellido ?? null,
-                        'telefono' => $inscripcion->tutorLegal->telefono ?? null,
-                        'tipo_tutor' => $inscripcion->tutorLegal->tipoTutor ?? null,
-                        'carnetIdentidad' => $inscripcion->tutorLegal->persona->carnetIdentidad ?? null,
-                        'correo' => $inscripcion->tutorLegal->persona->correoElectronico ?? null,
-                    ],
+                    'id_olimpista' => $olimpista->idPersona,
+                    'nombre' => $persona->nombre,
+                    'apellido' => $persona->apellido,
+                    'curso' => $olimpista->curso,
+                    'colegio' => $olimpista->colegio,
+                    'carnetIdentidad' => $persona->carnetIdentidad,
+                    'fechaNacimiento' => $olimpista->fechaNacimiento,
+                    'departamento' => $olimpista->departamento,
+                    'municipio' => $olimpista->municipio,
+                    'correo' => $persona->correoElectronico,
+                    'inscripciones' => $inscripciones,
+                    'responsableInscripcion' => $responsableInscripcion,
                 ];
             });
 
-            $responsableInscripcion = [
-                'nombre' => $primeraInscripcion->tutorResponsable->persona->nombre ?? null,
-                'apellido' => $primeraInscripcion->tutorResponsable->persona->apellido ?? null,
-                'telefono' => $primeraInscripcion->tutorResponsable->telefono ?? null,
-                'tipo_tutor' => $primeraInscripcion->tutorResponsable->tipoTutor ?? null,
-                'carnetIdentidad' => $primeraInscripcion->tutorResponsable->persona->carnetIdentidad ?? null,
-                'correo' => $primeraInscripcion->tutorResponsable->persona->correoElectronico ?? null,
-            ];
-            
-
             return [
-                'id_olimpista' => $olimpista->idPersona,
-                'nombre' => $persona->nombre,
-                'apellido' => $persona->apellido,
-                'curso' => $olimpista->curso,
-                'colegio' => $olimpista->colegio,
-                'carnetIdentidad' => $persona->carnetIdentidad,
-                'fechaNacimiento' => $olimpista->fechaNacimiento,
-                'departamento' => $olimpista->departamento,
-                'municipio' => $olimpista->municipio,
-                'correo' => $persona->correoElectronico,
-                'inscripciones' => $inscripciones,
-                'responsableInscripcion' => $responsableInscripcion,
+                'codigoInscripcion' => $codigo,
+                'olimpistas' => $olimpistas->values()
             ];
         })->values();
+
 
         return response()->json([
             'success' => true,

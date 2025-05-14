@@ -7,12 +7,15 @@ use App\Models\Inscripcion;
 use App\Models\Tutor;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
+
 
 class BoletaPagoController extends Controller
 {
 
-    public function generarBoleta($idTutor)
+    public function generarBoleta($idTutor, $codigoInscripcion)
     {
+        Log::info('Datos recibidos del request', [$idTutor, $codigoInscripcion]);
         try {
             // Verificar si el tutor existe
             $tutor = Tutor::find($idTutor);
@@ -20,12 +23,15 @@ class BoletaPagoController extends Controller
                 return response()->json(['message' => 'Tutor no encontrado.'], 404);
             }
 
+
+
             // Obtener inscripciones pendientes con relaciones cargadas
             $inscripciones = Inscripcion::with([
                 'olimpista.persona',
                 'OlimpiadaAreaCategoria.area'
             ])
                 ->where('idTutorResponsable', $idTutor)
+                ->where('codigoInscripcion', $codigoInscripcion)
                 ->whereNull('codigoBoleta')
                 ->get();
 

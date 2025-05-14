@@ -40,8 +40,8 @@ export const getPersonData = (carnet) =>
 export const setNewInscription = (data) =>
   inscriptionApi.post("/newInscription", data);
 
-export const finishRegistering = (id) =>
-  inscriptionApi.put(`/tutor/${id}/inscripciones/update`);
+export const finishRegistering = (id, codigoInscripcion) =>
+  inscriptionApi.put(`/tutor/${id}/${codigoInscripcion}/inscripciones/update`);
 
 // ============================
 // Tutores

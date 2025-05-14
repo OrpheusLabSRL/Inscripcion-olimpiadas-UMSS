@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Olimpista;
 use App\Models\Persona;
 use App\Models\Tutor;
+use App\Models\Inscripcion;
 
 class PersonaController extends Controller
 {
@@ -15,6 +16,9 @@ class PersonaController extends Controller
     if ($persona) {
         $olimpista = Olimpista::where("idPersona", $persona->idPersona)->first();
         $tutor = Tutor::where("idPersona", $persona->idPersona)->first();
+
+        // Verifica solo si es tutor responsable en alguna inscripción
+        $esTutorResponsable = Inscripcion::where('idTutorResponsable', $persona->idPersona)->exists();
 
         return response()->json([
             'success' => true,
@@ -31,6 +35,7 @@ class PersonaController extends Controller
                 'colegio' => $olimpista?->colegio,
                 'tipoTutor' => $tutor?->tipoTutor,
                 'telefono' => $tutor?->telefono,
+                'esTutorResponsable' => $esTutorResponsable
             ]
         ]);
     } else {

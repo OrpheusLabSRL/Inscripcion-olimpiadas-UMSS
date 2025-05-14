@@ -42,7 +42,7 @@ Route::post('/tutores', [TutorController::class, 'store']);
 Route::get('/tutor/{id_tutor}/estudiantes', [OlimpistaController::class, 'getOlimpistasByTutor']);
 Route::get('/tutores/verificar', [TutorController::class, 'checkExistingTutor']);
 Route::get('/tutor/{id}', [TutorController::class, 'getTutorWithPersona']);
-Route::put('/tutor/{id}/inscripciones/update', [InscripcionController::class, 'finishRegister']);
+Route::put('/tutor/{id}/{codigoInscripcion}/inscripciones/update', [InscripcionController::class, 'finishRegister']);
 
 // Contacto
 Route::post('/contacto', [InformacionContactoController::class, 'store']);
@@ -85,7 +85,7 @@ Route::delete('/eliminarOlimpiadas/{idOlimpiada}/area/{idArea}', [OlimpiadaAreaC
 
 
 
-Route::get('/boletas/generar/{idTutor}', [BoletaPagoController::class, 'generarBoleta']);
+Route::get('/boletas/generar/{idTutor}/{codigoInscripcion}/get', [BoletaPagoController::class, 'generarBoleta']);
 
 Route::post('/boletaPago/check', [BoletaPagoController::class, 'generarPago']);
 Route::post('/boletaPago/confirmarPago', [BoletaPagoController::class, 'confirmarPago']);
