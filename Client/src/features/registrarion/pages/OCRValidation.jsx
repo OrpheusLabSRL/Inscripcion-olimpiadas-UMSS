@@ -10,6 +10,7 @@ export const OCRValidation = () => {
   const [processing, setProcessing] = useState(false);
   const [codigoBoleta, setCodigoBoleta] = useState(null);
   const [boletaExists, setBoletaExists] = useState(null);
+  const [montoTotal, setMontoTotal] = useState(null);
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
@@ -17,6 +18,7 @@ export const OCRValidation = () => {
     setOcrResult("");
     setCodigoBoleta(null);
     setBoletaExists(null);
+    setMontoTotal(null);
   };
 
   const extractCodigoBoleta = (text) => {
@@ -30,6 +32,19 @@ export const OCRValidation = () => {
     const regex = /recibi de:\s*([A-Z\s]+?)(?:\s+por concepto de|$)/i;
     const match = text.match(regex);
     return match ? match[1].trim() : null;
+  };
+
+  const extractMontoTotal = (text) => {
+    // Extract monto total after "Total:Bs" with optional spaces and decimal
+    const regex = /total:bs\s*([\d.,]+)/i;
+    const match = text.match(regex);
+    if (match) {
+      // Convert to float, replace comma with dot if needed
+      const montoStr = match[1].replace(',', '.');
+      const monto = parseFloat(montoStr);
+      return isNaN(monto) ? null : monto;
+    }
+    return null;
   };
   
   const splitPayerName = (name) => {
@@ -60,7 +75,8 @@ export const OCRValidation = () => {
         },
         body: JSON.stringify({ 
           codigoBoleta: codigo,
-          payerName: extractPayerName(ocrResult)
+          payerName: extractPayerName(ocrResult),
+          montoTotal: montoTotal
         }),
       });
       const data = await response.json();
@@ -97,6 +113,8 @@ export const OCRValidation = () => {
 
       // Remove automatic backend check here
       // User will click button to check
+      const monto = extractMontoTotal(text);
+      setMontoTotal(monto);
     } catch (error) {
       setOcrResult("Error al procesar la imagen: " + error.message);
       setBoletaExists(false);

@@ -69,8 +69,10 @@ class BoletaPagoController extends Controller
     {
         $codigoBoleta = $request->input('codigoBoleta');
         $payerName = $request->input('payerName');
+        $montoTotal = $request->input('montoTotal');
         $codigoBoleta = intval(trim($codigoBoleta));
-        \Log::info('Checking codigoBoleta: ' . $codigoBoleta . ', payerName: ' . $payerName);
+        $montoTotal = floatval($montoTotal);
+        \Log::info('Checking codigoBoleta: ' . $codigoBoleta . ', payerName: ' . $payerName . ', montoTotal: ' . $montoTotal);
 
         // Normalize strings: lowercase and remove accents
         $normalize = function ($str) {
@@ -85,11 +87,12 @@ class BoletaPagoController extends Controller
             return response()->json(['exists' => false]);
         }
 
-        // Query to check if boleta exists with matching codigoBoleta and payer name parts
+        // Query to check if boleta exists with matching codigoBoleta, payer name parts, and montoTotal
         $exists = \DB::table('boletas_pagos')
             ->join('tutores', 'boletas_pagos.idTutor', '=', 'tutores.idPersona')
             ->join('personas', 'tutores.idPersona', '=', 'personas.idPersona')
             ->where('boletas_pagos.codigoBoleta', $codigoBoleta)
+            ->where('boletas_pagos.montoTotal', $montoTotal)
             ->where(function ($query) use ($nameParts) {
                 foreach ($nameParts as $part) {
                     $query->where(function ($q) use ($part) {
