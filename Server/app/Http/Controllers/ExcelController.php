@@ -108,6 +108,10 @@ class ExcelController extends Controller
                 throw new \Exception('Carnet de identidad del responsable es requerido');
             }
 
+            // Obtener el último código de inscripción y calcular el nuevo
+            $ultimoCodigo = Inscripcion::max('codigoInscripcion');
+            $nuevoCodigo = $ultimoCodigo ? $ultimoCodigo + 1 : 1;
+
             // Registrar persona responsable
             $responsiblePerson = Persona::updateOrCreate(
                 ['carnetIdentidad' => $responsibleData['Ci']],
@@ -211,7 +215,8 @@ class ExcelController extends Controller
                     'idTutorResponsable' => $responsibleTutor->idPersona,
                     'idTutorLegal' => $tutorLegal->idPersona,
                     'estadoInscripcion' => 0,
-                    'formaInscripcion' => 'Excel'
+                    'formaInscripcion' => 'Excel',
+                    'codigoInscripcion' => $nuevoCodigo
                 ];
                 
                 if ($tutorArea) {
