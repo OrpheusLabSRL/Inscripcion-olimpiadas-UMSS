@@ -98,14 +98,14 @@
   .reports-content {
     max-height: none;
     overflow-y: visible;
-    background-color: #a2bfcb !important;
+    /* background-color: #a2bfcb !important; */
     color: #000000;
     border-radius: 0 0 8px 8px;
   }
 
   /* Added style for content-area to control overall background */
   .content-area {
-    background-color: #a2bfcb !important;
+    /* background-color: #a2bfcb !important; */
     min-height: 100vh;
     display: flex;
     flex-direction: column;

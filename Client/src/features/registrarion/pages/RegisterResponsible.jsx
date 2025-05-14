@@ -117,6 +117,7 @@ export const RegisterResponsible = () => {
         setValue("Email", personData.data.data.correoElectronico);
         setIsReadOnly((prev) => ({
           ...prev,
+          Ci: true,
           Nombre: true,
           Apellido: true,
           Email: true,
@@ -128,6 +129,7 @@ export const RegisterResponsible = () => {
         setValue("Numero_Celular", personData.data.data.telefono);
         setIsReadOnly((prev) => ({
           ...prev,
+          Ci: true,
           Tipo_Tutor: true,
           Numero_Celular: true,
         }));

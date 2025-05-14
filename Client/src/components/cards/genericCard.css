@@ -11,8 +11,8 @@
 .container-card {
   max-width: 330px;
   background: linear-gradient(#fba834, #333a73);
+  border: 1px solid #333a73;
   border-radius: 10px;
-  box-shadow: 1px 1px 4px #0000006e;
   display: grid;
   color: #fff;
   transition: transform 0.3s ease;
