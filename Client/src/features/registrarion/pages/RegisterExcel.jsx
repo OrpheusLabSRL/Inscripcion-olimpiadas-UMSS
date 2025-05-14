@@ -139,6 +139,25 @@ const RegisterExcel = () => {
         const cellErrors = {};
         
         data.forEach((row, rowIndex) => {
+            // Validar campos obligatorios (columnas 0-16 excepto las que ya tienen validación específica)
+            const requiredFields = [
+                {index: 0, name: "CARNET DE IDENTIDAD (OLIMPISTA)"},
+                {index: 1, name: "NOMBRE(S) (OLIMPISTA)"},
+                {index: 2, name: "APELLIDO(S) (OLIMPISTA)"},
+                {index: 5, name: "DEPARTAMENTO (OLIMPISTA)"},
+                {index: 6, name: "MUNICIPIO (OLIMPISTA)"},
+                {index: 7, name: "COLEGIO (OLIMPISTA)"},
+                {index: 12, name: "NOMBRE(S) (TUTOR LEGAL)"},
+                {index: 13, name: "APELLIDO(S) (TUTOR LEGAL)"}
+            ];
+
+            requiredFields.forEach(field => {
+                if (!row[field.index] || row[field.index].toString().trim() === "") {
+                    errors.push(`Fila ${rowIndex + 2}: ${field.name} es requerido`);
+                    cellErrors[`${rowIndex}-${field.index}`] = true;
+                }
+            });
+
             // Validar CI Olimpista (columna 0) - 6 a 12 caracteres alfanuméricos
             const ciOlimpista = row[0]?.toString().trim();
             if (!ciOlimpista || !ciOlimpista.match(/^[a-zA-Z0-9]{6,12}$/)) {
@@ -229,7 +248,7 @@ const RegisterExcel = () => {
                 cellErrors[`${rowIndex}-10`] = true;
             }
             
-            // Validar campos de PROFESOR
+            // Validar campos de PROFESOR (opcionales pero deben estar todos llenos o todos vacíos)
             const professorError = validateProfessorFields(row, rowIndex);
             if (professorError) {
                 errors.push(professorError.error);
