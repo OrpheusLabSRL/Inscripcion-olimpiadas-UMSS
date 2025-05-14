@@ -48,6 +48,14 @@ class InscripcionController extends Controller
             $personaTutorLegal = $this->buscarOCrearPersona($tutorLegalData);
             $tutorLegal = $this->buscarOCrearTutor($personaTutorLegal->idPersona, $tutorLegalData);
 
+            if ($request->filled('codigoInscripcion')) {
+                    $codigoGrupo = $request->codigoInscripcion;
+                } else {
+                    $ultimoCodigo = Inscripcion::max('codigoInscripcion');
+                    $ultimoNumero = $ultimoCodigo ? (int) ltrim($ultimoCodigo, '0') : 0;
+                    $codigoGrupo = str_pad($ultimoNumero + 1, 3, '0', STR_PAD_LEFT);
+                }
+
             // 4. Procesar las inscripciones
             foreach ($request->inscripciones as $inscripcionData) {
                 // Procesar tutor de área si existe
@@ -64,6 +72,7 @@ class InscripcionController extends Controller
                 ->where('idCategoria', $inscripcionData['categoria'])
                 ->first();
 
+
                 // Crear la inscripción
                 Inscripcion::create([
                     'idTutorResponsable' => $tutorResponsable->idPersona,
@@ -74,6 +83,7 @@ class InscripcionController extends Controller
                     'idTutorArea' => $tutorArea ? $tutorArea->idPersona : null,
                     'formaInscripcion' => $inscripcionData['formaInscripcion'],
                     'registrandose' => $inscripcionData['registrandose'],
+                    'codigoInscripcion' => $codigoGrupo,
                 ]);
             }
 
@@ -84,7 +94,8 @@ class InscripcionController extends Controller
                 'message' => 'Inscripción completada exitosamente',
                 'data' => [
                     'olimpista_id' => $olimpista->idPersona,
-                    'tutor_responsable_id' => $tutorResponsable->idPersona
+                    'tutor_responsable_id' => $tutorResponsable->idPersona,
+                    'codigoInscripcion' => $codigoGrupo
                 ]
             ]);
 
@@ -421,9 +432,9 @@ class InscripcionController extends Controller
         ], 200);
     }
 
-function finishRegister($idTutorResponsable)
+function finishRegister($idTutorResponsable, $codigoInscripcion)
 {
-    Inscripcion::where('idTutorResponsable', $idTutorResponsable)
+    Inscripcion::where('idTutorResponsable', $idTutorResponsable)->where('codigoInscripcion', $codigoInscripcion)
         ->update(['registrandose' => false]);
 }
 

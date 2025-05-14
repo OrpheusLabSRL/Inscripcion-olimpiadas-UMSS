@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id('idInscripcion');
             $table->boolean('estadoInscripcion')->default(false);
             $table->string('formaInscripcion', 20);
+            $table->string('codigoInscripcion', 10)->nullable();
             $table->boolean('registrandose')->default(true);
             $table->timestamps();
 
