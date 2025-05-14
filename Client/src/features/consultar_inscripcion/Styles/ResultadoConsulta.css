@@ -102,7 +102,7 @@
   display: block;
   margin: 1.5rem auto 0;
   padding: 0.75rem 1.5rem;
-  background-color: #007bff;
+  background-color: #0EA5E9;
   color: white;
   border: none;
   border-radius: 4px;
@@ -130,7 +130,7 @@
 .inscripciones-info {
   margin-bottom: 30px;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: white;
   border-radius: 6px;
 }
 
@@ -219,21 +219,44 @@ h4 {
   margin-top: 20px;
 }
 
-.inscripciones-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  color: black;
+.inscripciones-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  table-layout: fixed;
 }
 
-.inscripciones-table th {
-  background-color: #f8f9fa;
-  color: black;
-  font-weight: bold;
-  padding: 12px;
+.inscripciones-table th,
+.inscripciones-table td {
+  padding: 0.75rem;
   text-align: left;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
 }
+
+/* Ajustar el ancho de las columnas específicas */
+.inscripciones-table th:nth-child(1),
+.inscripciones-table td:nth-child(1) {
+  width: 25%; /* Área */
+}
+
+.inscripciones-table th:nth-child(2),
+.inscripciones-table td:nth-child(2) {
+  width: 25%; /* Categoría */
+}
+
+.inscripciones-table th:nth-child(3),
+.inscripciones-table td:nth-child(3) {
+  width: 25%; /* Tutor Responsable */
+}
+
+.inscripciones-table th:nth-child(4),
+.inscripciones-table td:nth-child(4) {
+  width: 25%; /* Estado de Pago */
+}
+
 .titulo-resultado {
   color: black;
   font-family: "Poppins", sans-serif;

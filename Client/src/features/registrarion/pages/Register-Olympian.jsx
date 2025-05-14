@@ -146,9 +146,9 @@ export const RegisterOlympian = () => {
     const label = selectedOption.text;
 
     setValue("Departamento", e.target.value);
-    const provincias = municipioPorDepartamento[label] || [];
-    setMunicipiosFiltradas(provincias);
-    sessionStorage.setItem("municipiosFiltradas", JSON.stringify(provincias));
+    const municipios = municipioPorDepartamento[label] || [];
+    setMunicipiosFiltradas(municipios);
+    sessionStorage.setItem("municipiosFiltradas", JSON.stringify(municipios));
   };
 
   const onSelectMunicipio = (e) => {

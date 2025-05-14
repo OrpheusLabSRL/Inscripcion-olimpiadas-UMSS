@@ -167,9 +167,10 @@ const ConsultarInscripcion = () => {
           >
             <option value="">Seleccione su rol</option>
             <option value="olimpista">Olimpista</option>
-            <option value="tutor">Tutor</option>
+            <option value="tutor">Tutor/Responsable Inscripción </option>
           </select>
           {errors.rol && <div className="error-message">{errors.rol}</div>}
+          <div className="help-message">En caso de ser tutor legal, tutor de área o responsable de inscripción seleccione tutor/Responsable Inscripción</div>
         </div>
 
         <button
@@ -177,7 +178,7 @@ const ConsultarInscripcion = () => {
           className="btn-consulta submit-button"
           disabled={loading}
         >
-          {loading ? "Consultando..." : "CONSULTAR"}
+          {loading ? "Consultando..." : "Consultar"}
         </button>
 
         {error && <div className="error-message">{error}</div>}

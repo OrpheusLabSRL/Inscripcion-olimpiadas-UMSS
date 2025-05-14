@@ -1,10 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
 .resultado-container {
     padding: 2rem;
     min-height: 100vh;
-    background-color: #94B4C1;
+    background-color: #F0F9FF;
     margin-top: 60px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
 }
 
 .resultado-content {
@@ -12,85 +15,139 @@
     margin: 0 auto;
     background-color: white;
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .resultado-content h2 {
-    color: black;
+    color: #000000;
     margin-bottom: 1.5rem;
     text-align: center;
-    font-size: 1.8rem;
+    font-size: 24px;
     font-family: 'Poppins', sans-serif;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .tutor-info {
     margin-bottom: 2rem;
     padding: 1.5rem;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f8f9fa;
+    border-radius: 8px;
+    background-color: white;
 }
 
 .tutor-info h3 {
-    color: black;
+    color: #000000;
     margin-bottom: 1rem;
-    font-size: 1.4rem;
+    font-size: 18px;
     font-family: 'Poppins', sans-serif;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .tutor-info p {
-    color: black;
+    color: #000000;
     margin: 0.75rem 0;
-    font-size: 1.1rem;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
 }
 
 .olimpistas-table {
     margin-top: 2rem;
+    width: 100%;
+    overflow-x: auto;
 }
 
 .olimpistas-table h3 {
-    color: black;
+    color: #000000;
     margin-bottom: 1rem;
-    font-size: 1.4rem;
+    font-size: 18px;
     font-family: 'Poppins', sans-serif;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .olimpistas-table table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
+    table-layout: auto;
+    white-space: nowrap;
 }
 
 .olimpistas-table th,
 .olimpistas-table td {
-    color: black;
+    color: #000000;
     padding: 0.75rem;
     text-align: left;
     border-bottom: 1px solid #ddd;
-    font-size: 1.1rem;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+/* Ajustar el ancho de las columnas específicas */
+.olimpistas-table th:nth-child(5),
+.olimpistas-table td:nth-child(5) {
+    width: 25%; /* Área */
+}
+
+.olimpistas-table th:nth-child(6),
+.olimpistas-table td:nth-child(6) {
+    width: 25%; /* Categoría */
+}
+
+.olimpistas-table th:nth-child(4),
+.olimpistas-table td:nth-child(4) {
+    width: 25%; /* Tipo de Tutor */
+}
+
+.olimpistas-table th:nth-child(7),
+.olimpistas-table td:nth-child(7) {
+    width: 25%; /* Estado de Pago */
+}
+
+/* Las otras columnas se ajustarán automáticamente */
+.olimpistas-table th:nth-child(1),
+.olimpistas-table td:nth-child(1),
+.olimpistas-table th:nth-child(2),
+.olimpistas-table td:nth-child(2),
+.olimpistas-table th:nth-child(3),
+.olimpistas-table td:nth-child(3) {
+    width: auto;
 }
 
 .olimpistas-table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
+    background-color: white;
+    font-weight: 500;
+    white-space: nowrap;
 }
 
 .olimpistas-table tr:hover {
     background-color: #f5f5f5;
 }
 
+.btn-consulta {
+    background-color: #0EA5E9;
+    color: white;
+    padding: 6px 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    height: 40px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+}
 
-
-button:hover {
-    background-color: #0056b3;
+.btn-consulta:hover {
+    background-color: #0EA5E9;
 }
 
 .error-message {
@@ -103,14 +160,14 @@ button:hover {
 }
 
 .estado-pago {
-    font-weight: 600;
+    font-weight: 500;
     text-transform: capitalize;
 }
 
 .estado-pago.realizado {
-    color: #28a745;
+    color: #10b981;
 }
 
 .estado-pago.pendiente {
-    color: #dc3545;
+    color: #ef4444;
 } 
