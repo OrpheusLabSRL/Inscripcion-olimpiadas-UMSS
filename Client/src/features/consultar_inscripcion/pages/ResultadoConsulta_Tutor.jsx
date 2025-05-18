@@ -38,7 +38,7 @@ const ResultadoConsulta_Tutor = () => {
 
   // Agrupar olimpistas por codigoInscripcion
   const olimpistasAgrupados = olimpistas.reduce((grupos, olimpista) => {
-    const codigoInscripcion = olimpista.codigoInscripcion || 'sin-inscripcion';
+    const codigoInscripcion = olimpista.codigoInscripcion || "sin-inscripcion";
     if (!grupos[codigoInscripcion]) {
       grupos[codigoInscripcion] = [];
     }
@@ -69,58 +69,79 @@ const ResultadoConsulta_Tutor = () => {
             </p>
           </div>
 
-          {Object.entries(olimpistasAgrupados).map(([codigoInscripcion, olimpistasGrupo]) => {
-            // Obtener la forma de inscripción del primer olimpista del grupo
-            const primerOlimpista = olimpistasGrupo[0];
-            const formaInscripcion = primerOlimpista?.formaInscripcion || 'No especificada';
+          {Object.entries(olimpistasAgrupados).map(
+            ([codigoInscripcion, olimpistasGrupo], index) => {
+              // Obtener la forma de inscripción del primer olimpista del grupo
+              const primerOlimpista = olimpistasGrupo[0];
+              const formaInscripcion =
+                primerOlimpista?.formaInscripcion || "No especificada";
 
-            return (
-              <div key={codigoInscripcion} className="olimpistas-table">
-                <h3>
-                  {codigoInscripcion === 'sin-inscripcion' 
-                    ? 'Olimpistas sin inscripción' 
-                    : `Olimpistas correspondientes a la Inscripción: ${codigoInscripcion}`}
-                </h3>
-                {codigoInscripcion !== 'sin-inscripcion' && (
-                  <p className="forma-inscripcion">
-                    <strong>Forma de Inscripción:</strong> {formaInscripcion}
-                  </p>
-                )}
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Apellido</th>
-                      <th>Carnet de Identidad</th>
-                      <th>Tipo de Tutor</th>
-                      <th>Materia</th>
-                      <th>Categoría</th>
-                      <th>Estado de Pago</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {olimpistasGrupo.map((olimpista) => (
-                      <tr key={olimpista.idInscripcion}>
-                        <td>{olimpista.nombre}</td>
-                        <td>{olimpista.apellido}</td>
-                        <td>{olimpista.carnetIdentidad}</td>
-                        <td>{olimpista.tipoTutor}</td>
-                        <td>{olimpista.materia || "No especificada"}</td>
-                        <td>{olimpista.categoria || "No especificada"}</td>
-                        <td
-                          className={`estado-pago ${getEstadoPagoClass(
-                            olimpista.estadoPago
-                          )}`}
-                        >
-                          {olimpista.estadoPago}
-                        </td>
+              // Formatear el código de inscripción para el título
+              let codigoInscripcionFormateado;
+              if (codigoInscripcion === "sin-inscripcion") {
+                codigoInscripcionFormateado = "Olimpistas sin inscripción";
+              } else {
+                const match = String(codigoInscripcion).match(/\d+$/);
+                if (match && match[0]) {
+                  codigoInscripcionFormateado = String(match[0]).padStart(
+                    3,
+                    "0"
+                  );
+                } else {
+                  codigoInscripcionFormateado = String(codigoInscripcion);
+                }
+              }
+
+              return (
+                <div key={codigoInscripcion} className="olimpistas-table">
+                  <h3>
+                    {codigoInscripcion === "sin-inscripcion"
+                      ? codigoInscripcionFormateado
+                      : `Olimpistas correspondiente a la Inscripción: ${
+                          index + 1
+                        }`}
+                  </h3>
+                  {codigoInscripcion !== "sin-inscripcion" && (
+                    <p className="forma-inscripcion">
+                      <strong>Forma de Inscripción:</strong> {formaInscripcion}
+                    </p>
+                  )}
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Carnet de Identidad</th>
+                        <th>Tipo de Tutor</th>
+                        <th>Materia</th>
+                        <th>Categoría</th>
+                        <th>Estado de Pago</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            );
-          })}
+                    </thead>
+                    <tbody>
+                      {olimpistasGrupo.map((olimpista) => (
+                        <tr key={olimpista.idInscripcion}>
+                          <td>{olimpista.nombre}</td>
+                          <td>{olimpista.apellido}</td>
+                          <td>{olimpista.carnetIdentidad}</td>
+                          <td>{olimpista.tipoTutor}</td>
+                          <td>{olimpista.materia || "No especificada"}</td>
+                          <td>{olimpista.categoria || "No especificada"}</td>
+                          <td
+                            className={`estado-pago ${getEstadoPagoClass(
+                              olimpista.estadoPago
+                            )}`}
+                          >
+                            {olimpista.estadoPago}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              );
+            }
+          )}
 
           <div className="boton-volver-container">
             <button

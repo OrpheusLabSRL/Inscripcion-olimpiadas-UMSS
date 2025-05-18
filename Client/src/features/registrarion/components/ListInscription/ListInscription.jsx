@@ -123,7 +123,10 @@ export const ListInscription = ({
             onClick={finishRegister}
           />
         ) : (
-          <NextPage onClick={generarBoleta} value="Generar Boleta" />
+          <>
+            <NextPage onClick={generarBoleta} value="Generar Boleta" />
+            <NextPage to="/comprobar-boleta" value="Subir comprobante" />
+          </>
         )}
       </div>
     </div>
