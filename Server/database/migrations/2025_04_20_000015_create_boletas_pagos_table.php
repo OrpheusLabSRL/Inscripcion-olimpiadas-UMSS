@@ -14,6 +14,9 @@ return new class extends Migration {
             $table->integer('montoTotal');
             $table->boolean('estadoBoletaPago')->default(true);
             $table->date('fechaPago')->nullable();
+            $table->string('numeroControl', 50) //Control implementado
+                  ->nullable()
+                  ->unique();
             $table->timestamps();
 
             $table->foreign('idTutor')->references('idPersona')->on('tutores')->onDelete('cascade');
