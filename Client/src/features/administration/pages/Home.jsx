@@ -5,7 +5,13 @@ import {
   getAreasCategoriasPorOlimpiada,
   getInscripcionesConOlimpiadas,
 } from "../../../api/Administration.api";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaUser,
+  FaChartBar,
+  FaListAlt,
+} from "react-icons/fa";
 import "../Styles/Home.css";
 
 export default function Home() {
@@ -16,6 +22,7 @@ export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [participantes, setParticipantes] = useState(0);
   const [pagosPendientes, setPagosPendientes] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -27,28 +34,39 @@ export default function Home() {
 
     const fetchData = async () => {
       try {
-        const response = await getOlimpiadas();
+        setIsLoading(true);
+        const [response, inscripcionesRes] = await Promise.all([
+          getOlimpiadas(),
+          getInscripcionesConOlimpiadas(),
+        ]);
+
         const allOlimpiadas = response.data;
         const active = allOlimpiadas.filter((oli) => oli.estadoOlimpiada === 1);
         setActiveOlimpiadas(active);
 
+        const areasPromises = active.map((oli) =>
+          getAreasCategoriasPorOlimpiada(oli.idOlimpiada)
+        );
+        const areasResponses = await Promise.all(areasPromises);
+
         const areasData = {};
-        for (const oli of active) {
-          const res = await getAreasCategoriasPorOlimpiada(oli.idOlimpiada);
+        active.forEach((oli, index) => {
+          const res = areasResponses[index];
           const data = Array.isArray(res) ? res : res.data || [];
           areasData[oli.idOlimpiada] = data;
-        }
+        });
         setAreasPorOlimpiada(areasData);
 
-        const inscripcionesRes = await getInscripcionesConOlimpiadas();
         const inscripciones = Array.isArray(inscripcionesRes)
           ? inscripcionesRes
           : inscripcionesRes.data || [];
         setAllInscripciones(inscripciones);
       } catch (error) {
-        console.error("Error al cargar olimpiadas o áreas:", error);
+        console.error("Error al cargar datos:", error);
         setActiveOlimpiadas([]);
         setAreasPorOlimpiada({});
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -94,117 +112,99 @@ export default function Home() {
     ? areasPorOlimpiada[currentOlimpiada.idOlimpiada] || []
     : [];
 
+  if (isLoading) {
+    return (
+      <div className="admin-loading-container">
+        <div className="admin-spinner"></div>
+        <p>Cargando datos...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
+    <div className="admin-dashboard-container">
+      <div className="admin-dashboard-header">
         <h1>Panel de Control</h1>
-        {user ? (
-          <p>Bienvenido de nuevo, {user.nombre}</p>
-        ) : (
-          <p>Bienvenido de nuevo</p>
-        )}
+        <p>
+          {user ? `Bienvenido de nuevo, ${user.nombre}` : "Bienvenido de nuevo"}
+        </p>
       </div>
 
-      <div className="user-card">
-        <div className="user-avatar">
-          <span role="img" aria-label="user">
-            👤
-          </span>
+      <div className="admin-user-card">
+        <div className="admin-user-avatar">
+          <FaUser size={24} />
         </div>
-        <div className="user-info">
-          {user ? (
-            <>
-              <h2>{user.nombre}</h2>
-              <p>{user.rol ? user.rol.nombreRol : "Rol no asignado"}</p>
-            </>
-          ) : (
-            <>
-              <h2>Usuario</h2>
-              <p>Rol</p>
-            </>
-          )}
+        <div className="admin-user-info">
+          <h2>{user ? user.nombre : "Usuario"}</h2>
+          <p>{user?.rol?.nombreRol || "Rol no asignado"}</p>
         </div>
       </div>
 
-      <div className="summary-section">
-        <div className="summary-card" style={{ textAlign: "center" }}>
+      <div className="admin-summary-section">
+        <div className="admin-summary-card">
           <h3>Olimpiadas Activas</h3>
           {activeOlimpiadas.length > 0 ? (
-            <div
-              className="olimpiada-slider"
-              style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
-            >
+            <div className="admin-olimpiada-slider">
               {activeOlimpiadas.length > 1 && (
-                <button
-                  onClick={handlePrev}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
+                <button onClick={handlePrev} aria-label="Anterior">
                   <FaArrowLeft />
                 </button>
               )}
-              <p
-                className="big-text"
-                style={{ margin: 0, fontSize: "1.3rem", fontWeight: "bold" }}
-              >
+              <p className="admin-big-text">
                 {currentOlimpiada?.nombreOlimpiada}
               </p>
               {activeOlimpiadas.length > 1 && (
-                <button
-                  onClick={handleNext}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
+                <button onClick={handleNext} aria-label="Siguiente">
                   <FaArrowRight />
                 </button>
               )}
             </div>
           ) : (
-            <p className="big-text">No hay olimpiadas activas</p>
+            <p className="admin-big-text">No hay olimpiadas activas</p>
           )}
         </div>
 
-        <div className="summary-card" style={{ textAlign: "center" }}>
+        <div className="admin-summary-card">
           <h3>Áreas Registradas</h3>
-          <p className="big-text">{currentAreas.length}</p>
-          <p>Areas registradas a la olimpiada</p>
+          <p className="admin-big-text">{currentAreas.length}</p>
+          <p>Áreas en {currentOlimpiada?.nombreOlimpiada || "la olimpiada"}</p>
         </div>
 
-        <div className="summary-card">
+        <div className="admin-summary-card">
           <h3>Participantes</h3>
-          <p className="big-text">{participantes}</p>
-          <p>Estudiantes oficialmente inscritos</p>
+          <p className="admin-big-text">{participantes}</p>
+          <p>Estudiantes inscritos</p>
         </div>
 
-        <div className="summary-card">
+        <div className="admin-summary-card">
           <h3>Pagos Pendientes</h3>
-          <p className="big-text">{pagosPendientes}</p>
-          <p>Pagos aún no confirmados</p>
+          <p className="admin-big-text">{pagosPendientes}</p>
+          <p>Pendientes de confirmación</p>
         </div>
       </div>
 
-      <h2 className="section-title">Acciones Rápidas</h2>
+      <h2 className="admin-section-title">Acciones Rápidas</h2>
 
-      <div className="actions-section">
-        <div className="action-card">
-          <h3 style={{ fontWeight: "bold" }}>Áreas y Categorías</h3>
+      <div className="admin-actions-section">
+        <div className="admin-action-card">
+          <div className="admin-action-icon">
+            <FaListAlt size={32} color="#3498db" />
+          </div>
+          <h3>Áreas y Categorías</h3>
           <p>Visualiza las áreas y categorías disponibles</p>
           <button onClick={() => navigate("/admin/view-base")}>
-            ir a areas y categorías
+            Ir a áreas y categorías
           </button>
         </div>
 
-        <div className="action-card">
-          <h3 style={{ fontWeight: "bold" }}>Generar Reportes</h3>
+        <div className="admin-action-card">
+          <div className="admin-action-icon">
+            <FaChartBar size={32} color="#3498db" />
+          </div>
+          <h3>Generar Reportes</h3>
           <p>Genera reportes personalizados con filtros</p>
           <button onClick={() => navigate("/admin/reports")}>
-            generar reportes
+            Generar reportes
           </button>
         </div>
       </div>

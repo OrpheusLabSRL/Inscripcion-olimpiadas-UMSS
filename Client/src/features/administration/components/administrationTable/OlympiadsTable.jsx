@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { getOlimpiadas } from "../../../../api/inscription.api";
 import {
   updateOlimpiadaEstado,
   getAreasCategoriasPorOlimpiada,
 } from "../../../../api/Administration.api";
+import { getOlimpiadas } from "../../../../api/inscription.api";
 import OlympiadsModal from "../administrationModal/OlympiadsModal";
 import BaseDataModal from "../administrationModal/BaseDataModal";
 import { CiCircleInfo } from "react-icons/ci";
-import { MdEdit } from "react-icons/md";
-import "../../Styles/General.css";
+import { FaSpinner } from "react-icons/fa";
+import "../../Styles/Tables.css";
 
 const OlympiadsTable = () => {
   const [olympiads, setOlympiads] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOlympiad, setSelectedOlympiad] = useState(null);
-
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const fetchOlimpiads = async () => {
     try {
-      const data = await getOlimpiadas();
-      setOlympiads(data.data);
+      const { data } = await getOlimpiadas();
+      setOlympiads(data);
     } catch (error) {
       console.error("Error al obtener olimpiadas:", error);
       setOlympiads([]);
@@ -40,11 +38,6 @@ const OlympiadsTable = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (olympiad) => {
-    setSelectedOlympiad(olympiad);
-    setIsEditModalOpen(true);
-  };
-
   const toggleEstado = async (olympiad) => {
     try {
       const hoy = new Date().toISOString().split("T")[0];
@@ -56,9 +49,7 @@ const OlympiadsTable = () => {
       }
 
       if (olympiad.fechaFinOlimpiada < hoy) {
-        alert(
-          "No puedes activar una olimpiada cuya fecha de fin ya ha pasado."
-        );
+        alert("No puedes activar una olimpiada cuya fecha ya ha pasado.");
         return;
       }
 
@@ -70,10 +61,15 @@ const OlympiadsTable = () => {
       const tieneAsignaciones =
         data.length > 0 && data.some((area) => area.categorias.length > 0);
 
+      if (!tieneAsignaciones) {
+        alert("Debes asignar al menos un área y categoría para activarla.");
+        return;
+      }
+
       await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
       await fetchOlimpiads();
     } catch (error) {
-      console.error("Error al actualizar el estado de la olimpiada:", error);
+      console.error("Error al actualizar el estado:", error);
       alert("No se pudo actualizar el estado.");
     }
   };
@@ -88,13 +84,13 @@ const OlympiadsTable = () => {
     const hoy = new Date().toISOString().split("T")[0];
     const isFinished = olympiad.fechaFinOlimpiada < hoy;
     const isActive = olympiad.estadoOlimpiada && !isFinished;
-
-    return isActive ? "badge-success" : "badge-danger";
+    if (isFinished) return "table-util-badge-neutral";
+    return isActive ? "table-util-badge-success" : "table-util-badge-warning";
   };
 
   return (
-    <>
-      <table className="data-table">
+    <div className="olympiad-table-wrapper">
+      <table className="olympiad-table">
         <thead>
           <tr>
             <th>Nombre</th>
@@ -108,11 +104,14 @@ const OlympiadsTable = () => {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="6">Cargando olimpiadas...</td>
+              <td colSpan="6" className="table-util-loading">
+                <FaSpinner className="table-util-spinner" />
+                Cargando olimpiadas...
+              </td>
             </tr>
           ) : olympiads.length > 0 ? (
             olympiads.map((item) => (
-              <tr key={item.idOlimpiada}>
+              <tr key={item.idOlimpiada} className="olympiad-table-row">
                 <td>{item.nombreOlimpiada}</td>
                 <td>{item.version}</td>
                 <td>{item.fechaInicioOlimpiada}</td>
@@ -120,46 +119,27 @@ const OlympiadsTable = () => {
                 <td>
                   <button
                     onClick={() => toggleEstado(item)}
-                    className={getBadgeClass(item)}
-                    style={{
-                      border: "none",
-                      cursor: "pointer",
-                      width: "100px",
-                    }}
+                    className={`table-util-status-badge ${getBadgeClass(item)}`}
                   >
                     {getEstadoLabel(item)}
                   </button>
                 </td>
-                <td>
+                <td className="olympiad-table-actions">
                   <button
+                    className="olympiad-table-view-btn"
                     onClick={() => handleView(item)}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      fontSize: "1.5rem",
-                    }}
+                    title="Ver detalles"
                   >
                     <CiCircleInfo />
                   </button>
-                  {/*<button
-                    onClick={() => handleEdit(item)}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      fontSize: "1.5rem",
-                      marginLeft: "0.5rem",
-                    }}
-                  >
-                    <MdEdit />
-                  </button>*/}
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6">No hay olimpiadas registradas.</td>
+              <td colSpan="6" className="table-util-empty">
+                No hay olimpiadas registradas.
+              </td>
             </tr>
           )}
         </tbody>
@@ -176,7 +156,7 @@ const OlympiadsTable = () => {
         onClose={() => setIsEditModalOpen(false)}
         selectedVersion={selectedOlympiad?.idOlimpiada}
       />
-    </>
+    </div>
   );
 };
 

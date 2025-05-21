@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getCategoriaGrado } from "../../../../api/Administration.api";
-import "../../Styles/General.css";
+import { FaSpinner, FaInfoCircle } from "react-icons/fa";
+import "../../Styles/Tables.css";
 
 const CategoriesTable = () => {
   const [categoriasAgrupadas, setCategoriasAgrupadas] = useState({});
   const [loading, setLoading] = useState(true);
+  const [expandedCategory, setExpandedCategory] = useState(null);
 
   useEffect(() => {
     const fetchCategorias = async () => {
@@ -13,21 +15,18 @@ const CategoriesTable = () => {
         const data = response || [];
 
         const agrupado = {};
-
         data.forEach((cat) => {
           const nombreCategoria =
             cat.categoria?.nombreCategoria || "Sin categoría";
-
           if (!agrupado[nombreCategoria]) {
             agrupado[nombreCategoria] = {
               grados: [],
               estadoCategoriaGrado: cat.estadoCategoriaGrado,
             };
           }
-
           if (cat.grado) {
             agrupado[nombreCategoria].grados.push(
-              `${cat.grado.numeroGrado}° de ${cat.grado.nivel}`
+              `${cat.grado.numeroGrado}° ${cat.grado.nivel}`
             );
           }
         });
@@ -44,59 +43,90 @@ const CategoriesTable = () => {
     fetchCategorias();
   }, []);
 
-  const agruparGradosDeTres = (grados) => {
-    const grupos = [];
-    for (let i = 0; i < grados.length; i += 3) {
-      grupos.push(grados.slice(i, i + 3).join(", "));
-    }
-    return grupos;
+  const toggleExpand = (nombreCategoria) => {
+    setExpandedCategory(
+      expandedCategory === nombreCategoria ? null : nombreCategoria
+    );
   };
 
   return (
-    <table className="data-table">
-      <thead>
-        <tr>
-          <th style={{ textAlign: "left", paddingLeft: "1rem" }}>Categoría</th>
-          <th style={{ textAlign: "center" }}>Grados</th>
-          <th style={{ textAlign: "center" }}>Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        {loading ? (
+    <div className="category-table-wrapper">
+      <table className="category-table">
+        <thead>
           <tr>
-            <td colSpan="3">Cargando categorías...</td>
+            <th>Categoría</th>
+            <th className="table-util-text-center">Grados Incluidos</th>
+            <th className="table-util-text-center">Estado</th>
           </tr>
-        ) : Object.keys(categoriasAgrupadas).length > 0 ? (
-          Object.entries(categoriasAgrupadas).map(
-            ([nombreCategoria, data], index) => (
-              <tr key={index}>
-                <td style={{ textAlign: "left", paddingLeft: "1rem" }}>
-                  {nombreCategoria}
-                </td>
-                <td style={{ textAlign: "center", whiteSpace: "pre-line" }}>
-                  {agruparGradosDeTres(data.grados).join("\n")}
-                </td>
-                <td style={{ textAlign: "center" }}>
-                  <span
-                    className={`badge ${
-                      data.estadoCategoriaGrado
-                        ? "badge-success"
-                        : "badge-danger"
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan="3" className="table-util-loading">
+                <FaSpinner className="table-util-spinner" />
+                Cargando categorías...
+              </td>
+            </tr>
+          ) : Object.keys(categoriasAgrupadas).length > 0 ? (
+            Object.entries(categoriasAgrupadas).map(
+              ([nombreCategoria, data], index) => (
+                <React.Fragment key={index}>
+                  <tr
+                    className={`category-table-row ${
+                      expandedCategory === nombreCategoria ? "expanded" : ""
                     }`}
+                    onClick={() => toggleExpand(nombreCategoria)}
                   >
-                    {data.estadoCategoriaGrado ? "Activo" : "Inactivo"}
-                  </span>
-                </td>
-              </tr>
+                    <td className="category-table-name">
+                      {nombreCategoria} <FaInfoCircle className="info-icon" />
+                    </td>
+                    <td className="table-util-text-center">
+                      {data.grados.slice(0, 3).join(", ")}
+                      {data.grados.length > 3 && (
+                        <span className="category-table-more-count">
+                          +{data.grados.length - 3}
+                        </span>
+                      )}
+                    </td>
+                    <td className="table-util-text-center">
+                      <span
+                        className={`table-util-status-badge ${
+                          data.estadoCategoriaGrado
+                            ? "table-util-badge-success"
+                            : "table-util-badge-danger"
+                        }`}
+                      >
+                        {data.estadoCategoriaGrado ? "Activo" : "Inactivo"}
+                      </span>
+                    </td>
+                  </tr>
+                  {expandedCategory === nombreCategoria && (
+                    <tr className="category-table-details">
+                      <td colSpan="3">
+                        <h4>Grados completos:</h4>
+                        <div className="grades-list">
+                          {data.grados.map((grado, i) => (
+                            <span key={i} className="category-table-tag">
+                              {grado}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              )
             )
-          )
-        ) : (
-          <tr>
-            <td colSpan="3">No hay datos registrados.</td>
-          </tr>
-        )}
-      </tbody>
-    </table>
+          ) : (
+            <tr>
+              <td colSpan="3" className="table-util-empty">
+                No hay categorías registradas.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

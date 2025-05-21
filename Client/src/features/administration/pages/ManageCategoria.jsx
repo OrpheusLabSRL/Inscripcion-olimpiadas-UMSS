@@ -2,69 +2,37 @@ import React from "react";
 import CategoriesTable from "../components/administrationTable/CategoriesTable";
 import BackButton from "../../../components/Buttons/BackButton.jsx";
 import { useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 import "../Styles/General.css";
 
 const CategoryList = () => {
   const navigate = useNavigate();
 
-  const goBack = () => {
-    navigate("/admin/view-base");
-  };
-
   return (
-    <div
-      className="category-container"
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#a2bfcb",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <div
-        style={{
-          padding: "2rem",
-          flex: "1 0 auto",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <div
-          style={{
-            marginBottom: "1.5rem",
-            color: "black",
-          }}
-        >
-          <BackButton onClick={goBack} className="back-button">
-            Volver
-          </BackButton>
-          <h1
-            style={{
-              marginTop: "1rem",
-              marginBottom: "0.5rem",
-              color: "#213448",
-            }}
+    <div className="admin-category-container">
+      <div className="admin-content-wrapper">
+        <div className="category-header-section">
+          <BackButton
+            onClick={() => navigate("/admin/view-base")}
+            className="btn-back"
           >
-            Categorías
-          </h1>
-          <p>Gestiona las categorías que asociarás a las diferentes áreas</p>
+            <FaArrowLeft className="btn-back-icon" />
+            Volver a Datos Base
+          </BackButton>
+
+          <div className="category-title-group">
+            <h1 className="category-title">Gestión de Categorías</h1>
+            <p className="category-subtitle">
+              Administra las categorías asociadas a las diferentes áreas
+              académicas
+            </p>
+          </div>
         </div>
 
-        <div
-          style={{
-            backgroundColor: "#ecefca",
-            padding: "2rem",
-            borderRadius: "12px",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-            flexGrow: 1,
-            overflowX: "auto",
-          }}
-        >
+        <div className="admin-table-card">
           <CategoriesTable />
         </div>
       </div>
-
-      <div style={{ flexShrink: 0 }}></div>
     </div>
   );
 };

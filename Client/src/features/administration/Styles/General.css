@@ -1,81 +1,209 @@
-/* === Tabla === */
-.data-table {
+/* === Contenedores Generales === */
+.admin-area-container,
+.admin-category-container,
+.admin-olympiads-container {
+  max-width: 90%;
+  background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.admin-olympiads-container {
+  background-color: #f5f7fa;
+}
+
+.admin-content-wrapper {
+  padding: 2rem;
+  max-width: 1400px;
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  color: black;
+  margin: 0 auto;
+  flex: 1;
 }
 
-.data-table th,
-.data-table td {
-  border-bottom: 1px solid #ebebeb;
-  padding: 0.75rem;
-  text-align: left;
-  color: black;
+/* === Cabeceras === */
+.area-header-section,
+.category-header-section,
+.olympiads-header-section {
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 2rem;
 }
 
-/* === Badges de estado === */
-.badge-success,
-.badge-danger {
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-  font-size: 0.8rem;
-  display: inline-block;
-  font-weight: 500;
+.olympiads-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
-.badge-success {
-  background-color: #d4f8d4;
-  color: #1a7f1a;
+.olympiads-header-text {
+  flex: 1;
+  min-width: 300px;
 }
 
-.badge-danger {
-  background-color: #ffe0e0;
-  color: #e63946;
+/* === Títulos y Subtítulos === */
+.area-title,
+.category-title,
+.olympiads-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 1rem 0 0.5rem;
 }
 
-/* === Botones generales === */
-.add-button,
-.btn-registrar {
-  background-color: #2563eb;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
+.area-subtitle,
+.category-subtitle,
+.olympiads-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.category-title-group {
+  margin-top: 1.5rem;
+}
+
+/* === Tablas === */
+.admin-table-wrapper,
+.admin-table-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  width: 90%;
+  overflow-x: auto;
+}
+
+.admin-table-wrapper {
+  padding: 2rem;
+  max-width: 1200px;
+}
+
+.admin-table-card {
+  padding: 1.5rem;
+}
+
+/* === Botones === */
+.btn-primary,
+.btn-secondary,
+.btn-add,
+.btn-register {
+  font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  font-weight: 600;
+  transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.btn-registrar {
-  padding: 0.5rem 1.2rem;
-  font-size: 0.95rem;
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-add,
+.btn-register {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.5rem 1rem;
   border-radius: 6px;
+  font-size: 0.95rem;
 }
 
-.add-button:hover,
-.btn-registrar:hover {
+.btn-primary:hover,
+.btn-add:hover,
+.btn-register:hover {
   background-color: #1e40af;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* === Contenedor principal === */
-.manage-container {
-  padding: 20px;
+.btn-primary:active {
+  transform: translateY(0);
 }
 
-/* === Botón para volver === */
-.back-button {
-  background-color: transparent;
+.btn-icon {
+  font-size: 0.9rem;
+}
+
+/* === Botón de Volver === */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
   border: none;
-  font-size: 16px;
+  color: #64748b;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  margin-bottom: 10px;
-  color: #333;
-  padding: 5px 10px;
-  transition: color 0.3s ease;
+  padding: 0.5rem 0;
+  transition: all 0.2s ease;
 }
 
-.back-button:hover {
-  color: #007bff;
+.btn-back:hover {
+  color: #2563eb;
+  transform: translateX(-2px);
+}
+
+.btn-back-icon {
+  font-size: 0.9rem;
+}
+
+/* === Responsive === */
+@media (max-width: 1024px) {
+  .admin-content-wrapper {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-area-container,
+  .admin-category-container,
+  .admin-olympiads-container {
+    padding: 1.5rem;
+  }
+
+  .admin-table-wrapper,
+  .admin-table-card {
+    padding: 1rem;
+  }
+
+  .area-title,
+  .category-title,
+  .olympiads-title {
+    font-size: 1.5rem;
+  }
+
+  .category-subtitle,
+  .olympiads-subtitle {
+    font-size: 1rem;
+  }
+
+  .olympiads-header-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-content-wrapper {
+    padding: 1rem;
+  }
+
+  .category-title {
+    font-size: 1.5rem;
+  }
 }

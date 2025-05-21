@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
-import "../../Styles/ModalGeneral.css";
 import { createArea, getAreas } from "../../../../api/Administration.api";
-
+import "../../Styles/ModalGeneral.css";
 const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     nombreArea: "",

@@ -1,34 +1,184 @@
-.base-grid {
+.base-config-container {
+  max-width: 90%;
+  padding: 1rem 1rem 1rem 1rem;
+  color: #2c3e50;
+  background-color: #f5f7fa;
+  min-height: auto;
+  margin: 0 auto;
+}
+
+.base-config-back {
+  max-width: 1200px;
+  margin: 2rem auto auto auto;
+  padding: 0 0.5rem;
+}
+
+.base-config-header {
+  margin-bottom: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 0.5rem;
+}
+
+.base-config-title {
+  color: #2c3e50;
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+}
+
+.base-config-title::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 160px;
+  height: 3px;
+  background-color: #3498db;
+  border-radius: 2px;
+}
+
+.base-config-subtitle {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  max-width: 800px;
+}
+
+.base-config-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
+  gap: 2rem;
   margin-top: 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 0.5rem;
 }
 
-.card-item {
-  background: #ecefca;
+.base-config-card {
+  background: #ffffff;
   border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1.25rem;
   align-items: flex-start;
-  color: black;
+  transition: all 0.3s ease;
+  border: none;
+  position: relative;
+  overflow: hidden;
 }
 
-.card-item h3 {
-  font-size: 1rem;
+.base-config-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #3498db;
+}
+
+.base-config-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.base-config-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+}
+
+.base-config-card h3 {
+  font-size: 1.25rem;
   margin: 0;
+  color: #2c3e50;
+  font-weight: 700;
 }
 
-.card-item p {
-  font-size: 0.875rem;
-  line-height: 1.3;
+.base-config-card p {
+  font-size: 0.9375rem;
+  line-height: 1.6;
   margin: 0;
+  color: #7f8c8d;
 }
 
-.card-icon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+.base-config-button {
+  background: linear-gradient(to right, #3498db, #2980b9);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.base-config-button:hover {
+  background: linear-gradient(to right, #2980b9, #3498db);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.base-config-button::after {
+  content: "→";
+  transition: transform 0.3s ease;
+}
+
+.base-config-button:hover::after {
+  transform: translateX(3px);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .base-config-container {
+    padding: 1.5rem 1rem;
+    max-width: 100%;
+  }
+
+  .base-config-header {
+    margin-bottom: 2rem;
+  }
+
+  .base-config-title {
+    font-size: 1.75rem;
+  }
+
+  .base-config-subtitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .base-config-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .base-config-card {
+    padding: 1.5rem;
+  }
+
+  .base-config-title {
+    font-size: 1.5rem;
+  }
 }

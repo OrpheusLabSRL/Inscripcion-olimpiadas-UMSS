@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../Styles/ManageDocenteOlympiad.css";
 import {
   getOlimpiadas,
   getAreasCategoriasPorOlimpiada,
@@ -7,6 +6,7 @@ import {
 import { toast } from "react-toastify";
 import PanelOlympiadsTable from "../components/administrationTable/PanelOlympiadsTable";
 import RegisterAreaModal from "../components/administrationModal/RegisterAreaModal";
+import "../Styles/ManageDocenteOlympiad.css";
 
 export default function PanelOlympiad() {
   const [olimpiadas, setOlimpiadas] = useState([]);
@@ -71,14 +71,14 @@ export default function PanelOlympiad() {
   };
 
   return (
-    <div className="manage-olympiad-container">
-      <div className="form-group">
-        <label htmlFor="olimpiada-select" className="form-label">
+    <div className="panel-olymp-container">
+      <div className="panel-olymp-form-group">
+        <label htmlFor="olimpiada-select" className="panel-olymp-label">
           Selecciona una olimpiada
         </label>
         <select
           id="olimpiada-select"
-          className="form-select"
+          className="panel-olymp-select"
           value={selectedId}
           onChange={handleOlympiadChange}
           disabled={isLoading}
@@ -95,15 +95,18 @@ export default function PanelOlympiad() {
       {isLoadingAreas && selectedId && <p>Cargando áreas y categorías...</p>}
 
       {selectedId && (
-        <div className="olympiad-content">
-          <div className="section-header">
-            <h3 className="section-title">
+        <div className="panel-olymp-content">
+          <div className="panel-olymp-header">
+            <h3 className="panel-olymp-title">
               Áreas y Categorías -{" "}
               {
                 olimpiadas.find((o) => o.idOlimpiada === selectedId)
                   ?.nombreOlimpiada
               }
             </h3>
+            <button className="panel-olymp-button" onClick={handleAddAreaClick}>
+              Registrar nueva área
+            </button>
           </div>
 
           <PanelOlympiadsTable

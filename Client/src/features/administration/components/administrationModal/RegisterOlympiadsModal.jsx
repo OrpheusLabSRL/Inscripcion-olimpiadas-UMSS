@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import "../../Styles/ModalGeneral.css";
-import "../../Styles/General.css";
 import {
   createOlympiad,
   getOlimpiadas,
 } from "../../../../api/Administration.api";
+import "../../Styles/ModalGeneral.css";
 
 const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
   const initialFormState = {
