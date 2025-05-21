@@ -540,12 +540,9 @@ const RegisterExcel = () => {
           <div className="validation-errors">
             <h3>Errores de validación:</h3>
             <ul>
-              {validationErrors.slice(0, 10).map((error, index) => (
+              {validationErrors.map((error, index) => (
                 <li key={index}>{error}</li>
               ))}
-              {validationErrors.length > 10 && (
-                <li>...y {validationErrors.length - 10} errores más</li>
-              )}
             </ul>
           </div>
         )}
