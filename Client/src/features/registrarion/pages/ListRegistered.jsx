@@ -6,24 +6,27 @@ import { ListInscription } from "../components/ListInscription/ListInscription";
 
 //react
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 //api
 import { getDataOlympian } from "../../../api/inscription.api";
 
 export const ListRegistered = () => {
   const [dataInscriptions, setDataInscriptions] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     const storedTutorId = sessionStorage.getItem("tutorInscripcionId");
     const getStudents = async () => {
       try {
         const res = await getDataOlympian(storedTutorId);
+        console.log(res);
         setDataInscriptions(res.data.data);
       } catch (error) {
         console.error("Error en la petición:", error);
       }
     };
-
+    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
     getStudents();
   }, []);
 
