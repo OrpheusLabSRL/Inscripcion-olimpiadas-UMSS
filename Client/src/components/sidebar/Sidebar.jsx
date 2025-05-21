@@ -1,9 +1,11 @@
 //React
 import { NavLink, Link, useNavigate } from "react-router-dom";
+import { GrDocumentDownload } from "react-icons/gr";
 
 //Icons
 import { FaHome, FaRegCalendarAlt, FaRegEdit } from "react-icons/fa";
 import { IoDocumentTextOutline, IoLogInOutline } from "react-icons/io5";
+import { GrDocumentUpdate } from "react-icons/gr";
 import {
   HiOutlineClipboardDocumentList,
   HiOutlineClipboardDocument,
@@ -81,18 +83,42 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
               <li>
                 <NavLink
                   to={
-                    sessionStorage.getItem("pantallaActualRegistro")
+                    sessionStorage.getItem("pantallaActualRegistro") != ""
                       ? sessionStorage.getItem("pantallaActualRegistro")
-                      : "/register"
+                      : "/register/listRegistered"
                   }
                   className={({ isActive }) => (isActive ? "active-link" : "")}
                 >
                   <FaHome className="sidebar-icons" />
-                  {isOpen ? "Inscripción" : ""}
+                  {isOpen ? "Registro" : ""}
                 </NavLink>
               </li>
+
               <li>
-                <NavLink to="/contacto">
+                <NavLink
+                  to="/register/generate-order"
+                  className={({ isActive }) => (isActive ? "active-link" : "")}
+                >
+                  <GrDocumentDownload className="sidebar-icons" />
+                  {isOpen ? "Generar orden de pago" : ""}
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/register/comprobar-boleta"
+                  className={({ isActive }) => (isActive ? "active-link" : "")}
+                >
+                  <GrDocumentUpdate className="sidebar-icons" />
+                  {isOpen ? "Subir comprobante" : ""}
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/contacto"
+                  className={({ isActive }) => (isActive ? "active-link" : "")}
+                >
                   <IoDocumentTextOutline className="sidebar-icons" />
                   {isOpen ? "Contacto" : ""}
                 </NavLink>
