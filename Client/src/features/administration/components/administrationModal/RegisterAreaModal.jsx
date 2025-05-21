@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { FiX, FiSave, FiDollarSign, FiAlertCircle } from "react-icons/fi";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
-import "../../Styles/Dropdown.css";
-import "../../Styles/ModalGeneral.css";
+import "../../styles/ModalGeneral.css";
+import "../../styles/Dropdown.css";
+
 import {
   getOlimpiadas,
   getAreas,
@@ -151,7 +152,9 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
     if (hasErrors) {
       forceUpdate();
       setTimeout(() => {
-        const firstError = document.querySelector(".input-error, .has-error");
+        const firstError = document.querySelector(
+          ".admin-input-error, .admin-has-error"
+        );
         if (firstError)
           firstError.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 50);
@@ -217,17 +220,17 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={handleReset}>
+    <div className="admin-modal-overlay" onClick={handleReset}>
       <div
-        className="modal-content"
+        className="admin-modal-content"
         style={{ maxWidth: "850px", maxHeight: "90vh", overflowY: "auto" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="modal-header">
-          <h3 className="modal-title">Agregar Área y Categorías</h3>
+        <div className="admin-modal-header">
+          <h3 className="admin-modal-title">Agregar Área y Categorías</h3>
           <button
             type="button"
-            className="close-button"
+            className="admin-modal-close-btn"
             onClick={handleReset}
             aria-label="Cerrar modal"
             disabled={isSubmitting}
@@ -237,26 +240,32 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
         </div>
 
         {isLoading ? (
-          <div className="loading-container">
+          <div className="admin-loading-container">
             <p>Cargando datos...</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="modal-form">
-            <div className="form-section">
-              <h4 className="section-subtitle">Olimpiada seleccionada</h4>
-              <div className="version-display">
+          <form onSubmit={handleSubmit} className="admin-modal-form">
+            <div className="admin-form-section">
+              <h4 className="admin-section-subtitle">Olimpiada seleccionada</h4>
+              <div className="admin-version-display">
                 Versión: <strong>{versionTexto}</strong>
               </div>
             </div>
 
-            <div className="form-section">
-              <h4 className="section-subtitle">Selección de Área</h4>
-              <div className={`form-group ${errors.area ? "has-error" : ""}`}>
-                <label className="form-label">
-                  Área <span className="required-field">*</span>
+            <div className="admin-form-section">
+              <h4 className="admin-section-subtitle">Selección de Área</h4>
+              <div
+                className={`admin-form-group ${
+                  errors.area ? "admin-has-error" : ""
+                }`}
+              >
+                <label className="admin-form-label">
+                  Área <span className="admin-required-field">*</span>
                 </label>
                 <select
-                  className={`form-select ${errors.area ? "input-error" : ""}`}
+                  className={`admin-form-select ${
+                    errors.area ? "admin-input-error" : ""
+                  }`}
                   value={selectedArea || ""}
                   onChange={(e) => {
                     setSelectedArea(e.target.value);
@@ -273,22 +282,27 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                   ))}
                 </select>
                 {errors.area && (
-                  <p className="error-message">
+                  <p className="admin-error-message">
                     <FiAlertCircle /> {errors.area}
                   </p>
                 )}
               </div>
 
-              <div className={`form-group ${errors.costo ? "has-error" : ""}`}>
-                <label className="form-label">
-                  Costo del Área (Bs) <span className="required-field">*</span>
+              <div
+                className={`admin-form-group ${
+                  errors.costo ? "admin-has-error" : ""
+                }`}
+              >
+                <label className="admin-form-label">
+                  Costo del Área (Bs){" "}
+                  <span className="admin-required-field">*</span>
                 </label>
                 <div
-                  className={`input-with-icon ${
-                    errors.costo ? "input-error" : ""
+                  className={`admin-input-with-icon ${
+                    errors.costo ? "admin-input-error" : ""
                   }`}
                 >
-                  <FiDollarSign className="input-icon" />
+                  <FiDollarSign className="admin-input-icon" />
                   <input
                     type="number"
                     step="0.5"
@@ -298,14 +312,14 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                       setErrors((prev) => ({ ...prev, costo: "" }));
                     }}
                     placeholder="Ej: 50.00"
-                    className={`form-input ${
-                      errors.costo ? "input-error" : ""
+                    className={`admin-form-input ${
+                      errors.costo ? "admin-input-error" : ""
                     }`}
                     disabled={isSubmitting}
                   />
                 </div>
                 {errors.costo && (
-                  <p className="error-message">
+                  <p className="admin-error-message">
                     <FiAlertCircle /> {errors.costo}
                   </p>
                 )}
@@ -314,15 +328,15 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
 
             {selectedArea && (
               <div
-                className={`form-section ${
-                  errors.categorias ? "has-error" : ""
+                className={`admin-form-section ${
+                  errors.categorias ? "admin-has-error" : ""
                 }`}
               >
-                <h4 className="section-subtitle">
+                <h4 className="admin-section-subtitle">
                   Selección de Categorías{" "}
-                  <span className="required-field">*</span>
+                  <span className="admin-required-field">*</span>
                 </h4>
-                <div className="form-group">
+                <div className="admin-form-group">
                   <MultiSelectDropdown
                     name="categorias"
                     placeholder="Seleccione las categorías..."
@@ -349,10 +363,10 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
               </div>
             )}
 
-            <div className="modal-actions">
+            <div className="admin-modal-actions">
               <button
                 type="button"
-                className="cancel-button"
+                className="admin-modal-btn-cancel"
                 onClick={handleReset}
                 disabled={isSubmitting}
               >
@@ -360,7 +374,7 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
               </button>
               <button
                 type="submit"
-                className="save-button"
+                className="admin-modal-btn-save"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

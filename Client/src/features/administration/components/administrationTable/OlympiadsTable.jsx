@@ -39,27 +39,36 @@ const OlympiadsTable = () => {
   };
 
   const toggleEstado = async (olympiad) => {
-    try {
-      const hoy = new Date().toISOString().split("T")[0];
+    const hoy = new Date();
+    const fechaInicio = new Date(olympiad.fechaInicioOlimpiada);
+    const fechaFin = new Date(olympiad.fechaFinOlimpiada);
+    const isActive = olympiad.estadoOlimpiada === 1;
 
-      if (olympiad.estadoOlimpiada) {
+    if (fechaFin < hoy) {
+      alert("No puedes modificar una olimpiada finalizada.");
+      return;
+    }
+
+    if (isActive) {
+      try {
         await updateOlimpiadaEstado(olympiad.idOlimpiada, 0);
         await fetchOlimpiads();
-        return;
+      } catch (err) {
+        console.error("Error al desactivar:", err);
+        alert("No se pudo desactivar la olimpiada.");
       }
+      return;
+    }
 
-      if (olympiad.fechaFinOlimpiada < hoy) {
-        alert("No puedes activar una olimpiada cuya fecha ya ha pasado.");
-        return;
-      }
-
+    // Si está inactiva y en fechas válidas → reactivar
+    try {
       const response = await getAreasCategoriasPorOlimpiada(
         olympiad.idOlimpiada
       );
       const data = Array.isArray(response) ? response : response.data || [];
 
       const tieneAsignaciones =
-        data.length > 0 && data.some((area) => area.categorias.length > 0);
+        data.length > 0 && data.some((a) => a.categorias.length > 0);
 
       if (!tieneAsignaciones) {
         alert("Debes asignar al menos un área y categoría para activarla.");
@@ -69,23 +78,32 @@ const OlympiadsTable = () => {
       await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
       await fetchOlimpiads();
     } catch (error) {
-      console.error("Error al actualizar el estado:", error);
-      alert("No se pudo actualizar el estado.");
+      console.error("Error al activar:", error);
+      alert("No se pudo activar la olimpiada.");
     }
   };
 
   const getEstadoLabel = (olympiad) => {
-    const hoy = new Date().toISOString().split("T")[0];
-    if (olympiad.fechaFinOlimpiada < hoy) return "Finalizado";
-    return olympiad.estadoOlimpiada ? "Activo" : "Inactivo";
+    const hoy = new Date();
+    const fechaInicio = new Date(olympiad.fechaInicioOlimpiada);
+    const fechaFin = new Date(olympiad.fechaFinOlimpiada);
+
+    if (fechaFin < hoy) return "Finalizado";
+    if (fechaInicio > hoy && olympiad.estadoOlimpiada === 1) return "Pendiente";
+    if (olympiad.estadoOlimpiada === 1) return "En proceso";
+    return "Inactivo";
   };
 
   const getBadgeClass = (olympiad) => {
-    const hoy = new Date().toISOString().split("T")[0];
-    const isFinished = olympiad.fechaFinOlimpiada < hoy;
-    const isActive = olympiad.estadoOlimpiada && !isFinished;
-    if (isFinished) return "table-util-badge-neutral";
-    return isActive ? "table-util-badge-success" : "table-util-badge-warning";
+    const hoy = new Date();
+    const fechaInicio = new Date(olympiad.fechaInicioOlimpiada);
+    const fechaFin = new Date(olympiad.fechaFinOlimpiada);
+    const isActive = olympiad.estadoOlimpiada === 1;
+
+    if (fechaFin < hoy) return "table-util-badge-neutral";
+    if (fechaInicio > hoy && isActive) return "table-util-badge-default";
+    if (isActive) return "table-util-badge-success";
+    return "table-util-badge-warning";
   };
 
   return (

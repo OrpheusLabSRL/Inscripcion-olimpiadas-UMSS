@@ -74,6 +74,12 @@
   border: 1px solid #e2e8f0;
 }
 
+.table-util-badge-default {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
 .table-util-text-left {
   text-align: left;
 }

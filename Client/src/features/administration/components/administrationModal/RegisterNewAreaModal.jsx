@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
+import "../../styles/ModalGeneral.css";
+
 import { createArea, getAreas } from "../../../../api/Administration.api";
-import "../../Styles/ModalGeneral.css";
+
 const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     nombreArea: "",
@@ -110,16 +112,16 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={handleReset}>
+    <div className="admin-modal-overlay" onClick={handleReset}>
       <div
-        className="modal-content"
+        className="admin-modal-content"
         style={{ maxWidth: "600px" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="modal-header">
-          <h3 className="section-title">Registrar Nueva Área</h3>
+        <div className="admin-modal-header">
+          <h3 className="admin-modal-title">Registrar Nueva Área</h3>
           <button
-            className="close-button"
+            className="admin-modal-close-btn"
             onClick={handleReset}
             aria-label="Cerrar modal"
           >
@@ -127,10 +129,10 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="nombreArea">
-              Nombre del Área <span className="required-field">*</span>
+        <form onSubmit={handleSubmit} className="admin-modal-form">
+          <div className="admin-form-group">
+            <label htmlFor="nombreArea" className="admin-form-label">
+              Nombre del Área <span className="admin-required-field">*</span>
             </label>
             <input
               id="nombreArea"
@@ -138,47 +140,50 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
               type="text"
               value={formData.nombreArea}
               onChange={handleChange}
-              className={`form-input ${errors.nombreArea ? "input-error" : ""}`}
+              className={`admin-form-input ${
+                errors.nombreArea ? "admin-input-error" : ""
+              }`}
               placeholder="Ej: Matemáticas, Química, etc."
               maxLength="50"
             />
             {errors.nombreArea && (
-              <p className="error-message">
+              <p className="admin-error-message">
                 <FiAlertCircle /> {errors.nombreArea}
               </p>
             )}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="descripcionArea">
-              Descripción del Área <span className="required-field">*</span>
+          <div className="admin-form-group">
+            <label htmlFor="descripcionArea" className="admin-form-label">
+              Descripción del Área{" "}
+              <span className="admin-required-field">*</span>
             </label>
             <textarea
               id="descripcionArea"
               name="descripcionArea"
               value={formData.descripcionArea}
               onChange={handleChange}
-              className={`form-input ${
-                errors.descripcionArea ? "input-error" : ""
+              className={`admin-form-input ${
+                errors.descripcionArea ? "admin-input-error" : ""
               }`}
               placeholder="Breve descripción del área"
               maxLength="200"
               rows="3"
             />
-            <div className="char-counter">
+            <div className="admin-char-counter">
               {formData.descripcionArea.length}/200 caracteres
             </div>
             {errors.descripcionArea && (
-              <p className="error-message">
+              <p className="admin-error-message">
                 <FiAlertCircle /> {errors.descripcionArea}
               </p>
             )}
           </div>
 
-          <div className="modal-actions">
+          <div className="admin-modal-actions">
             <button
               type="button"
-              className="cancel-button"
+              className="admin-modal-btn-cancel"
               onClick={handleReset}
               disabled={isSubmitting}
             >
@@ -186,12 +191,12 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
             </button>
             <button
               type="submit"
-              className="save-button"
+              className="admin-modal-btn-save"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
                 <>
-                  <span className="spinner"></span> Guardando...
+                  <span className="admin-spinner"></span> Guardando...
                 </>
               ) : (
                 "Guardar"

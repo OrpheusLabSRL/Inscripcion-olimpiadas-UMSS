@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import "../../styles/ModalGeneral.css";
+
 import {
   createOlympiad,
   getOlimpiadas,
 } from "../../../../api/Administration.api";
-import "../../Styles/ModalGeneral.css";
 
 const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
   const initialFormState = {
@@ -161,90 +162,108 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <button type="button" className="close-button" onClick={handleClose}>
+    <div className="admin-modal-overlay">
+      <div className="admin-modal-content">
+        <button
+          type="button"
+          className="admin-modal-close-btn"
+          onClick={handleClose}
+        >
           ✖
         </button>
 
-        <form onSubmit={handleSubmit}>
-          <h2 className="modal-title">Nueva Olimpiada</h2>
+        <form onSubmit={handleSubmit} className="admin-modal-form">
+          <h2 className="admin-modal-title">Nueva Olimpiada</h2>
 
-          <div className="form-group">
-            <label>
-              Nombre de la Olimpiada <span style={{ color: "red" }}>*</span>
+          <div className="admin-form-group">
+            <label className="admin-form-label">
+              Nombre de la Olimpiada{" "}
+              <span className="admin-required-field">*</span>
             </label>
             <input
               type="text"
               name="nombreOlimpiada"
               value={formData.nombreOlimpiada}
               onChange={handleChange}
-              className={errors.nombreOlimpiada ? "input-error" : ""}
+              className={`admin-form-input ${
+                errors.nombreOlimpiada ? "admin-input-error" : ""
+              }`}
             />
             {errors.nombreOlimpiada && (
-              <p className="error-message">{errors.nombreOlimpiada}</p>
+              <p className="admin-error-message">{errors.nombreOlimpiada}</p>
             )}
           </div>
 
-          <div className="form-group">
-            <label>
-              Versión <span style={{ color: "red" }}>*</span>
+          <div className="admin-form-group">
+            <label className="admin-form-label">
+              Versión <span className="admin-required-field">*</span>
             </label>
             <input
               type="number"
               name="version"
               value={formData.version}
               onChange={handleChange}
-              className={errors.version ? "input-error" : ""}
+              className={`admin-form-input ${
+                errors.version ? "admin-input-error" : ""
+              }`}
             />
             {errors.version && (
-              <p className="error-message">{errors.version}</p>
+              <p className="admin-error-message">{errors.version}</p>
             )}
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>
-                Fecha de Inicio <span style={{ color: "red" }}>*</span>
+          <div className="admin-form-row">
+            <div className="admin-form-group">
+              <label className="admin-form-label">
+                Fecha de Inicio <span className="admin-required-field">*</span>
               </label>
               <input
                 type="date"
                 name="fechaInicioOlimpiada"
                 value={formData.fechaInicioOlimpiada}
                 onChange={handleChange}
-                className={errors.fechaInicioOlimpiada ? "input-error" : ""}
+                className={`admin-form-input ${
+                  errors.fechaInicioOlimpiada ? "admin-input-error" : ""
+                }`}
               />
               {errors.fechaInicioOlimpiada && (
-                <p className="error-message">{errors.fechaInicioOlimpiada}</p>
+                <p className="admin-error-message">
+                  {errors.fechaInicioOlimpiada}
+                </p>
               )}
             </div>
 
-            <div className="form-group">
-              <label>
-                Fecha de Finalización <span style={{ color: "red" }}>*</span>
+            <div className="admin-form-group">
+              <label className="admin-form-label">
+                Fecha de Finalización{" "}
+                <span className="admin-required-field">*</span>
               </label>
               <input
                 type="date"
                 name="fechaFinOlimpiada"
                 value={formData.fechaFinOlimpiada}
                 onChange={handleChange}
-                className={errors.fechaFinOlimpiada ? "input-error" : ""}
+                className={`admin-form-input ${
+                  errors.fechaFinOlimpiada ? "admin-input-error" : ""
+                }`}
               />
               {errors.fechaFinOlimpiada && (
-                <p className="error-message">{errors.fechaFinOlimpiada}</p>
+                <p className="admin-error-message">
+                  {errors.fechaFinOlimpiada}
+                </p>
               )}
             </div>
           </div>
 
-          <div className="modal-actions">
+          <div className="admin-modal-actions">
             <button
               type="button"
               onClick={handleClose}
-              className="cancel-button"
+              className="admin-modal-btn-cancel"
             >
               Cancelar
             </button>
-            <button type="submit" className="save-button">
+            <button type="submit" className="admin-modal-btn-save">
               Registrar Olimpiada
             </button>
           </div>

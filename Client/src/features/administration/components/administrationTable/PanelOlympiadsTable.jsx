@@ -8,6 +8,7 @@ import "../../Styles/Tables.css";
 export default function PanelOlympiadsTable({
   data,
   selectedVersion,
+  fechaInicioOlimpiada,
   onRefresh,
 }) {
   const [modalKey, setModalKey] = useState(0);
@@ -32,6 +33,10 @@ export default function PanelOlympiadsTable({
     setIsNewAreaModalOpen(false);
     if (onRefresh) onRefresh();
   };
+
+  // Validar fecha de inicio
+  const fechaInicio = new Date(fechaInicioOlimpiada);
+  const hasStarted = !isNaN(fechaInicio.getTime()) && fechaInicio <= new Date();
 
   return (
     <div className="panel-olympiad-container">
@@ -62,6 +67,7 @@ export default function PanelOlympiadsTable({
         <button
           className="panel-olympiad-btn primary"
           onClick={handleOpenAreaModal}
+          disabled={hasStarted}
         >
           <FiLayers className="button-icon" />
           Asignar Área/Categoría
@@ -117,13 +123,11 @@ export default function PanelOlympiadsTable({
                         )}
                       </td>
                       <td className="text-right panel-olympiad-cost">
-                        {hasCategories ? (
-                          <>
-                            Bs {parseFloat(area.categorias[0].costo).toFixed(2)}
-                          </>
-                        ) : (
-                          "-"
-                        )}
+                        {hasCategories
+                          ? `Bs ${parseFloat(area.categorias[0].costo).toFixed(
+                              2
+                            )}`
+                          : "-"}
                       </td>
                       <td>
                         <span
@@ -139,7 +143,7 @@ export default function PanelOlympiadsTable({
                           onClick={() => handleEditModal(area.idArea)}
                           className="panel-olympiad-edit-btn"
                           title="Editar categorías"
-                          disabled={!hasCategories}
+                          disabled={!hasCategories || hasStarted}
                         >
                           <FiEdit2 />
                         </button>
@@ -173,6 +177,7 @@ export default function PanelOlympiadsTable({
             <button
               className="panel-olympiad-btn success"
               onClick={() => setIsNewAreaModalOpen(true)}
+              disabled={hasStarted}
             >
               <FiPlus className="button-icon" />
               Registrar Nueva Área

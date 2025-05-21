@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
-import "../../Styles/ModalGeneral.css";
-import "../../Styles/Dropdown.css";
+import "../../styles/ModalGeneral.css";
+import "../../styles/Dropdown.css";
 
 import {
   getOlimpiadas,
@@ -211,19 +211,21 @@ const RegisterCategoriaModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
+    <div className="admin-modal-overlay">
       <div
-        className="modal-content"
+        className="admin-modal-content"
         style={{ maxWidth: "850px", maxHeight: "90vh", overflowY: "auto" }}
       >
-        <button type="button" className="close-button" onClick={handleReset}>
+        <button
+          type="button"
+          className="admin-modal-close-btn"
+          onClick={handleReset}
+        >
           ✖
         </button>
 
-        <form onSubmit={handleSubmit}>
-          <h3 className="section-title" style={{ color: "#000" }}>
-            Categorías de la Olimpiada
-          </h3>
+        <form onSubmit={handleSubmit} className="admin-modal-form">
+          <h3 className="admin-modal-title">Categorías de la Olimpiada</h3>
 
           {selectedAreas.map((areaId) => {
             const area = areas.find((a) => a.idArea === areaId);
@@ -233,13 +235,13 @@ const RegisterCategoriaModal = ({
             );
             const categoriasOptions = categoriasDisponibles.map((c) => ({
               value: c.idCategoria,
-              label:
-                c.nombreCategoria +
-                (c.grados?.length > 0
+              label: `${c.nombreCategoria}${
+                c.grados?.length > 0
                   ? ` (${c.grados
                       .map((g) => `${g.numeroGrado}° ${g.nivel}`)
                       .join(", ")})`
-                  : ""),
+                  : ""
+              }`,
             }));
             const categoriasSeleccionadas = categorias.filter((c) =>
               selectedCategorias[areaId]?.includes(c.idCategoria)
@@ -248,14 +250,14 @@ const RegisterCategoriaModal = ({
             return (
               <div
                 key={areaId}
-                className="field-group"
+                className="admin-form-group"
                 style={{ marginBottom: "1.5rem" }}
               >
-                <label className="dropdown-label">
+                <label className="admin-form-label">
                   Área: <strong>{area?.nombreArea}</strong>
                 </label>
 
-                <label style={{ marginTop: "0.5rem" }}>
+                <label className="admin-form-label">
                   Costo por categoría (Bs):
                   <input
                     type="number"
@@ -268,8 +270,8 @@ const RegisterCategoriaModal = ({
                         [areaId]: e.target.value,
                       }))
                     }
-                    className={`form-input ${
-                      errors[`costo-${areaId}`] ? "input-error" : ""
+                    className={`admin-form-input ${
+                      errors[`costo-${areaId}`] ? "admin-input-error" : ""
                     }`}
                     style={{
                       marginLeft: "1rem",
@@ -279,14 +281,14 @@ const RegisterCategoriaModal = ({
                   />
                 </label>
                 {errors[`costo-${areaId}`] && (
-                  <p className="error-message">
+                  <p className="admin-error-message">
                     <FiAlertCircle /> {errors[`costo-${areaId}`]}
                   </p>
                 )}
 
                 <div
-                  className={`dropdown-wrapper large ${
-                    errors[`categorias-${areaId}`] ? "input-error" : ""
+                  className={`admin-dropdown-wrapper large ${
+                    errors[`categorias-${areaId}`] ? "admin-input-error" : ""
                   }`}
                   style={{ marginTop: "1rem" }}
                 >
@@ -301,24 +303,18 @@ const RegisterCategoriaModal = ({
                 </div>
 
                 {errors[`categorias-${areaId}`] && (
-                  <p className="error-message">
+                  <p className="admin-error-message">
                     <FiAlertCircle /> {errors[`categorias-${areaId}`]}
                   </p>
                 )}
 
                 {categoriasSeleccionadas.length > 0 && (
-                  <ul
-                    style={{
-                      marginTop: "0.75rem",
-                      paddingLeft: "1.25rem",
-                      fontSize: "0.9rem",
-                    }}
-                  >
+                  <ul className="admin-categoria-list">
                     {categoriasSeleccionadas.map((cat) => (
                       <li key={cat.idCategoria}>
                         <strong>{cat.nombreCategoria}</strong>{" "}
                         {cat.grados?.length > 0 && (
-                          <span style={{ color: "#666" }}>
+                          <span className="admin-grado-text">
                             (
                             {cat.grados
                               .map(
@@ -338,11 +334,8 @@ const RegisterCategoriaModal = ({
             );
           })}
 
-          <div
-            className="modal-actions"
-            style={{ justifyContent: "flex-end", marginTop: "2rem" }}
-          >
-            <button type="submit" className="save-button">
+          <div className="admin-modal-actions">
+            <button type="submit" className="admin-modal-btn-save">
               Guardar
             </button>
           </div>

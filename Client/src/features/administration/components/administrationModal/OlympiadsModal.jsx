@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getAreasCategoriasPorOlimpiada } from "../../../../api/Administration.api";
-import "../../Styles/ModalGeneral.css";
+import "../../styles/ModalGeneral.css";
 
 const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
   const [agrupado, setAgrupado] = useState({});
@@ -36,7 +36,6 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
 
   if (!isOpen || !olimpiada) return null;
 
-  // 👉 Agrupar grados de 3 en 3
   const agruparGrados = (grados) => {
     const grupos = [];
     for (let i = 0; i < grados.length; i += 3) {
@@ -46,70 +45,56 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="admin-modal-overlay">
       <div
-        className="modal-content"
+        className="admin-modal-content"
         style={{ maxWidth: "850px", padding: "1.5rem" }}
       >
-        <button type="button" className="close-button" onClick={onClose}>
+        <button
+          type="button"
+          className="admin-modal-close-btn"
+          onClick={onClose}
+        >
           ✖
         </button>
 
-        <h2 className="modal-title" style={{ marginBottom: "1rem" }}>
+        <h2 className="admin-modal-title" style={{ marginBottom: "1rem" }}>
           Datos generales de la Olimpiada
         </h2>
 
-        <div
-          className="form-group"
-          style={{ marginBottom: "1.2rem", lineHeight: "1.4" }}
-        >
-          <p style={{ margin: "0.25rem 0" }}>
+        <div className="admin-olympiad-info">
+          <p>
             <strong>Nombre:</strong> {olimpiada.nombreOlimpiada}
           </p>
-          <p style={{ margin: "0.25rem 0" }}>
+          <p>
             <strong>Versión:</strong> {olimpiada.version}
           </p>
-          <p style={{ margin: "0.25rem 0" }}>
+          <p>
             <strong>Fecha de Inicio:</strong> {olimpiada.fechaInicioOlimpiada}
           </p>
-          <p style={{ margin: "0.25rem 0" }}>
+          <p>
             <strong>Fecha de Fin:</strong> {olimpiada.fechaFinOlimpiada}
           </p>
-          <p style={{ margin: "0.25rem 0" }}>
+          <p>
             <strong>Estado:</strong>{" "}
             {olimpiada.estadoOlimpiada ? "Activo" : "Finalizado"}
           </p>
         </div>
 
-        <h3 style={{ margin: "1.2rem 0 0.75rem" }}>Áreas y Categorías</h3>
+        <h3 className="admin-section-title">Áreas y Categorías</h3>
 
-        <div
-          className="area-categorias-container"
-          style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
-        >
+        <div className="admin-area-categorias-container">
           {Object.keys(agrupado).length > 0 ? (
             Object.entries(agrupado).map(([areaId, area]) => (
-              <div
-                className="area-categoria-box"
-                key={areaId}
-                style={{
-                  padding: "0.6rem 0.8rem",
-                  border: "1px solid #ccc",
-                  borderRadius: "6px",
-                  backgroundColor: "#D8D7BC",
-                }}
-              >
-                <div className="area-info" style={{ marginBottom: "0.4rem" }}>
+              <div className="admin-area-categoria-card" key={areaId}>
+                <div className="admin-area-info">
                   <strong>Área:</strong> {area.nombreArea}
                 </div>
-                <div className="categoria-info">
+                <div className="admin-categoria-info">
                   <strong>Categorías:</strong>
-                  <ul style={{ margin: "0.4rem 0 0", paddingLeft: "1.2rem" }}>
+                  <ul className="admin-categoria-list">
                     {area.categorias.map((cat) => (
-                      <li
-                        key={cat.idCategoria}
-                        style={{ marginBottom: "0.25rem" }}
-                      >
+                      <li key={cat.idCategoria}>
                         {cat.nombreCategoria}
                         {cat.grados && cat.grados.length > 0 && (
                           <>
@@ -139,16 +124,7 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
               </div>
             ))
           ) : (
-            <div
-              style={{
-                padding: "1rem",
-                backgroundColor: "#D8D7BC",
-                borderRadius: "6px",
-                textAlign: "center",
-                color: "#666",
-                fontStyle: "italic",
-              }}
-            >
+            <div className="admin-empty-state">
               No existen Áreas ni Categorías registradas en esta Olimpiada.
             </div>
           )}

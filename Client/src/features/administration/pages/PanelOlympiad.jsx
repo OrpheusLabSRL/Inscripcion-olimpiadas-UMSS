@@ -104,14 +104,15 @@ export default function PanelOlympiad() {
                   ?.nombreOlimpiada
               }
             </h3>
-            <button className="panel-olymp-button" onClick={handleAddAreaClick}>
-              Registrar nueva área
-            </button>
           </div>
 
           <PanelOlympiadsTable
             data={areasCategorias}
             selectedVersion={selectedId}
+            fechaInicioOlimpiada={
+              olimpiadas.find((o) => o.idOlimpiada === parseInt(selectedId))
+                ?.fechaInicioOlimpiada
+            }
             onRefresh={fetchAreasCategorias}
           />
         </div>
