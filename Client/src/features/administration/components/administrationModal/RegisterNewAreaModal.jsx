@@ -118,15 +118,15 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
         style={{ maxWidth: "600px" }}
         onClick={(e) => e.stopPropagation()}
       >
+        <button
+          className="admin-modal-close-btn"
+          onClick={handleReset}
+          aria-label="Cerrar modal"
+        >
+          ✖
+        </button>
         <div className="admin-modal-header">
           <h3 className="admin-modal-title">Registrar Nueva Área</h3>
-          <button
-            className="admin-modal-close-btn"
-            onClick={handleReset}
-            aria-label="Cerrar modal"
-          >
-            ✖
-          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="admin-modal-form">

@@ -70,10 +70,10 @@ const OlympiadsTable = () => {
       const tieneAsignaciones =
         data.length > 0 && data.some((a) => a.categorias.length > 0);
 
-      if (!tieneAsignaciones) {
+      /*if (!tieneAsignaciones) {
         alert("Debes asignar al menos un área y categoría para activarla.");
         return;
-      }
+      }*/
 
       await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
       await fetchOlimpiads();

@@ -10,22 +10,23 @@ const AreaList = () => {
 
   return (
     <div className="admin-area-container">
-      <div className="area-header-section">
-        <BackButton
-          onClick={() => navigate("/admin/view-base")}
-          className="btn-back"
-        >
-          <FaArrowLeft className="btn-back-icon" /> Volver a Datos Base
-        </BackButton>
+      <div className="admin-content-wrapper">
+        <div className="area-header-section">
+          <BackButton
+            onClick={() => navigate("/admin/view-base")}
+            className="btn-back"
+          >
+            <FaArrowLeft className="btn-back-icon" /> Volver a Datos Base
+          </BackButton>
+          <h1 className="area-title">Gestión de Áreas</h1>
+          <p className="area-subtitle">
+            Administra las áreas principales de competencia académica
+          </p>
+        </div>
 
-        <h1 className="area-title">Gestión de Áreas</h1>
-        <p className="area-subtitle">
-          Administra las áreas principales de competencia académica
-        </p>
-      </div>
-
-      <div className="admin-table-wrapper">
-        <AreasTable />
+        <div className="admin-table-wrapper">
+          <AreasTable />
+        </div>
       </div>
     </div>
   );

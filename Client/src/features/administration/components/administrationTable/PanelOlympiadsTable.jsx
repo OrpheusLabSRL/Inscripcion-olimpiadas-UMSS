@@ -41,7 +41,14 @@ export default function PanelOlympiadsTable({
   return (
     <div className="panel-olympiad-container">
       <div className="panel-olympiad-header">
-        <h3 className="panel-olympiad-title">Gestión de Áreas y Categorías</h3>
+        <button
+          className="panel-olympiad-btn primary"
+          onClick={handleOpenAreaModal}
+          disabled={hasStarted}
+        >
+          <FiLayers className="button-icon" />
+          Asignar Áreas y Categorías
+        </button>
 
         <div className="panel-olympiad-tabs">
           <button
@@ -63,16 +70,7 @@ export default function PanelOlympiadsTable({
         </div>
       </div>
 
-      <div className="panel-olympiad-actions">
-        <button
-          className="panel-olympiad-btn primary"
-          onClick={handleOpenAreaModal}
-          disabled={hasStarted}
-        >
-          <FiLayers className="button-icon" />
-          Asignar Área/Categoría
-        </button>
-      </div>
+      <div className="panel-olympiad-actions"></div>
 
       {activeTab === "asignadas" && (
         <div className="panel-olympiad-table-wrapper">

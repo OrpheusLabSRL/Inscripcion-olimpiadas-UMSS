@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
-import "../../styles/ModalGeneral.css";
 import "../../styles/Dropdown.css";
+import "../../styles/ModalGeneral.css";
 
 import {
   getOlimpiadas,
@@ -30,6 +30,7 @@ const RegisterCategoriaModal = ({
     areas: [],
     categorias: {},
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -132,6 +133,7 @@ const RegisterCategoriaModal = ({
   };
 
   const handleReset = () => {
+    if (isSubmitting) return;
     setVersion("");
     setSelectedAreas([]);
     setSelectedCategorias({});
@@ -145,6 +147,7 @@ const RegisterCategoriaModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const newErrors = {};
     if (!version) newErrors.version = "Debe seleccionar una versión";
@@ -167,7 +170,9 @@ const RegisterCategoriaModal = ({
     });
 
     setErrors(newErrors);
+
     if (Object.keys(newErrors).length > 0) {
+      setIsSubmitting(false);
       alert("Por favor corrige los errores antes de guardar.");
       return;
     }
@@ -175,7 +180,10 @@ const RegisterCategoriaModal = ({
     const confirmacion = window.confirm(
       "¿Está seguro de guardar esta configuración?"
     );
-    if (!confirmacion) return;
+    if (!confirmacion) {
+      setIsSubmitting(false);
+      return;
+    }
 
     const combinaciones = [];
     selectedAreas.forEach((idArea) => {
@@ -205,6 +213,8 @@ const RegisterCategoriaModal = ({
     } catch (error) {
       console.error("Error al guardar los datos:", error);
       alert("Ocurrió un error al guardar los datos.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -220,6 +230,7 @@ const RegisterCategoriaModal = ({
           type="button"
           className="admin-modal-close-btn"
           onClick={handleReset}
+          disabled={isSubmitting}
         >
           ✖
         </button>
@@ -229,11 +240,8 @@ const RegisterCategoriaModal = ({
 
           {selectedAreas.map((areaId) => {
             const area = areas.find((a) => a.idArea === areaId);
-            const yaAsignadas = initialState.categorias[areaId] || [];
-            const categoriasDisponibles = categorias.filter(
-              (cat) => !yaAsignadas.includes(cat.idCategoria)
-            );
-            const categoriasOptions = categoriasDisponibles.map((c) => ({
+
+            const categoriasOptions = categorias.map((c) => ({
               value: c.idCategoria,
               label: `${c.nombreCategoria}${
                 c.grados?.length > 0
@@ -243,6 +251,7 @@ const RegisterCategoriaModal = ({
                   : ""
               }`,
             }));
+
             const categoriasSeleccionadas = categorias.filter((c) =>
               selectedCategorias[areaId]?.includes(c.idCategoria)
             );
@@ -254,7 +263,7 @@ const RegisterCategoriaModal = ({
                 style={{ marginBottom: "1.5rem" }}
               >
                 <label className="admin-form-label">
-                  Área: <strong>{area?.nombreArea}</strong>
+                  Área: <strong> {area?.nombreArea} </strong>
                 </label>
 
                 <label className="admin-form-label">
@@ -278,6 +287,7 @@ const RegisterCategoriaModal = ({
                       padding: "0.3rem",
                       width: "120px",
                     }}
+                    disabled={isSubmitting}
                   />
                 </label>
                 {errors[`costo-${areaId}`] && (
@@ -299,44 +309,55 @@ const RegisterCategoriaModal = ({
                     options={categoriasOptions}
                     selectedValues={selectedCategorias[areaId] || []}
                     onChange={(values) => handleCategoriaChange(areaId, values)}
+                    disabled={isSubmitting}
+                    error={!!errors[`categorias-${areaId}`]}
+                    errorMessage={errors[`categorias-${areaId}`]}
                   />
                 </div>
 
-                {errors[`categorias-${areaId}`] && (
-                  <p className="admin-error-message">
-                    <FiAlertCircle /> {errors[`categorias-${areaId}`]}
-                  </p>
-                )}
-
                 {categoriasSeleccionadas.length > 0 && (
-                  <ul className="admin-categoria-list">
-                    {categoriasSeleccionadas.map((cat) => (
-                      <li key={cat.idCategoria}>
-                        <strong>{cat.nombreCategoria}</strong>{" "}
-                        {cat.grados?.length > 0 && (
-                          <span className="admin-grado-text">
-                            (
-                            {cat.grados
-                              .map(
-                                (g) =>
-                                  `${g.numeroGrado}° ${g.nivel}` ||
-                                  g.nombreGrado
-                              )
-                              .join(", ")}
-                            )
-                          </span>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="selected-categories-container">
+                    <p className="selected-categories-title">
+                      Categorías seleccionadas:
+                    </p>
+                    <ul className="selected-categories-list">
+                      {categoriasSeleccionadas.map((cat) => (
+                        <li
+                          key={cat.idCategoria}
+                          className="selected-category-item"
+                        >
+                          <strong>{cat.nombreCategoria}</strong>
+                          {cat.grados?.length > 0 && (
+                            <div className="grade-list">
+                              {cat.grados
+                                .map((g) => `${g.numeroGrado}° ${g.nivel}`)
+                                .join(", ")}
+                            </div>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </div>
             );
           })}
 
           <div className="admin-modal-actions">
-            <button type="submit" className="admin-modal-btn-save">
-              Guardar
+            <button
+              type="button"
+              className="admin-modal-btn-cancel"
+              onClick={handleReset}
+              disabled={isSubmitting}
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="admin-modal-btn-save"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Guardando..." : "Guardar"}
             </button>
           </div>
         </form>

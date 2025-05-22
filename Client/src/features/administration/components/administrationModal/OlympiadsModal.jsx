@@ -38,10 +38,35 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
 
   const agruparGrados = (grados) => {
     const grupos = [];
-    for (let i = 0; i < grados.length; i += 3) {
-      grupos.push(grados.slice(i, i + 3));
+    for (let i = 0; i < grados.length; i += 5) {
+      grupos.push(grados.slice(i, i + 5));
     }
     return grupos;
+  };
+
+  const obtenerEstadoOlimpiada = (estadoOlimpiada, fechaInicio, fechaFin) => {
+    const ahora = new Date();
+    const inicio = new Date(fechaInicio);
+    const fin = new Date(fechaFin);
+
+    if (ahora > fin) {
+      return "Finalizado";
+    }
+
+    if (!estadoOlimpiada && ahora >= inicio && ahora <= fin) {
+      return "Inactivo";
+    }
+
+    if (estadoOlimpiada && ahora < inicio) {
+      return "Pendiente (Todavia no inicia)";
+    }
+
+    if (estadoOlimpiada && ahora >= inicio && ahora <= fin) {
+      return "En proceso";
+    }
+
+    // Caso por defecto:
+    return estadoOlimpiada ? "Activo" : "Inactivo";
   };
 
   return (
@@ -54,6 +79,7 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
           type="button"
           className="admin-modal-close-btn"
           onClick={onClose}
+          aria-label="Cerrar modal"
         >
           ✖
         </button>
@@ -77,7 +103,11 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
           </p>
           <p>
             <strong>Estado:</strong>{" "}
-            {olimpiada.estadoOlimpiada ? "Activo" : "Finalizado"}
+            {obtenerEstadoOlimpiada(
+              olimpiada.estadoOlimpiada,
+              olimpiada.fechaInicioOlimpiada,
+              olimpiada.fechaFinOlimpiada
+            )}
           </p>
         </div>
 

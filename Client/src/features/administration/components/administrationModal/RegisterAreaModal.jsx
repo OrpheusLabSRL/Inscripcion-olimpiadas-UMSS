@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { FiX, FiSave, FiDollarSign, FiAlertCircle } from "react-icons/fi";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
-import "../../styles/ModalGeneral.css";
 import "../../styles/Dropdown.css";
+import "../../styles/ModalGeneral.css";
 
 import {
   getOlimpiadas,
@@ -226,17 +226,17 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
         style={{ maxWidth: "850px", maxHeight: "90vh", overflowY: "auto" }}
         onClick={(e) => e.stopPropagation()}
       >
+        <button
+          type="button"
+          className="admin-modal-close-btn"
+          onClick={handleReset}
+          aria-label="Cerrar modal"
+          disabled={isSubmitting}
+        >
+          <FiX />
+        </button>
         <div className="admin-modal-header">
           <h3 className="admin-modal-title">Agregar Área y Categorías</h3>
-          <button
-            type="button"
-            className="admin-modal-close-btn"
-            onClick={handleReset}
-            aria-label="Cerrar modal"
-            disabled={isSubmitting}
-          >
-            <FiX />
-          </button>
         </div>
 
         {isLoading ? (
@@ -359,6 +359,34 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                     error={!!errors.categorias}
                     errorMessage={errors.categorias}
                   />
+                  {selectedCategorias.length > 0 && (
+                    <div className="selected-categories-container">
+                      <p className="selected-categories-title">
+                        Categorías seleccionadas:
+                      </p>
+                      <ul className="selected-categories-list">
+                        {categorias
+                          .filter((c) =>
+                            selectedCategorias.includes(c.idCategoria)
+                          )
+                          .map((cat) => (
+                            <li
+                              key={cat.idCategoria}
+                              className="selected-category-item"
+                            >
+                              <strong>{cat.nombreCategoria}</strong>
+                              {cat.grados?.length > 0 && (
+                                <div className="grade-list">
+                                  {cat.grados
+                                    .map((g) => `${g.numeroGrado}° ${g.nivel}`)
+                                    .join(", ")}
+                                </div>
+                              )}
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

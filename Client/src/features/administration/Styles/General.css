@@ -2,7 +2,7 @@
 .admin-area-container,
 .admin-category-container,
 .admin-olympiads-container {
-  max-width: 90%;
+  max-width: 95%;
   background-color: #f8fafc;
   display: flex;
   flex-direction: column;
@@ -26,7 +26,7 @@
 .area-header-section,
 .category-header-section,
 .olympiads-header-section {
-  width: 100%;
+  width: 95%;
   max-width: 1200px;
   margin-bottom: 2rem;
 }
@@ -34,7 +34,7 @@
 .olympiads-header-section {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   flex-wrap: wrap;
   gap: 1.5rem;
 }
@@ -120,12 +120,14 @@
 .btn-primary:hover,
 .btn-add:hover,
 .btn-register:hover {
-  background-color: #1e40af;
+  background-color: #1d4ed8;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 16px rgba(29, 78, 216, 0.5);
 }
 
 .btn-primary:active {
+  background-color: #1e40af;
+  box-shadow: 0 4px 8px rgba(30, 64, 175, 0.6);
   transform: translateY(0);
 }
 
