@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../../api/Administration.api";
 import { FaSignInAlt, FaEnvelope, FaLock } from "react-icons/fa";
@@ -12,6 +12,14 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Si ya está logueado, redirige automáticamente
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser && storedUser.role === "admin") {
+      navigate("/admin/home");
+    }
+  }, [navigate]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -19,12 +27,18 @@ const Login = () => {
 
     try {
       const data = await login({ email, password });
-      localStorage.setItem("user", JSON.stringify(data.usuario));
+      // Ajusta esta línea si la estructura de respuesta es distinta
+      const userData = data.usuario || data.user || data;
+      if (!userData) throw new Error("No se recibió usuario");
+
+      localStorage.setItem("user", JSON.stringify(userData));
       navigate("/admin/home");
     } catch (err) {
       console.error("Error en login:", err);
       setError(
-        err.response?.data?.message || "Error al conectar con el servidor"
+        err.response?.data?.message ||
+          err.message ||
+          "Error al conectar con el servidor"
       );
     } finally {
       setIsLoading(false);

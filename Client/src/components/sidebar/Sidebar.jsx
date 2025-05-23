@@ -20,8 +20,13 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
   const navigation = useNavigate();
 
   const cerrarSesion = () => {
-    sessionStorage.clear();
-    navigation("/");
+    if (admin) {
+      localStorage.removeItem("user");
+      navigation("/admin");
+    } else {
+      sessionStorage.clear();
+      navigation("/");
+    }
   };
 
   return (
