@@ -281,6 +281,20 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                     </option>
                   ))}
                 </select>
+
+                {areasNoAsignadas.length === 0 && !isSubmitting && (
+                  <p
+                    style={{
+                      color: "#9ca3af",
+                      marginTop: "0.25rem",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    Todas las áreas ya están asignadas, no quedan más
+                    disponibles.
+                  </p>
+                )}
+
                 {errors.area && (
                   <p className="admin-error-message">
                     <FiAlertCircle /> {errors.area}

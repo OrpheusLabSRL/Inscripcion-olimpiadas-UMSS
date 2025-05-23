@@ -41,14 +41,25 @@ export default function PanelOlympiadsTable({
   return (
     <div className="panel-olympiad-container">
       <div className="panel-olympiad-header">
-        <button
-          className="panel-olympiad-btn primary"
-          onClick={handleOpenAreaModal}
-          disabled={hasStarted}
-        >
-          <FiLayers className="button-icon" />
-          Asignar Áreas y Categorías
-        </button>
+        <div className="tooltip-wrapper">
+          <button
+            className={`panel-olympiad-btn primary ${
+              hasStarted ? "disabled-btn" : ""
+            }`}
+            onClick={handleOpenAreaModal}
+            disabled={hasStarted}
+            aria-describedby="tooltip-assign"
+          >
+            <FiLayers className="button-icon" />
+            Asignar Áreas y Categorías
+          </button>
+          {hasStarted && (
+            <div id="tooltip-assign" role="tooltip" className="tooltip-text">
+              No se puede asignar áreas porque la olimpiada ya comenzó
+              <div className="tooltip-arrow"></div>
+            </div>
+          )}
+        </div>
 
         <div className="panel-olympiad-tabs">
           <button
@@ -137,14 +148,30 @@ export default function PanelOlympiadsTable({
                         </span>
                       </td>
                       <td className="panel-olympiad-actions-col">
-                        <button
-                          onClick={() => handleEditModal(area.idArea)}
-                          className="panel-olympiad-edit-btn"
-                          title="Editar categorías"
-                          disabled={!hasCategories || hasStarted}
-                        >
-                          <FiEdit2 />
-                        </button>
+                        <div className="tooltip-wrapper">
+                          <button
+                            onClick={() => handleEditModal(area.idArea)}
+                            className={`panel-olympiad-edit-btn ${
+                              !hasCategories || hasStarted ? "disabled-btn" : ""
+                            }`}
+                            disabled={!hasCategories || hasStarted}
+                            aria-describedby={`tooltip-edit-${area.idArea}`}
+                          >
+                            <FiEdit2 />
+                          </button>
+                          {(!hasCategories || hasStarted) && (
+                            <div
+                              id={`tooltip-edit-${area.idArea}`}
+                              role="tooltip"
+                              className="tooltip-text"
+                            >
+                              {!hasCategories
+                                ? "No se puede editar: No hay categorías asignadas"
+                                : "No se puede editar: La olimpiada ya comenzó"}
+                              <div className="tooltip-arrow"></div>
+                            </div>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -172,14 +199,29 @@ export default function PanelOlympiadsTable({
               Para registrar una nueva área que no existe en el sistema, haz
               clic en el botón "Registrar Nueva Área".
             </p>
-            <button
-              className="panel-olympiad-btn success"
-              onClick={() => setIsNewAreaModalOpen(true)}
-              disabled={hasStarted}
-            >
-              <FiPlus className="button-icon" />
-              Registrar Nueva Área
-            </button>
+            <div className="tooltip-wrapper">
+              <button
+                className={`panel-olympiad-btn success ${
+                  hasStarted ? "disabled-btn" : ""
+                }`}
+                onClick={() => setIsNewAreaModalOpen(true)}
+                disabled={hasStarted}
+                aria-describedby="tooltip-register"
+              >
+                <FiPlus className="button-icon" />
+                Registrar Nueva Área
+              </button>
+              {hasStarted && (
+                <div
+                  id="tooltip-register"
+                  role="tooltip"
+                  className="tooltip-text"
+                >
+                  No se puede registrar porque la olimpiada ya comenzó
+                  <div className="tooltip-arrow"></div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

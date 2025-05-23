@@ -1,3 +1,45 @@
+/* Fuente base para todo el contenedor de reportes */
+.reports-container,
+.reports__header,
+.reports__controls,
+.reports__select-wrapper,
+.reports__select,
+.reports__btn,
+.reports__content,
+.reports__content-header,
+.reports__table-container,
+.reports__data-table,
+.olympiads-report,
+.olympiads-report__controls,
+.olympiads-report__filter-group,
+.olympiads-report__filter-select,
+.olympiads-report__filter-input,
+.olympiads-report__columns-selector,
+.olympiads-report__table-container,
+.olympiads-report__table {
+  font-family: "Inter", sans-serif;
+  color: #1e293b;
+}
+
+/* Títulos principales con Poppins */
+.reports-container h1,
+.reports-container h2,
+.reports-container h3,
+.reports__title h1,
+.olympiads-report__title,
+.reports__content-header h2,
+.reports__empty-state h3 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* Botones y selects siguen con Inter para consistencia */
+.reports__btn,
+.reports__select {
+  font-family: "Inter", sans-serif;
+}
 /* === Base Container Styles === */
 .reports-container {
   max-width: 95%;

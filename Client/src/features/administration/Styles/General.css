@@ -22,6 +22,36 @@
   flex: 1;
 }
 
+/* Fuente base para todo el admin */
+body,
+.admin-area-container,
+.admin-category-container,
+.admin-olympiads-container,
+.admin-content-wrapper {
+  font-family: "Inter", sans-serif;
+}
+
+/* Títulos principales con Poppins */
+.area-title,
+.category-title,
+.olympiads-title {
+  font-family: "Poppins", sans-serif;
+}
+
+/* Puedes agregar más títulos o subtítulos si quieres */
+.area-subtitle,
+.category-subtitle,
+.olympiads-subtitle,
+.admin-table-wrapper,
+.admin-table-card,
+.btn-primary,
+.btn-secondary,
+.btn-add,
+.btn-register,
+.btn-back {
+  font-family: "Inter", sans-serif; /* Asegura que todo el texto no titulado use Inter */
+}
+
 /* === Cabeceras === */
 .area-header-section,
 .category-header-section,

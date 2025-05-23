@@ -1,3 +1,47 @@
+/* Fuente base para todo el modal y formularios */
+body,
+.admin-modal-content,
+.admin-form-label,
+.admin-form-input,
+.admin-form-textarea,
+.admin-form-select,
+.admin-modal-btn,
+.admin-empty-state,
+.admin-error-message,
+.admin-status-badge,
+.admin-tabs-container,
+.admin-tab,
+.admin-area-categoria-card,
+.admin-areas-table,
+.admin-areas-table td,
+.admin-areas-table th {
+  font-family: "Inter", sans-serif;
+}
+
+/* Títulos principales y subtítulos destacados en Poppins */
+.admin-modal-title,
+.admin-section-subtitle,
+.admin-area-categoria-card h3,
+.admin-error-message,
+.admin-empty-state svg {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+
+/* Botones y tabs usan Inter para consistencia */
+.admin-modal-btn,
+.btn-primary,
+.btn-secondary,
+.admin-tabs-container,
+.admin-tab {
+  font-family: "Inter", sans-serif;
+}
+
+/* Enfoque adicional en labels y inputs para legibilidad */
+.admin-form-label {
+  font-weight: 600;
+  color: #4b5563;
+}
 /* ====== Base Modal Styles ====== */
 .admin-modal-overlay {
   position: fixed;
@@ -351,32 +395,50 @@
   background: #ffffff;
   color: #4b5563;
   border: 1.5px solid #e5e7eb;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-weight: 600;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .admin-modal-btn-cancel:hover {
   background: #f9fafb;
-  border-color: #d1d5db;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.1);
+}
+
+.admin-modal-btn-cancel:focus {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
 }
 
 .admin-modal-btn-save {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  padding: 0.55rem 1.25rem;
+  font-weight: 600;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
 }
 
 .admin-modal-btn-save:hover {
   background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
 }
 
+.admin-modal-btn-save:focus {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
 /* ====== Spinner ====== */
 .admin-spinner {
   display: inline-block;
@@ -595,6 +657,9 @@
 
 /* ====== Responsive ====== */
 @media (max-width: 768px) {
+  .admin-modal-content {
+    font-family: "Inter", sans-serif;
+  }
   .admin-modal-content {
     width: 95%;
     padding: 2.5rem 1.5rem;

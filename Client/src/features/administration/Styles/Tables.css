@@ -1,3 +1,54 @@
+/* Fuente base para todo el contenido */
+body,
+.admin-area-container,
+.admin-category-container,
+.admin-olympiads-container,
+.admin-content-wrapper,
+.area-table,
+.category-table-wrapper,
+.olympiad-table-wrapper,
+.panel-olympiad-container {
+  font-family: "Inter", sans-serif;
+}
+
+.area-title,
+.category-title,
+.olympiads-title,
+.panel-olympiad-title,
+.panel-olympiad-info-card h4,
+.area-table th,
+.category-table th,
+.olympiad-table th,
+.base-config-title,
+.base-config-card h3 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+
+.area-subtitle,
+.category-subtitle,
+.olympiads-subtitle,
+.panel-olympiad-info-card p,
+.base-config-subtitle,
+.base-config-card p {
+  font-family: "Inter", sans-serif;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-add,
+.btn-register,
+.btn-back,
+.table-util-loading,
+.table-util-empty,
+.table-util-status-badge,
+.panel-olympiad-btn,
+.panel-olympiad-actions-col,
+.panel-olympiad-categories,
+.panel-olympiad-grade-list,
+.panel-olympiad-no-categories {
+  font-family: "Inter", sans-serif;
+}
 /* ===== UTILITARIOS COMUNES ===== */
 .table-util-spinner {
   animation: spin 1.2s linear infinite;
@@ -585,6 +636,16 @@
   transform: none;
 }
 
+/* Botones deshabilitados con opacidad y cursor no-allowed */
+.disabled-btn {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  user-select: none;
+  /* Opcionalmente, puedes desactivar box-shadow para dar mejor feedback visual */
+  box-shadow: none !important;
+}
+
 .panel-olympiad-empty-row td {
   text-align: center;
   padding: 3rem;
@@ -602,7 +663,7 @@
 
 .panel-olympiad-info-card {
   background: #f8fafc;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 12px;
   text-align: center;
   max-width: 600px;
@@ -619,9 +680,51 @@
 .panel-olympiad-info-card p {
   color: #64748b;
   line-height: 1.6;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-wrapper .tooltip-text {
+  visibility: hidden;
+  width: max-content;
+  max-width: 100px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 6px 10px;
+  position: absolute;
+  z-index: 10;
+  bottom: 100%; /* justo encima */
+  left: 50%;
+  transform: translate(-50%, -8px);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  font-size: 0.85rem;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip-wrapper:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -12px); /* se eleva un poco más al hacer hover */
+}
+
+.tooltip-arrow {
+  position: absolute;
+  top: 100%; /* justo debajo del tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
 /* ===== ANIMACIONES ===== */
 
 @keyframes spin {

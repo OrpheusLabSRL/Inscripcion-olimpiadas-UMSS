@@ -3,7 +3,13 @@
   margin: 0 auto;
   padding: 20px;
   color: #333;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Inter", sans-serif;
+}
+
+.admin-dashboard-container h1,
+.admin-dashboard-container h2,
+.admin-dashboard-container h3 {
+  font-family: "Poppins", sans-serif;
 }
 
 .admin-dashboard-header {

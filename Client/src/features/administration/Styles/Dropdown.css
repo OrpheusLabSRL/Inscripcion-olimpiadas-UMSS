@@ -1,3 +1,38 @@
+/* Fuente base para todo el dropdown */
+.dropdown-container,
+.dropdown-wrapper,
+.dropdown-selected,
+.dropdown-display,
+.dropdown-option,
+.multi-dropdown-item,
+.multi-label,
+.category-option,
+.category-name,
+.category-grades,
+.selected-categories-container,
+.selected-categories-title,
+.selected-categories-list,
+.selected-category-item,
+.grade-list,
+.error-message {
+  font-family: "Inter", sans-serif;
+}
+
+/* Etiquetas y títulos destacados con Poppins */
+.dropdown-label,
+.dropdown-label.large,
+.selected-categories-title,
+.category-name {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+/* Para botones, inputs o elementos interactivos podrías seguir con Inter */
+.dropdown-wrapper,
+.dropdown-wrapper:hover,
+.dropdown-wrapper.disabled {
+  font-family: "Inter", sans-serif;
+}
 /* ========== Contenedor principal ========== */
 .dropdown-container {
   position: relative;
