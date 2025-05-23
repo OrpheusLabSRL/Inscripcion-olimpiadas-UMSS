@@ -1,4 +1,4 @@
-/* Fuente base para todo el contenedor de reportes */
+/* Fuente base para todo el contenedor y elementos relacionados */
 .reports-container,
 .reports__header,
 .reports__controls,
@@ -35,34 +35,25 @@
   margin: 0;
 }
 
-/* Botones y selects siguen con Inter para consistencia */
+/* Botones y selects usan Inter */
 .reports__btn,
 .reports__select {
   font-family: "Inter", sans-serif;
 }
+
 /* === Base Container Styles === */
 .reports-container {
   max-width: 95%;
   padding: 2rem;
   background-color: #f8fafc;
-  font-family: "Inter", sans-serif;
-  color: #1e293b;
   min-height: calc(100vh - 120px);
   box-sizing: border-box;
   margin: 0 auto;
 }
 
-.reports-container h1,
-.reports-container h2,
-.reports-container h3 {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  margin: 0;
-}
-
 /* === Header Section === */
 .reports__header {
-  background-color: #ffffff;
+  background-color: #fff;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -106,7 +97,7 @@
   padding: 0.875rem 1rem 0.875rem 2.5rem;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  background-color: #ffffff;
+  background-color: #fff;
   color: #1e293b;
   font-size: 1rem;
   transition: all 0.2s ease;
@@ -146,7 +137,7 @@
 
 .reports__btn-generate {
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  color: #ffffff;
+  color: #fff;
 }
 
 .reports__btn-generate:hover {
@@ -156,7 +147,7 @@
 }
 
 .reports__btn-export {
-  background: #ffffff;
+  background: #fff;
   color: #3b82f6;
   border: 1px solid #e2e8f0;
 }
@@ -194,7 +185,7 @@
 
 /* === Content Area === */
 .reports__content {
-  background-color: #ffffff;
+  background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   padding: 2rem;
@@ -253,7 +244,7 @@
   border-collapse: separate;
   border-spacing: 0;
   color: #1e293b;
-  background-color: #ffffff;
+  background-color: #fff;
   min-width: 800px;
 }
 
@@ -306,9 +297,9 @@
   border-color: #fecaca;
 }
 
-/* Olympiads Report Table Styles */
+/* Olympiads Report Section */
 .olympiads-report {
-  background-color: #ffffff;
+  background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   padding: 2rem;
@@ -353,23 +344,18 @@
   white-space: nowrap;
 }
 
-.olympiads-report__filter-select {
+.olympiads-report__filter-select,
+.olympiads-report__filter-input {
   padding: 0.5rem 0.75rem;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
-  background-color: white;
+  background-color: #fff;
   font-size: 0.875rem;
   color: #1e293b;
   min-width: 180px;
 }
 
 .olympiads-report__filter-input {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  background-color: white;
-  font-size: 0.875rem;
-  color: #1e293b;
   min-width: 200px;
 }
 
@@ -399,7 +385,7 @@
   cursor: pointer;
 }
 
-/* Table Styles */
+/* Table styles */
 .olympiads-report__table-container {
   overflow-x: auto;
   border-radius: 8px;
@@ -444,7 +430,7 @@
   background-color: #f8fafc;
 }
 
-/* Badge Styles */
+/* Badge styles */
 .olympiads-report__badge {
   display: inline-flex;
   align-items: center;
@@ -466,7 +452,7 @@
   color: #991b1b;
 }
 
-/* Status Messages */
+/* Status messages */
 .olympiads-report__status {
   padding: 2rem;
   text-align: center;
@@ -474,45 +460,7 @@
   font-size: 0.875rem;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .olympiads-report__controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-  }
-
-  .olympiads-report__filter-group {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .olympiads-report__filter-select,
-  .olympiads-report__filter-input {
-    width: 100%;
-  }
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .olympiads-report__controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-  }
-
-  .olympiads-report__filter-group {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .olympiads-report__filter-select,
-  .olympiads-report__filter-input {
-    width: 100%;
-  }
-}
-
-/* === Responsive Adjustments === */
+/* Responsive */
 @media (max-width: 768px) {
   .reports-container {
     padding: 1rem;
@@ -537,5 +485,21 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
+  }
+
+  .olympiads-report__controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .olympiads-report__filter-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .olympiads-report__filter-select,
+  .olympiads-report__filter-input {
+    width: 100%;
   }
 }

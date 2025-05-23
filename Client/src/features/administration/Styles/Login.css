@@ -8,7 +8,7 @@
 }
 
 .login-card {
-  background: white;
+  background: #fff;
   padding: 2.5rem;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -83,7 +83,7 @@
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   font-size: 1rem;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .login-form-input:focus {
@@ -93,9 +93,10 @@
 }
 
 .login-submit-button {
+  margin-top: 0.5rem;
   padding: 0.75rem;
   background: #2563eb;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -105,8 +106,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition: all 0.2s ease;
-  margin-top: 0.5rem;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .login-submit-button:hover {
@@ -127,8 +127,8 @@
   width: 20px;
   height: 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
   border-radius: 50%;
-  border-top-color: white;
   animation: login-spin 1s ease-in-out infinite;
 }
 

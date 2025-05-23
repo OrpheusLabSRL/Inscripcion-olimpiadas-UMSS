@@ -1,4 +1,4 @@
-/* Fuente base para todo el dropdown */
+/* Fuente base para todo el dropdown y elementos relacionados */
 .dropdown-container,
 .dropdown-wrapper,
 .dropdown-selected,
@@ -27,13 +27,7 @@
   font-weight: 600;
 }
 
-/* Para botones, inputs o elementos interactivos podrías seguir con Inter */
-.dropdown-wrapper,
-.dropdown-wrapper:hover,
-.dropdown-wrapper.disabled {
-  font-family: "Inter", sans-serif;
-}
-/* ========== Contenedor principal ========== */
+/* Contenedor principal */
 .dropdown-container {
   position: relative;
   width: 100%;
@@ -42,11 +36,10 @@
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* ========== Etiqueta ========== */
+/* Etiqueta */
 .dropdown-label {
   display: block;
   margin-bottom: 0.75rem;
-  font-weight: 600;
   color: #1f2937;
   font-size: 0.95rem;
   line-height: 1.4;
@@ -57,7 +50,7 @@
   margin-bottom: 0.85rem;
 }
 
-/* ========== Encabezado (wrapper) ========== */
+/* Wrapper / encabezado */
 .dropdown-wrapper {
   position: relative;
   display: flex;
@@ -65,17 +58,24 @@
   justify-content: space-between;
   width: 100%;
   padding: 0.875rem 1.25rem;
-  background-color: #ffffff;
+  background-color: #fff;
   border: 1.5px solid #e5e7eb;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-family: "Inter", sans-serif;
 }
 
 .dropdown-wrapper:hover {
   border-color: #9ca3af;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-wrapper.disabled {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .dropdown-wrapper.small {
@@ -93,13 +93,7 @@
   font-size: 1.125rem;
 }
 
-.dropdown-wrapper.disabled {
-  background-color: #f9fafb;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-/* ========== Selected Value Display ========== */
+/* Selected value display */
 .dropdown-selected,
 .dropdown-display {
   flex: 1;
@@ -109,40 +103,36 @@
   color: #1f2937;
 }
 
-/* ========== Dropdown Arrow ========== */
+/* Dropdown arrow */
 .dropdown-arrow {
   margin-left: 0.75rem;
   color: #6b7280;
   font-size: 0.8rem;
   transition: transform 0.2s ease;
 }
-/* ========== Opciones desplegables ========== */
+
+/* Opciones desplegables */
 .dropdown-list,
 .multi-dropdown-options {
-  background-color: #ffffff;
+  background-color: #fff;
   position: absolute;
   width: 100%;
   z-index: 50;
   max-height: 300px;
   overflow-y: auto;
   margin-top: 0.5rem;
-  padding: 8px 0;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
   border: 1px solid #e5e7eb;
   transform: translateY(-10px);
   transition: opacity 0.2s ease, transform 0.2s ease;
+  padding: 0.75rem 0;
 }
 
 .dropdown-list {
   padding: 0.5rem 0;
 }
 
-.multi-dropdown-options {
-  padding: 0.75rem 0;
-}
-
-/* Active state */
 .dropdown-list.active,
 .multi-dropdown-options.active {
   opacity: 1;
@@ -150,7 +140,7 @@
   visibility: visible;
 }
 
-/* ========== Dropdown Options - Items ========== */
+/* Opciones individuales */
 .dropdown-option,
 .multi-dropdown-item {
   padding: 0.75rem 1.25rem;
@@ -160,7 +150,8 @@
   align-items: center;
 }
 
-.dropdown-option:hover {
+.dropdown-option:hover,
+.multi-dropdown-item:hover {
   background-color: #f3f4f6;
 }
 
@@ -168,11 +159,7 @@
   padding: 0.625rem 1.25rem;
 }
 
-.multi-dropdown-item:hover {
-  background-color: #f3f4f6;
-}
-
-/* ========== Multi-Select Checkboxes ========== */
+/* Multi-select checkboxes */
 .checkbox-container {
   position: relative;
   display: flex;
@@ -193,7 +180,7 @@
   height: 1.125rem;
   border: 2px solid #d1d5db;
   border-radius: 4px;
-  background: white;
+  background: #fff;
   transition: all 0.2s ease;
   position: relative;
 }
@@ -210,7 +197,7 @@
   top: 2px;
   width: 4px;
   height: 8px;
-  border: solid white;
+  border: solid #fff;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -221,7 +208,7 @@
   font-size: 0.9375rem;
 }
 
-/* ========== Error States ========== */
+/* Estados de error */
 .error-border,
 .input-error {
   border-color: #ef4444 !important;
@@ -250,7 +237,7 @@
   border-color: #ef4444;
 }
 
-/* ========== Animations ========== */
+/* Animaciones */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -262,7 +249,7 @@
   }
 }
 
-/* ========== Category Options ========== */
+/* Opciones de categoría */
 .category-option {
   display: flex;
   flex-direction: column;
@@ -273,6 +260,8 @@
   font-weight: 500;
   color: #1f2937;
   margin-bottom: 0.25rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
 }
 
 .category-grades {
@@ -280,7 +269,7 @@
   color: #6b7280;
 }
 
-/* ========== Selected Categories Display ========== */
+/* Contenedor y lista de categorías seleccionadas */
 .selected-categories-container {
   margin-top: 1rem;
   padding: 1rem;
@@ -294,6 +283,7 @@
   color: #6b7280;
   margin-bottom: 0.5rem;
   font-weight: 600;
+  font-family: "Poppins", sans-serif;
 }
 
 .selected-categories-list {
@@ -314,14 +304,14 @@
   border-bottom: none;
 }
 
-/* ========== Grade List ========== */
+/* Lista de grados */
 .grade-list {
   font-size: 0.75rem;
   color: #6b7280;
   margin-top: 0.25rem;
 }
 
-/* ========== Responsive Adjustments ========== */
+/* Responsive */
 @media (max-width: 768px) {
   .dropdown-wrapper {
     padding: 0.75rem 1rem;

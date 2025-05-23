@@ -6,6 +6,7 @@ import {
 import { toast } from "react-toastify";
 import PanelOlympiadsTable from "../components/administrationTable/PanelOlympiadsTable";
 import RegisterAreaModal from "../components/administrationModal/RegisterAreaModal";
+import { FiInfo } from "react-icons/fi";
 import "../Styles/ManageDocenteOlympiad.css";
 
 export default function PanelOlympiad() {
@@ -91,6 +92,13 @@ export default function PanelOlympiad() {
           ))}
         </select>
       </div>
+
+      {!selectedId && (
+        <div className="panel-olymp-no-selection">
+          <FiInfo size={24} />
+          No tienes ninguna olimpiada seleccionada. Por favor selecciona una.
+        </div>
+      )}
 
       {isLoadingAreas && selectedId && <p>Cargando áreas y categorías...</p>}
 

@@ -1,17 +1,19 @@
-/* Fuente base para todo el contenedor */
+/* ===== CONTENEDOR BASE ===== */
 .base-config-container {
   max-width: 90%;
-  padding: 1rem 1rem 1rem 1rem;
+  padding: 1rem;
+  margin: 0 auto;
+  min-height: auto;
   color: #2c3e50;
   background-color: #f5f7fa;
-  min-height: auto;
-  margin: 0 auto;
   font-family: "Inter", sans-serif;
 }
 
+/* ===== TIPOGRAFÍA ===== */
 .base-config-title,
 .base-config-card h3 {
   font-family: "Poppins", sans-serif;
+  font-weight: 700;
 }
 
 .base-config-subtitle,
@@ -20,25 +22,29 @@
   font-family: "Inter", sans-serif;
 }
 
-.base-config-back {
-  max-width: 1200px;
-  margin: 2rem auto auto auto;
-  padding: 0 0.5rem;
-}
-
-.base-config-header {
-  margin-bottom: 3rem;
+/* ===== ESTRUCTURA ===== */
+.base-config-back,
+.base-config-header,
+.base-config-grid {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   padding: 0 0.5rem;
 }
 
+.base-config-back {
+  margin: 2rem auto 0;
+}
+
+.base-config-header {
+  margin-bottom: 3rem;
+}
+
+/* ===== TÍTULOS ===== */
 .base-config-title {
   color: #2c3e50;
   font-size: 2rem;
   margin-bottom: 0.75rem;
-  font-weight: 700;
   position: relative;
   display: inline-block;
 }
@@ -62,19 +68,17 @@
   max-width: 800px;
 }
 
+/* ===== GRID ===== */
 .base-config-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 0.5rem;
 }
 
+/* ===== TARJETAS ===== */
 .base-config-card {
-  background: #ffffff;
+  background: #fff;
   border-radius: 12px;
   padding: 2rem 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -83,9 +87,9 @@
   gap: 1.25rem;
   align-items: flex-start;
   transition: all 0.3s ease;
-  border: none;
   position: relative;
   overflow: hidden;
+  border: none;
 }
 
 .base-config-card::before {
@@ -103,6 +107,7 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
+/* ===== ICONOS ===== */
 .base-config-icon {
   width: 60px;
   height: 60px;
@@ -117,6 +122,7 @@
   box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
 }
 
+/* ===== TEXTO DE TARJETA ===== */
 .base-config-card h3 {
   font-size: 1.25rem;
   margin: 0;
@@ -131,6 +137,7 @@
   color: #7f8c8d;
 }
 
+/* ===== BOTÓN ===== */
 .base-config-button {
   background: linear-gradient(to right, #3498db, #2980b9);
   color: white;
@@ -161,7 +168,7 @@
   transform: translateX(3px);
 }
 
-/* Media Queries */
+/* ===== MEDIA QUERIES ===== */
 @media (max-width: 768px) {
   .base-config-container {
     padding: 1.5rem 1rem;

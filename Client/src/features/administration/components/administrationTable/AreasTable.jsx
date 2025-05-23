@@ -93,12 +93,12 @@ const AreasTable = () => {
                 <td className="table-util-text-center">
                   <span
                     className={`table-util-status-badge ${
-                      area.estado
+                      area.estadoArea
                         ? "table-util-badge-success"
                         : "table-util-badge-danger"
                     }`}
                   >
-                    {area.estado ? "Activo" : "Inactivo"}
+                    {area.estadoArea ? "Activo" : "Inactivo"}
                   </span>
                 </td>
               </tr>

@@ -3,11 +3,11 @@
 .admin-category-container,
 .admin-olympiads-container {
   max-width: 95%;
-  background-color: #f8fafc;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0 auto;
+  background-color: #f8fafc;
 }
 
 .admin-olympiads-container {
@@ -36,9 +36,13 @@ body,
 .category-title,
 .olympiads-title {
   font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  color: #1e293b;
+  margin: 1rem 0 0.5rem;
 }
 
-/* Puedes agregar más títulos o subtítulos si quieres */
+/* Subtítulos y textos generales */
 .area-subtitle,
 .category-subtitle,
 .olympiads-subtitle,
@@ -49,7 +53,19 @@ body,
 .btn-add,
 .btn-register,
 .btn-back {
-  font-family: "Inter", sans-serif; /* Asegura que todo el texto no titulado use Inter */
+  font-family: "Inter", sans-serif;
+  color: #64748b;
+  margin: 0;
+}
+
+.area-subtitle,
+.category-subtitle,
+.olympiads-subtitle {
+  font-size: 1.1rem;
+}
+
+.category-title-group {
+  margin-top: 1.5rem;
 }
 
 /* === Cabeceras === */
@@ -72,28 +88,6 @@ body,
 .olympiads-header-text {
   flex: 1;
   min-width: 300px;
-}
-
-/* === Títulos y Subtítulos === */
-.area-title,
-.category-title,
-.olympiads-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 1rem 0 0.5rem;
-}
-
-.area-subtitle,
-.category-subtitle,
-.olympiads-subtitle {
-  font-size: 1.1rem;
-  color: #64748b;
-  margin: 0;
-}
-
-.category-title-group {
-  margin-top: 1.5rem;
 }
 
 /* === Tablas === */
@@ -125,25 +119,23 @@ body,
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.btn-primary {
   background-color: #2563eb;
   color: white;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 8px;
+  border-radius: 6px;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
 }
 
+.btn-primary {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
 .btn-add,
 .btn-register {
-  background-color: #2563eb;
-  color: white;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
   font-size: 0.95rem;
 }
 

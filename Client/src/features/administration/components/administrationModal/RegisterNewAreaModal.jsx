@@ -94,7 +94,7 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
 
     try {
       await createArea({
-        nombreArea: formData.nombreArea.trim(),
+        nombreArea: formData.nombreArea.trim().toUpperCase(), // <-- convertimos a mayúsculas aquí
         descripcionArea: formData.descripcionArea.trim(),
       });
 
@@ -194,13 +194,7 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
               className="admin-modal-btn-save"
               disabled={isSubmitting}
             >
-              {isSubmitting ? (
-                <>
-                  <span className="admin-spinner"></span> Guardando...
-                </>
-              ) : (
-                "Guardar"
-              )}
+              {isSubmitting ? "Guardando..." : "Guardar"}
             </button>
           </div>
         </form>
