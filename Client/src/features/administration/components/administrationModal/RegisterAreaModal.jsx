@@ -12,6 +12,10 @@ import {
   asignarAreasYCategorias,
 } from "../../../../api/Administration.api";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 
 const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -170,17 +174,32 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
       );
 
       if (nuevasCategorias.length === 0) {
-        alert(
-          "Todas las categorías seleccionadas ya están asignadas a esta área"
-        );
+        await MySwal.fire({
+          icon: "warning",
+          title: "Sin nuevas categorías",
+          text: "Todas las categorías seleccionadas ya están asignadas a esta área",
+          customClass: {
+            container: "swal2-container",
+          },
+        });
         setIsSubmitting(false);
         return;
       }
 
-      const confirmacion = window.confirm(
-        "¿Está seguro de guardar esta configuración?"
-      );
-      if (!confirmacion) {
+      const confirmacion = await MySwal.fire({
+        title: "¿Está seguro?",
+        text: "¿Deseas guardar esta configuración?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Sí, guardar",
+        cancelButtonText: "Cancelar",
+        reverseButtons: true,
+        customClass: {
+          container: "swal2-container",
+        },
+      });
+
+      if (!confirmacion.isConfirmed) {
         setIsSubmitting(false);
         return;
       }
@@ -194,14 +213,31 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
 
       await asignarAreasYCategorias(combinaciones);
 
-      alert("¡Configuración realizada exitosamente!");
+      await MySwal.fire({
+        icon: "success",
+        title: "¡Configuración guardada!",
+        text: "La configuración se ha guardado correctamente.",
+        timer: 2000,
+        showConfirmButton: false,
+        customClass: {
+          container: "swal2-container",
+        },
+      });
+
       setTimeout(() => {
         handleReset();
         if (onSuccess) onSuccess();
       }, 100);
     } catch (error) {
       console.error("Error al guardar los datos:", error);
-      alert("Error al guardar la configuración.");
+      await MySwal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Error al guardar la configuración.",
+        customClass: {
+          container: "swal2-container",
+        },
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -245,6 +281,7 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="admin-modal-form">
+            {/* ...resto del formulario como antes... */}
             <div className="admin-form-section">
               <h4 className="admin-section-subtitle">Olimpiada seleccionada</h4>
               <div className="admin-version-display">

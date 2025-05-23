@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import "../../styles/ModalGeneral.css";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 import { createArea, getAreas } from "../../../../api/Administration.api";
+
+const MySwal = withReactContent(Swal);
 
 const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -70,7 +74,7 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
       newErrors.descripcionArea = "La descripción del área es obligatoria";
     } else if (descripcion.length > 200) {
       newErrors.descripcionArea =
-        "La descripción solo deben ser 200 caracteres";
+        "La descripción solo debe tener 200 caracteres";
     }
 
     setErrors(newErrors);
@@ -81,29 +85,60 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      alert("Se deben llenar todos los campos obligatorios.");
+      await MySwal.fire({
+        icon: "warning",
+        title: "Campos incompletos",
+        text: "Se deben llenar todos los campos obligatorios correctamente.",
+      });
       return;
     }
 
-    const confirmacion = window.confirm(
-      "¿Está seguro de guardar esta configuración?"
-    );
-    if (!confirmacion) return;
+    const result = await MySwal.fire({
+      title: "¿Estás seguro?",
+      text: "¿Deseas registrar esta nueva área?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, guardar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+      customClass: {
+        container: "swal2-container",
+      },
+    });
+
+    if (!result.isConfirmed) return;
 
     setIsSubmitting(true);
 
     try {
       await createArea({
-        nombreArea: formData.nombreArea.trim().toUpperCase(), // <-- convertimos a mayúsculas aquí
+        nombreArea: formData.nombreArea.trim().toUpperCase(),
         descripcionArea: formData.descripcionArea.trim(),
       });
 
-      alert("Área registrada exitosamente.");
+      await MySwal.fire({
+        icon: "success",
+        title: "¡Área registrada!",
+        text: "La nueva área ha sido registrada exitosamente.",
+        timer: 2000,
+        showConfirmButton: false,
+        customClass: {
+          container: "swal2-container",
+        },
+      });
+
       handleReset();
       if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Error al registrar área:", error);
-      alert(error.response?.data?.message || "No se pudo registrar el área");
+      await MySwal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.response?.data?.message || "No se pudo registrar el área",
+        customClass: {
+          container: "swal2-container",
+        },
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -115,7 +150,7 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
     <div className="admin-modal-overlay" onClick={handleReset}>
       <div
         className="admin-modal-content"
-        style={{ maxWidth: "600px" }}
+        style={{ maxWidth: "700px" }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -145,6 +180,7 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
               }`}
               placeholder="Ej: Matemáticas, Química, etc."
               maxLength="50"
+              disabled={isSubmitting}
             />
             {errors.nombreArea && (
               <p className="admin-error-message">
@@ -169,6 +205,7 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
               placeholder="Breve descripción del área"
               maxLength="200"
               rows="3"
+              disabled={isSubmitting}
             />
             <div className="admin-char-counter">
               {formData.descripcionArea.length}/200 caracteres

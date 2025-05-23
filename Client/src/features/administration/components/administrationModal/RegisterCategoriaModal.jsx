@@ -13,9 +13,15 @@ import {
   deleteAreaCategoriaByOlimpiadaAndArea,
 } from "../../../../api/Administration.api";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
+
 const RegisterCategoriaModal = ({
   isOpen,
   onClose,
+  onSuccess,
   selectedVersion,
   selectedAreaId,
 }) => {
@@ -173,14 +179,27 @@ const RegisterCategoriaModal = ({
 
     if (Object.keys(newErrors).length > 0) {
       setIsSubmitting(false);
-      alert("Por favor corrige los errores antes de guardar.");
+      await MySwal.fire({
+        icon: "error",
+        title: "Errores en el formulario",
+        text: "Por favor corrige los errores antes de guardar.",
+        customClass: { container: "swal2-container" },
+      });
       return;
     }
 
-    const confirmacion = window.confirm(
-      "¿Está seguro de guardar esta configuración?"
-    );
-    if (!confirmacion) {
+    const confirmacion = await MySwal.fire({
+      title: "¿Está seguro?",
+      text: "¿Deseas guardar esta configuración?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, guardar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+      customClass: { container: "swal2-container" },
+    });
+
+    if (!confirmacion.isConfirmed) {
       setIsSubmitting(false);
       return;
     }
@@ -207,12 +226,26 @@ const RegisterCategoriaModal = ({
         await asignarAreasYCategorias(combinaciones);
       }
 
-      alert("¡Categoría registrada exitosamente!");
+      await MySwal.fire({
+        icon: "success",
+        title: "¡Categoría registrada!",
+        text: "La categoría se registró exitosamente.",
+        timer: 2000,
+        showConfirmButton: false,
+        customClass: { container: "swal2-container" },
+      });
+
       handleReset();
-      window.location.reload();
+
+      if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Error al guardar los datos:", error);
-      alert("Ocurrió un error al guardar los datos.");
+      await MySwal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Ocurrió un error al guardar los datos.",
+        customClass: { container: "swal2-container" },
+      });
     } finally {
       setIsSubmitting(false);
     }

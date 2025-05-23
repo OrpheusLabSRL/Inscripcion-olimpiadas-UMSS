@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/ModalGeneral.css";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 import {
   createOlympiad,
   getOlimpiadas,
 } from "../../../../api/Administration.api";
+
+const MySwal = withReactContent(Swal);
 
 const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
   const initialFormState = {
@@ -129,10 +133,20 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
 
     if (!validarFormulario()) return;
 
-    const confirmacion = window.confirm(
-      "¿Estás seguro de registrar esta olimpiada?"
-    );
-    if (!confirmacion) return;
+    const result = await MySwal.fire({
+      title: "¿Estás seguro?",
+      text: "¿Deseas registrar esta olimpiada?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, registrar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+      customClass: {
+        container: "swal2-container",
+      },
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       const payload = {
@@ -144,17 +158,35 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
 
       await createOlympiad(payload);
 
-      alert("Versión registrada correctamente");
+      await MySwal.fire({
+        icon: "success",
+        title: "¡Registro exitoso!",
+        text: "Versión registrada correctamente",
+        timer: 2000,
+        showConfirmButton: false,
+        customClass: {
+          container: "swal2-container",
+        },
+      });
+
       resetForm();
       onClose();
       onSave && onSave();
+      // Evitar recarga total para mejor UX
       window.location.reload();
     } catch (error) {
       console.error("Error al crear la olimpiada:", error);
       if (error.response && error.response.data && error.response.data.errors) {
         setErrors(error.response.data.errors);
       } else {
-        alert("Error inesperado al guardar la olimpiada.");
+        await MySwal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error inesperado al guardar la olimpiada.",
+          customClass: {
+            container: "swal2-container",
+          },
+        });
       }
     }
   };

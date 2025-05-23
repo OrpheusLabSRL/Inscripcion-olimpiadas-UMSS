@@ -636,6 +636,10 @@ body,
 }
 
 /* ====== Animations ====== */
+.swal2-container {
+  z-index: 20000 !important;
+}
+
 @keyframes admin-fadeIn {
   from {
     opacity: 0;
