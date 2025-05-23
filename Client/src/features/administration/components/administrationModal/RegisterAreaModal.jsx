@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { FiX, FiSave, FiDollarSign, FiAlertCircle } from "react-icons/fi";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
-import "../../Styles/ModalGeneral.css";
-import "../../Styles/Dropdown.css";
+import "../../styles/Dropdown.css";
+import "../../styles/ModalGeneral.css";
+
 import {
   getOlimpiadas,
   getAreas,
@@ -11,6 +12,10 @@ import {
   asignarAreasYCategorias,
 } from "../../../../api/Administration.api";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 
 const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -151,7 +156,9 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
     if (hasErrors) {
       forceUpdate();
       setTimeout(() => {
-        const firstError = document.querySelector(".input-error, .has-error");
+        const firstError = document.querySelector(
+          ".admin-input-error, .admin-has-error"
+        );
         if (firstError)
           firstError.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 50);
@@ -167,17 +174,32 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
       );
 
       if (nuevasCategorias.length === 0) {
-        alert(
-          "Todas las categorías seleccionadas ya están asignadas a esta área"
-        );
+        await MySwal.fire({
+          icon: "warning",
+          title: "Sin nuevas categorías",
+          text: "Todas las categorías seleccionadas ya están asignadas a esta área",
+          customClass: {
+            container: "swal2-container",
+          },
+        });
         setIsSubmitting(false);
         return;
       }
 
-      const confirmacion = window.confirm(
-        "¿Está seguro de guardar esta configuración?"
-      );
-      if (!confirmacion) {
+      const confirmacion = await MySwal.fire({
+        title: "¿Está seguro?",
+        text: "¿Deseas guardar esta configuración?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Sí, guardar",
+        cancelButtonText: "Cancelar",
+        reverseButtons: true,
+        customClass: {
+          container: "swal2-container",
+        },
+      });
+
+      if (!confirmacion.isConfirmed) {
         setIsSubmitting(false);
         return;
       }
@@ -191,14 +213,31 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
 
       await asignarAreasYCategorias(combinaciones);
 
-      alert("¡Configuración realizada exitosamente!");
+      await MySwal.fire({
+        icon: "success",
+        title: "¡Configuración guardada!",
+        text: "La configuración se ha guardado correctamente.",
+        timer: 2000,
+        showConfirmButton: false,
+        customClass: {
+          container: "swal2-container",
+        },
+      });
+
       setTimeout(() => {
         handleReset();
         if (onSuccess) onSuccess();
       }, 100);
     } catch (error) {
       console.error("Error al guardar los datos:", error);
-      alert("Error al guardar la configuración.");
+      await MySwal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Error al guardar la configuración.",
+        customClass: {
+          container: "swal2-container",
+        },
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -217,46 +256,53 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={handleReset}>
+    <div className="admin-modal-overlay" onClick={handleReset}>
       <div
-        className="modal-content"
+        className="admin-modal-content"
         style={{ maxWidth: "850px", maxHeight: "90vh", overflowY: "auto" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="modal-header">
-          <h3 className="modal-title">Agregar Área y Categorías</h3>
-          <button
-            type="button"
-            className="close-button"
-            onClick={handleReset}
-            aria-label="Cerrar modal"
-            disabled={isSubmitting}
-          >
-            <FiX />
-          </button>
+        <button
+          type="button"
+          className="admin-modal-close-btn"
+          onClick={handleReset}
+          aria-label="Cerrar modal"
+          disabled={isSubmitting}
+        >
+          <FiX />
+        </button>
+        <div className="admin-modal-header">
+          <h3 className="admin-modal-title">Agregar Área y Categorías</h3>
         </div>
 
         {isLoading ? (
-          <div className="loading-container">
+          <div className="admin-loading-container">
             <p>Cargando datos...</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="modal-form">
-            <div className="form-section">
-              <h4 className="section-subtitle">Olimpiada seleccionada</h4>
-              <div className="version-display">
+          <form onSubmit={handleSubmit} className="admin-modal-form">
+            {/* ...resto del formulario como antes... */}
+            <div className="admin-form-section">
+              <h4 className="admin-section-subtitle">Olimpiada seleccionada</h4>
+              <div className="admin-version-display">
                 Versión: <strong>{versionTexto}</strong>
               </div>
             </div>
 
-            <div className="form-section">
-              <h4 className="section-subtitle">Selección de Área</h4>
-              <div className={`form-group ${errors.area ? "has-error" : ""}`}>
-                <label className="form-label">
-                  Área <span className="required-field">*</span>
+            <div className="admin-form-section">
+              <h4 className="admin-section-subtitle">Selección de Área</h4>
+              <div
+                className={`admin-form-group ${
+                  errors.area ? "admin-has-error" : ""
+                }`}
+              >
+                <label className="admin-form-label">
+                  Área <span className="admin-required-field">*</span>
                 </label>
                 <select
-                  className={`form-select ${errors.area ? "input-error" : ""}`}
+                  className={`admin-form-select ${
+                    errors.area ? "admin-input-error" : ""
+                  }`}
                   value={selectedArea || ""}
                   onChange={(e) => {
                     setSelectedArea(e.target.value);
@@ -272,23 +318,42 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                     </option>
                   ))}
                 </select>
+
+                {areasNoAsignadas.length === 0 && !isSubmitting && (
+                  <p
+                    style={{
+                      color: "#9ca3af",
+                      marginTop: "0.25rem",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    Todas las áreas ya están asignadas, no quedan más
+                    disponibles.
+                  </p>
+                )}
+
                 {errors.area && (
-                  <p className="error-message">
+                  <p className="admin-error-message">
                     <FiAlertCircle /> {errors.area}
                   </p>
                 )}
               </div>
 
-              <div className={`form-group ${errors.costo ? "has-error" : ""}`}>
-                <label className="form-label">
-                  Costo del Área (Bs) <span className="required-field">*</span>
+              <div
+                className={`admin-form-group ${
+                  errors.costo ? "admin-has-error" : ""
+                }`}
+              >
+                <label className="admin-form-label">
+                  Costo del Área (Bs){" "}
+                  <span className="admin-required-field">*</span>
                 </label>
                 <div
-                  className={`input-with-icon ${
-                    errors.costo ? "input-error" : ""
+                  className={`admin-input-with-icon ${
+                    errors.costo ? "admin-input-error" : ""
                   }`}
                 >
-                  <FiDollarSign className="input-icon" />
+                  <FiDollarSign className="admin-input-icon" />
                   <input
                     type="number"
                     step="0.5"
@@ -298,14 +363,14 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                       setErrors((prev) => ({ ...prev, costo: "" }));
                     }}
                     placeholder="Ej: 50.00"
-                    className={`form-input ${
-                      errors.costo ? "input-error" : ""
+                    className={`admin-form-input ${
+                      errors.costo ? "admin-input-error" : ""
                     }`}
                     disabled={isSubmitting}
                   />
                 </div>
                 {errors.costo && (
-                  <p className="error-message">
+                  <p className="admin-error-message">
                     <FiAlertCircle /> {errors.costo}
                   </p>
                 )}
@@ -314,15 +379,15 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
 
             {selectedArea && (
               <div
-                className={`form-section ${
-                  errors.categorias ? "has-error" : ""
+                className={`admin-form-section ${
+                  errors.categorias ? "admin-has-error" : ""
                 }`}
               >
-                <h4 className="section-subtitle">
+                <h4 className="admin-section-subtitle">
                   Selección de Categorías{" "}
-                  <span className="required-field">*</span>
+                  <span className="admin-required-field">*</span>
                 </h4>
-                <div className="form-group">
+                <div className="admin-form-group">
                   <MultiSelectDropdown
                     name="categorias"
                     placeholder="Seleccione las categorías..."
@@ -345,14 +410,42 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                     error={!!errors.categorias}
                     errorMessage={errors.categorias}
                   />
+                  {selectedCategorias.length > 0 && (
+                    <div className="selected-categories-container">
+                      <p className="selected-categories-title">
+                        Categorías seleccionadas:
+                      </p>
+                      <ul className="selected-categories-list">
+                        {categorias
+                          .filter((c) =>
+                            selectedCategorias.includes(c.idCategoria)
+                          )
+                          .map((cat) => (
+                            <li
+                              key={cat.idCategoria}
+                              className="selected-category-item"
+                            >
+                              <strong>{cat.nombreCategoria}</strong>
+                              {cat.grados?.length > 0 && (
+                                <div className="grade-list">
+                                  {cat.grados
+                                    .map((g) => `${g.numeroGrado}° ${g.nivel}`)
+                                    .join(", ")}
+                                </div>
+                              )}
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
 
-            <div className="modal-actions">
+            <div className="admin-modal-actions">
               <button
                 type="button"
-                className="cancel-button"
+                className="admin-modal-btn-cancel"
                 onClick={handleReset}
                 disabled={isSubmitting}
               >
@@ -360,7 +453,7 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
               </button>
               <button
                 type="submit"
-                className="save-button"
+                className="admin-modal-btn-save"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

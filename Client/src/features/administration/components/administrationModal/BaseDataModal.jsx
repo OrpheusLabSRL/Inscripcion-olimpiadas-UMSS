@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
-import "../../Styles/ModalGeneral.css";
-import "../../Styles/Dropdown.css";
+import "../../styles/Dropdown.css";
+import "../../styles/ModalGeneral.css";
 
 import {
   getOlimpiadas,
@@ -9,7 +9,6 @@ import {
   getCategoriaGrado,
   getAreasCategoriasPorOlimpiada,
   asignarAreasYCategorias,
-  //deleteAreasCategoriasPorOlimpiada,
 } from "../../../../api/Administration.api";
 
 const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
@@ -182,36 +181,28 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
+    <div className="admin-modal-overlay">
       <div
-        className="modal-content"
+        className="admin-modal-content"
         style={{ maxWidth: "850px", maxHeight: "90vh", overflowY: "auto" }}
       >
-        <button type="button" className="close-button" onClick={handleReset}>
+        <button
+          type="button"
+          className="admin-modal-close-btn"
+          onClick={handleReset}
+        >
           ✖
         </button>
 
-        <form onSubmit={handleSubmit}>
-          <h3 className="section-title" style={{ color: "#000" }}>
-            Versión Seleccionada
-          </h3>
-          <div
-            style={{
-              padding: "0.75rem 1rem",
-              borderRadius: "8px",
-              backgroundColor: "#d8d7bc",
-              fontWeight: "600",
-              marginBottom: "1rem",
-            }}
-          >
+        <form onSubmit={handleSubmit} className="admin-modal-form">
+          <h3 className="admin-modal-title">Versión Seleccionada</h3>
+          <div className="admin-version-display">
             {versionLabel ? `Versión ${versionLabel}` : "Versión no disponible"}
           </div>
 
-          <h3 className="section-title" style={{ color: "#000" }}>
-            Áreas de la Olimpiada
-          </h3>
-          <div className="dropdown-container">
-            <div className="dropdown-wrapper large">
+          <h3 className="admin-modal-title">Áreas de la Olimpiada</h3>
+          <div className="admin-dropdown-container">
+            <div className="admin-dropdown-wrapper large">
               <MultiSelectDropdown
                 label=""
                 name="areas"
@@ -231,9 +222,7 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
             </div>
           </div>
 
-          <h3 className="section-title" style={{ color: "#000" }}>
-            Categorías de la Olimpiada
-          </h3>
+          <h3 className="admin-modal-title">Categorías de la Olimpiada</h3>
 
           {selectedAreas.map((areaId) => {
             const area = areas.find((a) => a.idArea === areaId);
@@ -249,20 +238,17 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
             return (
               <div
                 key={areaId}
-                className="field-group inline"
+                className="admin-form-group"
                 style={{ marginBottom: "1.5rem" }}
               >
-                <label
-                  className="dropdown-label"
-                  style={{ minWidth: "120px", marginRight: "1rem" }}
-                >
+                <label className="admin-form-label">
                   {area?.nombreArea}
-                  <span style={{ color: "red", marginLeft: "0.25rem" }}>*</span>
+                  <span className="admin-required-field">*</span>
                 </label>
                 <div style={{ flex: 1 }}>
                   <div
-                    className={`dropdown-wrapper large ${
-                      errors[`categorias-${areaId}`] ? "error-border" : ""
+                    className={`admin-dropdown-wrapper large ${
+                      errors[`categorias-${areaId}`] ? "admin-input-error" : ""
                     }`}
                   >
                     <MultiSelectDropdown
@@ -278,25 +264,18 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
                   </div>
 
                   {errors[`categorias-${areaId}`] && (
-                    <p className="error-message">
+                    <p className="admin-error-message">
                       {errors[`categorias-${areaId}`]}
                     </p>
                   )}
 
                   {categoriasSeleccionadas.length > 0 && (
-                    <ul
-                      style={{
-                        margin: "0.5rem 0 0 0",
-                        fontSize: "0.85rem",
-                        color: "#333",
-                        paddingLeft: "1rem",
-                      }}
-                    >
+                    <ul className="admin-categoria-list">
                       {categoriasSeleccionadas.map((cat) => (
                         <li key={cat.idCategoria}>
                           <strong>{cat.nombreCategoria}</strong>{" "}
                           {cat.grados && cat.grados.length > 0 && (
-                            <span style={{ color: "#666" }}>
+                            <span className="admin-grado-text">
                               (
                               {cat.grados
                                 .map(
@@ -317,11 +296,8 @@ const ManageBaseDataModal = ({ isOpen, onClose, selectedVersion }) => {
             );
           })}
 
-          <div
-            className="modal-actions"
-            style={{ justifyContent: "flex-end", marginTop: "2rem" }}
-          >
-            <button type="submit" className="save-button">
+          <div className="admin-modal-actions">
+            <button type="submit" className="admin-modal-btn-save">
               Guardar
             </button>
           </div>

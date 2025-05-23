@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
-import "../../Styles/ModalGeneral.css";
-import "../../Styles/Dropdown.css";
+import "../../styles/Dropdown.css";
+import "../../styles/ModalGeneral.css";
 
 import {
   getOlimpiadas,
@@ -13,9 +13,15 @@ import {
   deleteAreaCategoriaByOlimpiadaAndArea,
 } from "../../../../api/Administration.api";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
+
 const RegisterCategoriaModal = ({
   isOpen,
   onClose,
+  onSuccess,
   selectedVersion,
   selectedAreaId,
 }) => {
@@ -30,6 +36,7 @@ const RegisterCategoriaModal = ({
     areas: [],
     categorias: {},
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -132,6 +139,7 @@ const RegisterCategoriaModal = ({
   };
 
   const handleReset = () => {
+    if (isSubmitting) return;
     setVersion("");
     setSelectedAreas([]);
     setSelectedCategorias({});
@@ -145,6 +153,7 @@ const RegisterCategoriaModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const newErrors = {};
     if (!version) newErrors.version = "Debe seleccionar una versión";
@@ -167,15 +176,33 @@ const RegisterCategoriaModal = ({
     });
 
     setErrors(newErrors);
+
     if (Object.keys(newErrors).length > 0) {
-      alert("Por favor corrige los errores antes de guardar.");
+      setIsSubmitting(false);
+      await MySwal.fire({
+        icon: "error",
+        title: "Errores en el formulario",
+        text: "Por favor corrige los errores antes de guardar.",
+        customClass: { container: "swal2-container" },
+      });
       return;
     }
 
-    const confirmacion = window.confirm(
-      "¿Está seguro de guardar esta configuración?"
-    );
-    if (!confirmacion) return;
+    const confirmacion = await MySwal.fire({
+      title: "¿Está seguro?",
+      text: "¿Deseas guardar esta configuración?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, guardar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+      customClass: { container: "swal2-container" },
+    });
+
+    if (!confirmacion.isConfirmed) {
+      setIsSubmitting(false);
+      return;
+    }
 
     const combinaciones = [];
     selectedAreas.forEach((idArea) => {
@@ -199,48 +226,65 @@ const RegisterCategoriaModal = ({
         await asignarAreasYCategorias(combinaciones);
       }
 
-      alert("¡Categoría registrada exitosamente!");
+      await MySwal.fire({
+        icon: "success",
+        title: "¡Categoría registrada!",
+        text: "La categoría se registró exitosamente.",
+        timer: 2000,
+        showConfirmButton: false,
+        customClass: { container: "swal2-container" },
+      });
+
       handleReset();
-      window.location.reload();
+
+      if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Error al guardar los datos:", error);
-      alert("Ocurrió un error al guardar los datos.");
+      await MySwal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Ocurrió un error al guardar los datos.",
+        customClass: { container: "swal2-container" },
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
+    <div className="admin-modal-overlay">
       <div
-        className="modal-content"
+        className="admin-modal-content"
         style={{ maxWidth: "850px", maxHeight: "90vh", overflowY: "auto" }}
       >
-        <button type="button" className="close-button" onClick={handleReset}>
+        <button
+          type="button"
+          className="admin-modal-close-btn"
+          onClick={handleReset}
+          disabled={isSubmitting}
+        >
           ✖
         </button>
 
-        <form onSubmit={handleSubmit}>
-          <h3 className="section-title" style={{ color: "#000" }}>
-            Categorías de la Olimpiada
-          </h3>
+        <form onSubmit={handleSubmit} className="admin-modal-form">
+          <h3 className="admin-modal-title">Categorías de la Olimpiada</h3>
 
           {selectedAreas.map((areaId) => {
             const area = areas.find((a) => a.idArea === areaId);
-            const yaAsignadas = initialState.categorias[areaId] || [];
-            const categoriasDisponibles = categorias.filter(
-              (cat) => !yaAsignadas.includes(cat.idCategoria)
-            );
-            const categoriasOptions = categoriasDisponibles.map((c) => ({
+
+            const categoriasOptions = categorias.map((c) => ({
               value: c.idCategoria,
-              label:
-                c.nombreCategoria +
-                (c.grados?.length > 0
+              label: `${c.nombreCategoria}${
+                c.grados?.length > 0
                   ? ` (${c.grados
                       .map((g) => `${g.numeroGrado}° ${g.nivel}`)
                       .join(", ")})`
-                  : ""),
+                  : ""
+              }`,
             }));
+
             const categoriasSeleccionadas = categorias.filter((c) =>
               selectedCategorias[areaId]?.includes(c.idCategoria)
             );
@@ -248,14 +292,14 @@ const RegisterCategoriaModal = ({
             return (
               <div
                 key={areaId}
-                className="field-group"
+                className="admin-form-group"
                 style={{ marginBottom: "1.5rem" }}
               >
-                <label className="dropdown-label">
-                  Área: <strong>{area?.nombreArea}</strong>
+                <label className="admin-form-label">
+                  Área: <strong> {area?.nombreArea} </strong>
                 </label>
 
-                <label style={{ marginTop: "0.5rem" }}>
+                <label className="admin-form-label">
                   Costo por categoría (Bs):
                   <input
                     type="number"
@@ -268,25 +312,26 @@ const RegisterCategoriaModal = ({
                         [areaId]: e.target.value,
                       }))
                     }
-                    className={`form-input ${
-                      errors[`costo-${areaId}`] ? "input-error" : ""
+                    className={`admin-form-input ${
+                      errors[`costo-${areaId}`] ? "admin-input-error" : ""
                     }`}
                     style={{
                       marginLeft: "1rem",
                       padding: "0.3rem",
                       width: "120px",
                     }}
+                    disabled={isSubmitting}
                   />
                 </label>
                 {errors[`costo-${areaId}`] && (
-                  <p className="error-message">
+                  <p className="admin-error-message">
                     <FiAlertCircle /> {errors[`costo-${areaId}`]}
                   </p>
                 )}
 
                 <div
-                  className={`dropdown-wrapper large ${
-                    errors[`categorias-${areaId}`] ? "input-error" : ""
+                  className={`admin-dropdown-wrapper large ${
+                    errors[`categorias-${areaId}`] ? "admin-input-error" : ""
                   }`}
                   style={{ marginTop: "1rem" }}
                 >
@@ -297,53 +342,55 @@ const RegisterCategoriaModal = ({
                     options={categoriasOptions}
                     selectedValues={selectedCategorias[areaId] || []}
                     onChange={(values) => handleCategoriaChange(areaId, values)}
+                    disabled={isSubmitting}
+                    error={!!errors[`categorias-${areaId}`]}
+                    errorMessage={errors[`categorias-${areaId}`]}
                   />
                 </div>
 
-                {errors[`categorias-${areaId}`] && (
-                  <p className="error-message">
-                    <FiAlertCircle /> {errors[`categorias-${areaId}`]}
-                  </p>
-                )}
-
                 {categoriasSeleccionadas.length > 0 && (
-                  <ul
-                    style={{
-                      marginTop: "0.75rem",
-                      paddingLeft: "1.25rem",
-                      fontSize: "0.9rem",
-                    }}
-                  >
-                    {categoriasSeleccionadas.map((cat) => (
-                      <li key={cat.idCategoria}>
-                        <strong>{cat.nombreCategoria}</strong>{" "}
-                        {cat.grados?.length > 0 && (
-                          <span style={{ color: "#666" }}>
-                            (
-                            {cat.grados
-                              .map(
-                                (g) =>
-                                  `${g.numeroGrado}° ${g.nivel}` ||
-                                  g.nombreGrado
-                              )
-                              .join(", ")}
-                            )
-                          </span>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="selected-categories-container">
+                    <p className="selected-categories-title">
+                      Categorías seleccionadas:
+                    </p>
+                    <ul className="selected-categories-list">
+                      {categoriasSeleccionadas.map((cat) => (
+                        <li
+                          key={cat.idCategoria}
+                          className="selected-category-item"
+                        >
+                          <strong>{cat.nombreCategoria}</strong>
+                          {cat.grados?.length > 0 && (
+                            <div className="grade-list">
+                              {cat.grados
+                                .map((g) => `${g.numeroGrado}° ${g.nivel}`)
+                                .join(", ")}
+                            </div>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </div>
             );
           })}
 
-          <div
-            className="modal-actions"
-            style={{ justifyContent: "flex-end", marginTop: "2rem" }}
-          >
-            <button type="submit" className="save-button">
-              Guardar
+          <div className="admin-modal-actions">
+            <button
+              type="button"
+              className="admin-modal-btn-cancel"
+              onClick={handleReset}
+              disabled={isSubmitting}
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="admin-modal-btn-save"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Guardando..." : "Guardar"}
             </button>
           </div>
         </form>
