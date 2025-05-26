@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import HeaderProp from "../../home_usuario/components/HeaderProp";
 import "../Styles/ResultadoConsulta_Tutor.css";
@@ -7,6 +7,8 @@ const ResultadoConsulta_Tutor = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const resultado = location.state?.resultado;
+  const [showModal, setShowModal] = useState(false);
+  const [selectedOlimpistas, setSelectedOlimpistas] = useState([]);
 
   console.log("Datos completos recibidos:", resultado);
 
@@ -33,18 +35,68 @@ const ResultadoConsulta_Tutor = () => {
   console.log("Datos de olimpistas:", olimpistas);
 
   const getEstadoPagoClass = (estado) => {
-    return estado === "PAGO REALIZADO" ? "realizado" : "pendiente";
+    return estado === "PAGO PENDIENTE" ? "estado-pendiente" : "estado-realizado";
   };
 
   // Agrupar olimpistas por codigoInscripcion
   const olimpistasAgrupados = olimpistas.reduce((grupos, olimpista) => {
-    const codigoInscripcion = olimpista.codigoInscripcion || "sin-inscripcion";
+    const codigoInscripcion = olimpista.codigoInscripcion || 'sin-inscripcion';
     if (!grupos[codigoInscripcion]) {
       grupos[codigoInscripcion] = [];
     }
     grupos[codigoInscripcion].push(olimpista);
     return grupos;
   }, {});
+
+  const handleVerDetalles = (olimpistasGrupo) => {
+    setSelectedOlimpistas(olimpistasGrupo);
+    setShowModal(true);
+  };
+
+  const ModalDetalles = ({ olimpistas, onClose }) => {
+    if (!olimpistas || olimpistas.length === 0) return null;
+
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h3>Detalles de los Olimpistas</h3>
+            <button className="close-button" onClick={onClose}>&times;</button>
+          </div>
+          <div className="modal-body">
+            <table className="modal-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Carnet de Identidad</th>
+                  <th>Tipo de Tutor</th>
+                  <th>Materia</th>
+                  <th>Categoría</th>
+                  <th>Estado de Pago</th>
+                </tr>
+              </thead>
+              <tbody>
+                {olimpistas.map((olimpista) => (
+                  <tr key={olimpista.idInscripcion}>
+                    <td>{olimpista.nombre}</td>
+                    <td>{olimpista.apellido}</td>
+                    <td>{olimpista.carnetIdentidad}</td>
+                    <td>{olimpista.tipoTutor}</td>
+                    <td>{olimpista.materia || "No especificada"}</td>
+                    <td>{olimpista.categoria || "No especificada"}</td>
+                    <td className={getEstadoPagoClass(olimpista.estadoPago)}>
+                      {olimpista.estadoPago}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -69,79 +121,73 @@ const ResultadoConsulta_Tutor = () => {
             </p>
           </div>
 
-          {Object.entries(olimpistasAgrupados).map(
-            ([codigoInscripcion, olimpistasGrupo], index) => {
-              // Obtener la forma de inscripción del primer olimpista del grupo
-              const primerOlimpista = olimpistasGrupo[0];
-              const formaInscripcion =
-                primerOlimpista?.formaInscripcion || "No especificada";
+          {Object.entries(olimpistasAgrupados).map(([codigoInscripcion, olimpistasGrupo]) => {
+            const primerOlimpista = olimpistasGrupo[0];
+            const formaInscripcion = primerOlimpista?.formaInscripcion || 'No especificada';
+            const estadoPago = olimpistasGrupo.every(ol => ol.estadoPago === "PAGO REALIZADO") 
+              ? "PAGO REALIZADO" 
+              : "PAGO PENDIENTE";
 
-              // Formatear el código de inscripción para el título
-              let codigoInscripcionFormateado;
-              if (codigoInscripcion === "sin-inscripcion") {
-                codigoInscripcionFormateado = "Olimpistas sin inscripción";
-              } else {
-                const match = String(codigoInscripcion).match(/\d+$/);
-                if (match && match[0]) {
-                  codigoInscripcionFormateado = String(match[0]).padStart(
-                    3,
-                    "0"
-                  );
-                } else {
-                  codigoInscripcionFormateado = String(codigoInscripcion);
-                }
-              }
-
-              return (
-                <div key={codigoInscripcion} className="olimpistas-table">
-                  <h3>
-                    {codigoInscripcion === "sin-inscripcion"
-                      ? codigoInscripcionFormateado
-                      : `Olimpistas correspondiente a la Inscripción: ${
-                          index + 1
-                        }`}
-                  </h3>
-                  {codigoInscripcion !== "sin-inscripcion" && (
+            return (
+              <div key={codigoInscripcion} className={formaInscripcion === 'Excel' ? "inscripcion-card" : "olimpistas-table"}>
+                <h3>
+                  {codigoInscripcion === 'sin-inscripcion' 
+                    ? 'Olimpistas sin inscripción' 
+                    : `Olimpistas correspondientes a la Inscripción: ${codigoInscripcion}`}
+                </h3>
+                {codigoInscripcion !== 'sin-inscripcion' && (
+                  <>
                     <p className="forma-inscripcion">
                       <strong>Forma de Inscripción:</strong> {formaInscripcion}
                     </p>
-                  )}
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Carnet de Identidad</th>
-                        <th>Tipo de Tutor</th>
-                        <th>Materia</th>
-                        <th>Categoría</th>
-                        <th>Estado de Pago</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {olimpistasGrupo.map((olimpista) => (
-                        <tr key={olimpista.idInscripcion}>
-                          <td>{olimpista.nombre}</td>
-                          <td>{olimpista.apellido}</td>
-                          <td>{olimpista.carnetIdentidad}</td>
-                          <td>{olimpista.tipoTutor}</td>
-                          <td>{olimpista.materia || "No especificada"}</td>
-                          <td>{olimpista.categoria || "No especificada"}</td>
-                          <td
-                            className={`estado-pago ${getEstadoPagoClass(
-                              olimpista.estadoPago
-                            )}`}
-                          >
-                            {olimpista.estadoPago}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              );
-            }
-          )}
+                    {formaInscripcion === 'Excel' ? (
+                      <div className="excel-resumen">
+                        <p><strong>Cantidad Olimpistas:</strong> {olimpistasGrupo.length}</p>
+                        <p className={getEstadoPagoClass(estadoPago)}>
+                          <strong>Estado de Pago:</strong> {estadoPago}
+                        </p>
+                        <button 
+                          className="ver-detalles-btn"
+                          onClick={() => handleVerDetalles(olimpistasGrupo)}
+                        >
+                          Ver Detalles
+                        </button>
+                      </div>
+                    ) : (
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Carnet de Identidad</th>
+                            <th>Tipo de Tutor</th>
+                            <th>Materia</th>
+                            <th>Categoría</th>
+                            <th>Estado de Pago</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {olimpistasGrupo.map((olimpista) => (
+                            <tr key={olimpista.idInscripcion}>
+                              <td>{olimpista.nombre}</td>
+                              <td>{olimpista.apellido}</td>
+                              <td>{olimpista.carnetIdentidad}</td>
+                              <td>{olimpista.tipoTutor}</td>
+                              <td>{olimpista.materia || "No especificada"}</td>
+                              <td>{olimpista.categoria || "No especificada"}</td>
+                              <td className={getEstadoPagoClass(olimpista.estadoPago)}>
+                                {olimpista.estadoPago}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </>
+                )}
+              </div>
+            );
+          })}
 
           <div className="boton-volver-container">
             <button
@@ -153,6 +199,12 @@ const ResultadoConsulta_Tutor = () => {
           </div>
         </div>
       </div>
+      {showModal && (
+        <ModalDetalles 
+          olimpistas={selectedOlimpistas} 
+          onClose={() => setShowModal(false)} 
+        />
+      )}
     </>
   );
 };
