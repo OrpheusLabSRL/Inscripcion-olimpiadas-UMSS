@@ -208,7 +208,7 @@ const ResultadoConsulta = () => {
                     <tr>
                       <th>Área</th>
                       <th>Categoría</th>
-                      <th>Forma de Inscripción</th>
+                      <th>Tutor Responsable</th>
                       <th>Estado de Pago</th>
                       {inscripciones?.some(ins => ins.formaInscripcion === 'Excel') && <th>Acciones</th>}
                     </tr>
@@ -223,7 +223,12 @@ const ResultadoConsulta = () => {
                           <td>
                             {inscripcion.olimpiadaAreaCategoria?.categoria?.nombreCategoria || "No disponible"}
                           </td>
-                          <td>{inscripcion.formaInscripcion || "No especificada"}</td>
+                          <td>
+                            {inscripcion.tutorResponsable ? 
+                              `${inscripcion.tutorResponsable.nombre} ${inscripcion.tutorResponsable.apellido}` : 
+                              "No disponible"
+                            }
+                          </td>
                           <td
                             className={
                               inscripcion.estadoInscripcion === 0
