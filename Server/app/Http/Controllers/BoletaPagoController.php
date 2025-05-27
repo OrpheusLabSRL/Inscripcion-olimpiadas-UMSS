@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 
-
 class BoletaPagoController extends Controller
 {
 
@@ -140,5 +139,16 @@ class BoletaPagoController extends Controller
             ->update(['estadoInscripcion' => 1]);
 
         return response()->json(['message' => 'Pago confirmado exitosamente.']);
+    }
+
+    public function getBoletasByTutor($tutorId)
+    {
+        if (!$tutorId) {
+            return response()->json(['message' => 'Tutor ID no proporcionado.'], 400);
+        }
+
+        $boletas = BoletaPago::where('idTutor', $tutorId)->get();
+
+        return response()->json(['boletas' => $boletas]);
     }
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import "../Styles/OCRValidation.css";
@@ -11,7 +11,28 @@ export const OCRValidation = () => {
   const [controlBoleta, setControlBoleta] = useState(null);
   const [boletaExists, setBoletaExists] = useState(null);
   const [montoTotal, setMontoTotal] = useState(null);
+  const [uploadEnabled, setUploadEnabled] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const tutorId = sessionStorage.getItem("tutorInscripcionId");
+    if (tutorId) {
+      fetch(`http://127.0.0.1:8000/api/boletaPago/boletasByTutor/${tutorId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.boletas && data.boletas.length > 0) {
+            setUploadEnabled(true);
+          } else {
+            setUploadEnabled(false);
+          }
+        })
+        .catch(() => {
+          setUploadEnabled(false);
+        });
+    } else {
+      setUploadEnabled(false);
+    }
+  }, []);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -142,8 +163,8 @@ export const OCRValidation = () => {
       <p>Suba una imagen para validar mediante OCR.</p>
       <div className="ocrvalidation-panel" style={{marginTop: "20px"}}>
         <form onSubmit={handleSubmit} className="ocrvalidation-form" style={{display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start", justifyContent: "center", marginBottom: "20px", width: "660px"}}>
-          <input type="file" accept="image/*" onChange={handleFileChange} style={{padding: "0.5rem", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "white", color: "black", fontWeight: "600", fontSize: "1rem", cursor: "pointer", height: "40px", width: "660px"}} />
-          <PrimaryButton type="submit" value={processing ? "Procesando..." : "Procesar Imagen"} disabled={processing} style={{width: "150px", height: "40px", backgroundColor: "#1e40af", borderColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer"}} />
+          <input type="file" accept="image/*" onChange={handleFileChange} style={{padding: "0.5rem", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "white", color: "black", fontWeight: "600", fontSize: "1rem", cursor: "pointer", height: "40px", width: "660px"}} disabled={!uploadEnabled} />
+          <PrimaryButton type="submit" value={processing ? "Procesando..." : "Procesar Imagen"} disabled={processing || !uploadEnabled} style={{width: "150px", height: "40px", backgroundColor: "#1e40af", borderColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer"}} />
         </form>
         {ocrResult && (
           <div style={{marginTop: "10px", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", gap: "0.5rem"}}>
@@ -173,6 +194,11 @@ export const OCRValidation = () => {
               Confirmar Pago
             </button>
           </>
+        )}
+        {uploadEnabled === false && (
+          <div style={{marginTop: "10px", color: "red"}}>
+            No tiene boletas de pago asociadas. No puede subir comprobantes hasta que tenga al menos una boleta.
+          </div>
         )}
         {boletaExists !== null && (
           <div style={{marginTop: "10px", color: boletaExists ? "green" : "red"}}>
