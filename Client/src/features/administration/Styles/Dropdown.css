@@ -1,217 +1,328 @@
-/* ========== Contenedor principal ========== */
-.dropdown-container {
-  margin-bottom: 1rem;
-  width: 100%;
-  max-width: 400px;
-  position: relative;
-  font-family: inherit;
+/* Fuente base para todo el dropdown y elementos relacionados */
+.dropdown-container,
+.dropdown-wrapper,
+.dropdown-selected,
+.dropdown-display,
+.dropdown-option,
+.multi-dropdown-item,
+.multi-label,
+.category-option,
+.category-name,
+.category-grades,
+.selected-categories-container,
+.selected-categories-title,
+.selected-categories-list,
+.selected-category-item,
+.grade-list,
+.error-message {
+  font-family: "Inter", sans-serif;
 }
 
-/* ========== Etiqueta ========== */
+/* Etiquetas y títulos destacados con Poppins */
+.dropdown-label,
+.dropdown-label.large,
+.selected-categories-title,
+.category-name {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+/* Contenedor principal */
+.dropdown-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 1.5rem;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Etiqueta */
 .dropdown-label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  font-size: 1rem;
-  color: #333;
-}
-.dropdown-label.large {
-  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+  color: #1f2937;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
-/* ========== Encabezado (wrapper) ========== */
-.dropdown-wrapper {
-  background-color: #e2e2e2;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  border: 1px solid #d1d5db;
-  transition: border-color 0.2s;
+.dropdown-label.large {
+  font-size: 1.1rem;
+  margin-bottom: 0.85rem;
 }
+
+/* Wrapper / encabezado */
+.dropdown-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  background-color: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-family: "Inter", sans-serif;
+}
+
 .dropdown-wrapper:hover {
   border-color: #9ca3af;
-}
-.dropdown-wrapper.small {
-  font-size: 0.9rem;
-  padding: 0.5rem 0.75rem;
-}
-.dropdown-wrapper.medium {
-  font-size: 1rem;
-}
-.dropdown-wrapper.large {
-  font-size: 1.1rem;
-  padding: 0.9rem 1.2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-selected {
+.dropdown-wrapper.disabled {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.dropdown-wrapper.small {
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+}
+
+.dropdown-wrapper.medium {
+  padding: 0.875rem 1.25rem;
+  font-size: 1rem;
+}
+
+.dropdown-wrapper.large {
+  padding: 1rem 1.5rem;
+  font-size: 1.125rem;
+}
+
+/* Selected value display */
+.dropdown-selected,
+.dropdown-display {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: #1f2937;
 }
 
-/* ========== Flecha ========== */
+/* Dropdown arrow */
 .dropdown-arrow {
-  margin-left: 10px;
+  margin-left: 0.75rem;
+  color: #6b7280;
   font-size: 0.8rem;
-  color: #666;
-  transition: transform 0.2s;
+  transition: transform 0.2s ease;
 }
 
-/* ========== Opciones desplegables ========== */
+/* Opciones desplegables */
+.dropdown-list,
 .multi-dropdown-options {
-  background-color: #e2e2e2;
+  background-color: #fff;
   position: absolute;
   width: 100%;
-  z-index: 99;
-  max-height: 350px;
+  z-index: 50;
+  max-height: 300px;
   overflow-y: auto;
-  margin-top: 4px;
-  padding: 8px 0;
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  padding: 0.75rem 0;
 }
 
-/* ========== Ítems de opción ========== */
+.dropdown-list {
+  padding: 0.5rem 0;
+}
+
+.dropdown-list.active,
+.multi-dropdown-options.active {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+/* Opciones individuales */
+.dropdown-option,
 .multi-dropdown-item {
-  padding: 6px 16px;
-  font-size: 14px;
+  padding: 0.75rem 1.25rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background-color 0.15s ease;
   display: flex;
   align-items: center;
 }
+
+.dropdown-option:hover,
 .multi-dropdown-item:hover {
-  background-color: #ccc;
-}
-.multi-dropdown-item:hover .custom-checkbox {
-  border-color: #3182ce;
+  background-color: #f3f4f6;
 }
 
-/* ========== Checkbox personalizado ========== */
+.multi-dropdown-item {
+  padding: 0.625rem 1.25rem;
+}
+
+/* Multi-select checkboxes */
 .checkbox-container {
   position: relative;
-  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  margin-right: 0.75rem;
 }
+
 .hidden-checkbox {
   position: absolute;
   opacity: 0;
   width: 0;
   height: 0;
 }
+
 .custom-checkbox {
   display: inline-block;
-  width: 10px;
-  height: 10px;
-  border: 2px solid #555;
-  border-radius: 50%;
-  background: white;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
   transition: all 0.2s ease;
+  position: relative;
 }
+
 .hidden-checkbox:checked ~ .custom-checkbox {
-  background-color: #3182ce;
-  border-color: #3182ce;
+  background-color: #3b82f6;
+  border-color: #3b82f6;
 }
+
 .hidden-checkbox:checked ~ .custom-checkbox::after {
   content: "";
   position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 6px;
-  height: 6px;
-  background-color: white;
-  border-radius: 50%;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
-/* ========== Texto de las opciones ========== */
 .multi-label {
   flex: 1;
-  margin-left: 8px;
+  color: #1f2937;
+  font-size: 0.9375rem;
 }
 
-/* ========== Estilos para categorías en opciones ========== */
+/* Estados de error */
+.error-border,
+.input-error {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  color: #ef4444;
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  padding: 0.5rem 0.75rem;
+  background-color: #fef2f2;
+  border-radius: 6px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.error-message svg {
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.has-error .dropdown-wrapper {
+  border-color: #ef4444;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Opciones de categoría */
 .category-option {
   display: flex;
   flex-direction: column;
-  font-size: 0.85rem;
-  line-height: 1.3;
-  padding: 6px 0;
-}
-.category-name {
-  font-weight: 500;
-  margin-bottom: 2px;
-}
-.category-grades {
-  font-size: 0.75rem;
-  color: #666;
+  padding: 0.75rem 1.25rem;
 }
 
-/* ========== Categorías seleccionadas ========== */
-.selected-categories-container {
-  margin-top: 12px;
-  padding: 12px;
-  background-color: #f8f9fa;
-  border-radius: 6px;
-  border: 1px solid #e9ecef;
-}
-.selected-categories-title {
-  font-size: 0.8rem;
-  color: #495057;
-  margin-bottom: 8px;
+.category-name {
+  font-weight: 500;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+  font-family: "Poppins", sans-serif;
   font-weight: 600;
 }
+
+.category-grades {
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+/* Contenedor y lista de categorías seleccionadas */
+.selected-categories-container {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px dashed #e5e7eb;
+}
+
+.selected-categories-title {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
 .selected-categories-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
 .selected-category-item {
-  padding: 8px 0;
-  border-bottom: 1px solid #e9ecef;
-  font-size: 0.8rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+  display: flex;
+  justify-content: space-between;
 }
+
 .selected-category-item:last-child {
   border-bottom: none;
 }
 
-/* ========== Reutilizados ========== */
+/* Lista de grados */
 .grade-list {
   font-size: 0.75rem;
-  color: #6c757d;
-  margin-top: 4px;
-}
-.form-group {
-  margin-bottom: 16px;
-}
-
-/* ========== Errores ========== */
-.error-border {
-  border: 2px solid #dc2626 !important;
-  background-color: #ffecec !important;
-}
-.error-message {
-  color: #dc2626;
-  font-size: 0.75rem;
+  color: #6b7280;
   margin-top: 0.25rem;
-  background: #ffecec;
-  padding: 0.4rem 0.75rem;
-  border-radius: 5px;
 }
 
-.has-error .dropdown-wrapper {
-  border-color: #ff4444;
-}
+/* Responsive */
+@media (max-width: 768px) {
+  .dropdown-wrapper {
+    padding: 0.75rem 1rem;
+  }
 
-.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+  .dropdown-wrapper.large {
+    padding: 0.875rem 1.25rem;
+  }
 
-.multi-dropdown-options {
-  max-height: 200px;
-  overflow-y: auto;
+  .dropdown-list,
+  .multi-dropdown-options {
+    max-height: 250px;
+  }
 }

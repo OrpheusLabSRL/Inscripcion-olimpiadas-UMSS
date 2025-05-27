@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../Styles/ManageDocenteOlympiad.css";
 import {
   getOlimpiadas,
   getAreasCategoriasPorOlimpiada,
@@ -7,6 +6,8 @@ import {
 import { toast } from "react-toastify";
 import PanelOlympiadsTable from "../components/administrationTable/PanelOlympiadsTable";
 import RegisterAreaModal from "../components/administrationModal/RegisterAreaModal";
+import { FiInfo } from "react-icons/fi";
+import "../Styles/ManageDocenteOlympiad.css";
 
 export default function PanelOlympiad() {
   const [olimpiadas, setOlimpiadas] = useState([]);
@@ -71,14 +72,14 @@ export default function PanelOlympiad() {
   };
 
   return (
-    <div className="manage-olympiad-container">
-      <div className="form-group">
-        <label htmlFor="olimpiada-select" className="form-label">
+    <div className="panel-olymp-container">
+      <div className="panel-olymp-form-group">
+        <label htmlFor="olimpiada-select" className="panel-olymp-label">
           Selecciona una olimpiada
         </label>
         <select
           id="olimpiada-select"
-          className="form-select"
+          className="panel-olymp-select"
           value={selectedId}
           onChange={handleOlympiadChange}
           disabled={isLoading}
@@ -92,12 +93,19 @@ export default function PanelOlympiad() {
         </select>
       </div>
 
+      {!selectedId && (
+        <div className="panel-olymp-no-selection">
+          <FiInfo size={24} />
+          No tienes ninguna olimpiada seleccionada. Por favor selecciona una.
+        </div>
+      )}
+
       {isLoadingAreas && selectedId && <p>Cargando áreas y categorías...</p>}
 
       {selectedId && (
-        <div className="olympiad-content">
-          <div className="section-header">
-            <h3 className="section-title">
+        <div className="panel-olymp-content">
+          <div className="panel-olymp-header">
+            <h3 className="panel-olymp-title">
               Áreas y Categorías -{" "}
               {
                 olimpiadas.find((o) => o.idOlimpiada === selectedId)
@@ -109,6 +117,10 @@ export default function PanelOlympiad() {
           <PanelOlympiadsTable
             data={areasCategorias}
             selectedVersion={selectedId}
+            fechaInicioOlimpiada={
+              olimpiadas.find((o) => o.idOlimpiada === parseInt(selectedId))
+                ?.fechaInicioOlimpiada
+            }
             onRefresh={fetchAreasCategorias}
           />
         </div>

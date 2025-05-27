@@ -28,16 +28,16 @@ import ResultadoConsulta_Tutor from "./features/consultar_inscripcion/pages/Resu
 import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
 import { OCRValidation } from "./features/registrarion/pages/OCRValidation";
+import { GenerateOrder } from "./features/registrarion/pages/GenerateOrder";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
 
-  // 🔥 Rutas donde NO queremos mostrar el Sidebar
+  // Rutas donde NO mostrar sidebar
   const hideSidebarRoutes = [
     "/",
     "/register/tutor-form",
-    // "/register/excel",
     "/admin",
     "/contacto",
     "/consultar-inscripcion",
@@ -45,10 +45,6 @@ function App() {
     "/consultar-inscripcion/resultado-tutor",
   ];
   const showSidebar = !hideSidebarRoutes.includes(location.pathname);
-
-  const user = {
-    role: "admin",
-  };
 
   return (
     <div className="app-container">
@@ -61,7 +57,6 @@ function App() {
             : "main"
         }
       >
-        {/* Mostrar el Sidebar solo donde corresponde */}
         {showSidebar && (
           <Sidebar
             isOpen={isOpen}
@@ -78,7 +73,14 @@ function App() {
             <Route path="/register/tutor-legal" element={<RegisterTutor />} />
             <Route path="/register/tutor-form" element={<TutorForm />} />
             <Route path="/register/excel" element={<RegisterExcel />} />
-            <Route path="/comprobar-boleta" element={<OCRValidation />} />
+            <Route
+              path="/register/comprobar-boleta"
+              element={<OCRValidation />}
+            />
+            <Route
+              path="/register/generate-order"
+              element={<GenerateOrder />}
+            />
             <Route
               path="/register/responsible"
               element={<RegisterResponsible />}
@@ -109,23 +111,64 @@ function App() {
               element={<ResultadoConsulta_Tutor />}
             />
 
-            {/* Rutas de administración */}
+            {/* Admin Layout con rutas anidadas */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Login />} />
-              <Route path="home" element={<HomeAdministration />} />
-              <Route path="areas" element={<ManageArea />} />
-              <Route path="categorias" element={<ManageCategoria />} />
-              <Route path="olimpiadas" element={<ManageOlympiads />} />
-              <Route path="view-base" element={<ManageViewBase />} />
-              <Route path="panelOlympiad" element={<PanelOlympiad />} />
+              <Route
+                path="home"
+                element={
+                  <PrivateRoute
+                    element={<HomeAdministration />}
+                    allowedRoles={[1]}
+                  />
+                }
+              />
+              <Route
+                path="areas"
+                element={
+                  <PrivateRoute element={<ManageArea />} allowedRoles={[1]} />
+                }
+              />
+              <Route
+                path="categorias"
+                element={
+                  <PrivateRoute
+                    element={<ManageCategoria />}
+                    allowedRoles={[1]}
+                  />
+                }
+              />
+              <Route
+                path="olimpiadas"
+                element={
+                  <PrivateRoute
+                    element={<ManageOlympiads />}
+                    allowedRoles={[1]}
+                  />
+                }
+              />
+              <Route
+                path="view-base"
+                element={
+                  <PrivateRoute
+                    element={<ManageViewBase />}
+                    allowedRoles={[1]}
+                  />
+                }
+              />
+              <Route
+                path="panelOlympiad"
+                element={
+                  <PrivateRoute
+                    element={<PanelOlympiad />}
+                    allowedRoles={[1]}
+                  />
+                }
+              />
               <Route
                 path="reports"
                 element={
-                  <PrivateRoute
-                    element={<Reports />}
-                    allowedRoles={["admin"]}
-                    userRole={user.role}
-                  />
+                  <PrivateRoute element={<Reports />} allowedRoles={[1]} />
                 }
               />
             </Route>

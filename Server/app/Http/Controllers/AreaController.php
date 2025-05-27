@@ -7,10 +7,30 @@ use Illuminate\Http\Request;
 
 class AreaController extends Controller
 {
-    // API: Obtener todas las áreas
-    public function index()
+    // API: Obtener todas las áreas (solo activas por defecto)
+    public function index(Request $request)
     {
-        return response()->json(Area::all(), 200);
+        // Permitir filtrar por estadoArea (true, false o todos)
+        $estado = $request->query('estadoArea');
+
+        $query = Area::query();
+
+        if ($estado !== null) {
+            // Convertir a booleano si es 'true' o 'false' string
+            if ($estado === 'true' || $estado === '1') {
+                $query->where('estadoArea', true);
+            } elseif ($estado === 'false' || $estado === '0') {
+                $query->where('estadoArea', false);
+            }
+            // Si no es ninguno, no filtra
+        } else {
+            // Por defecto mostrar solo activas
+            $query->where('estadoArea', true);
+        }
+
+        $areas = $query->get();
+
+        return response()->json($areas, 200);
     }
 
     // Guardar área vía API
@@ -19,9 +39,17 @@ class AreaController extends Controller
         $request->validate([
             'nombreArea' => 'required|string',
             'descripcionArea' => 'nullable|string',
+            'estadoArea' => 'sometimes|boolean', // nuevo campo estadoArea opcional
         ]);
 
-        Area::create($request->only(['nombreArea', 'descripcionArea']));
+        $data = $request->only(['nombreArea', 'descripcionArea']);
+        if ($request->has('estadoArea')) {
+            $data['estadoArea'] = $request->boolean('estadoArea');
+        } else {
+            $data['estadoArea'] = true;
+        }
+
+        Area::create($data);
 
         return response()->json(['message' => 'Área registrada correctamente']);
     }
@@ -29,14 +57,15 @@ class AreaController extends Controller
     // Obtener estructura del programa (área + categoría + grados + costo)
     public function getProgramaCompleto()
     {
-        $programa = [];
-
-        $areas = Area::with(['categorias' => function ($query) {
+        // Solo áreas activas
+        $areas = Area::where('estadoArea', true)->with(['categorias' => function ($query) {
             $query->where('estadoCategoria', true)
                 ->with(['grados' => function ($q) {
                     $q->where('estadoGrado', true);
                 }]);
         }])->get();
+
+        $programa = [];
 
         foreach ($areas as $area) {
             foreach ($area->categorias as $categoria) {

@@ -131,7 +131,9 @@ export const OCRValidation = () => {
       });
       const checkData = await checkResponse.json();
       if (!checkData.exists) {
-        alert("La boleta no existe en la base de datos. No se puede confirmar el pago.");
+        alert(
+          "La boleta no existe en la base de datos. No se puede confirmar el pago."
+        );
         setBoletaExists(false);
         return;
       }
@@ -201,11 +203,32 @@ export const OCRValidation = () => {
           </div>
         )}
         {boletaExists !== null && (
-          <div style={{marginTop: "10px", color: boletaExists ? "green" : "red"}}>
-            {boletaExists ? (boletaPaid ? "La boleta ya fue pagada." : "La boleta existe en la base de datos.") : "La boleta NO existe en la base de datos."}
+          <div
+            style={{ marginTop: "10px", color: boletaExists ? "green" : "red" }}
+          >
+            {boletaExists
+              ? boletaPaid
+                ? "La boleta ya fue pagada."
+                : "La boleta existe en la base de datos."
+              : "La boleta NO existe en la base de datos."}
           </div>
         )}
-        <button className="back-button" onClick={handleBack} style={{marginTop: "20px", width: "150px", height: "40px", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer"}}>
+        <button
+          className="back-button"
+          onClick={handleBack}
+          style={{
+            marginTop: "20px",
+            width: "150px",
+            height: "40px",
+            borderRadius: "6px",
+            border: "1px solid #1e40af",
+            backgroundColor: "#1e40af",
+            color: "white",
+            fontWeight: "600",
+            fontSize: "1rem",
+            cursor: "pointer",
+          }}
+        >
           Volver
         </button>
       </div>

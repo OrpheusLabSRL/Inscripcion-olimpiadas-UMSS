@@ -17,16 +17,8 @@ export const ListInscription = ({
   index,
 }) => {
   const [registering, setRegistering] = useState(true);
-  const [tutorId, setTutorId] = useState(null);
 
   useEffect(() => {
-    const storedTutorId = sessionStorage.getItem("tutorInscripcionId");
-
-    if (!storedTutorId) {
-      console.error("ID del tutor no encontrado en sessionStorage.");
-      return;
-    }
-    setTutorId(storedTutorId);
     setRegistering(dataOlympians[0].inscripciones[0].registrandose);
   }, []);
 
@@ -55,39 +47,6 @@ export const ListInscription = ({
       } catch (error) {
         console.error("Error al finalizar el registro:", error);
       }
-    }
-  };
-
-  const generarBoleta = async () => {
-    if (!tutorId) {
-      alert("No se encontró el ID del tutor.");
-      return;
-    }
-
-    try {
-      console.log(codigoInscripcion);
-      const response = await axios.get(
-        `http://localhost:8000/api/boletas/generar/${tutorId}/${codigoInscripcion}/get`,
-        {
-          responseType: "blob",
-        }
-      );
-
-      const file = new Blob([response.data], { type: "application/pdf" });
-      const fileURL = URL.createObjectURL(file);
-      const link = document.createElement("a");
-      link.href = fileURL;
-      link.download = `boleta_pago_${tutorId}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        alert("No hay inscripciones pendientes para generar una boleta.");
-      } else {
-        alert("Ocurrió un error al generar la boleta. Intenta más tarde.");
-      }
-      console.error("Error al generar la boleta:", error);
     }
   };
 
@@ -123,7 +82,9 @@ export const ListInscription = ({
             onClick={finishRegister}
           />
         ) : (
-          <NextPage onClick={generarBoleta} value="Generar Boleta" />
+          <>
+            <p>Ahora puedes generar la orden de pago</p>
+          </>
         )}
       </div>
     </div>

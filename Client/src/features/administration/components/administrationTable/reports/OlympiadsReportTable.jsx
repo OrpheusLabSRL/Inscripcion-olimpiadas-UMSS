@@ -58,8 +58,13 @@ const OlympiadsReportTable = () => {
     fetchOlympiads();
   }, []);
 
-  if (loading) return <p style={{ color: "#000000" }}>Cargando reporte de olimpiadas...</p>;
-  if (error) return <p style={{ color: "#000000" }}>{error}</p>;
+  if (loading)
+    return (
+      <div className="olympiads-report__status">
+        Cargando reporte de olimpiadas...
+      </div>
+    );
+  if (error) return <div className="olympiads-report__status">{error}</div>;
 
   // Filter rows based on rowFilter and selected filterColumn (case insensitive substring match)
   const filteredOlympiads = olympiads.filter((item) => {
@@ -83,68 +88,58 @@ const OlympiadsReportTable = () => {
   };
 
   return (
-    <div style={{ color: "#000000" }}>
-      <div className="filter-controls" style={{ marginBottom: "1rem" }}>
-        <div
-          style={{
-            marginBottom: "0.5rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-          }}
-        >
-          <label style={{ color: "#000000" }}>
-            Filtrar por columna:
+    <div className="olympiads-report">
+      <div className="olympiads-report__header">
+        <h2 className="olympiads-report__title">Reporte de Olimpiadas</h2>
+
+        <div className="olympiads-report__controls">
+          <div className="olympiads-report__filter-group">
+            <label>Filtrar por columna:</label>
             <select
+              className="olympiads-report__filter-select"
               value={filterColumn}
               onChange={(e) => setFilterColumn(e.target.value)}
-              style={{ marginLeft: "0.5rem", color: "#000000" }}
             >
               {columnOptions.map((col) => (
-                <option key={col.value} value={col.value} style={{ color: "#000000" }}>
+                <option key={col.value} value={col.value}>
                   {col.label}
                 </option>
               ))}
             </select>
-          </label>
-          <label style={{ color: "#000000" }}>
-            Valor filtro:
+          </div>
+
+          <div className="olympiads-report__filter-group">
+            <label>Valor filtro:</label>
             <input
               type="text"
+              className="olympiads-report__filter-input"
               value={rowFilter}
               onChange={(e) => setRowFilter(e.target.value)}
               placeholder={`Buscar en ${
                 columnOptions.find((c) => c.value === filterColumn)?.label || ""
               }...`}
-              style={{ marginLeft: "0.5rem", color: "#000000" }}
             />
-          </label>
+          </div>
         </div>
-        <div>
-          <span style={{ color: "#000000" }}>Columnas a mostrar:</span>
+
+        <div className="olympiads-report__columns-selector">
+          <span>Columnas a mostrar:</span>
           {columnOptions.map((col) => (
-            <label
-              key={col.value}
-              style={{
-                marginLeft: "1rem",
-                color: "#000000",
-                display: "inline-flex",
-                alignItems: "center",
-              }}
-            >
+            <div key={col.value} className="olympiads-report__column-checkbox">
               <input
                 type="checkbox"
+                id={`col-${col.value}`}
                 checked={visibleColumns[col.value]}
                 onChange={() => toggleColumn(col.value)}
-                style={{ marginRight: "0.25rem" }}
               />
-              {col.label}
-            </label>
+              <label htmlFor={`col-${col.value}`}>{col.label}</label>
+            </div>
           ))}
         </div>
       </div>
-      <div style={{ padding: "0 20px" }}>
-        <table className="data-table">
+
+      <div className="olympiads-report__table-container">
+        <table className="olympiads-report__table">
           <thead>
             <tr>
               {visibleColumns.nombreOlimpiada && <th>Nombre Olimpiada</th>}
@@ -163,24 +158,34 @@ const OlympiadsReportTable = () => {
           <tbody>
             {filteredOlympiads.map((item, index) => (
               <tr key={index}>
-                {visibleColumns.nombreOlimpiada && <td>{item.nombreOlimpiada}</td>}
+                {visibleColumns.nombreOlimpiada && (
+                  <td>{item.nombreOlimpiada}</td>
+                )}
                 {visibleColumns.version && <td>{item.version}</td>}
                 {visibleColumns.estadoOlimpiada && (
                   <td>
                     <span
-                      className={`badge badge-${
-                        item.estadoOlimpiada ? "success" : "danger"
+                      className={`olympiads-report__badge ${
+                        item.estadoOlimpiada
+                          ? "olympiads-report__badge--success"
+                          : "olympiads-report__badge--danger"
                       }`}
                     >
                       {item.estadoOlimpiada ? "Activo" : "Finalizado"}
                     </span>
                   </td>
                 )}
-                {visibleColumns.fechaInicioOlimpiada && <td>{item.fechaInicioOlimpiada}</td>}
-                {visibleColumns.fechaFinOlimpiada && <td>{item.fechaFinOlimpiada}</td>}
+                {visibleColumns.fechaInicioOlimpiada && (
+                  <td>{item.fechaInicioOlimpiada}</td>
+                )}
+                {visibleColumns.fechaFinOlimpiada && (
+                  <td>{item.fechaFinOlimpiada}</td>
+                )}
                 {visibleColumns.area && <td>{item.area || ""}</td>}
                 {visibleColumns.categoria && <td>{item.categoria || ""}</td>}
-                {visibleColumns.fechaReserva && <td>{item.fechaReserva || ""}</td>}
+                {visibleColumns.fechaReserva && (
+                  <td>{item.fechaReserva || ""}</td>
+                )}
                 {visibleColumns.horaInicio && <td>{item.horaInicio || ""}</td>}
                 {visibleColumns.horaFin && <td>{item.horaFin || ""}</td>}
                 {visibleColumns.nombreAula && <td>{item.nombreAula || ""}</td>}
