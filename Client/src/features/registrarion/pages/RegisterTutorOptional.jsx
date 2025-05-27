@@ -1,6 +1,5 @@
 //components
 import { Input } from "../../../components/inputs/Input";
-import { Select } from "../../../components/inputs/Select";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { Validator } from "../utils/ValidationRules";
 
@@ -51,10 +50,6 @@ export const RegisterTutorOptional = () => {
     mode: "onChange",
   });
 
-  const tipoTutor = [
-    { value: "Profesor", label: "Profesor" },
-    { value: "Padre/Madre", label: "Papá/Mamá" },
-  ];
 
   const watchedNombre = watch("Nombre");
   const watchedApellido = watch("Apellido");
@@ -139,6 +134,7 @@ export const RegisterTutorOptional = () => {
         setValue("Email", personData.data.data.correoElectronico);
         setIsReadOnly((prev) => ({
           ...prev,
+          Ci: true,
           Nombre: true,
           Apellido: true,
           Email: true,

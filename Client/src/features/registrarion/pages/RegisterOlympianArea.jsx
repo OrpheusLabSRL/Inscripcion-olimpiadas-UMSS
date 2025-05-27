@@ -130,6 +130,7 @@ export const RegisterOlympianArea = () => {
           (area) => area.value !== areas.data?.data[0]
         );
       }
+
       setAreaInteres(areasFiltradas);
     };
     getAreas();

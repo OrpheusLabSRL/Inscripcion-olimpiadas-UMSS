@@ -3,7 +3,7 @@
 
 :root {
   /*-------------------Paleta de Colores--------------------*/
-  --primary-color: #213448;
+  --primary-color: #0ea5e9;
   --secondary-color: #547792;
   --tertiary-color: #94a6c1;
   --quaternary-color: #ecefca;
@@ -27,7 +27,8 @@
   --label: 16px;
   --error-size: 14px;
   --principal-text: 60px;
-  --background: #94b4c1;
+  /* --background: #94b4c1; */
+  --background: #f0f9ff;
 }
 
 body {
@@ -64,6 +65,6 @@ body {
   /*padding-bottom: 29px;*/
 }
 
-h1{
+h1 {
   color: #003f83;
 }

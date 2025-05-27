@@ -1,83 +1,233 @@
-.data-table {
+/* === Contenedores Generales === */
+.admin-area-container,
+.admin-category-container,
+.admin-olympiads-container {
+  max-width: 95%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  background-color: #f8fafc;
+}
+
+.admin-olympiads-container {
+  background-color: #f5f7fa;
+}
+
+.admin-content-wrapper {
+  padding: 2rem;
+  max-width: 1400px;
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  color: black;
+  margin: 0 auto;
+  flex: 1;
 }
 
-.data-table th,
-.data-table td {
-  border-bottom: 1px solid #ebebeb;
-  padding: 0.75rem;
-  text-align: left;
-  color: black;
+/* Fuente base para todo el admin */
+body,
+.admin-area-container,
+.admin-category-container,
+.admin-olympiads-container,
+.admin-content-wrapper {
+  font-family: "Inter", sans-serif;
 }
 
-.badge-success {
-  background-color: #d4f8d4;
-  color: #1a7f1a;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-  font-size: 0.8rem;
+/* Títulos principales con Poppins */
+.area-title,
+.category-title,
+.olympiads-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  color: #1e293b;
+  margin: 1rem 0 0.5rem;
 }
 
-.add-button {
-  background-color: #2563eb;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  border: none;
-  cursor: pointer;
+/* Subtítulos y textos generales */
+.area-subtitle,
+.category-subtitle,
+.olympiads-subtitle,
+.admin-table-wrapper,
+.admin-table-card,
+.btn-primary,
+.btn-secondary,
+.btn-add,
+.btn-register,
+.btn-back {
+  font-family: "Inter", sans-serif;
+  color: #64748b;
+  margin: 0;
 }
 
-.badge-success {
-  background-color: #d4f8d4;
-  color: #1a7f1a;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-  font-size: 0.8rem;
+.area-subtitle,
+.category-subtitle,
+.olympiads-subtitle {
+  font-size: 1.1rem;
 }
 
-.badge-danger {
-  background-color: #ffe0e0;
-  color: #e63946;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-  font-size: 0.8rem;
+.category-title-group {
+  margin-top: 1.5rem;
 }
 
-.manage-container {
-  padding: 20px;
+/* === Cabeceras === */
+.area-header-section,
+.category-header-section,
+.olympiads-header-section {
+  width: 95%;
+  max-width: 1200px;
+  margin-bottom: 2rem;
 }
 
-.back-button {
-  background-color: transparent;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  color: #333;
-  padding: 5px 10px;
-  transition: color 0.3s ease;
+.olympiads-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
-.back-button:hover {
-  color: #007bff;
+.olympiads-header-text {
+  flex: 1;
+  min-width: 300px;
 }
 
-.btn-registrar {
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 0.5rem 1.2rem;
-  font-size: 0.95rem;
+/* === Tablas === */
+.admin-table-wrapper,
+.admin-table-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  width: 90%;
+  overflow-x: auto;
+}
+
+.admin-table-wrapper {
+  padding: 2rem;
+  max-width: 1200px;
+}
+
+.admin-table-card {
+  padding: 1.5rem;
+}
+
+/* === Botones === */
+.btn-primary,
+.btn-secondary,
+.btn-add,
+.btn-register {
   font-weight: 600;
-  border-radius: 6px;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #2563eb;
+  color: white;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.btn-registrar:hover {
+.btn-primary {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+.btn-add,
+.btn-register {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+}
+
+.btn-primary:hover,
+.btn-add:hover,
+.btn-register:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(29, 78, 216, 0.5);
+}
+
+.btn-primary:active {
   background-color: #1e40af;
+  box-shadow: 0 4px 8px rgba(30, 64, 175, 0.6);
+  transform: translateY(0);
+}
+
+.btn-icon {
+  font-size: 0.9rem;
+}
+
+/* === Botón de Volver === */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: all 0.2s ease;
+}
+
+.btn-back:hover {
+  color: #2563eb;
+  transform: translateX(-2px);
+}
+
+.btn-back-icon {
+  font-size: 0.9rem;
+}
+
+/* === Responsive === */
+@media (max-width: 1024px) {
+  .admin-content-wrapper {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-area-container,
+  .admin-category-container,
+  .admin-olympiads-container {
+    padding: 1.5rem;
+  }
+
+  .admin-table-wrapper,
+  .admin-table-card {
+    padding: 1rem;
+  }
+
+  .area-title,
+  .category-title,
+  .olympiads-title {
+    font-size: 1.5rem;
+  }
+
+  .category-subtitle,
+  .olympiads-subtitle {
+    font-size: 1rem;
+  }
+
+  .olympiads-header-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-content-wrapper {
+    padding: 1rem;
+  }
+
+  .category-title {
+    font-size: 1.5rem;
+  }
 }

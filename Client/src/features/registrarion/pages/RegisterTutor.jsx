@@ -28,6 +28,8 @@ export const RegisterTutor = () => {
   const [tipoTutor, setTipoTutor] = useState([
     { value: "Padre/Madre", label: "Papá/Mamá" },
     { value: "Tutor Legal", label: "Tutor Legal" },
+    { value: "Profesor", label: "Profesor" },
+    { value: "Estudiante", label: "Estudiante" },
   ]);
   const navigation = useNavigate();
   const location = useLocation();
@@ -115,6 +117,7 @@ export const RegisterTutor = () => {
 
     if (confirmacion.isConfirmed) {
       const dataToSend = {
+        codigoInscripcion: sessionStorage.getItem("codigoInscripcion") || "",
         olimpista: {
           nombre: sessionStorage.getItem("NombreOlympian"),
           apellido: sessionStorage.getItem("ApellidoOlympian"),
@@ -148,7 +151,7 @@ export const RegisterTutor = () => {
           {
             area: sessionStorage.getItem("AreaPrincipal"),
             categoria: sessionStorage.getItem("CategoriaPrincipal"),
-            existeTutor: sessionStorage.getItem("TutorArea1"),
+            existeTutor: sessionStorage.getItem("TutorArea1") === "true",
             formaInscripcion: "Manual",
             registrandose: true,
             tutorArea: {
@@ -167,7 +170,9 @@ export const RegisterTutor = () => {
         dataToSend.inscripciones.push({
           area: sessionStorage.getItem("AreaSecundaria"),
           categoria: sessionStorage.getItem("CategoriaSecundaria"),
-          existeTutor: sessionStorage.getItem("TutorArea2"),
+          existeTutor: sessionStorage.getItem("TutorArea2" ) === "true",
+          formaInscripcion: "Manual",
+          registrandose: true,
           tutorArea: {
             nombre: sessionStorage.getItem("NombreSecundaria"),
             apellido: sessionStorage.getItem("ApellidoSecundaria"),

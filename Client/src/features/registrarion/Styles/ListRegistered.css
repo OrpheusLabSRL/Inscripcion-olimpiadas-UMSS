@@ -14,6 +14,13 @@
   justify-content: space-between;
 }
 
+.list-inscription-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .container-list {
   border: 1px solid #0000004d;
   overflow: auto;
@@ -42,4 +49,9 @@
 
 .btn-add-student-disabled:hover {
   background-color: #0000004d;
+}
+
+.btn-generate-payment {
+  width: 200px;
+  margin: auto;
 }

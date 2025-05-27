@@ -9,6 +9,7 @@ use App\Models\Tutor;
 use Illuminate\Http\Request;
 use App\Models\Olimpista;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InscripcionController extends Controller
 {
@@ -19,10 +20,14 @@ class InscripcionController extends Controller
             'olimpista' => 'required|array',
             'responsable' => 'required|array',
             'tutor_legal' => 'required|array',
-            'inscripciones' => 'required|array'
+            'inscripciones' => 'required|array',
+            'inscripciones.*.formaInscripcion' => 'required|string'
         ]);
 
         DB::beginTransaction();
+
+        Log::info('Usuario creado correctamente', [$request]);
+
 
         try {
             // 1. Procesar el olimpista
@@ -44,11 +49,21 @@ class InscripcionController extends Controller
             $personaTutorLegal = $this->buscarOCrearPersona($tutorLegalData);
             $tutorLegal = $this->buscarOCrearTutor($personaTutorLegal->idPersona, $tutorLegalData);
 
+            if ($request->filled('codigoInscripcion')) {
+                    $codigoGrupo = $request->codigoInscripcion;
+                } else {
+                    $ultimoCodigo = Inscripcion::max('codigoInscripcion');
+                    $ultimoNumero = $ultimoCodigo ? (int) ltrim($ultimoCodigo, '0') : 0;
+                    $codigoGrupo = str_pad($ultimoNumero + 1, 3, '0', STR_PAD_LEFT);
+                }
+
             // 4. Procesar las inscripciones
             foreach ($request->inscripciones as $inscripcionData) {
                 // Procesar tutor de área si existe
                 $tutorArea = null;
-                if ($request->has('existeTutor') && $request->existeTutor === true  && isset($inscripcionData['tutorArea'])) {
+                if (isset($inscripcionData['existeTutor']) &&
+                    filter_var($inscripcionData['existeTutor'], FILTER_VALIDATE_BOOLEAN) &&
+                    isset($inscripcionData['tutorArea'])) {
                     $personaTutorArea = $this->buscarOCrearPersona($inscripcionData['tutorArea']);
                     $tutorArea = $this->buscarOCrearTutor($personaTutorArea->idPersona, $inscripcionData['tutorArea']);
                 }
@@ -57,6 +72,7 @@ class InscripcionController extends Controller
                 $areaCategoria = OlimpiadaAreaCategoria::where('idArea', $inscripcionData['area'])
                 ->where('idCategoria', $inscripcionData['categoria'])
                 ->first();
+
 
                 // Crear la inscripción
                 Inscripcion::create([
@@ -68,6 +84,7 @@ class InscripcionController extends Controller
                     'idTutorArea' => $tutorArea ? $tutorArea->idPersona : null,
                     'formaInscripcion' => $inscripcionData['formaInscripcion'],
                     'registrandose' => $inscripcionData['registrandose'],
+                    'codigoInscripcion' => $codigoGrupo,
                 ]);
             }
 
@@ -78,7 +95,8 @@ class InscripcionController extends Controller
                 'message' => 'Inscripción completada exitosamente',
                 'data' => [
                     'olimpista_id' => $olimpista->idPersona,
-                    'tutor_responsable_id' => $tutorResponsable->idPersona
+                    'tutor_responsable_id' => $tutorResponsable->idPersona,
+                    'codigoInscripcion' => $codigoGrupo
                 ]
             ]);
 
@@ -415,9 +433,9 @@ class InscripcionController extends Controller
         ], 200);
     }
 
-function finishRegister($idTutorResponsable)
+function finishRegister($idTutorResponsable, $codigoInscripcion)
 {
-    Inscripcion::where('idTutorResponsable', $idTutorResponsable)
+    Inscripcion::where('idTutorResponsable', $idTutorResponsable)->where('codigoInscripcion', $codigoInscripcion)
         ->update(['registrandose' => false]);
 }
 

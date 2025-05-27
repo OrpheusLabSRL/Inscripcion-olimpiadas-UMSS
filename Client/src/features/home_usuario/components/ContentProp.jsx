@@ -2,24 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../Styles/ContentProp.css";
 
-
 function ContentProp() {
-  const [showButtons, setShowButtons] = useState(false);
-  const [textColor, setTextColor] = useState('black'); // Inicializamos el color de texto como negro
   const navigate = useNavigate();
-
-  const handleStartClick = () => {
-    setShowButtons(true);
-    setTextColor('white'); 
-  };
-
-  const handleStartRegistration = () => {
-    navigate('/register/tutor-form', { state: { formType: 'new' } });
-  };
-
-  const handleContinueRegistration = () => {
-    navigate('/register/tutor-form', { state: { formType: 'continue' } });
-  };
   const [selectedCategory, setSelectedCategory] = useState('Matemáticas');
 
   const categoryImages = {
@@ -33,32 +17,6 @@ function ContentProp() {
 
   return (
     <main className="content-container">
-      <section className={`event-description ${showButtons ? 'active' : ''}`}>
-        <h2 className={textColor === 'white' ? 'white-text' : ''}>Olimpiadas Científicas O! SanSi</h2>
-        <p className={textColor === 'white' ? 'white-text' : ''}>Descubre y desarrolla tu potencial científico en las áreas más fascinantes de la ciencia</p>
-
-        {!showButtons ? (
-          <button className="start-adventure" onClick={handleStartClick}>
-            Comienza tu Aventura Científica
-          </button>
-        ) : (
-          <div className="action-buttons">
-            <button
-              className="action-button start-button"
-              onClick={handleStartRegistration}
-            >
-              Empezar Inscripción
-            </button>
-            <button
-              className="action-button continue-button"
-              onClick={handleContinueRegistration}
-            >
-              Continuar Inscripción
-            </button>
-          </div>
-        )}
-      </section>
-
       <section className="areas-competence">
         <h2>Áreas de Competencia</h2>
         <div className="competence-grid">
@@ -94,7 +52,6 @@ function ContentProp() {
           </div>
         </div>
       </section>
-
 
       <section className="registration-process">
         <h2>Proceso de Inscripción</h2>

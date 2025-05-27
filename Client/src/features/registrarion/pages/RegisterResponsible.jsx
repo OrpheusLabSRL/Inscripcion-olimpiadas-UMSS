@@ -10,7 +10,7 @@ import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import { MdCleaningServices } from "react-icons/md";
@@ -22,6 +22,7 @@ import { getPersonData } from "../../../api/inscription.api";
 export const RegisterResponsible = () => {
   const [isReadOnly, setIsReadOnly] = useState({});
   const [currentStep, sertCurrentStep] = useState(1);
+  const [isTutorResponsible, setIsTutorResponsible] = useState(false);
   const [totalSteps, setTotalStep] = useState(4);
   const navigation = useNavigate();
   const location = useLocation();
@@ -49,6 +50,7 @@ export const RegisterResponsible = () => {
     { value: "Profesor", label: "Profesor" },
     { value: "Padre/Madre", label: "Papá/Mamá" },
     { value: "Estudiante", label: "Estudiante" },
+    { value: "Tutor Legal", label: "Tutor Legal" },
   ];
 
   const watchedNombre = watch("Nombre");
@@ -111,12 +113,14 @@ export const RegisterResponsible = () => {
       const personData = await getPersonData(
         sessionStorage.getItem("CiResponsible")
       );
+      setIsTutorResponsible(personData.data.data.esTutorResponsable);
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
         setValue("Email", personData.data.data.correoElectronico);
         setIsReadOnly((prev) => ({
           ...prev,
+          Ci: true,
           Nombre: true,
           Apellido: true,
           Email: true,
@@ -128,6 +132,7 @@ export const RegisterResponsible = () => {
         setValue("Numero_Celular", personData.data.data.telefono);
         setIsReadOnly((prev) => ({
           ...prev,
+          Ci: true,
           Tipo_Tutor: true,
           Numero_Celular: true,
         }));
@@ -176,15 +181,49 @@ export const RegisterResponsible = () => {
   };
 
   const onSubmit = async (data) => {
-    try {
-      sessionStorage.setItem("prevPage", location.pathname);
-      navigation(manual === "true" ? "/register/olympian" : "/register/excel", {
-        state: { from: location.pathname },
-        data,
+    if (isTutorResponsible) {
+      const confirmacion = await Swal.fire({
+        title: "Inscripción activa detectada",
+        text: "Ya tienes una inscripción en proceso. ¿Deseas continuar con esta nueva inscripción o continuar con la anterior?",
+        icon: "warning",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Nueva inscripción",
+        denyButtonText: "Inscripción anterior",
+        cancelButtonText: "Cancelar",
       });
-    } catch (error) {
-      console.log(error);
-      swal("Error al registrar los datos");
+
+      if (confirmacion.isConfirmed) {
+        try {
+          sessionStorage.setItem("prevPage", location.pathname);
+          navigation(
+            manual === "true" ? "/register/olympian" : "/register/excel",
+            {
+              state: { from: location.pathname },
+              data,
+            }
+          );
+        } catch (error) {
+          console.log(error);
+          swal("Error al registrar los datos");
+        }
+      } else if (confirmacion.isDenied) {
+        navigation("/register/tutor-form", { state: { formType: "continue" } });
+      }
+    } else {
+      try {
+        sessionStorage.setItem("prevPage", location.pathname);
+        navigation(
+          manual === "true" ? "/register/olympian" : "/register/excel",
+          {
+            state: { from: location.pathname },
+            data,
+          }
+        );
+      } catch (error) {
+        console.log(error);
+        swal("Error al registrar los datos");
+      }
     }
   };
 

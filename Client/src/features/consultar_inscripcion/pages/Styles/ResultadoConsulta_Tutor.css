@@ -1,0 +1,12 @@
+.forma-inscripcion {
+  color: #000000;
+  margin-bottom: 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.forma-inscripcion strong {
+  color: #000000;
+  font-weight: 400;
+} 

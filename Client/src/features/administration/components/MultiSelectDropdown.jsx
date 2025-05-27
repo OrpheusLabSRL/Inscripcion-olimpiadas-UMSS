@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { FiAlertCircle } from "react-icons/fi";
 import "../Styles/Dropdown.css";
 
 const MultiSelectDropdown = ({
@@ -10,6 +11,9 @@ const MultiSelectDropdown = ({
   placeholder = "Seleccione una opción",
   error = false,
   errorMessage = "",
+  size = "medium",
+  className = "",
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -39,47 +43,55 @@ const MultiSelectDropdown = ({
     .join(", ");
 
   return (
-    <div className="multi-dropdown-container" ref={dropdownRef}>
+    <div
+      className={`dropdown-container ${error ? "has-error" : ""} ${className}`}
+      ref={dropdownRef}
+    >
       {label && (
-        <label
-          className="multi-dropdown-label"
-          style={error ? { color: "#dc2626" } : {}}
-        >
+        <label className={`dropdown-label ${size === "large" ? "large" : ""}`}>
           {label}
         </label>
       )}
 
       <div
-        className={`multi-dropdown-header ${error ? "error-border" : ""}`}
-        onClick={() => setIsOpen(!isOpen)}
-        style={{
-          color: selectedLabels ? "inherit" : error ? "#dc2626" : "#666",
-        }}
+        className={`dropdown-wrapper ${size} ${error ? "input-error" : ""} ${
+          disabled ? "disabled" : ""
+        }`}
+        onClick={() => !disabled && setIsOpen(!isOpen)}
       >
-        {selectedLabels || placeholder}
+        <span className="dropdown-selected">
+          {selectedLabels || placeholder}
+        </span>
         <span className="dropdown-arrow">{isOpen ? "▲" : "▼"}</span>
       </div>
 
-      {isOpen && (
+      {isOpen && !disabled && (
         <div className="multi-dropdown-options">
           {options.map((option) => (
             <label key={option.value} className="multi-dropdown-item">
-              <span className="custom-circle">
+              <div className="checkbox-container">
                 <input
                   type="checkbox"
                   name={name}
                   value={option.value}
                   checked={selectedValues.includes(option.value)}
                   onChange={() => toggleOption(option.value)}
+                  className="hidden-checkbox"
                 />
-              </span>
+                <span className="custom-checkbox"></span>
+              </div>
               <span className="multi-label">{option.label}</span>
             </label>
           ))}
         </div>
       )}
 
-      {error && <p className="error-message">{errorMessage}</p>}
+      {error && errorMessage && (
+        <p className="error-message">
+          <FiAlertCircle style={{ marginRight: "4px" }} />
+          {errorMessage}
+        </p>
+      )}
     </div>
   );
 };

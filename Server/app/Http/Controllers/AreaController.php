@@ -3,16 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Area;
-use App\Models\Olimpiada;
-use App\Models\OlimpiadaAreaCategoria;
 use Illuminate\Http\Request;
 
 class AreaController extends Controller
 {
-    // API: Obtener todas las áreas
-    public function index()
+    // API: Obtener todas las áreas (solo activas por defecto)
+    public function index(Request $request)
     {
-        return response()->json(Area::all(), 200);
+        // Permitir filtrar por estadoArea (true, false o todos)
+        $estado = $request->query('estadoArea');
+
+        $query = Area::query();
+
+        if ($estado !== null) {
+            // Convertir a booleano si es 'true' o 'false' string
+            if ($estado === 'true' || $estado === '1') {
+                $query->where('estadoArea', true);
+            } elseif ($estado === 'false' || $estado === '0') {
+                $query->where('estadoArea', false);
+            }
+            // Si no es ninguno, no filtra
+        } else {
+            // Por defecto mostrar solo activas
+            $query->where('estadoArea', true);
+        }
+
+        $areas = $query->get();
+
+        return response()->json($areas, 200);
     }
 
     // Guardar área vía API
@@ -21,69 +39,68 @@ class AreaController extends Controller
         $request->validate([
             'nombreArea' => 'required|string',
             'descripcionArea' => 'nullable|string',
-            'costoArea' => 'required|numeric',
-            'estadoArea' => 'required|boolean'
+            'estadoArea' => 'sometimes|boolean', // nuevo campo estadoArea opcional
         ]);
 
-        Area::create($request->all());
+        $data = $request->only(['nombreArea', 'descripcionArea']);
+        if ($request->has('estadoArea')) {
+            $data['estadoArea'] = $request->boolean('estadoArea');
+        } else {
+            $data['estadoArea'] = true;
+        }
+
+        Area::create($data);
 
         return response()->json(['message' => 'Área registrada correctamente']);
     }
 
-    // Obtener estructura completa del programa (área + categoría + grados) desde la nueva tabla pivote
+    // Obtener estructura del programa (área + categoría + grados + costo)
     public function getProgramaCompleto()
-{
-    $programa = [];
-
-    $areas = Area::where('estadoArea', true)
-        ->with(['categorias' => function ($query) {
+    {
+        // Solo áreas activas
+        $areas = Area::where('estadoArea', true)->with(['categorias' => function ($query) {
             $query->where('estadoCategoria', true)
                 ->with(['grados' => function ($q) {
                     $q->where('estadoGrado', true);
                 }]);
         }])->get();
 
-    foreach ($areas as $area) {
-        foreach ($area->categorias as $categoria) {
-            $grados = $categoria->grados;
+        $programa = [];
 
-            if ($grados->count() > 0) {
-                // Ordenamos grados por número
-                $gradosOrdenados = $grados->sortBy('numeroGrado')->values();
+        foreach ($areas as $area) {
+            foreach ($area->categorias as $categoria) {
+                $grados = $categoria->grados;
 
-                // Tomamos primer y último grado
-                $primero = $gradosOrdenados->first();
-                $ultimo = $gradosOrdenados->last();
+                if ($grados->count() > 0) {
+                    $gradosOrdenados = $grados->sortBy('numeroGrado')->values();
+                    $primero = $gradosOrdenados->first();
+                    $ultimo = $gradosOrdenados->last();
+                    $mismoNivel = $gradosOrdenados->every(fn($g) => $g->nivel === $primero->nivel);
 
-                // Verificamos si todos tienen el mismo nivel (Primaria, Secundaria)
-                $mismoNivel = $gradosOrdenados->every(fn($g) => $g->nivel === $primero->nivel);
+                    if ($gradosOrdenados->count() === 1) {
+                        $gradoFormateado = $this->formatearGrado($primero->numeroGrado, $primero->nivel);
+                    } elseif ($mismoNivel) {
+                        $gradoFormateado = "{$primero->numeroGrado}° a {$ultimo->numeroGrado}° {$primero->nivel}";
+                    } else {
+                        $gradoFormateado = $gradosOrdenados->map(function ($g) {
+                            return $this->formatearGrado($g->numeroGrado, $g->nivel);
+                        })->implode(' / ');
+                    }
 
-                // Construimos la cadena de grados
-                if ($gradosOrdenados->count() === 1) {
-                    $gradoFormateado = $this->formatearGrado($primero->numeroGrado, $primero->nivel);
-                } elseif ($mismoNivel) {
-                    $gradoFormateado = "{$primero->numeroGrado}° a {$ultimo->numeroGrado}° {$primero->nivel}";
-                } else {
-                    // Si hay niveles distintos (raro), los listamos separados
-                    $gradoFormateado = $gradosOrdenados->map(function ($g) {
-                        return $this->formatearGrado($g->numeroGrado, $g->nivel);
-                    })->implode(' / ');
+                    $programa[] = [
+                        'area' => $area->nombreArea,
+                        'nivel' => $categoria->nombreCategoria,
+                        'grados' => $gradoFormateado,
+                        'area_id' => $area->idArea,
+                        'categoria_id' => $categoria->idCategoria,
+                        'costo' => $categoria->pivot->costo,
+                    ];
                 }
-
-                // Agregamos al programa
-                $programa[] = [
-                    'area' => $area->nombreArea,
-                    'nivel' => $categoria->nombreCategoria,
-                    'grados' => $gradoFormateado,
-                    'area_id' => $area->idArea,
-                    'categoria_id' => $categoria->idCategoria,
-                ];
             }
         }
-    }
 
-    return response()->json($programa);
-}
+        return response()->json($programa);
+    }
 
     // Formato visual del grado
     private function formatearGrado($numero, $nivel)

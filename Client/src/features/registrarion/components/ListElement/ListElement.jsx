@@ -84,7 +84,7 @@ export const ListElement = ({ data }) => {
 
       <GenericModal modalIsOpen={modalIsOpen} closeModal={closeModal}>
         <div className="olimpista-modal">
-          <div className="data-section">
+          <div className="data-section-summary">
             <div className="section-header">
               <h3>Datos de olimpista</h3>
             </div>
@@ -118,7 +118,7 @@ export const ListElement = ({ data }) => {
                 <span className="data-value">{data.departamento}</span>
               </div>
               <div className="data-item">
-                <span className="data-label">Provincia:</span>
+                <span className="data-label">Municipio:</span>
                 <span className="data-value">{data.municipio}</span>
               </div>
               <div className="data-item">
@@ -130,7 +130,7 @@ export const ListElement = ({ data }) => {
 
           {data.inscripciones.map((inscripcion, index) => (
             <div key={`inscripcion-${index}`}>
-              <div className="data-section">
+              <div className="data-section-summary">
                 <div className="section-header">
                   <h3>Área {index + 1}</h3>
                 </div>
@@ -198,7 +198,7 @@ export const ListElement = ({ data }) => {
                 </div>
               </div>
 
-              <div className="data-section">
+              <div className="data-section-summary">
                 <div className="section-header">
                   <h3>Tutor legal para Área {index + 1}</h3>
                 </div>
@@ -245,7 +245,7 @@ export const ListElement = ({ data }) => {
             </div>
           ))}
 
-          <div className="data-section">
+          <div className="data-section-summary">
             <div className="section-header">
               <h3>Responsable de inscripción</h3>
             </div>
