@@ -75,47 +75,20 @@ class BoletaPagoController extends Controller
 
     public function generarPago(Request $request)
     {
-        $codigoBoleta = $request->input('codigoBoleta');
-        $payerName = $request->input('payerName');
-        $montoTotal = $request->input('montoTotal');
-        $codigoBoleta = intval(trim($codigoBoleta));
-        $montoTotal = floatval($montoTotal);
-        \Log::info('Checking codigoBoleta: ' . $codigoBoleta . ', payerName: ' . $payerName . ', montoTotal: ' . $montoTotal);
+        $numeroControlRaw = $request->input('numeroControl');
+        if (!$numeroControlRaw || !preg_match('/(\d+)/', $numeroControlRaw, $matches)) {
+        return response()->json(['exists' => false, 'paid' => false]);
+        }
+        $numeroControl = $matches[1];
+        \Log::info('Checking numeroControl: ' . $numeroControl);
 
-        // Normalize strings: lowercase and remove accents
-        $normalize = function ($str) {
-            $str = mb_strtolower($str, 'UTF-8');
-            $str = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $str);
-            return $str;
-        };
-
-        $payerNameNormalized = $normalize($payerName);
-        // Remove punctuation and extra spaces from payerNameNormalized
-        $payerNameNormalized = preg_replace('/[^\p{L}\p{N}\s]/u', '', $payerNameNormalized);
-        $payerNameNormalized = preg_replace('/\s+/', ' ', $payerNameNormalized);
-        $payerNameNormalized = trim($payerNameNormalized);
-
-        $nameParts = preg_split('/\s+/', $payerNameNormalized);
-        if (count($nameParts) < 2) {
-            return response()->json(['exists' => false]);
+        if (!$numeroControl) {
+            return response()->json(['exists' => false, 'paid' => false]);
         }
 
-        // Query to check if boleta exists with matching codigoBoleta, payer name parts, and montoTotal
         $boleta = \DB::table('boletas_pagos')
-            ->join('tutores', 'boletas_pagos.idTutor', '=', 'tutores.idPersona')
-            ->join('personas', 'tutores.idPersona', '=', 'personas.idPersona')
-            ->where('boletas_pagos.codigoBoleta', $codigoBoleta)
-            ->where('boletas_pagos.montoTotal', $montoTotal)
-            ->where(function ($query) use ($nameParts) {
-                foreach ($nameParts as $part) {
-                    $part = strtolower($part);
-                    $query->where(function ($q) use ($part) {
-                        $q->whereRaw('LOWER(personas.apellido) LIKE ?', ["%{$part}%"])
-                          ->orWhereRaw('LOWER(personas.nombre) LIKE ?', ["%{$part}%"]);
-                    });
-                }
-            })
-            ->select('boletas_pagos.estadoBoletaPago')
+            ->where('numeroControl', $numeroControl)
+            ->select('estadoBoletaPago')
             ->first();
 
         if (!$boleta) {
@@ -129,8 +102,27 @@ class BoletaPagoController extends Controller
 
     public function confirmarPago(Request $request)
     {
-        $codigoBoleta = $request->input('codigoBoleta');
-        $boleta = BoletaPago::where('codigoBoleta', $codigoBoleta)->first();
+        $numeroControlRaw = $request->input('numeroControl');
+
+        if (!$numeroControlRaw) {
+            return response()->json(['message' => 'Número de control no proporcionado.'], 400);
+        }
+
+        // Normalizar: pasar a minúsculas y eliminar espacios, signos de puntuación y comillas
+        $normalized = strtolower($numeroControlRaw);
+        $normalized = preg_replace('/[\s\.\:\-\'\"]/', '', $normalized);
+
+        // Buscar patrón "nro" seguido de caracteres no alfanuméricos, luego "control" seguido de caracteres no alfanuméricos y luego dígitos
+        // Si no se encuentra el patrón, intentar extraer solo dígitos
+        if (preg_match('/nro[^a-zA-Z0-9]*control[^a-zA-Z0-9]*[:\s\-+´\{\}\.<>\w]*?(\d+)/i', $normalized, $matches)) {
+            $numeroControl = $matches[1];
+        } elseif (preg_match('/(\d+)/', $normalized, $matches)) {
+            $numeroControl = $matches[1];
+        } else {
+            return response()->json(['message' => 'Número de control inválido.'], 400);
+        }
+
+        $boleta = BoletaPago::where('numeroControl', $numeroControl)->first();
 
         if (!$boleta) {
             return response()->json(['message' => 'Boleta no encontrada.'], 404);
@@ -139,6 +131,9 @@ class BoletaPagoController extends Controller
         $boleta->estadoBoletaPago = 1;
         $boleta->fechaPago = now()->toDateString();
         $boleta->save();
+
+        // Obtener el codigoBoleta de la boleta encontrada
+        $codigoBoleta = $boleta->codigoBoleta;
 
         // Actualizar estadoInscripcion a 1 en la tabla inscripciones para las inscripciones con este codigoBoleta
         Inscripcion::where('codigoBoleta', $codigoBoleta)
