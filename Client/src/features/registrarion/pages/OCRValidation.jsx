@@ -8,7 +8,7 @@ export const OCRValidation = () => {
   const [file, setFile] = useState(null);
   const [ocrResult, setOcrResult] = useState("");
   const [processing, setProcessing] = useState(false);
-  const [codigoBoleta, setCodigoBoleta] = useState(null);
+  const [controlBoleta, setControlBoleta] = useState(null);
   const [boletaExists, setBoletaExists] = useState(null);
   const [montoTotal, setMontoTotal] = useState(null);
   const navigate = useNavigate();
@@ -16,61 +16,21 @@ export const OCRValidation = () => {
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setOcrResult("");
-    setCodigoBoleta(null);
+    setControlBoleta(null);
     setBoletaExists(null);
     setMontoTotal(null);
   };
 
-  const extractCodigoBoleta = (text) => {
-    // More flexible extraction of codigo boleta allowing noise around "nro control"
-    const regex = /nro[^0-9]*control[^0-9]*[:\s]*([\d]+)/i;
+  const extractControlBoleta = (text) => {
+    // Extract numeroControl from noisy string, e.g. "43124asdfad514Nrodsads.Co4532ntrol     -{+´-: dfasfdsa<NroControl>+-´ñ5432-2."
+    // Strategy: find "nro" and "control" words ignoring non-alphanumeric chars, then extract following digits
+    const regex = /nro[^a-zA-Z0-9]*control[^a-zA-Z0-9]*[:\s\-+´\{\}\.<>\w]*?(\d+)/i;
     const match = text.match(regex);
     return match ? match[1].trim() : null;
-  };
-
-  const extractPayerName = (text) => {
-    // More flexible extraction of payer name allowing noise around "Recibi de"
-    // Normalize accents to non-accented characters for consistent matching
-    const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const regex = /recibi de[^A-Z]*([A-Z\s]+?)(?:\s+por concepto de|$)/i;
-    const match = normalizedText.match(regex);
-    return match ? match[1].trim() : null;
-  };
-
-  const extractMontoTotal = (text) => {
-    // More flexible extraction of monto total, allowing for noise around "Total" and "Bs"
-    // Match pattern with optional characters around "Total" and "Bs" and capture number
-    const regex = /total[^0-9]*bs[^0-9]*([\d.,]+)/i;
-    const match = text.match(regex);
-    if (match) {
-      // Convert to float, replace comma with dot if needed
-      const montoStr = match[1].replace(',', '.');
-      const monto = parseFloat(montoStr);
-      return isNaN(monto) ? null : monto;
-    }
-    return null;
   };
   
-  const splitPayerName = (name) => {
-    if (!name) return { lastNames: null, firstNames: null };
-    const parts = name.trim().split(/\s+/);
-    let lastNames = "";
-    let firstNames = "";
-    if (parts.length === 1) {
-      lastNames = parts[0];
-      firstNames = "";
-    } else if (parts.length === 2) {
-      lastNames = parts[0];
-      firstNames = parts[1];
-    } else {
-      // Assume first two words are last names, rest are first names
-      lastNames = parts.slice(0, 2).join(" ");
-      firstNames = parts.slice(2).join(" ");
-    }
-    return { lastNames, firstNames };
-  };
-
-  const checkCodigoBoleta = async (codigo) => {
+     
+  const checkControlBoleta = async (control) => {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/boletaPago/check", {
         method: "POST",
@@ -78,9 +38,7 @@ export const OCRValidation = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ 
-          codigoBoleta: codigo,
-          payerName: extractPayerName(ocrResult),
-          montoTotal: montoTotal
+          numeroControl: control
         }),
       });
       const data = await response.json();
@@ -101,26 +59,22 @@ export const OCRValidation = () => {
 
     setProcessing(true);
     setOcrResult("");
-    setCodigoBoleta(null);
+    setControlBoleta(null);
     setBoletaExists(null);
 
     try {
       const { data } = await Tesseract.recognize(file, "spa", {
-        logger: (m) => {
-          // Optionally handle progress updates here
-          // console.log(m);
-        },
+        logger: (m) => {},
       });
       const text = data.text;
       setOcrResult(text);
 
-      const codigo = extractCodigoBoleta(text);
-      setCodigoBoleta(codigo);
+      const control = extractControlBoleta(text);
+      setControlBoleta(control);
 
-      // Remove automatic backend check here
-      // User will click button to check
-      const monto = extractMontoTotal(text);
-      setMontoTotal(monto);
+      if (control) {
+        await checkControlBoleta(control);
+      }
     } catch (error) {
       setOcrResult("Error al procesar la imagen: " + error.message);
       setBoletaExists(false);
@@ -135,11 +89,9 @@ export const OCRValidation = () => {
 
   const [boletaPaid, setBoletaPaid] = useState(false);
 
-  // Removed duplicate declaration of checkCodigoBoleta to fix redeclaration error
-
-  const confirmarPago = async (codigo) => {
-    if (!codigo) {
-      alert("Código de boleta no detectado. Por favor, procese una imagen válida.");
+  const confirmarPago = async (control) => {
+    if (!control) {
+      alert("Código de control no detectado. Por favor, procese una imagen válida.");
       return;
     }
     if (boletaPaid) {
@@ -147,16 +99,13 @@ export const OCRValidation = () => {
       return;
     }
     try {
-      // Check boleta existence and payment status before confirming payment
       const checkResponse = await fetch("http://127.0.0.1:8000/api/boletaPago/check", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ 
-          codigoBoleta: codigo,
-          payerName: extractPayerName(ocrResult),
-          montoTotal: montoTotal
+          numeroControl: control
         }),
       });
       const checkData = await checkResponse.json();
@@ -170,13 +119,12 @@ export const OCRValidation = () => {
         setBoletaPaid(true);
         return;
       }
-      // Proceed to confirm payment
       const response = await fetch("http://127.0.0.1:8000/api/boletaPago/confirmarPago", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ codigoBoleta: codigo }),
+        body: JSON.stringify({ numeroControl: control }),
       });
       const data = await response.json();
       alert(data.message);
@@ -199,23 +147,29 @@ export const OCRValidation = () => {
         </form>
         {ocrResult && (
           <div style={{marginTop: "10px", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", gap: "0.5rem"}}>
-            <div><strong>Código de Boleta detectado:</strong> <span>{codigoBoleta ? codigoBoleta : "N/A"}</span></div>
-            <div><strong>Apellidos:</strong> {(() => {
-              const payerName = extractPayerName(ocrResult);
-              const { lastNames } = splitPayerName(payerName);
-              return lastNames ? lastNames : "N/A";
-            })()}</div>
-            <div><strong>Nombres:</strong> {(() => {
-              const payerName = extractPayerName(ocrResult);
-              const { firstNames } = splitPayerName(payerName);
-              return firstNames ? firstNames : "N/A";
-            })()}</div>
-            <div><strong>Monto Total:</strong> {montoTotal ? montoTotal + " Bs." : "N/A"}</div>
+            <div><strong>Código de Control detectado:</strong> <span>{controlBoleta ? controlBoleta : "N/A"}</span></div>
           </div>
         )}
-        {codigoBoleta && (
+        {controlBoleta && (
           <>
-            <button onClick={() => confirmarPago(codigoBoleta)} style={{marginTop: "10px", marginRight: "10px", width: "150px", height: "40px", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer", verticalAlign: "middle"}}>
+            <button 
+              onClick={() => confirmarPago(controlBoleta)} 
+              disabled={!boletaExists || boletaPaid}
+              style={{
+                marginTop: "10px", 
+                marginRight: "10px", 
+                width: "150px", 
+                height: "40px", 
+                borderRadius: "6px", 
+                border: "1px solid #1e40af", 
+                backgroundColor: (!boletaExists || boletaPaid) ? "#a0aec0" : "#1e40af", 
+                color: "white", 
+                fontWeight: "600", 
+                fontSize: "1rem", 
+                cursor: (!boletaExists || boletaPaid) ? "not-allowed" : "pointer", 
+                verticalAlign: "middle"
+              }}
+            >
               Confirmar Pago
             </button>
           </>
