@@ -27,7 +27,7 @@ import ResultadoConsulta from "./features/consultar_inscripcion/pages/ResultadoC
 import ResultadoConsulta_Tutor from "./features/consultar_inscripcion/pages/ResultadoConsulta_Tutor";
 import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
-import { OCRValidation } from "./features/registrarion/pages/ocrvalidation";
+import { OCRValidation } from "./features/registrarion/pages/OCRValidation";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
