@@ -85,7 +85,9 @@ Route::delete('/eliminarOlimpiadas/{idOlimpiada}/area/{idArea}', [OlimpiadaAreaC
 
 
 
-Route::get('/boletas/generar/{idTutor}/{codigoInscripcion}/get', [BoletaPagoController::class, 'generarBoleta']);
+Route::get('/boletas/generar/{idTutor}/{codigoInscripcion}', [BoletaPagoController::class, 'generarBoleta']);
+Route::get('/boletas/reimprimir/{codigoBoleta}', [BoletaPagoController::class, 'reimprimirBoleta']);
+
 
 Route::post('/boletaPago/check', [BoletaPagoController::class, 'generarPago']);
 Route::post('/boletaPago/confirmarPago', [BoletaPagoController::class, 'confirmarPago']);

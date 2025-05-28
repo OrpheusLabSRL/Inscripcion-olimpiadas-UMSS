@@ -22,9 +22,6 @@ class BoletaPagoController extends Controller
             if (!$tutor) {
                 return response()->json(['message' => 'Tutor no encontrado.'], 404);
             }
-
-
-
             // Obtener inscripciones pendientes con relaciones cargadas
             $inscripciones = Inscripcion::with([
                 'olimpista.persona',
@@ -32,7 +29,6 @@ class BoletaPagoController extends Controller
             ])
                 ->where('idTutorResponsable', $idTutor)
                 ->where('codigoInscripcion', $codigoInscripcion)
-                ->whereNull('codigoBoleta')
                 ->get();
 
             if ($inscripciones->isEmpty()) {
@@ -40,9 +36,10 @@ class BoletaPagoController extends Controller
             }
 
             // Calcular monto total sumando el costo de cada área
-            $monto = $inscripciones->sum(function($inscripcion) {
-                return $inscripcion->OlimpiadaAreaCategoria->area->costoArea ?? 0;
+            $monto = $inscripciones->sum(function ($inscripcion) {
+                return $inscripcion->OlimpiadaAreaCategoria->costo ?? 0;
             });
+
 
             // Crear boleta de pago
             $boleta = BoletaPago::create([
@@ -111,7 +108,7 @@ class BoletaPagoController extends Controller
                     $part = strtolower($part);
                     $query->where(function ($q) use ($part) {
                         $q->whereRaw('LOWER(personas.apellido) LIKE ?', ["%{$part}%"])
-                          ->orWhereRaw('LOWER(personas.nombre) LIKE ?', ["%{$part}%"]);
+                            ->orWhereRaw('LOWER(personas.nombre) LIKE ?', ["%{$part}%"]);
                     });
                 }
             })
@@ -146,4 +143,40 @@ class BoletaPagoController extends Controller
 
         return response()->json(['message' => 'Pago confirmado exitosamente.']);
     }
+
+    public function reimprimirBoleta($codigoBoleta)
+{
+    try {
+        $boleta = BoletaPago::where('codigoBoleta', $codigoBoleta)->first();
+
+        if (!$boleta) {
+            return response()->json(['message' => 'Boleta no encontrada.'], 404);
+        }
+
+        $tutor = Tutor::find($boleta->idTutor);
+        $inscripciones = Inscripcion::with([
+            'olimpista.persona',
+            'OlimpiadaAreaCategoria.area'
+        ])->where('codigoBoleta', $codigoBoleta)->get();
+
+        if ($inscripciones->isEmpty()) {
+            return response()->json(['message' => 'No hay inscripciones asociadas a esta boleta.'], 404);
+        }
+
+        $pdf = Pdf::loadView('boletas.plantillas', [
+            'boleta' => $boleta,
+            'tutor' => $tutor,
+            'inscripciones' => $inscripciones,
+            'fecha' => now()->toDateString(), // Cambia la fecha solo para mostrar
+            'montoTotal' => $boleta->montoTotal,
+        ]);
+
+        return $pdf->download("boleta_pago_reimpresion_{$boleta->codigoBoleta}.pdf");
+
+    } catch (\Exception $e) {
+        Log::error('Error al reimprimir la boleta: ' . $e->getMessage());
+        return response()->json(['message' => 'Error interno al reimprimir la boleta.'], 500);
+    }
+}
+
 }
