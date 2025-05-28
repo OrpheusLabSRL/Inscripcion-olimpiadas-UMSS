@@ -90,6 +90,8 @@ Route::get('/boletas/generar/{idTutor}/{codigoInscripcion}/get', [BoletaPagoCont
 Route::post('/boletaPago/check', [BoletaPagoController::class, 'generarPago']);
 Route::post('/boletaPago/confirmarPago', [BoletaPagoController::class, 'confirmarPago']);
 
+Route::get('/boletaPago/boletasByTutor/{tutorId}', [BoletaPagoController::class, 'getBoletasByTutor']);
+
 // Excel
 Route::post('/register-from-excel', [ExcelController::class, 'registerFromExcel']);
 Route::post('/validate-excel-data', [ExcelController::class, 'validateExcelData']);
