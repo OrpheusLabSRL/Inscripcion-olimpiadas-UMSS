@@ -43,11 +43,13 @@ class BoletaPagoController extends Controller
                 return $inscripcion->OlimpiadaAreaCategoria->area->costoArea ?? 0;
             });
 
-            // Crear boleta de pago
+            // Crear boleta de pago con numeroControl generado
+            $numeroControl = strtoupper(uniqid('NC'));
             $boleta = BoletaPago::create([
                 'idTutor' => $idTutor,
                 'fechaEmision' => now()->toDateString(),
                 'montoTotal' => $monto,
+                'numeroControl' => $numeroControl,
             ]);
 
             // Asignar código de boleta a cada inscripción
