@@ -433,10 +433,15 @@ class InscripcionController extends Controller
         ], 200);
     }
 
-function finishRegister($idTutorResponsable, $codigoInscripcion)
+public function finishRegister($idTutorResponsable, $codigoInscripcion)
 {
     Inscripcion::where('idTutorResponsable', $idTutorResponsable)->where('codigoInscripcion', $codigoInscripcion)
         ->update(['registrandose' => false]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Registro finalizado correctamente'
+    ]);
 }
 
 
