@@ -9,8 +9,6 @@ import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
 import { ListElement } from "../ListElement/ListElement";
 
 //api
-import { finishRegistering } from "../../../../api/inscription.api";
-
 export const ListInscription = ({
   dataOlympians,
   codigoInscripcion,
@@ -39,10 +37,25 @@ export const ListInscription = ({
 
     if (confirmacion.isConfirmed) {
       try {
-        await finishRegistering(
-          sessionStorage.getItem("tutorInscripcionId"),
-          codigoInscripcion
-        );
+        // Depurar valores de tutorId y codigoInscripcion
+        const tutorId = sessionStorage.getItem("tutorInscripcionId");
+        console.log("tutorId:", tutorId);
+        console.log("codigoInscripcion (raw):", codigoInscripcion);
+        let cleanCodigoInscripcion = "";
+        if (typeof codigoInscripcion === "string") {
+          cleanCodigoInscripcion = codigoInscripcion.replace(/^\/+/, '');
+        } else if (typeof codigoInscripcion === "number") {
+          cleanCodigoInscripcion = codigoInscripcion.toString();
+        } else {
+          cleanCodigoInscripcion = String(codigoInscripcion);
+        }
+        console.log("codigoInscripcion (clean):", cleanCodigoInscripcion);
+        if (!tutorId || !cleanCodigoInscripcion) {
+          Swal.fire("Error", "Faltan datos necesarios para finalizar el registro.", "error");
+          return;
+        }
+        const url = `/api/tutor/${tutorId}/${cleanCodigoInscripcion}/inscripciones/update`;
+        await axios.put(url);
         setRegistering(false);
       } catch (error) {
         console.error("Error al finalizar el registro:", error);
