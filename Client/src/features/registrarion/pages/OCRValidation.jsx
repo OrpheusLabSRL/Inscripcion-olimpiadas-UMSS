@@ -21,7 +21,11 @@ export const OCRValidation = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.boletas && data.boletas.length > 0) {
-            setUploadEnabled(true);
+            // Filtrar boletas que no estén pagadas (estadoBoletaPago != 1)
+            const pendingBoletas = data.boletas.filter(
+              (boleta) => boleta.estadoBoletaPago !== 1
+            );
+            setUploadEnabled(pendingBoletas.length > 0);
           } else {
             setUploadEnabled(false);
           }
@@ -199,7 +203,7 @@ export const OCRValidation = () => {
         )}
         {uploadEnabled === false && (
           <div style={{marginTop: "10px", color: "red"}}>
-            No tiene boletas de pago asociadas. No puede subir comprobantes hasta que tenga al menos una boleta.
+            No tiene boletas de pago pendientes. No puede subir comprobantes hasta que tenga al menos una boleta pendiente.
           </div>
         )}
         {boletaExists !== null && (
