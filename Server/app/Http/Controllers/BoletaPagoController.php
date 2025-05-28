@@ -43,8 +43,8 @@ class BoletaPagoController extends Controller
                 return $inscripcion->OlimpiadaAreaCategoria->area->costoArea ?? 0;
             });
 
-            // Crear boleta de pago con numeroControl generado
-            $numeroControl = strtoupper(uniqid('NC'));
+            // Crear boleta de pago con numeroControl generado (número aleatorio de hasta 6 dígitos)
+            $numeroControl = str_pad(strval(random_int(0, 999999)), 6, '0', STR_PAD_LEFT);
             $boleta = BoletaPago::create([
                 'idTutor' => $idTutor,
                 'fechaEmision' => now()->toDateString(),
@@ -96,7 +96,7 @@ class BoletaPagoController extends Controller
             return response()->json(['exists' => false, 'paid' => false]);
         }
 
-        $isPaid = $boleta->estadoBoletaPago == 1;
+        $isPaid = $boleta->estadoBoletaPago == 0;
 
         return response()->json(['exists' => true, 'paid' => $isPaid]);
     }
@@ -129,7 +129,7 @@ class BoletaPagoController extends Controller
             return response()->json(['message' => 'Boleta no encontrada.'], 404);
         }
 
-        $boleta->estadoBoletaPago = 1;
+        $boleta->estadoBoletaPago = 0;
         $boleta->fechaPago = now()->toDateString();
         $boleta->save();
 

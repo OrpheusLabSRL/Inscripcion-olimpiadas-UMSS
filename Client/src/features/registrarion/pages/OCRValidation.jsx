@@ -21,9 +21,9 @@ export const OCRValidation = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.boletas && data.boletas.length > 0) {
-            // Filtrar boletas que no estén pagadas (estadoBoletaPago != 1)
+            // Filtrar boletas que no estén pagadas (estadoBoletaPago == 1)
             const pendingBoletas = data.boletas.filter(
-              (boleta) => boleta.estadoBoletaPago !== 1
+              (boleta) => boleta.estadoBoletaPago === 1
             );
             setUploadEnabled(pendingBoletas.length > 0);
           } else {
