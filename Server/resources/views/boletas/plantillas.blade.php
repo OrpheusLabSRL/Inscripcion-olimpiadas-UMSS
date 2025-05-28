@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Boleta de Pago</title>
+    <title>Orden de Pago</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -118,12 +118,15 @@
         <div class="codigo-boleta">
             N°: 00{{ $boleta->codigoBoleta }}
         </div>
-        <h2 class="titulo">Boleta de Inscripción</h2>
+        <h2 class="titulo">Orden de pago</h2>
     </div>
 
     <div class="info">
         <p><strong>Señor(es):</strong> {{ $tutor->persona->nombre }} {{ $tutor->persona->apellido }}</p>
         <p><strong>NIT/CI:</strong> {{ $tutor->persona->carnetIdentidad }}</p>
+        <p><strong>Código de Inscripción:</strong> {{ $inscripciones->first()->codigoInscripcion }}</p>
+
+      
     </div>
 
     <h3>Detalle de Inscripciones</h3>
@@ -144,7 +147,7 @@
                     <td>{{ $inscripcion->olimpista->persona->nombre }} {{ $inscripcion->olimpista->persona->apellido }}
                     </td>
                     <td>{{ $inscripcion->OlimpiadaAreaCategoria->area->nombreArea }}</td>
-                    <td>Bs{{ $inscripcion->OlimpiadaAreaCategoria->area->costoArea }}</td>
+                    <td>Bs{{ $inscripcion->OlimpiadaAreaCategoria->costo}}</td>
                 </tr>
             @endforeach
         </tbody>

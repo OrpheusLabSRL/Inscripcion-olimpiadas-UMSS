@@ -56,7 +56,7 @@ export const ListElementInscription = ({ inscription, index }) => {
 
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/boletas/generar/${tutorId}/${inscription.codigoInscripcion}/get`,
+        `http://localhost:8000/boletas/generar/${tutorId}/${inscription.codigoInscripcion}`,
         {
           responseType: "blob",
         }
