@@ -17,6 +17,7 @@ class BoletaPago extends Model
         'nombre_pagador',
         'fechaEmision',
         'montoTotal',
+        'numeroControl',
     ];
 
     public function inscripciones()
