@@ -64,23 +64,12 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                   {isOpen ? "Gestionar" : ""}
                 </Link>
               </li>
-              <li>
-                <NavLink>
-                  <HiOutlineClipboardDocumentList className="sidebar-icons" />
-                  {isOpen ? "Exámenes" : ""}
-                </NavLink>
-              </li>
+
               <li>
                 <Link to="/admin/reports">
                   <HiOutlineClipboardDocument className="sidebar-icons" />
                   {isOpen ? "Reportes" : ""}
                 </Link>
-              </li>
-              <li>
-                <NavLink>
-                  <FaRegCalendarAlt className="sidebar-icons" />
-                  {isOpen ? "Calendario" : ""}
-                </NavLink>
               </li>
             </>
           ) : (
