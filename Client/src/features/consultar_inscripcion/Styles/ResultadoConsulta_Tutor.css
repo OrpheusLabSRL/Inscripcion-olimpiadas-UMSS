@@ -52,6 +52,7 @@
     font-weight: 400;
 }
 
+/* Estilos para inscripciones manuales */
 .olimpistas-table {
     margin-top: 2rem;
     width: 100%;
@@ -85,37 +86,6 @@
     font-weight: 400;
 }
 
-/* Ajustar el ancho de las columnas específicas */
-.olimpistas-table th:nth-child(5),
-.olimpistas-table td:nth-child(5) {
-    width: 25%; /* Área */
-}
-
-.olimpistas-table th:nth-child(6),
-.olimpistas-table td:nth-child(6) {
-    width: 25%; /* Categoría */
-}
-
-.olimpistas-table th:nth-child(4),
-.olimpistas-table td:nth-child(4) {
-    width: 25%; /* Tipo de Tutor */
-}
-
-.olimpistas-table th:nth-child(7),
-.olimpistas-table td:nth-child(7) {
-    width: 25%; /* Estado de Pago */
-}
-
-/* Las otras columnas se ajustarán automáticamente */
-.olimpistas-table th:nth-child(1),
-.olimpistas-table td:nth-child(1),
-.olimpistas-table th:nth-child(2),
-.olimpistas-table td:nth-child(2),
-.olimpistas-table th:nth-child(3),
-.olimpistas-table td:nth-child(3) {
-    width: auto;
-}
-
 .olimpistas-table th {
     background-color: white;
     font-weight: 500;
@@ -124,6 +94,163 @@
 
 .olimpistas-table tr:hover {
     background-color: #f5f5f5;
+}
+
+/* Estilos para inscripciones Excel */
+.inscripcion-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.inscripcion-card h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.forma-inscripcion {
+    color: #666;
+    margin-bottom: 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.excel-resumen {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.excel-resumen p {
+    margin: 10px 0;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.excel-resumen .estado-pendiente,
+.excel-resumen .estado-realizado {
+    font-weight: 500;
+}
+
+.excel-resumen .estado-pendiente {
+    color: #ef4444;
+}
+
+.excel-resumen .estado-realizado {
+    color: #10b981;
+}
+
+.ver-detalles-btn {
+    background-color: #0EA5E9;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.ver-detalles-btn:hover {
+    background-color: #0284c7;
+}
+
+/* Estilos del modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.modal-table th,
+.modal-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.modal-table th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+    color: #333;
+}
+
+.modal-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.estado-pendiente {
+    color: #ef4444;
+    font-weight: 500;
+}
+
+.estado-realizado {
+    color: #10b981;
+    font-weight: 500;
 }
 
 .btn-consulta {
@@ -147,27 +274,10 @@
 }
 
 .btn-consulta:hover {
-    background-color: #0EA5E9;
+    background-color: #0284c7;
 }
 
-.error-message {
-    color: #dc3545;
-    margin-top: 1rem;
+.boton-volver-container {
+    margin-top: 20px;
     text-align: center;
-    font-size: 1.1rem;
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-}
-
-.estado-pago {
-    font-weight: 500;
-    text-transform: capitalize;
-}
-
-.estado-pago.realizado {
-    color: #10b981;
-}
-
-.estado-pago.pendiente {
-    color: #ef4444;
 } 

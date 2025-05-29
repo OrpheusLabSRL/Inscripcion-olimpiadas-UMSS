@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import HeaderProp from "../../home_usuario/components/HeaderProp";
 import "../Styles/ResultadoConsulta.css";
@@ -7,6 +7,8 @@ const ResultadoConsulta = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const resultado = location.state?.resultado;
+  const [showModal, setShowModal] = useState(false);
+  const [selectedInscripcion, setSelectedInscripcion] = useState(null);
 
   console.log("Datos completos recibidos:", resultado);
   console.log("Datos de olimpistas:", resultado?.data?.olimpistas);
@@ -56,59 +58,74 @@ const ResultadoConsulta = () => {
     navigate("/consultar-inscripcion");
   };
 
-  const renderPersonaInfo = (persona, tipo) => (
-    <div className="persona-info">
-      <h3 className="titulo-resultado">Información del {tipo}</h3>
-      <table className="info-table">
-        <tbody>
-          <tr>
-            <td className="label">Nombre:</td>
-            <td>{persona?.nombre || "No disponible"}</td>
-          </tr>
-          <tr>
-            <td className="label">Apellido:</td>
-            <td>{persona?.apellido || "No disponible"}</td>
-          </tr>
-          <tr>
-            <td className="label">Carnet de Identidad:</td>
-            <td>{persona?.carnetIdentidad || "No disponible"}</td>
-          </tr>
-          <tr>
-            <td className="label">Correo Electrónico:</td>
-            <td>{persona?.correoElectronico || "No disponible"}</td>
-          </tr>
-          {tipo === "Tutor" && (
-            <>
-              <tr>
-                <td className="label">Teléfono:</td>
-                <td>{persona?.telefono || "No disponible"}</td>
-              </tr>
-            </>
-          )}
-          {tipo === "Olimpista" && (
-            <>
-              <tr>
-                <td className="label">Curso:</td>
-                <td>{persona?.curso || "No disponible"}</td>
-              </tr>
-              <tr>
-                <td className="label">Colegio:</td>
-                <td>{persona?.colegio || "No disponible"}</td>
-              </tr>
-              <tr>
-                <td className="label">Departamento:</td>
-                <td>{persona?.departamento || "No disponible"}</td>
-              </tr>
-              <tr>
-                <td className="label">Municipio:</td>
-                <td>{persona?.municipio || "No disponible"}</td>
-              </tr>
-            </>
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
+  const renderPersonaInfo = (persona, tipo) => {
+    return (
+      <div className="persona-info">
+        <h3 className="titulo-resultado">Información del {tipo}</h3>
+        <div className="info-grid">
+          <div className="info-item">
+            <span className="info-label">Nombre:</span>
+            <span className="info-value">{persona.nombre}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Apellido:</span>
+            <span className="info-value">{persona.apellido}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Carnet de Identidad:</span>
+            <span className="info-value">{persona.carnetIdentidad}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Correo Electrónico:</span>
+            <span className="info-value">{persona.correoElectronico}</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const handleVerDetalles = (inscripcion) => {
+    setSelectedInscripcion(inscripcion);
+    setShowModal(true);
+  };
+
+  const ModalDetalles = ({ inscripcion, onClose }) => {
+    if (!inscripcion) return null;
+
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h3>Detalles de la Inscripción</h3>
+            <button className="close-button" onClick={onClose}>&times;</button>
+          </div>
+          <div className="modal-body">
+            <div className="data-section">
+              <h4>Información del Área</h4>
+              <p><strong>Área:</strong> {inscripcion.olimpiadaAreaCategoria?.area?.nombreArea || "No disponible"}</p>
+              <p><strong>Categoría:</strong> {inscripcion.olimpiadaAreaCategoria?.categoria?.nombreCategoria || "No disponible"}</p>
+            </div>
+            <div className="data-section">
+              <h4>Información del Tutor Responsable</h4>
+              <p><strong>Nombre:</strong> {inscripcion.tutorResponsable?.nombre} {inscripcion.tutorResponsable?.apellido}</p>
+              <p><strong>Carnet de Identidad:</strong> {inscripcion.tutorResponsable?.carnetIdentidad}</p>
+              <p><strong>Correo Electrónico:</strong> {inscripcion.tutorResponsable?.correoElectronico}</p>
+              <p><strong>Teléfono:</strong> {inscripcion.tutorResponsable?.telefono}</p>
+            </div>
+            {inscripcion.tutorArea && (
+              <div className="data-section">
+                <h4>Información del Tutor de Área</h4>
+                <p><strong>Nombre:</strong> {inscripcion.tutorArea?.nombre} {inscripcion.tutorArea?.apellido}</p>
+                <p><strong>Carnet de Identidad:</strong> {inscripcion.tutorArea?.carnetIdentidad}</p>
+                <p><strong>Correo Electrónico:</strong> {inscripcion.tutorArea?.correoElectronico}</p>
+                <p><strong>Teléfono:</strong> {inscripcion.tutorArea?.telefono}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const renderOlimpistasTable = (olimpistas) => {
     console.log("Renderizando tabla de olimpistas con datos:", olimpistas);
@@ -193,25 +210,24 @@ const ResultadoConsulta = () => {
                       <th>Categoría</th>
                       <th>Tutor Responsable</th>
                       <th>Estado de Pago</th>
+                      {inscripciones?.some(ins => ins.formaInscripcion === 'Excel') && <th>Acciones</th>}
                     </tr>
                   </thead>
                   <tbody>
-                    {Array.isArray(inscripciones) &&
-                    inscripciones.length > 0 ? (
+                    {Array.isArray(inscripciones) && inscripciones.length > 0 ? (
                       inscripciones.map((inscripcion, index) => (
                         <tr key={index}>
                           <td>
-                            {inscripcion.olimpiadaAreaCategoria?.area
-                              ?.nombreArea || "No disponible"}
+                            {inscripcion.olimpiadaAreaCategoria?.area?.nombreArea || "No disponible"}
                           </td>
                           <td>
-                            {inscripcion.olimpiadaAreaCategoria?.categoria
-                              ?.nombreCategoria || "No disponible"}
+                            {inscripcion.olimpiadaAreaCategoria?.categoria?.nombreCategoria || "No disponible"}
                           </td>
-
                           <td>
-                            {inscripcion.tutorResponsable?.nombre}{" "}
-                            {inscripcion.tutorResponsable?.apellido}
+                            {inscripcion.tutorResponsable ? 
+                              `${inscripcion.tutorResponsable.nombre} ${inscripcion.tutorResponsable.apellido}` : 
+                              "No disponible"
+                            }
                           </td>
                           <td
                             className={
@@ -224,11 +240,21 @@ const ResultadoConsulta = () => {
                               ? "PAGO PENDIENTE"
                               : "PAGO REALIZADO"}
                           </td>
+                          {inscripcion.formaInscripcion === 'Excel' && (
+                            <td>
+                              <button 
+                                className="ver-detalles-btn"
+                                onClick={() => handleVerDetalles(inscripcion)}
+                              >
+                                Ver Detalles
+                              </button>
+                            </td>
+                          )}
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="4" className="no-inscripciones">
+                        <td colSpan="5" className="no-inscripciones">
                           No hay inscripciones registradas.
                         </td>
                       </tr>
@@ -247,6 +273,12 @@ const ResultadoConsulta = () => {
             </div>
           </div>
         </div>
+        {showModal && (
+          <ModalDetalles 
+            inscripcion={selectedInscripcion} 
+            onClose={() => setShowModal(false)} 
+          />
+        )}
       </>
     );
   }
@@ -277,3 +309,4 @@ const ResultadoConsulta = () => {
 };
 
 export default ResultadoConsulta;
+

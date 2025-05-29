@@ -6,7 +6,8 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\BoletaPagoController;
 
 
-Route::get('/boletas/generar/{idTutor}', [BoletaPagoController::class, 'generarBoleta']);
+Route::get('/boletas/generar/{idTutor}/{codigoInscripcion}', [BoletaPagoController::class, 'generarBoleta']);
+
 
 //rutas para olimpiada
 Route::get('/', [OlimpiadaController::class, 'formularioOlimpiada'])->name('olimpiada.mostrar');
