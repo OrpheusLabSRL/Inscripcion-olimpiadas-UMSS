@@ -27,7 +27,6 @@ const Login = () => {
 
     try {
       const data = await login({ email, password });
-      // Ajusta esta línea si la estructura de respuesta es distinta
       const userData = data.usuario || data.user || data;
       if (!userData) throw new Error("No se recibió usuario");
 

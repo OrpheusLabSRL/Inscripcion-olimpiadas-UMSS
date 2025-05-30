@@ -1,15 +1,13 @@
 //React
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { GrDocumentDownload } from "react-icons/gr";
+import { useState } from "react";
 
 //Icons
-import { FaHome, FaRegCalendarAlt, FaRegEdit } from "react-icons/fa";
+import { FaHome, FaRegEdit } from "react-icons/fa";
 import { IoDocumentTextOutline, IoLogInOutline } from "react-icons/io5";
 import { GrDocumentUpdate } from "react-icons/gr";
-import {
-  HiOutlineClipboardDocumentList,
-  HiOutlineClipboardDocument,
-} from "react-icons/hi2";
+import { HiOutlineClipboardDocument } from "react-icons/hi2";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { GiAchievement } from "react-icons/gi";
 
@@ -17,6 +15,10 @@ import { GiAchievement } from "react-icons/gi";
 import "./Sidebar.css";
 
 export default function Sidebar({ isOpen, setIsOpen, admin }) {
+  const [usuario, setUsuario] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
   const navigation = useNavigate();
 
   const cerrarSesion = () => {
@@ -28,6 +30,9 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
       navigation("/");
     }
   };
+
+  const permisos = usuario?.rol?.permisos?.map((p) => p.nombrePermiso) || [];
+  const tienePermiso = (permiso) => permisos.includes(permiso);
 
   return (
     <>
@@ -52,36 +57,33 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                   {isOpen ? "Inicio" : ""}
                 </Link>
               </li>
-              <li>
-                <Link to="/admin/olimpiadas">
-                  <GiAchievement className="sidebar-icons" />
-                  {isOpen ? "Olimpiadas" : ""}
-                </Link>
-              </li>
-              <li>
-                <Link to="/admin/panelOlympiad">
-                  <FaRegEdit className="sidebar-icons" />
-                  {isOpen ? "Gestionar" : ""}
-                </Link>
-              </li>
-              <li>
-                <NavLink>
-                  <HiOutlineClipboardDocumentList className="sidebar-icons" />
-                  {isOpen ? "Exámenes" : ""}
-                </NavLink>
-              </li>
-              <li>
-                <Link to="/admin/reports">
-                  <HiOutlineClipboardDocument className="sidebar-icons" />
-                  {isOpen ? "Reportes" : ""}
-                </Link>
-              </li>
-              <li>
-                <NavLink>
-                  <FaRegCalendarAlt className="sidebar-icons" />
-                  {isOpen ? "Calendario" : ""}
-                </NavLink>
-              </li>
+
+              {tienePermiso("crear_olimpiadas") && (
+                <li>
+                  <Link to="/admin/olimpiadas">
+                    <GiAchievement className="sidebar-icons" />
+                    {isOpen ? "Olimpiadas" : ""}
+                  </Link>
+                </li>
+              )}
+
+              {tienePermiso("gestionar_olimpiadas") && (
+                <li>
+                  <Link to="/admin/panelOlympiad">
+                    <FaRegEdit className="sidebar-icons" />
+                    {isOpen ? "Gestionar" : ""}
+                  </Link>
+                </li>
+              )}
+
+              {tienePermiso("ver_reportes") && (
+                <li>
+                  <Link to="/admin/reports">
+                    <HiOutlineClipboardDocument className="sidebar-icons" />
+                    {isOpen ? "Reportes" : ""}
+                  </Link>
+                </li>
+              )}
             </>
           ) : (
             <>
