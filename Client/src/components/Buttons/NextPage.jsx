@@ -15,6 +15,7 @@ export const NextPage = ({
   state,
   type,
   disabled = false,
+  children,
 }) => {
   return (
     <NavLink to={to} state={state} style={{ textDecoration: "none" }}>
@@ -26,7 +27,9 @@ export const NextPage = ({
         label={label}
         type={type}
         disabled={disabled}
-      />
+      >
+        {children}
+      </PrimaryButton>
     </NavLink>
   );
 };

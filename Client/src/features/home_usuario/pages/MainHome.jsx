@@ -6,7 +6,9 @@ export const MainHome = () => {
   return (
     <>
       <HeaderProp />
-      <ContentProp />
+      {/* <ContentProp /> */}
+      <Home/>
     </>
   );
 };
+
