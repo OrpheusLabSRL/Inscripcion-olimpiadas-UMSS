@@ -178,8 +178,10 @@ import React, { useState } from "react";
    };
  
    return (
-     <div className="pagina-contacto-container">
-       <HeaderProp />
+    <div>
+      <HeaderProp />
+      <div className="pagina-contacto-container">
+       
        
        <div className="contact-main-container">
          <div className="contact-sidebar">
@@ -332,6 +334,9 @@ import React, { useState } from "react";
          </div>
        </div>
      </div>
+    </div>
+     
+     
    );
  };
  

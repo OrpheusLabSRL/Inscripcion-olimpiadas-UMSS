@@ -7,7 +7,6 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding-top: 120px; /* Espacio para el header */
   background-color: #94b4c1;
   box-sizing: border-box;
 }
@@ -141,7 +140,6 @@ option {
   flex-direction: column;
   min-height: 100vh;
   background-color: #F0F9FF;
-  padding-top: 120px;
   font-family: 'Poppins', sans-serif;
 }
 
