@@ -23,8 +23,13 @@ class Rol extends Model
     public $timestamps = true;
 
     // Relación: Un Rol puede tener muchos Usuarios
+     public function permisos()
+    {
+        return $this->belongsToMany(Permiso::class, 'roles_permisos', 'idRol', 'idPermiso');
+    }
+
     public function usuarios()
     {
-        return $this->hasMany(Usuario::class, 'idRol', 'idRol');
+        return $this->hasMany(User::class, 'idRol');
     }
 }
