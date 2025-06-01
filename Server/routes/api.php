@@ -69,6 +69,9 @@ Route::get('/permisos', [PermisoController::class, 'index']);
 Route::get('/viewAreas', [AreaController::class, 'index']);
 Route::post('/registrarAreas', [AreaController::class, 'store']);
 Route::get('/catalogoCompleto', [AreaController::class, 'getProgramaCompleto']);
+Route::put('/areas/{id}', [AreaController::class, 'update']);
+Route::patch('/areas/{id}/estado', [AreaController::class, 'actualizarEstado']);
+Route::delete('/areas/{id}', [AreaController::class, 'destroy']);
 
 // Categorías
 Route::get('/viewCategorias', [CategoriaController::class, 'index']);

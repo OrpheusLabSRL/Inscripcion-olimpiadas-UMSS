@@ -66,6 +66,20 @@ export const createArea = async (data) => {
   return await inscriptionApi.post("/registrarAreas", data);
 };
 
+export const updateArea = async (id, data) => {
+  return await inscriptionApi.put(`/areas/${id}`, data);
+};
+
+export const updateAreaStatus = async (id, estado) => {
+  return await inscriptionApi.patch(`/areas/${id}/estado`, {
+    estadoArea: estado,
+  });
+};
+
+export const deleteArea = async (id) => {
+  return await inscriptionApi.delete(`/areas/${id}`);
+};
+
 /* =======================
    GRADOS
 ======================= */
