@@ -90,11 +90,33 @@ export const getGrados = async () => {
 };
 
 // ============================
-// Categorías
+// Categorías - Grados
 // ============================
 
 export const getCategoriaGrado = async () =>
   (await inscriptionApi.get("/viewCategoriaGrado")).data;
+
+export const deleteCategoriaGrado = async (id) =>
+  (await inscriptionApi.delete(`/deleteCategoriaGrado/${id}`)).data;
+
+export const changeEstadoCategoriaGrado = async (id, estado) =>
+  (
+    await inscriptionApi.patch(`/changeEstadoCategoriaGrado/${id}`, {
+      estadoCategoriaGrado: estado,
+    })
+  ).data;
+
+export const updateCategoriaWithGrados = async (
+  idCategoria,
+  { nombreCategoria, grados, estadoCategoriaGrado }
+) =>
+  (
+    await inscriptionApi.put(`/updateCategoriaWithGrados/${idCategoria}`, {
+      nombreCategoria,
+      grados,
+      estadoCategoriaGrado: estadoCategoriaGrado || true,
+    })
+  ).data;
 
 /* =======================
    COMBINACIONES (OlimpiadaAreaCategoria)

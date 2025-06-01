@@ -89,6 +89,9 @@ Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class,
 
 // Categoría - Grado
 Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
+Route::patch('/changeEstadoCategoriaGrado/{id}', [CategoriaGradoController::class, 'cambiarEstado']);
+Route::put('/updateCategoriaWithGrados/{idCategoria}', [CategoriaGradoController::class, 'actualizarCategoriaYGrados']);
+Route::delete('/deleteCategoriaGrado/{id}', [CategoriaGradoController::class, 'destroy']);
 
 // Categoría - Área - Olimpiada
 Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'index']);
@@ -96,7 +99,7 @@ Route::post('/newAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'stor
 Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);
 Route::delete('/eliminarOlimpiadas/{idOlimpiada}/area/{idArea}', [OlimpiadaAreaCategoriaController::class, 'eliminarPorOlimpiadaYArea']);
 
-
+ 
 
 Route::get('/boletas/generar/{idTutor}/{codigoInscripcion}', [BoletaPagoController::class, 'generarBoleta']);
 Route::get('/boletas/reimprimir/{codigoBoleta}', [BoletaPagoController::class, 'reimprimirBoleta']);
