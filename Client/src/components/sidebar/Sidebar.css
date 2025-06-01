@@ -2,7 +2,7 @@
 .sidebar {
   position: fixed;
   top: 0;
-  height: 95vh;
+  height: 100%;
   background: var(--white);
   color: #222;
   padding: 25px 20px; /* un poco menos horizontal */
@@ -111,7 +111,7 @@
 /* ===== Botón Cerrar Sesión ===== */
 .btn-logout {
   position: absolute;
-  bottom: 40px;
+  bottom: 30px;
   left: 25px;
   padding: 8px 8px;
   border-radius: 10px;
