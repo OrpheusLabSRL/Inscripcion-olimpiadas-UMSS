@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
 
 /* Estilos generales del header */
 header {
@@ -15,7 +15,7 @@ header {
   top: 0; /* Pegado a la parte superior */
   left: 0; /* Pegado a la izquierda */
   z-index: 1000; /* Asegurarse de que esté encima de otros elementos */
-  font-family: 'Poppins', sans-serif; /* Fuente Poppins para todo el header */
+  font-family: "Poppins", sans-serif; /* Fuente Poppins para todo el header */
 }
 
 /* Logo */
@@ -25,7 +25,7 @@ header {
 
 /* Título */
 .header-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 28px;
   font-weight: 400;
   color: #000;
@@ -33,6 +33,7 @@ header {
 }
 
 /* Estilos para los elementos de navegación */
+
 nav ul {
   list-style: none; /* Quitar los puntos de lista */
   display: flex; /* Flexbox para los items de navegación */
@@ -44,7 +45,7 @@ nav ul {
 nav ul li {
   cursor: pointer;
   color: #000;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-size: 16px;
   display: flex;
@@ -54,10 +55,10 @@ nav ul li {
 }
 
 nav ul li:last-child a .btn-next-page {
-  background-color: #0EA5E9; /* Color del botón de inscribirse */
+  background-color: #0ea5e9; /* Color del botón de inscribirse */
   color: white;
   border-radius: 8px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 500;
   border: none;
   padding: 6px 16px;
@@ -160,7 +161,7 @@ nav ul li:last-child a .btn-next-page:hover {
     top: 80px;
     left: 0;
     right: 0;
-    background-color: #ECEFCA;
+    background-color: #ecefca;
     flex-direction: column;
     padding: 20px;
     gap: 15px;

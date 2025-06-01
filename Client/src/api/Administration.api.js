@@ -133,3 +133,24 @@ export const getInscripcionesConOlimpiadas = async () => {
     throw error;
   }
 };
+
+// ============================
+// ROLES Y PERMISOS
+// ============================
+
+export const getRoles = async () => {
+  const response = await inscriptionApi.get("/roles");
+  return response.data;
+};
+export const getPermisos = async () => {
+  const response = await inscriptionApi.get("/permisos");
+  return response.data;
+};
+export const setRol = async (data) => {
+  const response = await inscriptionApi.post("/roles", data);
+  return response.data;
+};
+export const setUser = async (data) => {
+  const response = await inscriptionApi.post("/usuarios", data);
+  return response.data;
+};

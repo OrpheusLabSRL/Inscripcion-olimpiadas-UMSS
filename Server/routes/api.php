@@ -18,6 +18,10 @@ use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\BoletaPagoController;
+use App\Http\Controllers\RolController;
+use App\Http\Controllers\PermisoController;
+use App\Http\Controllers\UsuarioController;
+
 
 // Ruta protegida para obtener el usuario autenticado
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -52,8 +56,14 @@ Route::post('/enviar-contacto', [ContactoController::class, 'enviarContacto']);
 Route::get('/viewOlimpiadas', [OlimpiadaController::class, 'mostrarOlimpiada']);
 Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
+
 Route::put('/editarOlimpiadas/{id}/estado', [OlimpiadaController::class, 'cambiarEstado']);
 
+//Roles y Permisos
+Route::get('/roles', [RolController::class, 'index']);
+Route::post('/roles', [RolController::class, 'store']);
+Route::post('/usuarios', [UsuarioController::class, 'store']);
+Route::get('/permisos', [PermisoController::class, 'index']);
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);
