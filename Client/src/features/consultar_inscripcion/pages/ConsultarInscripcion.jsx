@@ -128,7 +128,7 @@ const ConsultarInscripcion = () => {
 
           <div className="form-group">
             <label htmlFor="ci">
-              Carnet de Identidad <span className="required-field">*</span>
+              <i className="bi bi-person-vcard"></i> Carnet de Identidad <span className="required-field">*</span>
             </label>
             <input
               type="text"
@@ -145,7 +145,7 @@ const ConsultarInscripcion = () => {
 
           <div className="form-group">
             <label htmlFor="correo">
-              Correo Electrónico <span className="required-field">*</span>
+              <i className="bi bi-envelope"></i> Correo Electrónico <span className="required-field">*</span>
             </label>
             <input
               type="email"
@@ -164,7 +164,7 @@ const ConsultarInscripcion = () => {
 
           <div className="form-group">
             <label htmlFor="rol">
-              Rol <span className="required-field">*</span>
+              <i className="bi bi-person-badge"></i> Rol <span className="required-field">*</span>
             </label>
             <select
               id="rol"
@@ -180,7 +180,7 @@ const ConsultarInscripcion = () => {
             </select>
             {errors.rol && <div className="error-message">{errors.rol}</div>}
             <div className="help-message">
-              En caso de ser tutor legal, tutor de área o responsable de inscripción seleccione tutor/Responsable Inscripción
+              En caso de ser tutor legal, tutor de área o responsable de inscripción seleccione Tutor/Responsable Inscripción
             </div>
           </div>
 
