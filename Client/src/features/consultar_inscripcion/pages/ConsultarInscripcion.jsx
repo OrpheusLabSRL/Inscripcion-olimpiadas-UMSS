@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import HeaderProp from "../../home_usuario/components/HeaderProp";
-import "../Styles/ConsultarInscripcion.css";
+import "../Styles/estadoInscripcion.css";
+import imagen from "../../../assets/images/estadoInscripcion.png"
 
 const ConsultarInscripcion = () => {
   const navigate = useNavigate();
@@ -112,12 +113,17 @@ const ConsultarInscripcion = () => {
   };
 
   return (
+  <div>
+    <HeaderProp />
 
-    <div>
-      <HeaderProp />
-      <div className="consultar-inscripcion-container">
+    <div className="consulta-wrapper">
+      <div className="image-side">
+        <img src={imagen} alt="Ilustración educativa" />
+      </div>
 
-        <form className="consultar-form" onSubmit={handleSubmit} noValidate>
+      {/* Lado del formulario */}
+      <div className="form-side">
+        <form onSubmit={handleSubmit} noValidate>
           <h2>Consultar Estado de Inscripción</h2>
 
           <div className="form-group">
@@ -170,17 +176,20 @@ const ConsultarInscripcion = () => {
             >
               <option value="">Seleccione su rol</option>
               <option value="olimpista">Olimpista</option>
-              <option value="tutor">Tutor/Responsable Inscripción </option>
+              <option value="tutor">Tutor/Responsable Inscripción</option>
             </select>
             {errors.rol && <div className="error-message">{errors.rol}</div>}
-            <div className="help-message">En caso de ser tutor legal, tutor de área o responsable de inscripción seleccione tutor/Responsable Inscripción</div>
+            <div className="help-message">
+              En caso de ser tutor legal, tutor de área o responsable de inscripción seleccione tutor/Responsable Inscripción
+            </div>
           </div>
 
           <button
             type="submit"
-            className="btn-consulta submit-button"
+            className="submit-button"
             disabled={loading}
           >
+            <i className="bi bi-search"></i>
             {loading ? "Consultando..." : "Consultar"}
           </button>
 
@@ -188,7 +197,9 @@ const ConsultarInscripcion = () => {
         </form>
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default ConsultarInscripcion;
