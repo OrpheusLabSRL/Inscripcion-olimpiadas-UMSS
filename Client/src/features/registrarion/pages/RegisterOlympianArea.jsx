@@ -12,7 +12,6 @@ import ProgressBar from "../components/ProgressBar/ProgressBar";
 import { useEffect, useState } from "react";
 import swal from "sweetalert";
 import { useForm } from "react-hook-form";
-import { IoArrowBackCircle } from "react-icons/io5";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { MdCleaningServices } from "react-icons/md";
 import Swal from "sweetalert2";
@@ -262,7 +261,7 @@ export const RegisterOlympianArea = () => {
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
-          <h1>Datos de competición</h1>
+          <h2>Datos de competición</h2>
           <h5 className="message-recomendation">
             Un olimpista puede participar en hasta dos áreas. Si desea
             participar solo en una, deje sin seleccionar el campo de 'área de
@@ -320,8 +319,17 @@ export const RegisterOlympianArea = () => {
         />
 
         <div className="container-btn-next-back input-2c">
-          <NextPage type="button" value="Anterior" to={"/register/olympian"} />
-          <NextPage value="Cancelar" onClick={cancelInscription} />
+          <NextPage
+            type="button"
+            value="Anterior"
+            to={"/register/olympian"}
+            className="btn-back-register"
+          />
+          <NextPage
+            value="Cancelar"
+            onClick={cancelInscription}
+            className="btn-cancel-register"
+          />
           <PrimaryButton type="submit" value="Siguiente" />
         </div>
       </form>

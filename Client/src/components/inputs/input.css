@@ -40,3 +40,19 @@
   border-radius: 8px;
   padding: 5px;
 }
+
+@media (max-width: 435px) {
+  .config-input > input,
+  .config-input > textarea,
+  .config-input > select {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .config-input > input,
+  .config-input > textarea,
+  .config-input > select {
+    font-size: 12px;
+  }
+}

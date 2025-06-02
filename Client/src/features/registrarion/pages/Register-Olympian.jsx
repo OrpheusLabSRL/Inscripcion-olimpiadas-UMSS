@@ -10,9 +10,8 @@ import ProgressBar from "../components/ProgressBar/ProgressBar";
 //react
 import { useForm } from "react-hook-form";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
-import { useNavigate, NavLink, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
-import { IoArrowBackCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { MdCleaningServices } from "react-icons/md";
 import Swal from "sweetalert2";
@@ -285,7 +284,7 @@ export const RegisterOlympian = () => {
         autoComplete="off"
       >
         <div className="input-2c">
-          <h1>Registro de datos del Olimpista</h1>
+          <h2>Registro de datos del Olimpista</h2>
           <h5 className="message-recomendation">
             Si ya tiene datos registrados, ingrese su CI y se llenara
             automáticamente los campos.
@@ -437,8 +436,13 @@ export const RegisterOlympian = () => {
           />
         </div>
         <div className="container-btn-next-back input-2c">
-          <NextPage type="button" value="Anterior" to={previousPath} />
-          <NextPage value="Cancelar" onClick={cancelInscription} />
+          <NextPage
+            type="button"
+            value="Anterior"
+            to={previousPath}
+            className="btn-back-register"
+          />
+          <NextPage value="Cancelar" onClick={cancelInscription} className="btn-cancel-register"/>
           <PrimaryButton type="submit" value="Siguiente" />
         </div>
       </form>

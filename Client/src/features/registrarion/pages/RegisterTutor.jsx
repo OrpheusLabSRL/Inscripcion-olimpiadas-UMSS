@@ -12,8 +12,7 @@ import ProgressBar from "../components/ProgressBar/ProgressBar";
 //react
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, NavLink, useLocation } from "react-router-dom";
-import { IoArrowBackCircle } from "react-icons/io5";
+import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import { MdCleaningServices } from "react-icons/md";
 import Swal from "sweetalert2";
@@ -371,7 +370,7 @@ export const RegisterTutor = () => {
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
-          <h1>Registro de datos de tutor legal</h1>
+          <h2>Registro de datos de tutor legal</h2>
           <h5 className="message-recomendation">
             Si ya tiene datos registrados, ingrese su CI y se llenara
             automáticamente los campos.
@@ -481,8 +480,13 @@ export const RegisterTutor = () => {
             type="button"
             value="Anterior"
             to={"/register/olympian-area"}
+            className="btn-back-register"
           />
-          <NextPage value="Cancelar" onClick={cancelInscription} />
+          <NextPage
+            value="Cancelar"
+            onClick={cancelInscription}
+            className="btn-cancel-register"
+          />
           <PrimaryButton type="submit" value="Registrar" />
         </div>
       </form>

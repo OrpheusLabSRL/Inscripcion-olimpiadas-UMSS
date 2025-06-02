@@ -239,7 +239,7 @@ export const RegisterResponsible = () => {
         autoComplete="off"
       >
         <div className="input-2c">
-          <h1>Datos de responsable de inscripción</h1>
+          <h2>Datos de responsable de inscripción</h2>
           <h5 className="message-recomendation">
             Si ya tiene datos registrados, ingrese su CI y se llenara
             automáticamente los campos.
@@ -345,7 +345,11 @@ export const RegisterResponsible = () => {
         </div>
 
         <div className="container-btn-next-back input-2c">
-          <NextPage value="Cancelar" onClick={cancelInscription} />
+          <NextPage
+            value="Cancelar"
+            onClick={cancelInscription}
+            className="btn-back-register"
+          />
           <PrimaryButton type="submit" value="Siguiente" />
         </div>
       </form>

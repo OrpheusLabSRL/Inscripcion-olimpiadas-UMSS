@@ -14,3 +14,11 @@
   gap: 10px;
   flex-wrap: wrap;
 }
+
+.btn-back-register {
+  background: #6b7280 !important;
+}
+
+.btn-cancel-register {
+  background: #dc2626 !important;
+}

@@ -1,5 +1,6 @@
 .container-form {
   margin-top: 20px;
+  margin-right: 10px;
 }
 
 .container-form-inputs {
@@ -13,6 +14,10 @@
   box-shadow: 0px 5px 10px #00000014;
   padding: 30px;
   column-gap: 20px;
+}
+
+.container-form-inputs h2 {
+  color: #2563eb;
 }
 
 .input-1c {
@@ -80,7 +85,6 @@
 .container-btn-next-register button {
   background-color: var(--secondary-color);
 }
-
 
 @media (max-width: 975px) {
   .container-form-inputs {
