@@ -279,9 +279,6 @@ export const RegisterOlympian = () => {
     <div className="container-form">
       <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-      <NavLink to={previousPath}>
-        <IoArrowBackCircle className="btn-back" />
-      </NavLink>
       <form
         className="container-form-inputs"
         onSubmit={handleSubmit(onSubmit)}
@@ -439,11 +436,9 @@ export const RegisterOlympian = () => {
             errors={errors}
           />
         </div>
-        <div className="container-btn-back-olympian input-1c">
+        <div className="container-btn-next-back input-2c">
+          <NextPage type="button" value="Anterior" to={previousPath} />
           <NextPage value="Cancelar" onClick={cancelInscription} />
-        </div>
-
-        <div className="container-btn-next-olympian input-1c">
           <PrimaryButton type="submit" value="Siguiente" />
         </div>
       </form>

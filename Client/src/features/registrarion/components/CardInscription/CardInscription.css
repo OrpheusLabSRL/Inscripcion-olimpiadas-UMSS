@@ -1,4 +1,4 @@
-.container-card-choose {
+.card-choose {
   background-color: #fff;
   color: #000;
   display: flex;
@@ -12,11 +12,11 @@
   box-shadow: 1px 1px 4px #0000006e;
 }
 
-.container-card-choose:hover {
+.card-choose:hover {
   scale: 1.03;
 }
 
-.container-card-choose > p {
+.card-choose > p {
   text-align: center;
   font-size: var(--pM-size);
   line-height: 1.5;
@@ -39,4 +39,15 @@
 .btn-card-inscription {
   width: 350px;
   padding: 10px;
+}
+
+@media (max-width: 600px) {
+  .card-choose {
+    max-width: 65%;
+  }
+
+  .btn-card-inscription {
+    width: 100%;
+    padding: 10px;
+  }
 }

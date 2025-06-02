@@ -76,7 +76,7 @@
 .olimpista-modal {
   color: #333;
   width: 100%;
-  max-width: 800px;
+  width: 613px;
   margin: 0 auto;
 }
 
@@ -152,9 +152,12 @@
   background-color: #f9fafb;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
+@media (max-width: 855px) {
   .data-grid {
     grid-template-columns: 1fr;
+  }
+
+  .olimpista-modal {
+    width: 490px;
   }
 }

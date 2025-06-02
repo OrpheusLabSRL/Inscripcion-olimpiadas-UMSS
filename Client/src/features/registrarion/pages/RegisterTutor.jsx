@@ -170,7 +170,7 @@ export const RegisterTutor = () => {
         dataToSend.inscripciones.push({
           area: sessionStorage.getItem("AreaSecundaria"),
           categoria: sessionStorage.getItem("CategoriaSecundaria"),
-          existeTutor: sessionStorage.getItem("TutorArea2" ) === "true",
+          existeTutor: sessionStorage.getItem("TutorArea2") === "true",
           formaInscripcion: "Manual",
           registrandose: true,
           tutorArea: {
@@ -369,9 +369,6 @@ export const RegisterTutor = () => {
     <div className="container-form">
       <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-      <NavLink to={"/register/olympian-area"}>
-        <IoArrowBackCircle className="btn-back" />
-      </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
           <h1>Registro de datos de tutor legal</h1>
@@ -479,11 +476,13 @@ export const RegisterTutor = () => {
           />
         </div>
 
-        <div className="container-btn-back-olympian input-1c">
+        <div className="container-btn-next-back input-2c">
+          <NextPage
+            type="button"
+            value="Anterior"
+            to={"/register/olympian-area"}
+          />
           <NextPage value="Cancelar" onClick={cancelInscription} />
-        </div>
-
-        <div>
           <PrimaryButton type="submit" value="Registrar" />
         </div>
       </form>
