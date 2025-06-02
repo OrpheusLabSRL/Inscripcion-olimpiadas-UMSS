@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
-import "./RegisterExcel.css";
-import Sidebar from "../../../components/sidebar/Sidebar";
+import "../Styles/RegisterExcel.css";
 import { useLocation, useNavigate, NavLink } from "react-router-dom";
 import {
   validateExcelData,

@@ -26,7 +26,7 @@ export const CardInscription = ({
   };
 
   return (
-    <div className="container-card-choose">
+    <div className="card-choose">
       <Icon style={{ fontSize: "70px" }} />
       <h3>{title}</h3>
       <p>{description}</p>

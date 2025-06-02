@@ -27,6 +27,8 @@ export const GenerateOrder = () => {
     <div className="container-list-registered">
       <div className="list-inscription-header">
         <h2>Lista de Inscripciones</h2>
+      </div>
+      <div className="container-list">
         <table className="container-table-list">
           <thead>
             <tr>

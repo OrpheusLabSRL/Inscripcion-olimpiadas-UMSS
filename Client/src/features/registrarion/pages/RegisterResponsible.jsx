@@ -10,7 +10,7 @@ import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
 import { useEffect, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import { MdCleaningServices } from "react-icons/md";
@@ -239,7 +239,7 @@ export const RegisterResponsible = () => {
         autoComplete="off"
       >
         <div className="input-2c">
-          <h1>Datos de responsable de inscripción</h1>
+          <h2>Datos de responsable de inscripción</h2>
           <h5 className="message-recomendation">
             Si ya tiene datos registrados, ingrese su CI y se llenara
             automáticamente los campos.
@@ -344,10 +344,12 @@ export const RegisterResponsible = () => {
           />
         </div>
 
-        <div className="container-btn-back-responsible input-1c">
-          <NextPage value="Cancelar" onClick={cancelInscription} />
-        </div>
-        <div>
+        <div className="container-btn-next-back input-2c">
+          <NextPage
+            value="Cancelar"
+            onClick={cancelInscription}
+            className="btn-back-register"
+          />
           <PrimaryButton type="submit" value="Siguiente" />
         </div>
       </form>

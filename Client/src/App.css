@@ -55,7 +55,7 @@ body {
 }
 
 .main.active {
-  grid-template-columns: 220px auto;
+  grid-template-columns: 275px auto;
 }
 
 .content-area {

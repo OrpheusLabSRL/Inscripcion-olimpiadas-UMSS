@@ -1,5 +1,6 @@
 .option-add-tutor {
-  width: 340px;
+  width: 50%;
+  cursor: pointer;
 }
 
 .option-add-tutor > p {
@@ -19,4 +20,10 @@
 
 .btn-modal-tutor {
   width: 130px;
+}
+
+@media (max-width: 500px) {
+  .option-add-tutor {
+    width: 70%;
+  }
 }
