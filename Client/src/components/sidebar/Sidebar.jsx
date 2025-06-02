@@ -57,33 +57,25 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                   {isOpen ? "Inicio" : ""}
                 </Link>
               </li>
+              <li>
+                <Link to="/admin/olimpiadas">
+                  <GiAchievement className="sidebar-icons" />
+                  {isOpen ? "Olimpiadas" : ""}
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/panelOlympiad">
+                  <FaRegEdit className="sidebar-icons" />
+                  {isOpen ? "Gestionar" : ""}
+                </Link>
+              </li>
 
-              {tienePermiso("crear_olimpiadas") && (
-                <li>
-                  <Link to="/admin/olimpiadas">
-                    <GiAchievement className="sidebar-icons" />
-                    {isOpen ? "Olimpiadas" : ""}
-                  </Link>
-                </li>
-              )}
-
-              {tienePermiso("gestionar_olimpiadas") && (
-                <li>
-                  <Link to="/admin/panelOlympiad">
-                    <FaRegEdit className="sidebar-icons" />
-                    {isOpen ? "Gestionar" : ""}
-                  </Link>
-                </li>
-              )}
-
-              {tienePermiso("ver_reportes") && (
-                <li>
-                  <Link to="/admin/reports">
-                    <HiOutlineClipboardDocument className="sidebar-icons" />
-                    {isOpen ? "Reportes" : ""}
-                  </Link>
-                </li>
-              )}
+              <li>
+                <Link to="/admin/reports">
+                  <HiOutlineClipboardDocument className="sidebar-icons" />
+                  {isOpen ? "Reportes" : ""}
+                </Link>
+              </li>
             </>
           ) : (
             <>

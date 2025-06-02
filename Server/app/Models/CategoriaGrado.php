@@ -10,7 +10,7 @@ class CategoriaGrado extends Model
     use HasFactory;
 
     protected $table = 'categorias_grados';
-    protected $primaryKey = 'id_CategoriaGrado';
+    protected $primaryKey = 'idCategoriaGrado';
     public $timestamps = false;
 
     protected $fillable = [
