@@ -8,6 +8,8 @@ use App\Models\Tutor;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PaymentConfirmationMail;
 
 class BoletaPagoController extends Controller
 {
@@ -135,6 +137,25 @@ class BoletaPagoController extends Controller
         // Actualizar estadoInscripcion a 1 en la tabla inscripciones para las inscripciones con este codigoBoleta
         Inscripcion::where('codigoBoleta', $codigoBoleta)
             ->update(['estadoInscripcion' => 1]);
+
+        // Send payment confirmation email to the tutor
+        $tutor = Tutor::with('persona')->find($boleta->idTutor);
+        if ($tutor && $tutor->persona) {
+            $email = $tutor->persona->correoElectronico;
+            if (!empty($email)) {
+                try {
+                    \Log::info('Enviando correo de confirmación a: ' . $email);
+                    Mail::to($email)->send(new PaymentConfirmationMail($boleta, $tutor));
+                    \Log::info('Correo de confirmación enviado correctamente.');
+                } catch (\Exception $e) {
+                    \Log::error('Error al enviar correo de confirmación: ' . $e->getMessage());
+                }
+            } else {
+                \Log::warning('El tutor no tiene correo electrónico asignado.');
+            }
+        } else {
+            \Log::warning('Tutor o persona no encontrado para la boleta: ' . $boleta->codigoBoleta);
+        }
 
         return response()->json(['message' => 'Pago confirmado exitosamente.']);
     }
