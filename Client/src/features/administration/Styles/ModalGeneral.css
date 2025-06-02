@@ -241,7 +241,7 @@ body,
 /* ====== Form Inputs ====== */
 .admin-form-input,
 .admin-form-textarea {
-  width: 90%;
+  width: 95%;
   padding: 1.25rem 1.75rem;
   border: 1.5px solid #e5e7eb;
   border-radius: 14px;
@@ -639,7 +639,12 @@ body,
 .swal2-container {
   z-index: 20000 !important;
 }
-
+.admin-char-counter {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  text-align: left;
+}
 @keyframes admin-fadeIn {
   from {
     opacity: 0;

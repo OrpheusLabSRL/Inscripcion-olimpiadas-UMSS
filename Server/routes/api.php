@@ -69,6 +69,9 @@ Route::get('/permisos', [PermisoController::class, 'index']);
 Route::get('/viewAreas', [AreaController::class, 'index']);
 Route::post('/registrarAreas', [AreaController::class, 'store']);
 Route::get('/catalogoCompleto', [AreaController::class, 'getProgramaCompleto']);
+Route::put('/areas/{id}', [AreaController::class, 'update']);
+Route::patch('/areas/{id}/estado', [AreaController::class, 'actualizarEstado']);
+Route::delete('/areas/{id}', [AreaController::class, 'destroy']);
 
 // Categorías
 Route::get('/viewCategorias', [CategoriaController::class, 'index']);
@@ -86,6 +89,9 @@ Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class,
 
 // Categoría - Grado
 Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
+Route::patch('/changeEstadoCategoriaGrado/{id}', [CategoriaGradoController::class, 'cambiarEstado']);
+Route::put('/updateCategoriaWithGrados/{idCategoria}', [CategoriaGradoController::class, 'actualizarCategoriaYGrados']);
+Route::delete('/deleteCategoriaGrado/{id}', [CategoriaGradoController::class, 'destroy']);
 
 // Categoría - Área - Olimpiada
 Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'index']);
@@ -93,7 +99,7 @@ Route::post('/newAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'stor
 Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);
 Route::delete('/eliminarOlimpiadas/{idOlimpiada}/area/{idArea}', [OlimpiadaAreaCategoriaController::class, 'eliminarPorOlimpiadaYArea']);
 
-
+ 
 
 Route::get('/boletas/generar/{idTutor}/{codigoInscripcion}', [BoletaPagoController::class, 'generarBoleta']);
 Route::get('/boletas/reimprimir/{codigoBoleta}', [BoletaPagoController::class, 'reimprimirBoleta']);

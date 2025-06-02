@@ -48,6 +48,10 @@ const OlympiadsTable = () => {
       alert("No puedes modificar una olimpiada finalizada.");
       return;
     }
+    if (fechaInicio <= hoy) {
+      alert("No puedes modificar una olimpiada que ya comenzo.");
+      return;
+    }
 
     if (isActive) {
       try {
