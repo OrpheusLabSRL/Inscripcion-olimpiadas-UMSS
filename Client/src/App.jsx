@@ -29,6 +29,7 @@ import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
 import { OCRValidation } from "./features/registrarion/pages/ocrvalidation";
 import { GenerateOrder } from "./features/registrarion/pages/GenerateOrder";
+import OlympiadDetail from "./features/detallesOlimpiada/OlympiadDetail";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
@@ -44,17 +45,19 @@ function App() {
     "/consultar-inscripcion/resultado",
     "/consultar-inscripcion/resultado-tutor",
   ];
-  const showSidebar = !hideSidebarRoutes.includes(location.pathname);
 
+  const hideSidebar = hideSidebarRoutes.some((ruta) => location.pathname === ruta) || location.pathname.startsWith("/olimpiada/");
+
+  const showSidebar = !hideSidebar;
   return (
     <div className="app-container">
       <div
         className={
-          hideSidebarRoutes.includes(location.pathname)
-            ? ""
+          hideSidebar
+            ? "page-no-sidebar"
             : isOpen
-            ? "main active"
-            : "main"
+              ? "main active"
+              : "main"
         }
       >
         {showSidebar && (
@@ -65,9 +68,10 @@ function App() {
           />
         )}
 
-        <div className="content-area">
+        <div className={`content-area ${hideSidebar ? "no-content-style" : ""}`}>
           <Routes>
             <Route path="/" element={<MainHome />} />
+            <Route path="/olimpiada/:id" element={<OlympiadDetail />} />
             <Route path="/register" element={<RegisterChoose />} />
             <Route path="/register/olympian" element={<RegisterOlympian />} />
             <Route path="/register/tutor-legal" element={<RegisterTutor />} />

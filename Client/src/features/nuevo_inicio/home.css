@@ -104,51 +104,102 @@
   background-color: rgba(0, 0, 0, 0.6);
 }
 
+/*Seccion de informacion*/
+
 .info-section {
   padding: 2.5rem 5rem ;
-  background-color: #fff ;
+  background-color: var(--gris-claro);
   color: #213448;
   font-family: 'Poppins', sans-serif;
 }
 
 .info-section h2 {
-  font-size: 28px;
-  margin-bottom: 10px;
+  color: var(--texto-azul);
   text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 28px;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
 }
 
+.info-section h2::after {
+  content: '';
+  width: 100px;
+  height: 3px;
+  background-color: var(--azul-claro, #007bff);
+  display: block;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.info-box{
+  padding: 1rem 2rem;
+  color: var(--texto-azul);
+    font-size: 18px;
+    line-height: 1.6;
+}
 
 .info-box h3 {
   margin-top: 1.5rem;
   font-size: 20px;
-  border-bottom: 1px solid #fff;
   padding-bottom: 4px;
 }
 
-.info-box p, .info-box li {
-  font-size: 18px;
-  line-height: 1.6;
+.requisitos-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
 }
 
-.info-box ul {
-padding-right: 1rem;
-  margin: 0;
-  list-style-type: none;
+.requisitos-texto,
+.requisitos-imagen {
+  flex: 1 1 100%;
 }
-.info-box ul li i{
-  color: green;
-  margin-right: 5px ;
+
+.requisitos-texto h3 {
+  margin-top: 1.5rem;
+  font-size: 20px;
+  padding-bottom: 4px;
 }
+.requisitos-texto ol li{
+  margin: 4px 0px;
+}
+.requisitos-imagen img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+/*seccion de inscripcion*/
 .info-inscripcion{
-  background-color: var(--azul-oscuro);
+  background-color: var(--gris-claro);
   padding: 2rem;
 }
+
 .info-inscripcion h2 {
-  margin-bottom: 10px;
-  font-size: 2rem;
-  color: #333;
+  color: var(--texto-azul);
   text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 28px;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
 }
+
+.info-inscripcion h2::after {
+  content: '';
+  width: 100px;
+  height: 3px;
+  background-color: var(--azul-claro, #007bff);
+  display: block;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
 .pasos-inscripcion {
   display: flex;
   align-items: stretch; /* 👈 clave: hace que .numero se estire en altura */
@@ -181,4 +232,13 @@ padding-right: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+
+/* Para pantallas medianas o grandes */
+@media (min-width: 768px) {
+  .requisitos-texto,
+  .requisitos-imagen {
+    flex: 1 1 45%;
+  }
 }

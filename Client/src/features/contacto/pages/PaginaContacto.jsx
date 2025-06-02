@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import HeaderProp from "../../home_usuario/components/HeaderProp";
 import "../Styles/PaginaContacto.css";
-import phoneIcon from "../../../assets/icons/phone-call.png";
-import Ubicacion from "../../../assets/icons/location.png";
-import Trabajo from "../../../assets/icons/freelance.png";
 import axios from "axios";
 
 const PaginaContacto = () => {

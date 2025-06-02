@@ -1,0 +1,16 @@
+/* styles/Overrides.css (o donde lo tengas importado) */
+.page-no-sidebar {
+  display: block; /* rompe el grid que tiene .main */
+  width: 100%;
+  min-height: 100vh;
+}
+
+.content-area.no-content-style {
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+.olympiad-detail-content{
+    background-color: aqua;
+}
