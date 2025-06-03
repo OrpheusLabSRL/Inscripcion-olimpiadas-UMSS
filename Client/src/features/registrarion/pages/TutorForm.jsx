@@ -163,8 +163,8 @@ export const TutorForm = () => {
           formData.carnet.length < 6
             ? "Mínimo 6 caracteres requeridos"
             : formData.carnet.length > 12
-            ? "Máximo 12 caracteres permitidos"
-            : errors.carnet,
+              ? "Máximo 12 caracteres permitidos"
+              : errors.carnet,
       });
       return;
     }
@@ -330,15 +330,9 @@ export const TutorForm = () => {
   };
 
   return (
-    <div className="tutor-page-wrapper">
-      <HeaderProp />
-      <div className="tutor-form-content">
+    <div>
+      
         <div className="tutor-form-container">
-          <h1>Proceso de Inscripción</h1>
-          <p className="form-description">
-            Inicia una nueva inscripción o continua si ya empezaste una
-          </p>
-
           <div className="form-options-container">
             <button
               type="button"
@@ -349,9 +343,8 @@ export const TutorForm = () => {
             </button>
             <button
               type="button"
-              className={`form-option ${
-                formType === "continue" ? "active" : ""
-              }`}
+              className={`form-option ${formType === "continue" ? "active" : ""
+                }`}
               onClick={() => setFormType("continue")}
             >
               Continuar inscripción
@@ -429,7 +422,7 @@ export const TutorForm = () => {
             </form>
           )}
         </div>
-      </div>
+   
     </div>
   );
 };

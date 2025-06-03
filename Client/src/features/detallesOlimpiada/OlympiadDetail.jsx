@@ -1,12 +1,10 @@
 import { useParams } from "react-router-dom";
-import { useNavigate, useLocation } from "react-router-dom";
-import { registerTutor, checkExistingTutor } from "../../../api/TutorForm.api";
-import { GenericCard } from "../../../components/cards/GenericCard";
 import { useEffect, useState } from "react";
 import { getOlimpiadas, getAreasCategoriasPorOlimpiada } from "../../api/Administration.api";
 import "../detallesOlimpiada/OlympiadDetail.css";
 import HeaderProp from "../home_usuario/components/HeaderProp";
 import Footer from "../home_usuario/components/Footer";
+import { TutorForm } from "../registrarion/pages/TutorForm";
 
 const OlympiadDetail = () => {
   const { id } = useParams();
@@ -101,8 +99,11 @@ const OlympiadDetail = () => {
             ))}
           </div>
         )}
-
-        <h2>Proceso de Inscripción</h2>
+        <div className="inscripcion">
+           <h2>Proceso de Inscripción</h2>
+        <TutorForm />
+        </div>
+       
       </div>
       <Footer />
     </div>

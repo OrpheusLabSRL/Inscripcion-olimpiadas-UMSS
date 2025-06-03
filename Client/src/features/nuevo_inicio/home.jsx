@@ -53,12 +53,30 @@ const Home = () => {
             />
             <div className="caption">
               <h3>{olympiad.nombreOlimpiada}</h3>
-              <p>{olympiad.fechaInicioOlimpiada || "fecha no disponible."} {olympiad.fechaFinOlimpiada || "fecha no disponible."}</p>
+              <p>
+                <strong>Desde</strong>{" "}
+                {olympiad.fechaInicioOlimpiada
+                  ? new Date(olympiad.fechaInicioOlimpiada).toLocaleDateString("es-ES", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })
+                  : "fecha no disponible."}{" "}
+                <strong>hasta</strong>{" "}
+                {olympiad.fechaFinOlimpiada
+                  ? new Date(olympiad.fechaFinOlimpiada).toLocaleDateString("es-ES", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })
+                  : "fecha no disponible."}
+              </p>
+
               <button
                 className="caption-button"
                 onClick={() => handleView(olympiad.idOlimpiada)}
-              >
-                Ver más
+              > <i className="bi bi-search"></i>
+                Más información
               </button>
             </div>
           </div>
@@ -107,23 +125,57 @@ const Home = () => {
       <div className="info-inscripcion">
         <h2>Pasos para inscribirte</h2>
 
-        <div className="pasos-inscripcion">
-          <div className="numero">1</div>
-          <div className="info-titulo">
-            <h3>Selecciona una olimpiada</h3>
-            <p>Ingresa a la plataforma y elige la olimpiada en la que deseas participar. Este paso es obligatorio para todos: estudiantes, tutores o responsables de inscripción.</p>
-          </div>
-        </div>
-
-        <div className="pasos-inscripcion">
-          <div className="numero">2</div>
-          <div className="info-titulo">
-            <h3>Elige el tipo de inscripción</h3>
-            <p>Puedes elegir entre una inscripción manual (llenando un formulario paso a paso) o una inscripción masiva mediante una plantilla Excel.</p>
-          </div>
+        <div className="pasos-grid">
+          {[...Array(10)].map((_, i) => (
+            <div className="pasos-inscripcion" key={i}>
+              <div className="numero">{i + 1}</div>
+              <div className="info-titulo">
+                <h3>
+                  <i className={`bi ${[
+                      "bi-trophy",
+                      "bi-ui-checks-grid",
+                      "bi-person-badge",
+                      "bi-person-lines-fill",
+                      "bi-list-check",
+                      "bi-person-vcard",
+                      "bi-check-circle",
+                      "bi-credit-card-2-front",
+                      "bi-upload",
+                      "bi-patch-check-fill"
+                    ][i]
+                    } me-2`}></i>
+                  {[
+                    "Selecciona una olimpiada",
+                    "Elige el tipo de inscripción",
+                    "Registra al responsable de inscripción",
+                    "Ingresa los datos del olimpista",
+                    "Selecciona las áreas de competencia",
+                    "Registra al tutor legal",
+                    "Finaliza la inscripción",
+                    "Realiza el pago",
+                    "Sube el comprobante de pago",
+                    "Inscripción completada"
+                  ][i]}
+                </h3>
+                <p>{[
+                  "Elige la olimpiada en la que deseas participar. Este paso es obligatorio para todos los tipos de inscripción.",
+                  "Puedes continuar con un registro manual, llenando los datos paso a paso, o subir una planilla Excel con los datos de los participantes.",
+                  "Antes de continuar con el registro de participantes, se deben completar los datos del responsable que realiza la inscripción.",
+                  "Registra los datos personales del estudiante que participará en la olimpiada.",
+                  "Indica en qué áreas participará el olimpista. De forma opcional, puedes asignar a los tutores encargados de cada área.",
+                  "Completa los datos del padre, madre o tutor legal del estudiante participante.",
+                  "Una vez registrados todos los datos necesarios, genera la boleta de pago para continuar con el proceso.",
+                  "Acude a las cajas de la universidad con la boleta de pago para completar el pago correspondiente.",
+                  "Ingresa nuevamente a la plataforma y sube una foto clara del comprobante o factura entregado en caja.",
+                  "Una vez validado el pago, el estado de inscripción de tus olimpistas pasará de 'pendiente' a 'completada'."
+                ][i]}</p>
+              </div>
+            </div>
+          ))}
         </div>
 
       </div>
+
 
 
     </div>

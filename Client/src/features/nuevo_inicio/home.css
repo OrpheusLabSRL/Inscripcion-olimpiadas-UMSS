@@ -65,19 +65,20 @@
 }
 
 .caption-button {
-  background-color: #ffffff;
-  color: #333;
+  background-color: var(--azul-claro);
+  color: var(--blanco);
   border: none;
   padding: 10px 20px;
   font-weight: bold;
   font-size: 1rem;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .caption-button:hover {
-  background-color: #ddd;
+  background-color: var(--blanco);
+  color: var(--azul-claro);
 }
 
 
@@ -107,7 +108,7 @@
 /*Seccion de informacion*/
 
 .info-section {
-  padding: 2.5rem 5rem ;
+  padding: 2rem 4rem ;
   background-color: var(--gris-claro);
   color: #213448;
   font-family: 'Poppins', sans-serif;
@@ -166,18 +167,26 @@
 .requisitos-texto ol li{
   margin: 4px 0px;
 }
+.requisitos-imagen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .requisitos-imagen img {
   max-width: 100%;
   height: auto;
   display: block;
-  margin: 0 auto;
+  margin: auto auto;
   border-radius: 10px;
 }
 
-/*seccion de inscripcion*/
-.info-inscripcion{
+/* Sección de inscripción */
+.info-inscripcion {
   background-color: var(--gris-claro);
   padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .info-inscripcion h2 {
@@ -200,33 +209,41 @@
   border-radius: 2px;
 }
 
+/* Grid responsivo para los pasos */
+.pasos-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Tarjeta de paso individual */
 .pasos-inscripcion {
   display: flex;
-  align-items: stretch; /* 👈 clave: hace que .numero se estire en altura */
+  align-items: stretch;
   width: 100%;
-  max-width: 800px;
-  margin: 40px auto;
   background-color: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(29, 33, 218, 0.1);
+  box-shadow: 0 0 10px rgba(29, 33, 218, 0.2);
   overflow: hidden;
 }
 
+/* Número del paso */
 .numero {
   background-color: rgb(107, 159, 207);
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: bold;
   padding: 0 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width:4.5rem;
-  flex-shrink: 0; /* no se encoge */
+  width: 3.5rem;
+  flex-shrink: 0;
 }
 
+/* Información del paso */
 .info-titulo {
-  padding: 20px;
+  padding: 10px;
   text-align: left;
   flex: 1;
   display: flex;
@@ -234,11 +251,28 @@
   justify-content: center;
 }
 
+.info-titulo h3 {
+  margin: 0 0 0.5rem;
+  font-size: 20px;
+  padding-bottom: 2px;
+    color: var(--texto-azul);
+}
+
+.info-titulo p{
+  margin: 0px;
+  font-size: 16px;
+  color: var(--texto-azul);
+
+}
 
 /* Para pantallas medianas o grandes */
 @media (min-width: 768px) {
   .requisitos-texto,
   .requisitos-imagen {
     flex: 1 1 45%;
+  }
+
+  .pasos-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
