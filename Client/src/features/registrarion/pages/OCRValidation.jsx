@@ -181,133 +181,160 @@ export const OCRValidation = () => {
   };
 
   return (
-    <div className={`ocrvalidation-container ${sidebarOpen ? "sidebar-collapsed" : ""}`}>
-      <h1>Subir foto del comprobante de pago</h1>
-      <p>Suba una imagen para validar mediante OCR.</p>
-      <div className="reports__content" style={{ marginTop: "20px" }}>
-        <form
-          onSubmit={handleSubmit}
-          className="ocrvalidation-form"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-            alignItems: "stretch",
-            justifyContent: "center",
-            marginBottom: "20px",
-            width: "100%",
-            maxWidth: "660px",
+  <div className={`ocrvalidation-container ${sidebarOpen ? "sidebar-collapsed" : ""}`}>
+    <h1>Subir foto del comprobante de pago</h1>
+    <p>Suba una imagen para validar mediante OCR.</p>
+    <div className="reports__content" style={{ marginTop: "20px" }}>
+      <form
+        onSubmit={handleSubmit}
+        className="ocrvalidation-form"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+          alignItems: "stretch",
+          justifyContent: "center",
+          marginBottom: "20px",
+          width: "100%",
+          maxWidth: "660px",
+        }}
+      >
+        {/* Contenedor del input de archivo personalizado */}
+        <div 
+          style={{ 
+            position: "relative", 
+            width: "150px", 
+            height: "40px",
+            opacity: uploadEnabled ? 1 : 0.6
           }}
         >
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            style={{
-              padding: "0.5rem",
-              borderRadius: "6px",
-              border: "1px solid #1e40af",
-              backgroundColor: "white",
-              color: "black",
-              fontWeight: "600",
-              fontSize: "1rem",
-              cursor: "pointer",
-              height: "40px",
-              width: "100%",
-              maxWidth: "660px",
-            }}
             disabled={!uploadEnabled}
-          />
-          <PrimaryButton
-            type="submit"
-            value={processing ? "Procesando..." : "Procesar Imagen"}
-            disabled={processing || !uploadEnabled}
             style={{
-              width: "150px",
-              height: "40px",
-              backgroundColor: "#1e40af",
-              borderColor: "#1e40af",
-              color: "white",
-              fontWeight: "600",
-              fontSize: "1rem",
-              cursor: "pointer",
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              opacity: 0,
+              cursor: uploadEnabled ? "pointer" : "not-allowed",
+              zIndex: 1,
             }}
           />
-        </form>
-        {ocrResult && (
           <div
             style={{
-              marginTop: "10px",
+              width: "100%",
+              height: "100%",
+              backgroundColor: "#1e40af",
+              color: "white",
+              borderRadius: "6px",
               display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
+              alignItems: "center",
               justifyContent: "center",
-              gap: "0.5rem",
+              fontWeight: "600",
+              fontSize: "1rem",
+              pointerEvents: "none",
+              border: "1px solid #1e40af",
             }}
           >
-            <div>
-              <strong>Código de Control detectado:</strong>{" "}
-              <span>{controlBoleta ? controlBoleta : "N/A"}</span>
-            </div>
+            {file ? file.name.slice(0, 12) + (file.name.length > 12 ? "..." : "") : "Seleccionar imagen"}
           </div>
-        )}
-        {controlBoleta && (
-          <>
-            <button
-              onClick={() => confirmarPago(controlBoleta)}
-              disabled={!boletaExists || boletaPaid}
-              style={{
-                marginTop: "10px",
-                marginRight: "10px",
-                width: "150px",
-                height: "40px",
-                borderRadius: "6px",
-                border: "1px solid #1e40af",
-                backgroundColor: !boletaExists || boletaPaid ? "#a0aec0" : "#1e40af",
-                color: "white",
-                fontWeight: "600",
-                fontSize: "1rem",
-                cursor: !boletaExists || boletaPaid ? "not-allowed" : "pointer",
-                verticalAlign: "middle",
-              }}
-            >
-              Confirmar Pago
-            </button>
-          </>
-        )}
-        {uploadEnabled === false && (
-          <div style={{ marginTop: "10px", color: "red" }}>
-            No tiene boletas de pago pendientes. No puede subir comprobantes hasta que tenga al menos una boleta pendiente.
-          </div>
-        )}
-        {boletaExists !== null && (
-          <div style={{ marginTop: "10px", color: boletaExists ? "green" : "red" }}>
-            {boletaExists
-              ? boletaPaid
-                ? "La boleta ya fue pagada."
-                : "La boleta existe en la base de datos."
-              : "La boleta NO existe en la base de datos."}
-          </div>
-        )}
-        <button
-          className="back-button"
-          onClick={handleBack}
+        </div>
+
+        <PrimaryButton
+          type="submit"
+          value={processing ? "Procesando..." : "Procesar Imagen"}
+          disabled={processing || !uploadEnabled || !file}
           style={{
-            marginTop: "20px",
+            width: "150px",
+            height: "40px",
+            backgroundColor: "#1e40af",
+            borderColor: "#1e40af",
+            color: "white",
+            fontWeight: "600",
+            fontSize: "1rem",
+            cursor: (processing || !uploadEnabled || !file) ? "not-allowed" : "pointer",
+          }}
+        />
+      </form>
+
+      {/* {ocrResult && (
+        <div
+          style={{
+            marginTop: "10px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            justifyContent: "center",
+            gap: "0.5rem",
+          }}
+        >
+          <div>
+            <strong>Código de Control detectado:</strong>{" "}
+            <span>{controlBoleta ? controlBoleta : "N/A"}</span>
+          </div>
+        </div>
+      )} */}
+
+      {controlBoleta && (
+        <button
+          onClick={() => confirmarPago(controlBoleta)}
+          disabled={!boletaExists || boletaPaid}
+          style={{
+            marginTop: "10px",
+            marginRight: "10px",
             width: "150px",
             height: "40px",
             borderRadius: "6px",
             border: "1px solid #1e40af",
-            backgroundColor: "#1e40af",
+            backgroundColor: !boletaExists || boletaPaid ? "#a0aec0" : "#1e40af",
             color: "white",
             fontWeight: "600",
             fontSize: "1rem",
-            cursor: "pointer",
+            cursor: !boletaExists || boletaPaid ? "not-allowed" : "pointer",
+            verticalAlign: "middle",
           }}
         >
-          Volver
+          Confirmar Pago
         </button>
-      </div>
+      )}
+
+      {uploadEnabled === false && (
+        <div style={{ marginTop: "10px", color: "red" }}>
+          No tiene boletas de pago pendientes. No puede subir comprobantes hasta que tenga al menos una boleta pendiente.
+        </div>
+      )}
+
+      {boletaExists !== null && (
+        <div style={{ marginTop: "10px", color: boletaExists ? "green" : "red" }}>
+          {boletaExists
+            ? boletaPaid
+              ? "La boleta ya fue pagada."
+              : "La boleta existe en la base de datos."
+            : "La boleta NO existe en la base de datos."}
+        </div>
+      )}
+
+      <button
+        className="back-button"
+        onClick={handleBack}
+        style={{
+          marginTop: "20px",
+          width: "150px",
+          height: "40px",
+          borderRadius: "6px",
+          border: "1px solid #1e40af",
+          backgroundColor: "#1e40af",
+          color: "white",
+          fontWeight: "600",
+          fontSize: "1rem",
+          cursor: "pointer",
+        }}
+      >
+        Volver
+      </button>
     </div>
-  );
+  </div>
+);
 };
