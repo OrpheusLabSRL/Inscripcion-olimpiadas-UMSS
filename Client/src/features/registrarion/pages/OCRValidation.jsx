@@ -236,11 +236,29 @@ export const OCRValidation = () => {
               fontSize: "1rem",
               pointerEvents: "none",
               border: "1px solid #1e40af",
+              textAlign: "center",
+              paddingLeft: "0",
             }}
           >
-            {file ? file.name.slice(0, 12) + (file.name.length > 12 ? "..." : "") : "Seleccionar imagen"}
+            Seleccionar imagen
           </div>
         </div>
+        {file && (
+          <div
+            style={{
+              marginTop: "5px",
+              fontWeight: "600",
+              fontSize: "1rem",
+              color: "#1e40af",
+              maxWidth: "250px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+            title={file.name}
+          >
+            Archivo seleccionado: {file.name}
+          </div>
+        )}
 
         <PrimaryButton
           type="submit"
