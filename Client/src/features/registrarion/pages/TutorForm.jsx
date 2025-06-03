@@ -419,14 +419,6 @@ export const TutorForm = () => {
 
               <div className="form-buttons">
                 <button
-                  type="button"
-                  className="back-button"
-                  onClick={() => navigate(-1)}
-                  disabled={isSubmitting}
-                >
-                  Atrás
-                </button>
-                <button
                   type="submit"
                   className="submit-button"
                   disabled={isSubmitting}

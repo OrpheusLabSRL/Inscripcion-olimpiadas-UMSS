@@ -1,4 +1,7 @@
 import { useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { registerTutor, checkExistingTutor } from "../../../api/TutorForm.api";
+import { GenericCard } from "../../../components/cards/GenericCard";
 import { useEffect, useState } from "react";
 import { getOlimpiadas, getAreasCategoriasPorOlimpiada } from "../../api/Administration.api";
 import "../detallesOlimpiada/OlympiadDetail.css";
@@ -69,7 +72,7 @@ const OlympiadDetail = () => {
                   <button
                     className="toggle-button"
                     onClick={() => toggleExpand(area.idArea)}
-                  >
+                  > <i className="bi bi-eye"></i>
                     {expandedAreaId === area.idArea ? "Ocultar" : "Ver más información"}
                   </button>
 
@@ -98,6 +101,8 @@ const OlympiadDetail = () => {
             ))}
           </div>
         )}
+
+        <h2>Proceso de Inscripción</h2>
       </div>
       <Footer />
     </div>

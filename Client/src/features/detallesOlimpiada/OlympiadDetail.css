@@ -139,7 +139,9 @@
   padding: 10px 15px;
   border-radius: 8px;
 }
-
+.categorias-desplegable ul{
+  list-style: none;
+}
 .categorias-desplegable ul ul {
   margin-left: 1rem;
   padding-left: 1rem;
