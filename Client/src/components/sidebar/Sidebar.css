@@ -2,7 +2,7 @@
 .sidebar {
   position: fixed;
   top: 0;
-  height: 95vh;
+  height: 100vh; /* Changed from 95vh to 100vh */
   background: var(--white);
   color: #222;
   padding: 25px 20px; /* un poco menos horizontal */
@@ -17,6 +17,21 @@
 
   &.sidebar ul li a {
     width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 80px; /* Increased sidebar width on mobile */
+    padding: 25px 15px;
+  }
+
+  .sidebar ul li a {
+    padding: 12px 15px; /* Align bottom buttons with top */
+  }
+
+  .sidebar.active {
+    width: 250px; /* Expanded sidebar width on mobile */
   }
 }
 

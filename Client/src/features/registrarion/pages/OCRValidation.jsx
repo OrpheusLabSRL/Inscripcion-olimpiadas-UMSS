@@ -12,7 +12,24 @@ export const OCRValidation = () => {
   const [boletaExists, setBoletaExists] = useState(null);
   const [montoTotal, setMontoTotal] = useState(null);
   const [uploadEnabled, setUploadEnabled] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Collapse sidebar on mobile devices
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setSidebarOpen(false); // Sidebar collapsed on mobile (false means collapsed)
+      } else {
+        setSidebarOpen(true); // Sidebar expanded on desktop
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const tutorId = sessionStorage.getItem("tutorInscripcionId");
@@ -164,37 +181,94 @@ export const OCRValidation = () => {
   };
 
   return (
-    <div className="ocrvalidation-container">
+    <div className={`ocrvalidation-container ${sidebarOpen ? "sidebar-collapsed" : ""}`}>
       <h1>Subir foto del comprobante de pago</h1>
       <p>Suba una imagen para validar mediante OCR.</p>
-      <div className="ocrvalidation-panel" style={{marginTop: "20px"}}>
-        <form onSubmit={handleSubmit} className="ocrvalidation-form" style={{display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start", justifyContent: "center", marginBottom: "20px", width: "660px"}}>
-          <input type="file" accept="image/*" onChange={handleFileChange} style={{padding: "0.5rem", borderRadius: "6px", border: "1px solid #1e40af", backgroundColor: "white", color: "black", fontWeight: "600", fontSize: "1rem", cursor: "pointer", height: "40px", width: "660px"}} disabled={!uploadEnabled} />
-          <PrimaryButton type="submit" value={processing ? "Procesando..." : "Procesar Imagen"} disabled={processing || !uploadEnabled} style={{width: "150px", height: "40px", backgroundColor: "#1e40af", borderColor: "#1e40af", color: "white", fontWeight: "600", fontSize: "1rem", cursor: "pointer"}} />
+      <div className="reports__content" style={{ marginTop: "20px" }}>
+        <form
+          onSubmit={handleSubmit}
+          className="ocrvalidation-form"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            alignItems: "stretch",
+            justifyContent: "center",
+            marginBottom: "20px",
+            width: "100%",
+            maxWidth: "660px",
+          }}
+        >
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            style={{
+              padding: "0.5rem",
+              borderRadius: "6px",
+              border: "1px solid #1e40af",
+              backgroundColor: "white",
+              color: "black",
+              fontWeight: "600",
+              fontSize: "1rem",
+              cursor: "pointer",
+              height: "40px",
+              width: "100%",
+              maxWidth: "660px",
+            }}
+            disabled={!uploadEnabled}
+          />
+          <PrimaryButton
+            type="submit"
+            value={processing ? "Procesando..." : "Procesar Imagen"}
+            disabled={processing || !uploadEnabled}
+            style={{
+              width: "150px",
+              height: "40px",
+              backgroundColor: "#1e40af",
+              borderColor: "#1e40af",
+              color: "white",
+              fontWeight: "600",
+              fontSize: "1rem",
+              cursor: "pointer",
+            }}
+          />
         </form>
         {ocrResult && (
-          <div style={{marginTop: "10px", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", gap: "0.5rem"}}>
-            <div><strong>Código de Control detectado:</strong> <span>{controlBoleta ? controlBoleta : "N/A"}</span></div>
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              justifyContent: "center",
+              gap: "0.5rem",
+            }}
+          >
+            <div>
+              <strong>Código de Control detectado:</strong>{" "}
+              <span>{controlBoleta ? controlBoleta : "N/A"}</span>
+            </div>
           </div>
         )}
         {controlBoleta && (
           <>
-            <button 
-              onClick={() => confirmarPago(controlBoleta)} 
+            <button
+              onClick={() => confirmarPago(controlBoleta)}
               disabled={!boletaExists || boletaPaid}
               style={{
-                marginTop: "10px", 
-                marginRight: "10px", 
-                width: "150px", 
-                height: "40px", 
-                borderRadius: "6px", 
-                border: "1px solid #1e40af", 
-                backgroundColor: (!boletaExists || boletaPaid) ? "#a0aec0" : "#1e40af", 
-                color: "white", 
-                fontWeight: "600", 
-                fontSize: "1rem", 
-                cursor: (!boletaExists || boletaPaid) ? "not-allowed" : "pointer", 
-                verticalAlign: "middle"
+                marginTop: "10px",
+                marginRight: "10px",
+                width: "150px",
+                height: "40px",
+                borderRadius: "6px",
+                border: "1px solid #1e40af",
+                backgroundColor: !boletaExists || boletaPaid ? "#a0aec0" : "#1e40af",
+                color: "white",
+                fontWeight: "600",
+                fontSize: "1rem",
+                cursor: !boletaExists || boletaPaid ? "not-allowed" : "pointer",
+                verticalAlign: "middle",
               }}
             >
               Confirmar Pago
@@ -202,14 +276,12 @@ export const OCRValidation = () => {
           </>
         )}
         {uploadEnabled === false && (
-          <div style={{marginTop: "10px", color: "red"}}>
+          <div style={{ marginTop: "10px", color: "red" }}>
             No tiene boletas de pago pendientes. No puede subir comprobantes hasta que tenga al menos una boleta pendiente.
           </div>
         )}
         {boletaExists !== null && (
-          <div
-            style={{ marginTop: "10px", color: boletaExists ? "green" : "red" }}
-          >
+          <div style={{ marginTop: "10px", color: boletaExists ? "green" : "red" }}>
             {boletaExists
               ? boletaPaid
                 ? "La boleta ya fue pagada."

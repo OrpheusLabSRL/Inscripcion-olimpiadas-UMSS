@@ -30,9 +30,26 @@ import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
 import { OCRValidation } from "./features/registrarion/pages/OCRValidation";
 import { GenerateOrder } from "./features/registrarion/pages/GenerateOrder";
 
+import { useEffect } from "react";
+
 function App() {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setIsOpen(false); // Collapse sidebar on mobile
+      } else {
+        setIsOpen(true); // Expand sidebar on desktop
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Rutas donde NO mostrar sidebar
   const hideSidebarRoutes = [

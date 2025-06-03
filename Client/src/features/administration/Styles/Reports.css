@@ -502,4 +502,22 @@
   .olympiads-report__filter-input {
     width: 100%;
   }
+
+  /* Make tables horizontally scrollable */
+  .reports__table-container,
+  .olympiads-report__table-container {
+    overflow-x: auto;
+  }
+
+  /* Stack filter controls and column selectors vertically */
+  .olympiads-report__columns-selector {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Hide less important columns on small screens */
+  .olympiads-report__table th:nth-child(n+6),
+  .olympiads-report__table td:nth-child(n+6) {
+    display: none;
+  }
 }

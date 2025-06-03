@@ -1,23 +1,84 @@
 .ocrvalidation-container {
-  padding: 2rem;
-  min-height: 100vh;
-  max-height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
+  max-width: 85%;
+  padding: 30px;
+  margin: 50px auto;
+  background-color: #f8fafc; /* Light background similar to Reports */
+  column-gap: 20px;
+  border-radius: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
+@media (max-width: 768px) {
+  .ocrvalidation-container {
+    margin-left: 20px; /* Reduced left margin on mobile */
+  }
 }
 
 .ocrvalidation-panel {
-  background-color: #ecefca;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-  max-height: calc(100vh - 4rem);
-  box-sizing: border-box;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ocrvalidation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+  justify-content: center;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 660px;
+}
+
+.ocrvalidation-form input[type="file"] {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #1e40af;
+  background-color: white;
+  color: black;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  height: 40px;
+  width: 100%;
+  max-width: 660px;
+}
+
+.ocrvalidation-form button,
+.ocrvalidation-form input[type="submit"] {
+  width: 150px;
+  height: 40px;
+  background-color: #1e40af;
+  border-color: #1e40af;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 6px;
+  align-self: flex-start;
+}
+
+.ocrvalidation-form button:disabled,
+.ocrvalidation-form input[type="submit"]:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .ocrvalidation-form {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ocrvalidation-form input[type="file"] {
+    width: 100%;
+  }
+
+  .ocrvalidation-form button,
+  .ocrvalidation-form input[type="submit"] {
+    width: 100%;
+    align-self: stretch;
+  }
 }
