@@ -10,19 +10,16 @@ const OlympiadDetail = () => {
   const [olympiad, setOlympiad] = useState(null);
   const [areasCategorias, setAreasCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expandedAreaId, setExpandedAreaId] = useState(null); // Para mostrar u ocultar detalles
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 1. Obtener olimpiada
         const allOlympiads = await getOlimpiadas();
-        // getOlimpiadas devuelve { data: [...] }
         const found = allOlympiads.data.find(o => o.idOlimpiada.toString() === id);
         setOlympiad(found);
 
-        // 2. Obtener áreas y categorías asociadas a esta olimpiada
         const responseAreasCat = await getAreasCategoriasPorOlimpiada(id);
-        // Según tu API, puede venir en response.data o directamente en response
         const areasCategoriasData = responseAreasCat.data || responseAreasCat;
         setAreasCategorias(areasCategoriasData);
 
@@ -36,6 +33,10 @@ const OlympiadDetail = () => {
     fetchData();
   }, [id]);
 
+  const toggleExpand = (idArea) => {
+    setExpandedAreaId(prev => (prev === idArea ? null : idArea));
+  };
+
   if (loading) return <div>Cargando información de la olimpiada...</div>;
   if (!olympiad) return <div>No se encontró la olimpiada</div>;
 
@@ -43,33 +44,59 @@ const OlympiadDetail = () => {
     <div className="olympiad-detail-page">
       <HeaderProp />
       <div className="olympiad-detail-content">
-        <h1>{olympiad.nombreOlimpiada}</h1>
-        <p><strong>Versión:</strong> {olympiad.version}</p>
-        <p><strong>Inicio:</strong> {olympiad.fechaInicioOlimpiada}</p>
-        <p><strong>Fin:</strong> {olympiad.fechaFinOlimpiada}</p>
+        <div className="olympiad-hero">
+          <div className="olympiad-hero-overlay">
+            <h2>{olympiad.nombreOlimpiada}</h2>
+            <p><strong>Versión:</strong> {olympiad.version}</p>
+            <p><strong>Inicio:</strong> {olympiad.fechaInicioOlimpiada} <strong>Fin:</strong> {olympiad.fechaFinOlimpiada}</p>
 
-        <h2>Áreas y Categorías Asociadas</h2>
+          </div>
+        </div>
+
+        <h2>Áreas</h2>
         {areasCategorias.length === 0 ? (
           <p>No hay áreas o categorías asociadas a esta olimpiada.</p>
         ) : (
-          <ul>
+          <div className="tarjetas-container">
             {areasCategorias.map((area) => (
-              <li key={area.idArea}>
-                <strong>Área:</strong> {area.nombreArea} <br />
-                <p>Descripción: {area.descripcionArea}</p>
+              <div className="area-card-horizontal" key={area.idArea}>
+                <div className="area-card-image">
+                  <img src="https://img.freepik.com/vector-gratis/concepto-astronomia-iconos-dibujos-animados-ciencia-retro_1284-7503.jpg?semt=ais_hybrid&w=740" alt="Área" />
+                </div>
+                <div className="area-card-content">
+                  <h4>{area.nombreArea}</h4>
+                  <p>{area.descripcionArea}</p>
+                  <button
+                    className="toggle-button"
+                    onClick={() => toggleExpand(area.idArea)}
+                  >
+                    {expandedAreaId === area.idArea ? "Ocultar" : "Ver más información"}
+                  </button>
 
-                <strong>Categorías:</strong>
-                <ul>
-                  {area.categorias.map((categoria) => (
-                    <li key={categoria.idCategoria}>
-                      {categoria.nombreCategoria} - Costo: {categoria.costo}
-                    </li>
-                  ))}
-                </ul>
-              </li>
+                  {expandedAreaId === area.idArea && (
+                    <div className="categorias-desplegable">
+                      <h4>Categorías:</h4>
+                      <ul>
+                        {area.categorias.map((categoria) => (
+                          <li key={categoria.idCategoria}>
+                            <strong>{categoria.nombreCategoria}</strong>
+                            <ul>
+                              {categoria.grados.map((grado) => (
+                                <li key={grado.idGrado}>
+                                  Grado {grado.numeroGrado} - Nivel: {grado.nivel}
+                                </li>
+                              ))}
+                            </ul>
+                          </li>
+
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
             ))}
-
-          </ul>
+          </div>
         )}
       </div>
       <Footer />
