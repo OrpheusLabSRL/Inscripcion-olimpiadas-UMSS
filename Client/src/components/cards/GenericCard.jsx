@@ -26,7 +26,7 @@ export const GenericCard = ({
         <p>{description}</p>
 
         <Link to={to} className="link-card">
-          <PrimaryButton value={value} className="card-generic-btn" />
+          <PrimaryButton value={value} />
         </Link>
       </div>
     </div>

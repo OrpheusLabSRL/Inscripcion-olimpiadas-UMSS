@@ -108,4 +108,39 @@ class AreaController extends Controller
         $simbolo = is_numeric($numero) ? "{$numero}°" : $numero;
         return "{$simbolo} {$nivel}";
     }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nombreArea' => 'required|string',
+            'descripcionArea' => 'nullable|string',
+        ]);
+
+        $area = Area::findOrFail($id);
+        $area->update($request->only(['nombreArea', 'descripcionArea']));
+
+        return response()->json(['message' => 'Área actualizada correctamente']);
+    }
+
+    public function actualizarEstado(Request $request, $id)
+    {
+        $request->validate([
+            'estadoArea' => 'required|boolean',
+        ]);
+
+        $area = Area::findOrFail($id);
+        $area->estadoArea = $request->estadoArea;
+        $area->save();
+
+        return response()->json(['message' => 'Estado del área actualizado correctamente']);
+    }
+
+    public function destroy($id)
+    {
+        $area = Area::findOrFail($id);
+        $area->delete();
+
+        return response()->json(['message' => 'Área eliminada correctamente']);
+    }
+
 }

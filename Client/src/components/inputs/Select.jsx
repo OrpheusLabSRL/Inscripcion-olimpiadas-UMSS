@@ -29,7 +29,6 @@ export const Select = ({
         className={className}
         id={id}
         name={name}
-        defaultValue={placeholder}
         {...(register &&
           (mandatory
             ? register(name, { required: `${label} es requerido` })

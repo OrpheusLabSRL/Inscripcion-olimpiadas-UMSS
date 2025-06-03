@@ -1,11 +1,17 @@
+//React
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+
+//Css
 import "../Styles/TutorForm.css";
 
+//Componentes
 import HeaderProp from "../../home_usuario/components/HeaderProp";
 import { registerTutor, checkExistingTutor } from "../../../api/TutorForm.api";
-import { NextPage } from "../../../components/Buttons/NextPage";
 import { GenericCard } from "../../../components/cards/GenericCard";
+import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
+
+//Assets
 import Logo from "../../../assets/images/O-Sansi.jpeg";
 
 export const TutorForm = () => {

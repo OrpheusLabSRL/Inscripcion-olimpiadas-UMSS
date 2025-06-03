@@ -20,6 +20,7 @@ import { RegisterResponsible } from "./features/registrarion/pages/RegisterRespo
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
 import Reports from "./features/administration/pages/Reports";
+import ManageUsers from "./features/administration/pages/ManageUsers";
 
 import PaginaContacto from "./features/contacto/pages/PaginaContacto";
 import ConsultarInscripcion from "./features/consultar_inscripcion/pages/ConsultarInscripcion";
@@ -40,6 +41,8 @@ function App() {
     "/",
     "/register/tutor-form",
     "/admin",
+    "/no-autorizado",
+    "no-autorizado",
     "/contacto",
     "/consultar-inscripcion",
     "/consultar-inscripcion/resultado",
@@ -118,19 +121,32 @@ function App() {
             {/* Admin Layout con rutas anidadas */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Login />} />
+
               <Route
                 path="home"
                 element={
                   <PrivateRoute
                     element={<HomeAdministration />}
-                    allowedRoles={[1]}
+                    withoutAllowed={true}
+                  />
+                }
+              />
+              <Route
+                path="users"
+                element={
+                  <PrivateRoute
+                    element={<ManageUsers />}
+                    allowedPermiso={"crear_usuarios"}
                   />
                 }
               />
               <Route
                 path="areas"
                 element={
-                  <PrivateRoute element={<ManageArea />} allowedRoles={[1]} />
+                  <PrivateRoute
+                    element={<ManageArea />}
+                    allowedPermiso={"gestionar_areas"}
+                  />
                 }
               />
               <Route
@@ -138,7 +154,7 @@ function App() {
                 element={
                   <PrivateRoute
                     element={<ManageCategoria />}
-                    allowedRoles={[1]}
+                    allowedPermiso={"gestionar_categorias"}
                   />
                 }
               />
@@ -147,7 +163,7 @@ function App() {
                 element={
                   <PrivateRoute
                     element={<ManageOlympiads />}
-                    allowedRoles={[1]}
+                    allowedPermiso={"crear_olimpiadas"}
                   />
                 }
               />
@@ -156,7 +172,7 @@ function App() {
                 element={
                   <PrivateRoute
                     element={<ManageViewBase />}
-                    allowedRoles={[1]}
+                    allowedPermiso={"gestionar_datos_base"}
                   />
                 }
               />
@@ -165,14 +181,17 @@ function App() {
                 element={
                   <PrivateRoute
                     element={<PanelOlympiad />}
-                    allowedRoles={[1]}
+                    allowedPermiso={"gestionar_olimpiadas"}
                   />
                 }
               />
               <Route
                 path="reports"
                 element={
-                  <PrivateRoute element={<Reports />} allowedRoles={[1]} />
+                  <PrivateRoute
+                    element={<Reports />}
+                    allowedPermiso={"ver_reportes"}
+                  />
                 }
               />
             </Route>

@@ -25,6 +25,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
+  const permisos = user?.rol?.permisos?.map((p) => p.nombrePermiso) || [];
+  const tienePermiso = (permiso) => permisos.includes(permiso);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -186,27 +188,30 @@ export default function Home() {
       <h2 className="admin-section-title">Acciones Rápidas</h2>
 
       <div className="admin-actions-section">
-        <div className="admin-action-card">
-          <div className="admin-action-icon">
-            <FaListAlt size={32} color="#3498db" />
+        {tienePermiso("gestionar_datos_base") && (
+          <div className="admin-action-card">
+            <div className="admin-action-icon">
+              <FaListAlt size={32} color="#3498db" />
+            </div>
+            <h3>Áreas y Categorías</h3>
+            <p>Visualiza las áreas y categorías disponibles</p>
+            <button onClick={() => navigate("/admin/view-base")}>
+              Ir a áreas y categorías
+            </button>
           </div>
-          <h3>Áreas y Categorías</h3>
-          <p>Visualiza las áreas y categorías disponibles</p>
-          <button onClick={() => navigate("/admin/view-base")}>
-            Ir a áreas y categorías
-          </button>
-        </div>
-
-        <div className="admin-action-card">
-          <div className="admin-action-icon">
-            <FaChartBar size={32} color="#3498db" />
+        )}
+        {tienePermiso("ver_reportes") && (
+          <div className="admin-action-card">
+            <div className="admin-action-icon">
+              <FaChartBar size={32} color="#3498db" />
+            </div>
+            <h3>Generar Reportes</h3>
+            <p>Genera reportes personalizados con filtros</p>
+            <button onClick={() => navigate("/admin/reports")}>
+              Generar reportes
+            </button>
           </div>
-          <h3>Generar Reportes</h3>
-          <p>Genera reportes personalizados con filtros</p>
-          <button onClick={() => navigate("/admin/reports")}>
-            Generar reportes
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );
