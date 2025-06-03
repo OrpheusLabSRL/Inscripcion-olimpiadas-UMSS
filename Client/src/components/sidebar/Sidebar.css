@@ -22,7 +22,7 @@
 
 @media (max-width: 768px) {
   .sidebar {
-    width: 80px; /* Increased sidebar width on mobile */
+    width: 40px; /* Increased sidebar width on mobile */
     padding: 25px 15px;
     bottom: 0; /* Ensure sidebar reaches bottom of screen */
     height:unset; /* Initially hidden on mobile */
@@ -155,6 +155,15 @@
 .btn-logout:hover {
   background-color: rgba(220, 38, 38, 0.1);
   color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .btn-logout {
+    position: fixed;
+    bottom: 40px;
+    left: 10px;
+    z-index: 1002;
+  }
 }
 
 .btn-logout a {

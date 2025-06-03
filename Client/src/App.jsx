@@ -30,9 +30,9 @@ import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
 import { OCRValidation } from "./features/registrarion/pages/OCRValidation";
 import { GenerateOrder } from "./features/registrarion/pages/GenerateOrder";
+import OlympiadDetail from "./features/detallesOlimpiada/OlympiadDetail";
 
 import { useEffect } from "react";
-import OlympiadDetail from "./features/detallesOlimpiada/OlympiadDetail";
 
 function App() {
   const [isOpen, setIsOpen] = useState(true);
@@ -64,6 +64,7 @@ function App() {
     "/consultar-inscripcion",
     "/consultar-inscripcion/resultado",
     "/consultar-inscripcion/resultado-tutor",
+    "/olimpiada/:id"
   ];
 
   const hideSidebar = hideSidebarRoutes.some((ruta) => location.pathname === ruta) || location.pathname.startsWith("/olimpiada/");
@@ -88,7 +89,7 @@ function App() {
           />
         )}
 
-        <div className={`content-area ${hideSidebarRoutes.includes(location.pathname) ? "no-margin" : ""}`}>
+        <div className={`content-area ${(hideSidebarRoutes.includes(location.pathname) || location.pathname.startsWith("/olimpiada/")) ? "no-margin" : ""}`}>
           <Routes>
             <Route path="/" element={<MainHome />} />
             <Route path="/olimpiada/:id" element={<OlympiadDetail />} />
