@@ -31,6 +31,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
 
   return (
     <>
+      {isOpen && <div className="sidebar-overlay" onClick={() => setIsOpen(false)}></div>}
       <div className={` sidebar ${isOpen ? "active" : ""}`}>
         <div
           className={`sidebar-header ${

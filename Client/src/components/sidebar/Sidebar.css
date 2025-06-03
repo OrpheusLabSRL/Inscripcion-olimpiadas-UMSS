@@ -24,6 +24,8 @@
   .sidebar {
     width: 80px; /* Increased sidebar width on mobile */
     padding: 25px 15px;
+    bottom: 0; /* Ensure sidebar reaches bottom of screen */
+    height:unset; /* Initially hidden on mobile */
   }
 
   .sidebar ul li a {
@@ -32,6 +34,16 @@
 
   .sidebar.active {
     width: 250px; /* Expanded sidebar width on mobile */
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
   }
 }
 
