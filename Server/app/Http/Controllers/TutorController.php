@@ -238,20 +238,19 @@ class TutorController extends Controller
         try {
             $tutores = \DB::table('tutores')
                 ->leftJoin('personas', 'tutores.idPersona', '=', 'personas.idPersona')
-                // Simplify query to isolate error
-                // ->leftJoin('inscripciones', 'tutores.idPersona', '=', 'inscripciones.idTutorResponsable')
-                // ->leftJoin('olimpiadas_areas_categorias', 'inscripciones.idOlimpAreaCategoria', '=', 'olimpiadas_areas_categorias.idOlimpAreaCategoria')
-                // ->leftJoin('olimpistas', 'inscripciones.idOlimpista', '=', 'olimpistas.idPersona')
+                ->leftJoin('inscripciones', 'tutores.idPersona', '=', 'inscripciones.idTutorLegal')
+                ->leftJoin('olimpistas', 'inscripciones.idOlimpista', '=', 'olimpistas.idPersona')
+                ->leftJoin('personas as olimpista_persona', 'olimpistas.idPersona', '=', 'olimpista_persona.idPersona')
                 ->select(
                     'personas.carnetIdentidad',
                     'personas.nombre',
                     'personas.apellido',
                     'personas.correoElectronico',
                     'tutores.tipoTutor',
-                    'tutores.telefono'
-                    // 'olimpistas.carnetIdentidad as carnetOlimpista',
-                    // 'olimpistas.nombre as nombreOlimpista',
-                    // 'olimpistas.apellido as apellidoOlimpista'
+                    'tutores.telefono',
+                    'olimpista_persona.carnetIdentidad as carnetOlimpista',
+                    'olimpista_persona.nombre as nombreOlimpista',
+                    'olimpista_persona.apellido as apellidoOlimpista'
                 )
                 ->get();
 
