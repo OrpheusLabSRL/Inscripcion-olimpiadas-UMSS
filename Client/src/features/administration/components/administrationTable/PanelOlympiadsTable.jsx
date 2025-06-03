@@ -55,7 +55,8 @@ export default function PanelOlympiadsTable({
           </button>
           {hasStarted && (
             <div id="tooltip-assign" role="tooltip" className="tooltip-text">
-              No se puede asignar áreas porque la olimpiada ya comenzó
+              No se puede asignar áreas porque la olimpiada ya comenzó o no esta
+              activa
               <div className="tooltip-arrow"></div>
             </div>
           )}
@@ -217,7 +218,8 @@ export default function PanelOlympiadsTable({
                   role="tooltip"
                   className="tooltip-text"
                 >
-                  No se puede registrar porque la olimpiada ya comenzó
+                  No se puede registrar porque la olimpiada ya comenzó o no esta
+                  activa
                   <div className="tooltip-arrow"></div>
                 </div>
               )}

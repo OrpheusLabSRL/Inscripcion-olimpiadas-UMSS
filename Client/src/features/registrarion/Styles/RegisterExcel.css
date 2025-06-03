@@ -260,4 +260,163 @@
     margin-left: 0;
     margin-top: 3px;
   }
+  @media (max-width: 768px) {
+  .excel-container {
+    padding: 15px;
+    margin: 10px;
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+  }
+
+  .excel-header h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .download-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .instructions {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .action-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .upload-section h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .file-input-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .file-label {
+    text-align: center;
+  }
+
+  .file-name {
+    text-align: center;
+    display: block;
+    word-break: break-all;
+  }
+
+  .table-container {
+    max-height: 400px;
+    font-size: 12px;
+    overflow-x: auto;
+    display: block;
+  }
+
+  .data-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px;
+    min-width: 100px;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .data-table th {
+    font-size: 12px;
+    white-space: normal;
+    word-wrap: break-word;
+  }
+
+  .validation-errors {
+    font-size: 14px;
+  }
+
+  .validation-errors ul {
+    padding-left: 15px;
+  }
+
+  .error-message,
+  .success-message {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .empty-table-message {
+    font-size: 14px;
+    padding: 15px;
+    text-align: center;
+  }
+
+  .action-buttons-excel {
+    display: flex;
+    justify-content: center;
+  }
+
+  .register-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .btn-back {
+    font-size: 2rem;
+    margin-left: 10px;
+  }
+
+  .title-register {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .excel-container {
+    padding: 10px;
+  }
+
+  .excel-header h1 {
+    font-size: 18px;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 6px;
+    font-size: 11px;
+  }
+
+  .data-table th {
+    font-size: 11px;
+  }
+
+  .instructions {
+    font-size: 12px;
+  }
+
+  .validation-errors {
+    font-size: 12px;
+  }
+
+  .validation-errors h3 {
+    font-size: 14px;
+  }
+
+  .error-message,
+  .success-message {
+    font-size: 12px;
+  }
+}
 }

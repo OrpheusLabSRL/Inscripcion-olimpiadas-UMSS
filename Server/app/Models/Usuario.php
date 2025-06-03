@@ -31,6 +31,22 @@ class Usuario extends Model
         return $this->belongsTo(Rol::class, 'idRol', 'idRol');
     }
 
+     public function hasRole($rolNombre)
+    {
+        return optional($this->rol)->nombreRol === $rolNombre;
+    }
+
+    // Obtener permisos a través del rol
+    public function permisos()
+    {
+        return $this->rol ? $this->rol->permisos : collect();
+    }
+
+    public function hasPermiso($permisoNombre)
+    {
+        return $this->permisos()->contains('nombrePermiso', $permisoNombre);
+    }
+
     // Ocultar atributos sensibles al devolver el modelo como JSON
     protected $hidden = [
         'password',

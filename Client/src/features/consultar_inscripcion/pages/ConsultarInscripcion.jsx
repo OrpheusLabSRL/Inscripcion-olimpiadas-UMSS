@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import HeaderProp from "../../home_usuario/components/HeaderProp";
-import "../Styles/ConsultarInscripcion.css";
+import "../Styles/estadoInscripcion.css";
+import imagen from "../../../assets/images/estadoInscripcion.png"
 
 const ConsultarInscripcion = () => {
   const navigate = useNavigate();
@@ -112,79 +113,93 @@ const ConsultarInscripcion = () => {
   };
 
   return (
-    <div className="consultar-inscripcion-container">
-      <HeaderProp />
-      <form className="consultar-form" onSubmit={handleSubmit} noValidate>
-        <h2>Consultar Estado de Inscripción</h2>
+  <div>
+    <HeaderProp />
 
-        <div className="form-group">
-          <label htmlFor="ci">
-            Carnet de Identidad <span className="required-field">*</span>
-          </label>
-          <input
-            type="text"
-            id="ci"
-            value={ci}
-            onChange={(e) => setCi(e.target.value)}
-            className={errors.ci ? "invalid-input" : ""}
-            required
-            placeholder="Ingrese su carnet de identidad"
-            aria-required="true"
-          />
-          {errors.ci && <div className="error-message">{errors.ci}</div>}
-        </div>
+    <div className="consulta-wrapper">
+      <div className="image-side">
+        <img src={imagen} alt="Ilustración educativa" />
+      </div>
 
-        <div className="form-group">
-          <label htmlFor="correo">
-            Correo Electrónico <span className="required-field">*</span>
-          </label>
-          <input
-            type="email"
-            id="correo"
-            value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
-            className={errors.correo ? "invalid-input" : ""}
-            required
-            placeholder="Ingrese su correo electrónico"
-            aria-required="true"
-          />
-          {errors.correo && (
-            <div className="error-message">{errors.correo}</div>
-          )}
-        </div>
+      {/* Lado del formulario */}
+      <div className="form-side">
+        <form onSubmit={handleSubmit} noValidate>
+          <h2>Consultar Estado de Inscripción</h2>
 
-        <div className="form-group">
-          <label htmlFor="rol">
-            Rol <span className="required-field">*</span>
-          </label>
-          <select
-            id="rol"
-            value={rol}
-            onChange={(e) => setRol(e.target.value)}
-            className={errors.rol ? "invalid-input" : ""}
-            required
-            aria-required="true"
+          <div className="form-group">
+            <label htmlFor="ci">
+              <i className="bi bi-person-vcard"></i> Carnet de Identidad <span className="required-field">*</span>
+            </label>
+            <input
+              type="text"
+              id="ci"
+              value={ci}
+              onChange={(e) => setCi(e.target.value)}
+              className={errors.ci ? "invalid-input" : ""}
+              required
+              placeholder="Ingrese su carnet de identidad"
+              aria-required="true"
+            />
+            {errors.ci && <div className="error-message">{errors.ci}</div>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="correo">
+              <i className="bi bi-envelope"></i> Correo Electrónico <span className="required-field">*</span>
+            </label>
+            <input
+              type="email"
+              id="correo"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              className={errors.correo ? "invalid-input" : ""}
+              required
+              placeholder="Ingrese su correo electrónico"
+              aria-required="true"
+            />
+            {errors.correo && (
+              <div className="error-message">{errors.correo}</div>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="rol">
+              <i className="bi bi-person-badge"></i> Rol <span className="required-field">*</span>
+            </label>
+            <select
+              id="rol"
+              value={rol}
+              onChange={(e) => setRol(e.target.value)}
+              className={errors.rol ? "invalid-input" : ""}
+              required
+              aria-required="true"
+            >
+              <option value="">Seleccione su rol</option>
+              <option value="olimpista">Olimpista</option>
+              <option value="tutor">Tutor/Responsable Inscripción</option>
+            </select>
+            {errors.rol && <div className="error-message">{errors.rol}</div>}
+            <div className="help-message">
+              En caso de ser tutor legal, tutor de área o responsable de inscripción seleccione Tutor/Responsable Inscripción
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={loading}
           >
-            <option value="">Seleccione su rol</option>
-            <option value="olimpista">Olimpista</option>
-            <option value="tutor">Tutor/Responsable Inscripción </option>
-          </select>
-          {errors.rol && <div className="error-message">{errors.rol}</div>}
-          <div className="help-message">En caso de ser tutor legal, tutor de área o responsable de inscripción seleccione tutor/Responsable Inscripción</div>
-        </div>
+            <i className="bi bi-search"></i>
+            {loading ? "Consultando..." : "Consultar"}
+          </button>
 
-        <button
-          type="submit"
-          className="btn-consulta submit-button"
-          disabled={loading}
-        >
-          {loading ? "Consultando..." : "Consultar"}
-        </button>
-
-        {error && <div className="error-message">{error}</div>}
-      </form>
+          {error && <div className="error-message">{error}</div>}
+        </form>
+      </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default ConsultarInscripcion;

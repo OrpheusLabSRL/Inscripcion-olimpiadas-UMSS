@@ -108,31 +108,32 @@ const ResultadoConsulta_Tutor = () => {
           <div className="tutor-info">
             <h3>Información del Tutor</h3>
             <p>
-              <strong>Nombre:</strong> {tutor.nombre} {tutor.apellido}
+              <strong><i className="bi bi-person-vcard"></i> Nombre:</strong> {tutor.nombre} {tutor.apellido}
             </p>
             <p>
-              <strong>Carnet de Identidad:</strong> {tutor.carnetIdentidad}
+              <strong><i className="bi bi-credit-card-2-front"></i> Carnet de Identidad:</strong> {tutor.carnetIdentidad}
             </p>
             <p>
-              <strong>Correo Electrónico:</strong> {tutor.correoElectronico}
+              <strong><i className="bi bi-envelope-at"></i> Correo Electrónico:</strong> {tutor.correoElectronico}
             </p>
             <p>
-              <strong>Teléfono:</strong> {tutor.telefono}
+              <strong><i className="bi bi-telephone-fill"></i> Teléfono:</strong> {tutor.telefono}
             </p>
           </div>
+
 
           {Object.entries(olimpistasAgrupados).map(([codigoInscripcion, olimpistasGrupo]) => {
             const primerOlimpista = olimpistasGrupo[0];
             const formaInscripcion = primerOlimpista?.formaInscripcion || 'No especificada';
-            const estadoPago = olimpistasGrupo.every(ol => ol.estadoPago === "PAGO REALIZADO") 
-              ? "PAGO REALIZADO" 
+            const estadoPago = olimpistasGrupo.every(ol => ol.estadoPago === "PAGO REALIZADO")
+              ? "PAGO REALIZADO"
               : "PAGO PENDIENTE";
 
             return (
               <div key={codigoInscripcion} className={formaInscripcion === 'Excel' ? "inscripcion-card" : "olimpistas-table"}>
                 <h3>
-                  {codigoInscripcion === 'sin-inscripcion' 
-                    ? 'Olimpistas sin inscripción' 
+                  {codigoInscripcion === 'sin-inscripcion'
+                    ? 'Olimpistas sin inscripción'
                     : `Olimpistas correspondientes a la Inscripción: ${codigoInscripcion}`}
                 </h3>
                 {codigoInscripcion !== 'sin-inscripcion' && (
@@ -146,7 +147,7 @@ const ResultadoConsulta_Tutor = () => {
                         <p className={getEstadoPagoClass(estadoPago)}>
                           <strong>Estado de Pago:</strong> {estadoPago}
                         </p>
-                        <button 
+                        <button
                           className="ver-detalles-btn"
                           onClick={() => handleVerDetalles(olimpistasGrupo)}
                         >
@@ -200,9 +201,9 @@ const ResultadoConsulta_Tutor = () => {
         </div>
       </div>
       {showModal && (
-        <ModalDetalles 
-          olimpistas={selectedOlimpistas} 
-          onClose={() => setShowModal(false)} 
+        <ModalDetalles
+          olimpistas={selectedOlimpistas}
+          onClose={() => setShowModal(false)}
         />
       )}
     </>

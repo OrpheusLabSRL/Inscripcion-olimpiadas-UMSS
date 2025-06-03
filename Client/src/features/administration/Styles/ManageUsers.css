@@ -1,0 +1,230 @@
+#crear-usuario-container {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 40px;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.05);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+#crear-usuario-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #007bff, #0056b3, #004085);
+  border-radius: 20px 20px 0 0;
+}
+
+#crear-usuario-titulo {
+  text-align: center;
+  margin-bottom: 35px;
+  color: #2c3e50;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+#crear-usuario-form label {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #34495e;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+#crear-usuario-form input[type="text"],
+#crear-usuario-form input[type="email"],
+#crear-usuario-form input[type="password"],
+#crear-usuario-form select {
+  width: 100%;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  background-color: #ffffff;
+  font-size: 16px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+#crear-usuario-form input[type="text"]:focus,
+#crear-usuario-form input[type="email"]:focus,
+#crear-usuario-form input[type="password"]:focus,
+#crear-usuario-form select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+#crear-usuario-form input[type="text"]:hover,
+#crear-usuario-form input[type="email"]:hover,
+#crear-usuario-form input[type="password"]:hover,
+#crear-usuario-form select:hover {
+  border-color: #adb5bd;
+}
+
+#crear-usuario-checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.crear-usuario-checkbox {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.crear-usuario-checkbox:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+.crear-usuario-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  accent-color: #007bff;
+  cursor: pointer;
+}
+
+.crear-usuario-checkbox label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  cursor: pointer;
+  color: #495057;
+}
+
+#crear-usuario-boton {
+  width: 100%;
+  padding: 16px 24px;
+  margin-top: 35px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+#crear-usuario-boton:hover {
+  background: linear-gradient(135deg, #0056b3, #004085);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+}
+
+#crear-usuario-boton:hover::before {
+  left: 100%;
+}
+
+#crear-usuario-boton:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+}
+
+#crear-usuario-mensaje {
+  margin-top: 20px;
+  padding: 15px;
+  text-align: center;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+#crear-usuario-mensaje.success {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+#crear-usuario-mensaje.error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #crear-usuario-container {
+    margin: 20px;
+    padding: 25px;
+  }
+
+  #crear-usuario-titulo {
+    font-size: 24px;
+  }
+
+  #crear-usuario-checkbox-group {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+
+  #crear-usuario-form input[type="text"],
+  #crear-usuario-form input[type="email"],
+  #crear-usuario-form input[type="password"],
+  #crear-usuario-form select {
+    padding: 12px 14px;
+  }
+}
+
+/* Animaciones adicionales */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#crear-usuario-container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Estados de validación */
+.input-valid {
+  border-color: #28a745 !important;
+  background-color: #f8fff9;
+}
+
+.input-invalid {
+  border-color: #dc3545 !important;
+  background-color: #fff8f8;
+}
+
+.input-valid:focus {
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1) !important;
+}
+
+.input-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
+}

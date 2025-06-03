@@ -2,12 +2,12 @@
 import { Input } from "../../../components/inputs/Input";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { Validator } from "../utils/ValidationRules";
+import { NextPage } from "../../../components/Buttons/NextPage";
 
 //react
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
-import { IoArrowBackCircle } from "react-icons/io5";
 import { MdCleaningServices } from "react-icons/md";
 
 //api
@@ -49,7 +49,6 @@ export const RegisterTutorOptional = () => {
     },
     mode: "onChange",
   });
-
 
   const watchedNombre = watch("Nombre");
   const watchedApellido = watch("Apellido");
@@ -199,9 +198,6 @@ export const RegisterTutorOptional = () => {
 
   return (
     <div className="container-form">
-      <NavLink to={"/register/olympian-area"} onClick={backPage}>
-        <IoArrowBackCircle className="btn-back" />
-      </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
           <h1>Registro de profesor de área</h1>
@@ -293,7 +289,14 @@ export const RegisterTutorOptional = () => {
           />
         </div>
 
-        <div className="container-btn-next">
+        <div className="container-btn-next-back input-2c">
+          <NextPage
+            type="button"
+            value="Anterior"
+            to={"/register/olympian-area"}
+            onClick={backPage}
+            className="btn-back-register"
+          />
           <PrimaryButton type="submit" value="Registrar" />
         </div>
       </form>

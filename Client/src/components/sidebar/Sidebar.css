@@ -5,7 +5,7 @@
   height: 100vh; /* Changed from 95vh to 100vh */
   background: var(--white);
   color: #222;
-  padding: 25px 20px; /* un poco menos horizontal */
+  padding: 25px 5px; /* un poco menos horizontal */
   transition: all 0.4s ease; /* más rápido y suave */
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
@@ -85,7 +85,7 @@
   padding: 10px 14px;
   cursor: pointer;
   position: fixed;
-  left: 25px;
+  left: 10px;
   bottom: 80px;
   z-index: 1001;
   border-radius: 10px;
@@ -138,11 +138,11 @@
 /* ===== Botón Cerrar Sesión ===== */
 .btn-logout {
   position: absolute;
-  bottom: 40px;
-  left: 25px;
+  bottom: 70px;
   padding: 8px 8px;
   border-radius: 10px;
   cursor: pointer;
+  left: 10px;
   display: flex;
   align-items: center;
   gap: 8px;

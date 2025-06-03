@@ -273,6 +273,41 @@ body,
   color: #2563eb;
 }
 
+.table-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.action-icon {
+  cursor: pointer;
+  font-size: 1.8rem;
+  transition: all 0.3s ease;
+  padding: 5px;
+  border-radius: 4px;
+  margin-top: 6px;
+}
+
+.edit-icon {
+  color: #4a89dc;
+}
+
+.edit-icon:hover {
+  color: white;
+  background-color: #4a89dc;
+  transform: scale(1.1);
+}
+
+.delete-icon {
+  color: #e9573f;
+}
+
+.delete-icon:hover {
+  color: white;
+  background-color: #e9573f;
+  transform: scale(1.1);
+}
+
 .category-table-more-count {
   background-color: #e2e8f0;
   color: #475569;

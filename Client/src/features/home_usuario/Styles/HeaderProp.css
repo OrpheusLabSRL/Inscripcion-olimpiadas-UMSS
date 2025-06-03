@@ -1,63 +1,124 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
 
-/* Estilos generales del header */
-header {
-  height: 80px; /* Altura del header */
-  background-color: white; /* Fondo blanco */
-  padding: var(--high-button) var(--broad-button); /* Padding del header usando las variables */
-  display: flex; /* Layout con flexbox */
-  align-items: center; /* Alineación vertical centrada */
-  justify-content: space-between; /* Espacio entre los elementos */
-  border-bottom: 1px solid #ddd;
-  width: 100%; /* Ancho completo */
-  box-sizing: border-box; /* Incluir el padding en el cálculo del ancho */
-  position: fixed; /* Posición fija */
-  top: 0; /* Pegado a la parte superior */
-  left: 0; /* Pegado a la izquierda */
-  z-index: 1000; /* Asegurarse de que esté encima de otros elementos */
-  font-family: 'Poppins', sans-serif; /* Fuente Poppins para todo el header */
+:root {
+  --azul-oscuro: #213448;
+  --azul-claro: #547792;
+  --blanco: #ffffff;
+  --gris-claro: #f5f5f5;
+  --texto-azul: #213448;
 }
 
-/* Logo */
-.header-logo img {
-  height: 50px; /* Ajustar la altura del logo */
+/* General */
+.header-container {
+  background-color: var(--azul-oscuro);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
 }
 
-/* Título */
-.header-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 28px;
-  font-weight: 400;
-  color: #000;
-  margin-left: 10px;
-}
-
-/* Estilos para los elementos de navegación */
-nav ul {
-  list-style: none; /* Quitar los puntos de lista */
-  display: flex; /* Flexbox para los items de navegación */
-  gap: 20px; /* Espacio entre los items de navegación */
+.header-content {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  height: 100%;
 }
 
-nav ul li {
-  cursor: pointer;
-  color: #000;
+.header-left {
+  display: flex;
+  align-items: center;
+  color: white;
   font-family: 'Poppins', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
+  cursor: pointer;
+}
+
+.header-logo {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.header-left h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1;
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 0 5px;
+  color: var(--blanco);
 }
 
-nav ul li:last-child a .btn-next-page {
-  background-color: #0EA5E9; /* Color del botón de inscribirse */
+.header-logo {
+  height: 50px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: white;
+}
+
+/* Menú hamburguesa */
+.menu-toggle {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  display: none;
+  cursor: pointer;
+  color: white;
+}
+
+/* Navegación */
+.header-nav {
+  display: flex;
+  list-style: none;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  gap: 20px;
+}
+
+.header-nav ul {
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+.header-nav li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  cursor: pointer;
+  color: white;
+  padding: 0 5px;
+  transition: color 0.3s ease;
+}
+
+/* Subrayado animado */
+.header-nav li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background-color:var(--azul-claro);
+  transition: width 0.3s ease;
+}
+
+.header-nav li:hover::after {
+  width: 100%;
+}
+
+.header-nav li:hover {
+  color: #aad3f2;
+}
+
+/* Botón "Inscribirse" */
+.header-nav li:last-child .btn-next-page {
+  background-color: #0EA5E9;
   color: white;
   border-radius: 8px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 500;
   border: none;
   padding: 6px 16px;
@@ -70,121 +131,43 @@ nav ul li:last-child a .btn-next-page {
   margin: 0;
 }
 
-nav ul li:last-child a .btn-next-page:hover {
+.header-nav li:last-child .btn-next-page:hover {
   background-color: #3a5a6e;
 }
 
-/* Contenedor del header */
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--high-button) var(--broad-button);
-  background-color: #fff; /* Cambiado a blanco */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-}
-
-.header-logo {
-  height: 50px;
-  margin-right: 10px;
-}
-
-/* Estilos para la barra de navegación */
-.header-nav {
-  display: flex;
-  gap: 20px;
-  list-style: none;
-  font-weight: regular;
-}
-
-.header-nav li {
-  position: relative;
-  cursor: pointer;
-  padding-bottom: 5px;
-  transition: color 0.3s ease;
-}
-
-.header-nav li::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0;
-  height: 2px;
-  background-color: #547792;
-  transition: width 0.3s ease;
-}
-
-.header-nav li:hover::after {
-  width: 100%;
-}
-
-.header-nav li:hover {
-  color: #3a5a6e;
-}
-
-/* Estilos para el menú móvil */
-.mobile-menu {
-  display: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #547792;
-}
-
-/* Media queries para responsividad */
+/* Responsivo */
 @media (max-width: 768px) {
-  header {
-    padding: 10px;
-  }
-
-  .header-container {
-    padding: 10px;
-  }
-
-  .header-logo img {
-    height: 40px;
-  }
-
-  h1 {
-    font-size: 24px;
-  }
-
-  .header-nav {
-    display: none;
-    position: absolute;
-    top: 80px;
-    left: 0;
-    right: 0;
-    background-color: #ECEFCA;
-    flex-direction: column;
-    padding: 20px;
-    gap: 15px;
-  }
-
-  .mobile-menu {
+  .menu-toggle {
     display: block;
   }
 
-  .header-nav.show {
-    display: flex;
-  }
-}
-
-@media (max-width: 480px) {
-  .header-title {
-    font-size: 20px;
-  }
-
-  .header-logo img {
-    height: 35px;
+  .header-nav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    background-color: #213448;
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
   }
 
-  .header-container {
-    padding: 5px;
+  .header-nav.open {
+    max-height: 300px;
+  }
+
+  .header-nav ul {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .header-nav li {
+    justify-content: flex-start;
+  }
+
+  .header-nav li::after {
+    bottom: 0;
   }
 }

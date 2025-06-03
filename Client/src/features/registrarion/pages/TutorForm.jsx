@@ -1,11 +1,17 @@
+//React
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+
+//Css
 import "../Styles/TutorForm.css";
 
+//Componentes
 import HeaderProp from "../../home_usuario/components/HeaderProp";
 import { registerTutor, checkExistingTutor } from "../../../api/TutorForm.api";
-import { NextPage } from "../../../components/Buttons/NextPage";
 import { GenericCard } from "../../../components/cards/GenericCard";
+import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
+
+//Assets
 import Logo from "../../../assets/images/O-Sansi.jpeg";
 
 export const TutorForm = () => {
@@ -157,8 +163,8 @@ export const TutorForm = () => {
           formData.carnet.length < 6
             ? "Mínimo 6 caracteres requeridos"
             : formData.carnet.length > 12
-            ? "Máximo 12 caracteres permitidos"
-            : errors.carnet,
+              ? "Máximo 12 caracteres permitidos"
+              : errors.carnet,
       });
       return;
     }
@@ -324,15 +330,9 @@ export const TutorForm = () => {
   };
 
   return (
-    <div className="tutor-page-wrapper">
-      <HeaderProp />
-      <div className="tutor-form-content">
+    <div>
+      
         <div className="tutor-form-container">
-          <h1>Proceso de Inscripción</h1>
-          <p className="form-description">
-            Inicia una nueva inscripción o continua si ya empezaste una
-          </p>
-
           <div className="form-options-container">
             <button
               type="button"
@@ -343,9 +343,8 @@ export const TutorForm = () => {
             </button>
             <button
               type="button"
-              className={`form-option ${
-                formType === "continue" ? "active" : ""
-              }`}
+              className={`form-option ${formType === "continue" ? "active" : ""
+                }`}
               onClick={() => setFormType("continue")}
             >
               Continuar inscripción
@@ -413,14 +412,6 @@ export const TutorForm = () => {
 
               <div className="form-buttons">
                 <button
-                  type="button"
-                  className="back-button"
-                  onClick={() => navigate(-1)}
-                  disabled={isSubmitting}
-                >
-                  Atrás
-                </button>
-                <button
                   type="submit"
                   className="submit-button"
                   disabled={isSubmitting}
@@ -431,7 +422,7 @@ export const TutorForm = () => {
             </form>
           )}
         </div>
-      </div>
+   
     </div>
   );
 };

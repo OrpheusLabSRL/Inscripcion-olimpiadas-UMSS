@@ -66,6 +66,20 @@ export const createArea = async (data) => {
   return await inscriptionApi.post("/registrarAreas", data);
 };
 
+export const updateArea = async (id, data) => {
+  return await inscriptionApi.put(`/areas/${id}`, data);
+};
+
+export const updateAreaStatus = async (id, estado) => {
+  return await inscriptionApi.patch(`/areas/${id}/estado`, {
+    estadoArea: estado,
+  });
+};
+
+export const deleteArea = async (id) => {
+  return await inscriptionApi.delete(`/areas/${id}`);
+};
+
 /* =======================
    GRADOS
 ======================= */
@@ -76,11 +90,33 @@ export const getGrados = async () => {
 };
 
 // ============================
-// Categorías
+// Categorías - Grados
 // ============================
 
 export const getCategoriaGrado = async () =>
   (await inscriptionApi.get("/viewCategoriaGrado")).data;
+
+export const deleteCategoriaGrado = async (id) =>
+  (await inscriptionApi.delete(`/deleteCategoriaGrado/${id}`)).data;
+
+export const changeEstadoCategoriaGrado = async (id, estado) =>
+  (
+    await inscriptionApi.patch(`/changeEstadoCategoriaGrado/${id}`, {
+      estadoCategoriaGrado: estado,
+    })
+  ).data;
+
+export const updateCategoriaWithGrados = async (
+  idCategoria,
+  { nombreCategoria, grados, estadoCategoriaGrado }
+) =>
+  (
+    await inscriptionApi.put(`/updateCategoriaWithGrados/${idCategoria}`, {
+      nombreCategoria,
+      grados,
+      estadoCategoriaGrado: estadoCategoriaGrado || true,
+    })
+  ).data;
 
 /* =======================
    COMBINACIONES (OlimpiadaAreaCategoria)
@@ -132,4 +168,25 @@ export const getInscripcionesConOlimpiadas = async () => {
     console.error("Error al obtener inscripciones:", error);
     throw error;
   }
+};
+
+// ============================
+// ROLES Y PERMISOS
+// ============================
+
+export const getRoles = async () => {
+  const response = await inscriptionApi.get("/roles");
+  return response.data;
+};
+export const getPermisos = async () => {
+  const response = await inscriptionApi.get("/permisos");
+  return response.data;
+};
+export const setRol = async (data) => {
+  const response = await inscriptionApi.post("/roles", data);
+  return response.data;
+};
+export const setUser = async (data) => {
+  const response = await inscriptionApi.post("/usuarios", data);
+  return response.data;
 };

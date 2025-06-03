@@ -12,8 +12,7 @@ import ProgressBar from "../components/ProgressBar/ProgressBar";
 //react
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, NavLink, useLocation } from "react-router-dom";
-import { IoArrowBackCircle } from "react-icons/io5";
+import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 import { MdCleaningServices } from "react-icons/md";
 import Swal from "sweetalert2";
@@ -170,7 +169,7 @@ export const RegisterTutor = () => {
         dataToSend.inscripciones.push({
           area: sessionStorage.getItem("AreaSecundaria"),
           categoria: sessionStorage.getItem("CategoriaSecundaria"),
-          existeTutor: sessionStorage.getItem("TutorArea2" ) === "true",
+          existeTutor: sessionStorage.getItem("TutorArea2") === "true",
           formaInscripcion: "Manual",
           registrandose: true,
           tutorArea: {
@@ -369,12 +368,9 @@ export const RegisterTutor = () => {
     <div className="container-form">
       <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-      <NavLink to={"/register/olympian-area"}>
-        <IoArrowBackCircle className="btn-back" />
-      </NavLink>
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
-          <h1>Registro de datos de tutor legal</h1>
+          <h2>Registro de datos de tutor legal</h2>
           <h5 className="message-recomendation">
             Si ya tiene datos registrados, ingrese su CI y se llenara
             automáticamente los campos.
@@ -479,11 +475,18 @@ export const RegisterTutor = () => {
           />
         </div>
 
-        <div className="container-btn-back-olympian input-1c">
-          <NextPage value="Cancelar" onClick={cancelInscription} />
-        </div>
-
-        <div>
+        <div className="container-btn-next-back input-2c">
+          <NextPage
+            type="button"
+            value="Anterior"
+            to={"/register/olympian-area"}
+            className="btn-back-register"
+          />
+          <NextPage
+            value="Cancelar"
+            onClick={cancelInscription}
+            className="btn-cancel-register"
+          />
           <PrimaryButton type="submit" value="Registrar" />
         </div>
       </form>

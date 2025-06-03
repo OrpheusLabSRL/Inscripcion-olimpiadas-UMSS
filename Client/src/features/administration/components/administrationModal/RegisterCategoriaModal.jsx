@@ -303,7 +303,7 @@ const RegisterCategoriaModal = ({
                   Costo por categoría (Bs):
                   <input
                     type="number"
-                    step="0.01"
+                    step="0.5"
                     min="0"
                     value={costoPorArea[areaId] || ""}
                     onChange={(e) =>

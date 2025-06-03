@@ -93,6 +93,7 @@ class OlimpiadaAreaCategoriaController extends Controller
             $resultados[] = [
                 'idArea' => $area->idArea,
                 'nombreArea' => $area->nombreArea,
+                'descripcionArea' => $area->descripcionArea,
                 'categorias' => $categorias,
             ];
         }
