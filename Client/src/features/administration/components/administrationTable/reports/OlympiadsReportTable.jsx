@@ -93,32 +93,34 @@ const OlympiadsReportTable = () => {
         <h2 className="olympiads-report__title">Reporte de Olimpiadas</h2>
 
         <div className="olympiads-report__controls">
-          <div className="olympiads-report__filter-group">
-            <label>Filtrar por columna:</label>
-            <select
-              className="olympiads-report__filter-select"
-              value={filterColumn}
-              onChange={(e) => setFilterColumn(e.target.value)}
-            >
-              {columnOptions.map((col) => (
-                <option key={col.value} value={col.value}>
-                  {col.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <div className="filter-controls-wrapper">
+            <div className="olympiads-report__filter-group">
+              <label>Filtrar por columna:</label>
+              <select
+                className="olympiads-report__filter-select"
+                value={filterColumn}
+                onChange={(e) => setFilterColumn(e.target.value)}
+              >
+                {columnOptions.map((col) => (
+                  <option key={col.value} value={col.value}>
+                    {col.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="olympiads-report__filter-group">
-            <label>Valor filtro:</label>
-            <input
-              type="text"
-              className="olympiads-report__filter-input"
-              value={rowFilter}
-              onChange={(e) => setRowFilter(e.target.value)}
-              placeholder={`Buscar en ${
-                columnOptions.find((c) => c.value === filterColumn)?.label || ""
-              }...`}
-            />
+            <div className="olympiads-report__filter-group">
+              <label>Valor filtro:</label>
+              <input
+                type="text"
+                className="olympiads-report__filter-input"
+                value={rowFilter}
+                onChange={(e) => setRowFilter(e.target.value)}
+                placeholder={`Buscar en ${
+                  columnOptions.find((c) => c.value === filterColumn)?.label || ""
+                }...`}
+              />
+            </div>
           </div>
         </div>
 

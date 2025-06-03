@@ -78,6 +78,7 @@ const TutorsReportTable = () => {
     <div style={{ color: "#000000" }}>
       <div className="filter-controls" style={{ marginBottom: "1rem" }}>
         <div
+          className="filter-controls-wrapper"
           style={{
             marginBottom: "0.5rem",
             display: "flex",
@@ -135,8 +136,8 @@ const TutorsReportTable = () => {
           ))}
         </div>
       </div>
-      <div style={{ padding: "0 20px" }}>
-        <table className="data-table">
+      <div className="olympiads-report__table-container">
+        <table className="olympiads-report__table">
           <thead>
             <tr>
               {visibleColumns.carnetIdentidad && <th>Carnet Identidad</th>}

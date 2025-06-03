@@ -298,7 +298,7 @@
 }
 
 /* Olympiads Report Section */
-.olympiads-report {
+.reports-table {
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -306,28 +306,41 @@
   margin-bottom: 2rem;
 }
 
-.olympiads-report__header {
+.reports-table__header {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
-.olympiads-report__title {
+.reports-table__title {
   font-size: 1.5rem;
   font-weight: 600;
   color: #1e293b;
   margin: 0;
 }
 
-.olympiads-report__controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  align-items: center;
-}
+  .reports-table__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+  }
 
-.olympiads-report__filter-group {
+  .filter-controls-wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .filter-controls-wrapper {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+.reports-filter__group {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -337,15 +350,15 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.olympiads-report__filter-group label {
+.reports-filter__group label {
   font-size: 0.875rem;
   font-weight: 500;
   color: #475569;
   white-space: nowrap;
 }
 
-.olympiads-report__filter-select,
-.olympiads-report__filter-input {
+.reports-filter__select,
+.reports-filter__input {
   padding: 0.5rem 0.75rem;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
@@ -355,11 +368,11 @@
   min-width: 180px;
 }
 
-.olympiads-report__filter-input {
+.reports-filter__input {
   min-width: 200px;
 }
 
-.olympiads-report__columns-selector {
+.reports-table__columns-selector {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -369,17 +382,17 @@
   margin-top: 1rem;
 }
 
-.olympiads-report__column-checkbox {
+.reports-table__column-checkbox {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.olympiads-report__column-checkbox input {
+.reports-table__column-checkbox input {
   accent-color: #3b82f6;
 }
 
-.olympiads-report__column-checkbox label {
+.reports-table__column-checkbox label {
   font-size: 0.875rem;
   color: #475569;
   cursor: pointer;
@@ -391,6 +404,7 @@
   border-radius: 8px;
   border: 1px solid #e2e8f0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  max-width: 100%;
 }
 
 .olympiads-report__table {
@@ -398,6 +412,7 @@
   border-collapse: separate;
   border-spacing: 0;
   min-width: 1000px;
+  table-layout: auto;
 }
 
 .olympiads-report__table th {
@@ -516,8 +531,8 @@
   }
 
   /* Hide less important columns on small screens */
-  .olympiads-report__table th:nth-child(n+6),
+  /* .olympiads-report__table th:nth-child(n+6),
   .olympiads-report__table td:nth-child(n+6) {
     display: none;
-  }
+  } */
 }

@@ -87,7 +87,7 @@ const OlympiansReportTable = () => {
   return (
     <div style={{ color: "#000000" }}>
       <div className="filter-controls" style={{ marginBottom: "1rem" }}>
-        <div style={{ marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "1rem" }}>
+        <div className="filter-controls-wrapper" style={{ marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "1rem" }}>
           <label style={{ color: "#000000" }}>
             Filtrar por columna:
             <select
@@ -131,8 +131,8 @@ const OlympiansReportTable = () => {
           ))}
         </div>
       </div>
-      <div ref={reportRef} style={{ padding: "0 20px" }}>
-        <table className="data-table">
+      <div className="olympiads-report__table-container">
+        <table className="olympiads-report__table">
           <thead>
             <tr>
               {visibleColumns.carnetDeIdentidad && <th>Carnet de Identidad</th>}
