@@ -82,7 +82,7 @@ function App() {
           />
         )}
 
-        <div className="content-area">
+        <div className={`content-area ${hideSidebarRoutes.includes(location.pathname) ? "no-margin" : ""}`}>
           <Routes>
             <Route path="/" element={<MainHome />} />
             <Route path="/register" element={<RegisterChoose />} />
