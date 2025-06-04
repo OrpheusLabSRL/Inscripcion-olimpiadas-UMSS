@@ -12,10 +12,13 @@ export const NextPage = ({
   label = "",
   id,
   to = "",
+  state,
   type,
+  disabled = false,
+  children,
 }) => {
   return (
-    <NavLink to={to} style={{ textDecoration: "none" }}>
+    <NavLink to={to} state={state} style={{ textDecoration: "none" }}>
       <PrimaryButton
         value={value}
         className={`btn-next-page ${className}`}
@@ -23,7 +26,10 @@ export const NextPage = ({
         id={id}
         label={label}
         type={type}
-      />
+        disabled={disabled}
+      >
+        {children}
+      </PrimaryButton>
     </NavLink>
   );
 };

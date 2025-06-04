@@ -1,79 +1,147 @@
 //React
-import { Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import { GrDocumentDownload } from "react-icons/gr";
+import { useState } from "react";
 
 //Icons
-import { FaHome } from "react-icons/fa";
-import { IoDocumentTextOutline } from "react-icons/io5";
-import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
+import { FaHome, FaRegEdit } from "react-icons/fa";
+import { IoDocumentTextOutline, IoLogInOutline } from "react-icons/io5";
+import { GrDocumentUpdate } from "react-icons/gr";
 import { HiOutlineClipboardDocument } from "react-icons/hi2";
-import { FaRegCalendarAlt } from "react-icons/fa";
-import { IoLogInOutline } from "react-icons/io5";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
+import { GiAchievement } from "react-icons/gi";
 
 //css
 import "./Sidebar.css";
 
-//assets
-import logoOlab from "../../assets/images/logo-olab.png";
+export default function Sidebar({ isOpen, setIsOpen, admin }) {
+  const [usuario, setUsuario] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  const navigation = useNavigate();
 
-export default function Sidebar({ isOpen, setIsOpen }) {
+  const cerrarSesion = () => {
+    if (admin) {
+      localStorage.removeItem("user");
+      navigation("/admin");
+    } else {
+      sessionStorage.clear();
+      navigation("/");
+    }
+  };
+
+  const permisos = usuario?.rol?.permisos?.map((p) => p.nombrePermiso) || [];
+  const tienePermiso = (permiso) => permisos.includes(permiso);
+
   return (
     <>
+      {isOpen && <div className="sidebar-overlay" onClick={() => setIsOpen(false)}></div>}
       <div className={` sidebar ${isOpen ? "active" : ""}`}>
         <div
           className={`sidebar-header ${
             isOpen ? "" : "sidebar-header-contrain"
           }`}
         >
-          <img src={logoOlab} />
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/7330cc38170480eadf5800dd915ae76c4a5737cb"
+            alt="LOGO O SANSI"
+          />
           {isOpen && <h2 className="sidebar-title">Oh! SanSi</h2>}
         </div>
         <ul>
-          <li>
-            <Link>
-              {<FaHome className="sidebar-icons" />}{" "}
-              {isOpen ? "Olimpiadas" : ""}
-            </Link>
-          </li>
-          <li>
-            <Link>
-              {<IoDocumentTextOutline className="sidebar-icons" />}{" "}
-              {isOpen ? "Datos base" : ""}
-            </Link>
-          </li>
-          <li>
-            <Link>
-              {" "}
-              {
-                <HiOutlineClipboardDocumentList className="sidebar-icons" />
-              }{" "}
-              {isOpen ? "Exámenes" : ""}
-            </Link>
-          </li>
-          <li>
-            <Link>
-              {<HiOutlineClipboardDocument className="sidebar-icons" />}{" "}
-              {isOpen ? "Reportes" : ""}
-            </Link>
-          </li>
-          <li>
-            <Link>
-              {<FaRegCalendarAlt className="sidebar-icons" />}{" "}
-              {isOpen ? "Calendario" : ""}
-            </Link>
-          </li>
+          {admin ? (
+            <>
+              <li>
+                <Link to="/admin/home">
+                  <FaHome className="sidebar-icons" />
+                  {isOpen ? "Inicio" : ""}
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/olimpiadas">
+                  <GiAchievement className="sidebar-icons" />
+                  {isOpen ? "Olimpiadas" : ""}
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/panelOlympiad">
+                  <FaRegEdit className="sidebar-icons" />
+                  {isOpen ? "Gestionar" : ""}
+                </Link>
+              </li>
+
+              <li>
+                <Link to="/admin/reports">
+                  <HiOutlineClipboardDocument className="sidebar-icons" />
+                  {isOpen ? "Reportes" : ""}
+                </Link>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <NavLink
+                  to={
+                    sessionStorage.getItem("pantallaActualRegistro") != ""
+                      ? sessionStorage.getItem("pantallaActualRegistro")
+                      : "/register/listRegistered"
+                  }
+                  className={({ isActive }) => (isActive ? "active-link" : "")}
+                >
+                  <FaHome className="sidebar-icons" />
+                  {isOpen ? "Registro" : ""}
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/register/generate-order"
+                  className={({ isActive }) => (isActive ? "active-link" : "")}
+                >
+                  <GrDocumentDownload className="sidebar-icons" />
+                  {isOpen ? "Generar orden de pago" : ""}
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/register/comprobar-boleta"
+                  className={({ isActive }) => (isActive ? "active-link" : "")}
+                >
+                  <GrDocumentUpdate className="sidebar-icons" />
+                  {isOpen ? "Subir comprobante" : ""}
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/contacto"
+                  className={({ isActive }) => (isActive ? "active-link" : "")}
+                >
+                  <IoDocumentTextOutline className="sidebar-icons" />
+                  {isOpen ? "Contacto" : ""}
+                </NavLink>
+              </li>
+            </>
+          )}
         </ul>
 
         <div className="btn-logout">
           <a>
-            {<IoLogInOutline className="sidebar-icons" />}{" "}
-            {isOpen ? "Cerrar Sesion" : ""}
+            <IoLogInOutline
+              style={{ fontSize: "25px" }}
+              className="sidebar-icons"
+              onClick={cerrarSesion}
+            />
+            {isOpen ? <span onClick={cerrarSesion}>Cerrar Sesion</span> : ""}
           </a>
         </div>
       </div>
 
       <button className="toggle-btn" onClick={() => setIsOpen(!isOpen)}>
-        <FaArrowRightArrowLeft />
+        <FaArrowRightArrowLeft style={{ fontSize: "18px" }} />
+        {isOpen ? <span style={{ margin: "10px" }}>Contraer menú</span> : ""}
       </button>
     </>
   );

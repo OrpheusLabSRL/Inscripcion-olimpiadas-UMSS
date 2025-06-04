@@ -1,21 +1,18 @@
 import ReactModal from "react-modal";
 
-//components
-import { Tag } from "../Buttons/Tag";
-
 //css
 import "./GenericModal.css";
 
 ReactModal.setAppElement("#root");
 
-export const GenericModal = ({ closeModal, modalIsOpen, children }) => {
+export const GenericModal = ({ closeModal, modalIsOpen, children, errors }) => {
   const modalStyle = {
     content: {
       position: "fixed",
-      maxWidth: "600px",
-      maxHeight: "300px",
+      maxWidth: "fit-content",
+      maxHeight: "400px",
       margin: "auto",
-      overflow: "none",
+      overflow: "auto",
       border: "1px solid black",
     },
 
@@ -30,9 +27,9 @@ export const GenericModal = ({ closeModal, modalIsOpen, children }) => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Ejemplo de Modal"
-        style={modalStyle}
+        className='container-modal'
       >
-        <div className="container-modal">{children}</div>
+        <div className="container-content-modal">{children}</div>
       </ReactModal>
     </>
   );

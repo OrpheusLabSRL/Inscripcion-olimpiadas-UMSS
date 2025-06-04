@@ -1,30 +1,17 @@
 // css
 import "./ListElement.css";
 
-//components
-import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
-import { GenericModal } from "../../../../components/modals/GenericModal";
-import { Select } from "../../../../components/inputs/Select";
-
 //React
-import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FaInfoCircle } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 
-//utils
-import { areasDeInteres, categorias } from "./DataOptions";
-import { Validator } from "./ValidationRules";
+//component
+import { GenericModal } from "../../../../components/modals/GenericModal";
 
 export const ListElement = ({ data }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm({});
 
   const openModal = (e) => {
     e.preventDefault();
@@ -37,131 +24,263 @@ export const ListElement = ({ data }) => {
 
   return (
     <div className="container-element-list">
-      <div className="list-data-header" key={data.id}>
-        <div>
-          <p>#</p>
-          <p>{data.id}</p>
-        </div>
-        <div>
-          <p>Nombre</p>
-          <p>{data.nombre}</p>
-        </div>
-        <div>
-          <p>Apellidos</p>
-          <p>{data.apellidos}</p>
-        </div>
-        <div>
-          <p>CI</p>
-          <p>{data.ci}</p>
-        </div>
-        <div>
-          <p>Fecha nacimiento</p>
-          <p>{data.fechaNacimiento}</p>
-        </div>
-        <div>
-          <p>Colegio</p>
-          <p>{data.colegio}</p>
-        </div>
-        <div>
-          <p>Curso</p>
-          <p>{data.curso}</p>
-        </div>
-        <div>
-          <p>Departamento</p>
-          <p>{data.departamento}</p>
-        </div>
-        <div>
-          <p>Provincia</p>
-          <p>{data.provincia}</p>
-        </div>
-        <div>
-          <p>Acciones</p>
-          <MdEdit
-            style={{ fontSize: "25px", color: "orange", marginRight: "10px" }}
-          />
-          <MdDelete style={{ fontSize: "25px", color: "red" }} />
-        </div>
+      <div className="list-data-header">
+        <table className="container-table-list">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>CI</th>
+              <th>Fecha Nacimiento</th>
+              <th>Colegio</th>
+              <th>Curso</th>
+              <th>Departamento</th>
+              <th>Provincia</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{data.nombre}</td>
+              <td>{data.apellido}</td>
+              <td>{data.carnetIdentidad}</td>
+              <td>{data.fechaNacimiento}</td>
+              <td>{data.colegio}</td>
+              <td>{data.curso}</td>
+              <td>{data.departamento}</td>
+              <td>{data.municipio}</td>
+              <td>
+                <div>
+                  <MdDelete
+                    style={{
+                      fontSize: "25px",
+                      color: "red",
+                      marginRight: "8px",
+                      cursor: "pointer",
+                    }}
+                  />
+                  <FaInfoCircle
+                    style={{
+                      fontSize: "25px",
+                      color: "blue",
+                      cursor: "pointer",
+                    }}
+                    onClick={openModal}
+                  />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <div className="list-aditional-data-student">
-        <div className="containter-registered-area">
-          <h5>Areas registradas</h5>
-          <div className="registered-area">
-            <span className="label-area">Matematicas</span>
-            <span className="label-area">Lenguaje</span>
-          </div>
-          <div className="btn-add-area">
-            <PrimaryButton value="Registrar Area" onClick={openModal} />
-          </div>
-        </div>
-
-        <div className="containter-registered-area">
-          <h5>Tutores registrados</h5>
-          <div className="registered-area">
-            <span className="label-area">Juan Pablo Perez Lopez</span>
-            <span className="label-area">Maria Angel Serrano de la monte</span>
-          </div>
-          <div className="btn-add-area">
-            <PrimaryButton value="Registrar Tutor" />
-          </div>
-        </div>
-      </div>
       <GenericModal modalIsOpen={modalIsOpen} closeModal={closeModal}>
-        <div className="input-2c">
-          <h2>Areas y categorias de interes</h2>
-        </div>
+        <div className="olimpista-modal">
+          <div className="data-section-summary">
+            <div className="section-header">
+              <h3>Datos de olimpista</h3>
+            </div>
+            <div className="data-grid">
+              <div className="data-item">
+                <span className="data-label">Nombre:</span>
+                <span className="data-value">{data.nombre}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Apellido:</span>
+                <span className="data-value">{data.apellido}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Fecha de Nacimiento:</span>
+                <span className="data-value">{data.fechaNacimiento}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Carnet de Identidad:</span>
+                <span className="data-value">{data.carnetIdentidad}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Colegio:</span>
+                <span className="data-value">{data.colegio}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Curso:</span>
+                <span className="data-value">{data.curso}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Departamento:</span>
+                <span className="data-value">{data.departamento}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Municipio:</span>
+                <span className="data-value">{data.municipio}</span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Correo Electrónico:</span>
+                <span className="data-value">{data.correo}</span>
+              </div>
+            </div>
+          </div>
 
-        <div className="input-1c">
-          <Select
-            label={"Area de Interes"}
-            placeholder="Seleccione un area"
-            mandatory="true"
-            name="Area"
-            options={areasDeInteres}
-            register={register}
-            errors={errors}
-          />
-        </div>
+          {data.inscripciones.map((inscripcion, index) => (
+            <div key={`inscripcion-${index}`}>
+              <div className="data-section-summary">
+                <div className="section-header">
+                  <h3>Área {index + 1}</h3>
+                </div>
+                <div className="data-grid">
+                  <div className="data-item">
+                    <span className="data-label">Nombre área:</span>
+                    <span className="data-value">
+                      {inscripcion.nombre_area}
+                    </span>
+                  </div>
+                  <div className="data-item">
+                    <span className="data-label">Categoría:</span>
+                    <span className="data-value">
+                      {inscripcion.nombre_categoria}
+                    </span>
+                  </div>
 
-        <div className="input-1c">
-          <Select
-            label={"Categoria de Interes"}
-            placeholder="Seleccione una categoria"
-            mandatory="true"
-            name="Categoria"
-            options={categorias}
-            register={register}
-            errors={errors}
-          />
-        </div>
+                  {inscripcion.nombre_tutor_area ? (
+                    <>
+                      <div className="data-item">
+                        <span className="data-label">
+                          Nombre tutor de área:
+                        </span>
+                        <span className="data-value">
+                          {inscripcion.nombre_tutor_area}
+                        </span>
+                      </div>
+                      <div className="data-item">
+                        <span className="data-label">
+                          Apellido tutor de área:
+                        </span>
+                        <span className="data-value">
+                          {inscripcion.apellido_tutor_area}
+                        </span>
+                      </div>
 
-        <div className="input-1c">
-          <Select
-            label={"Segunda Area de Interes"}
-            placeholder="Seleccione un area"
-            options={areasDeInteres}
-          />
-        </div>
+                      <div className="data-item">
+                        <span className="data-label">Tipo de tutor:</span>
+                        <span className="data-value">
+                          {inscripcion.tipo_tutor}
+                        </span>
+                      </div>
+                      <div className="data-item">
+                        <span className="data-label">Carnet de Identidad:</span>
+                        <span className="data-value">
+                          {inscripcion.carnetIdentidad}
+                        </span>
+                      </div>
+                      <div className="data-item">
+                        <span className="data-label">Telefono:</span>
+                        <span className="data-value">
+                          {inscripcion.telefono}
+                        </span>
+                      </div>
+                      <div className="data-item">
+                        <span className="data-label">Correo Electronico:</span>
+                        <span className="data-value">{inscripcion.correo}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <span className="data-value">
+                      No se cuenta con tutor de área
+                    </span>
+                  )}
+                </div>
+              </div>
 
-        <div className="input-1c">
-          <Select
-            label={"Categoria de Interes"}
-            placeholder="Seleccione una categoria"
-            options={categorias}
-          />
-        </div>
-        <div className="container-btn-modal-area">
-          <PrimaryButton
-            type="submit"
-            value="Cancelar"
-            className="btn-modal-area"
-            onClick={closeModal}
-          />
-          <PrimaryButton
-            type="submit"
-            value="Registrar"
-            className="btn-modal-area"
-          />
+              <div className="data-section-summary">
+                <div className="section-header">
+                  <h3>Tutor legal para Área {index + 1}</h3>
+                </div>
+                <div className="data-grid">
+                  <div className="data-item">
+                    <span className="data-label">Nombre tutor legal:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.nombre}
+                    </span>
+                  </div>
+                  <div className="data-item">
+                    <span className="data-label">Apellido tutor de legal:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.apellido}
+                    </span>
+                  </div>
+
+                  <div className="data-item">
+                    <span className="data-label">Tipo de tutor:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.tipo_tutor}
+                    </span>
+                  </div>
+                  <div className="data-item">
+                    <span className="data-label">Carnet de Identidad:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.carnetIdentidad}
+                    </span>
+                  </div>
+                  <div className="data-item">
+                    <span className="data-label">Telefono:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.telefono}
+                    </span>
+                  </div>
+                  <div className="data-item">
+                    <span className="data-label">Correo Electronico:</span>
+                    <span className="data-value">
+                      {inscripcion.tutor_legal.correo}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <div className="data-section-summary">
+            <div className="section-header">
+              <h3>Responsable de inscripción</h3>
+            </div>
+            <div className="data-grid">
+              <div className="data-item">
+                <span className="data-label">Nombre tutor legal:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.nombre}
+                </span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Apellido tutor de legal:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.apellido}
+                </span>
+              </div>
+
+              <div className="data-item">
+                <span className="data-label">Tipo de tutor:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.tipo_tutor}
+                </span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Carnet de Identidad:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.carnetIdentidad}
+                </span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Telefono:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.telefono}
+                </span>
+              </div>
+              <div className="data-item">
+                <span className="data-label">Correo Electronico:</span>
+                <span className="data-value">
+                  {data.responsableInscripcion.correo}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </GenericModal>
     </div>

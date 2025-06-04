@@ -43,3 +43,35 @@
 .line.active {
   background: #2563eb;
 }
+
+@media (max-width: 975px) {
+  .line {
+    width: 150px;
+  }
+}
+
+@media (max-width: 750px) {
+  .line {
+    width: 120px;
+  }
+}
+@media (max-width: 660px) {
+  .line {
+    width: 80px;
+  }
+}
+@media (max-width: 520px) {
+  .line {
+    width: 45px;
+  }
+  .step {
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+  }
+}
+@media (max-width: 450px) {
+  .line {
+    width: 40px;
+  }
+}

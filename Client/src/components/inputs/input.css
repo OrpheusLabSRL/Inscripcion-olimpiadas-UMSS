@@ -23,10 +23,36 @@
 }
 
 .error-validation {
-  font-size: var(--error-size);
-  color: rgb(171, 0, 0);
+  background-color: #ffebee;
+  border-left: 4px solid #f44336;
+  padding: 10px;
+  border-radius: 4px;
+  color: #d32f2f;
 }
 
 .mandatory {
   color: red;
+}
+
+.btn-autofill {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+@media (max-width: 435px) {
+  .config-input > input,
+  .config-input > textarea,
+  .config-input > select {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .config-input > input,
+  .config-input > textarea,
+  .config-input > select {
+    font-size: 12px;
+  }
 }

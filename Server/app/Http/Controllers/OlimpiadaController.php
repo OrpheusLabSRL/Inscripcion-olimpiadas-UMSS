@@ -1,36 +1,86 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Olimpiada;
 
+use App\Models\Olimpiada;
 use Illuminate\Http\Request;
-use Nette\Utils\Json;
-use Symfony\Contracts\Service\Attribute\Required;
 
 class OlimpiadaController extends Controller
 {
+    // API - Listar todas las olimpiadas
     public function mostrarOlimpiada()
     {
         $olimpiadas = Olimpiada::all();
         return response()->json(['data' => $olimpiadas]);
-        // return view ('welcome',compact('olimpiadas'));
     }
 
-    public function formularioOlimpiada()
+    // API - Crear nueva olimpiada
+    public function store(Request $request)
     {
-        $olimpiadas = Olimpiada::with('areas')->get();
-        return view ('welcome',compact('olimpiadas'));
-    }
-
-    public function agregarOlimpiada(Request $request){
-        $request->validate([
-            'nombreOlimpiada'=> 'required|string|max:30|unique:olimpiadas,nombreOlimpiada',
-            'version'=> 'required|integer|min:1',
-            'fechaInicioOlimp'=> 'required|date',
-            'fechaFinOlimp'=> 'required|date|after:fechaInicioOlimp'
+        $validated = $request->validate([
+            'nombreOlimpiada' => 'required|string|max:100',
+            'version' => 'required|integer|min:1',
+            'fechaInicioOlimpiada' => 'required|date',
+            'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
         ]);
 
-        Olimpiada::create($request->all());
-        return redirect()->route('olimpiada.mostrar')->with('success', 'Olimpiada creada con éxito');
+        $validated['estadoOlimpiada'] = false;
+        $validated['idUsuario'] = 1;
+        $olimpiada = Olimpiada::create($validated);
+
+        return response()->json([
+            'message' => 'Olimpiada creada exitosamente',
+            'data' => $olimpiada
+        ], 201);
+    }
+
+    // API - Actualizar olimpiada
+    public function update(Request $request, $id)
+    {
+        $olimpiada = Olimpiada::findOrFail($id);
+
+        $request->validate([
+            'nombreOlimpiada' => 'required|string|max:100,' . $id . ',idOlimpiada',
+            'version' => 'required|integer|min:1',
+            'fechaInicioOlimpiada' => 'required|date',
+            'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
+            'estadoOlimpiada' => 'required|boolean',
+        ]);
+
+        $olimpiada->update($request->all());
+
+        return response()->json([
+            'message' => 'Olimpiada actualizada correctamente',
+            'data' => $olimpiada
+        ]);
+    }
+
+    // API - Cambiar estado de una olimpiada
+    public function cambiarEstado(Request $request, $id)
+    {
+        $olimpiada = Olimpiada::findOrFail($id);
+
+        $request->validate([
+            'estadoOlimpiada' => 'required|boolean',
+        ]);
+
+        $olimpiada->estadoOlimpiada = $request->estadoOlimpiada;
+        $olimpiada->save();
+
+        return response()->json([
+            'message' => 'Estado actualizado correctamente',
+            'data' => $olimpiada
+        ]);
+    }
+
+    // API - Eliminar olimpiada
+    public function destroy($id)
+    {
+        $olimpiada = Olimpiada::findOrFail($id);
+        $olimpiada->delete();
+
+        return response()->json([
+            'message' => 'Olimpiada eliminada correctamente'
+        ]);
     }
 }

@@ -2,32 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OlimpiadaAreaCategoria;
 
 class Categoria extends Model
 {
-    use HasFactory;
-
     protected $table = 'categorias';
+    protected $primaryKey = 'idCategoria';
+    public $timestamps = false;
 
     protected $fillable = [
         'nombreCategoria',
-        'estadoCategoria'
+        'estadoCategoria',
     ];
-
-    // Relacion Muchos a Muchos con Areas
-    public function areas()
-    {
-        return $this->belongsToMany(Area::class, 'area_categoria', 'categoria_id', 'area_id')
-                    ->withPivot('estadoAreaCategoria') 
-                    ->withTimestamps(); 
-    }
 
     public function grados()
     {
-        return $this->belongsToMany(Grados::class, 'categoria_grados', 'categoria_id', 'grado_id')
-                    ->withPivot('estadoCategoriaGrado') 
-                    ->withTimestamps(); 
+        return $this->belongsToMany(Grado::class, 'categorias_grados', 'categoria_id', 'grado_id')
+            ->withPivot('estadoCategoriaGrado');
+
+    }
+
+    public function combinaciones()
+    {
+        return $this->hasMany(OlimpiadaAreaCategoria::class, 'idCategoria');
     }
 }

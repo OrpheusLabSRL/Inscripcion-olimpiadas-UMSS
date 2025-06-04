@@ -1,0 +1,538 @@
+/* Fuente base para todo el contenedor y elementos relacionados */
+.reports-container,
+.reports__header,
+.reports__controls,
+.reports__select-wrapper,
+.reports__select,
+.reports__btn,
+.reports__content,
+.reports__content-header,
+.reports__table-container,
+.reports__data-table,
+.olympiads-report,
+.olympiads-report__controls,
+.olympiads-report__filter-group,
+.olympiads-report__filter-select,
+.olympiads-report__filter-input,
+.olympiads-report__columns-selector,
+.olympiads-report__table-container,
+.olympiads-report__table {
+  font-family: "Inter", sans-serif;
+  color: #1e293b;
+}
+
+/* Títulos principales con Poppins */
+.reports-container h1,
+.reports-container h2,
+.reports-container h3,
+.reports__title h1,
+.olympiads-report__title,
+.reports__content-header h2,
+.reports__empty-state h3 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* Botones y selects usan Inter */
+.reports__btn,
+.reports__select {
+  font-family: "Inter", sans-serif;
+}
+
+/* === Base Container Styles === */
+.reports-container {
+  max-width: 95%;
+  padding: 2rem;
+  background-color: #f8fafc;
+  min-height: calc(100vh - 120px);
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+/* === Header Section === */
+.reports__header {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.reports__title h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+  font-weight: 700;
+  background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.reports__title p {
+  color: #64748b;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* === Controls Section === */
+.reports__controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.reports__select-wrapper {
+  position: relative;
+  flex-grow: 1;
+  max-width: 400px;
+}
+
+.reports__select {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 2.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #1e293b;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  appearance: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.reports__select:focus {
+  outline: none;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.3);
+}
+
+.reports__select-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+}
+
+/* === Buttons === */
+.reports__btn {
+  border: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reports__btn-generate {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #fff;
+}
+
+.reports__btn-generate:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+}
+
+.reports__btn-export {
+  background: #fff;
+  color: #3b82f6;
+  border: 1px solid #e2e8f0;
+}
+
+.reports__btn-export:hover {
+  background: #f8fafc;
+  border-color: #cbd5e0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.reports__btn:disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.reports__spinner {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 3px solid rgba(59, 130, 246, 0.2);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === Content Area === */
+.reports__content {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  min-height: 400px;
+}
+
+.reports__content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.reports__content-header h2 {
+  font-size: 1.5rem;
+  color: #1e293b;
+}
+
+.reports__timestamp {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.reports__empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: #64748b;
+  text-align: center;
+}
+
+.reports__empty-state h3 {
+  margin: 1rem 0 0.5rem;
+  color: #334155;
+}
+
+.reports__empty-state p {
+  margin: 0;
+  max-width: 300px;
+}
+
+/* === Table Container === */
+.reports__table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+/* === Data Table Styles === */
+.reports__data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: #1e293b;
+  background-color: #fff;
+  min-width: 800px;
+}
+
+.reports__data-table th {
+  background-color: #f8fafc;
+  font-weight: 600;
+  color: #334155;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+}
+
+.reports__data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.reports__data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.reports__data-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* === Badge Styles === */
+.reports__badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.reports__badge-success {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.reports__badge-danger {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+/* Olympiads Report Section */
+.reports-table {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.reports-table__header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.reports-table__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+  .reports-table__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .filter-controls-wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .filter-controls-wrapper {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+.reports-filter__group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #f8fafc;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.reports-filter__group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.reports-filter__select,
+.reports-filter__input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 0.875rem;
+  color: #1e293b;
+  min-width: 180px;
+}
+
+.reports-filter__input {
+  min-width: 200px;
+}
+
+.reports-table__columns-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.reports-table__column-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reports-table__column-checkbox input {
+  accent-color: #3b82f6;
+}
+
+.reports-table__column-checkbox label {
+  font-size: 0.875rem;
+  color: #475569;
+  cursor: pointer;
+}
+
+/* Table styles */
+.olympiads-report__table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+}
+
+.olympiads-report__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 1000px;
+  table-layout: auto;
+}
+
+.olympiads-report__table th {
+  background-color: #f1f5f9;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #334155;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+}
+
+.olympiads-report__table td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  font-size: 0.875rem;
+  vertical-align: middle;
+}
+
+.olympiads-report__table tr:last-child td {
+  border-bottom: none;
+}
+
+.olympiads-report__table tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* Badge styles */
+.olympiads-report__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.olympiads-report__badge--success {
+  background-color: #ecfdf5;
+  color: #065f46;
+}
+
+.olympiads-report__badge--danger {
+  background-color: #fef2f2;
+  color: #991b1b;
+}
+
+/* Status messages */
+.olympiads-report__status {
+  padding: 2rem;
+  text-align: center;
+  color: #475569;
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reports-container {
+    padding: 1rem;
+  }
+
+  .reports__controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .reports__select-wrapper {
+    max-width: 100%;
+  }
+
+  .reports__btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .reports__content-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .olympiads-report__controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .olympiads-report__filter-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .olympiads-report__filter-select,
+  .olympiads-report__filter-input {
+    width: 100%;
+  }
+
+  /* Make tables horizontally scrollable */
+  .reports__table-container,
+  .olympiads-report__table-container {
+    overflow-x: auto;
+  }
+
+  /* Stack filter controls and column selectors vertically */
+  .olympiads-report__columns-selector {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Hide less important columns on small screens */
+  /* .olympiads-report__table th:nth-child(n+6),
+  .olympiads-report__table td:nth-child(n+6) {
+    display: none;
+  } */
+}

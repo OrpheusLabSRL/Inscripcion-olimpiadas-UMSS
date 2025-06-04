@@ -7,18 +7,21 @@ export const Select = ({
   className = "",
   value,
   onChange,
+  asterisk = true,
   id,
   placeholder = "",
   register,
   options = [],
   errors = null,
   mandatory = false,
+  isReadOnly = {},
 }) => {
   return (
     <div className="config-input">
       {label && (
         <label htmlFor={id}>
-          {label} {mandatory ? <span className="mandatory">*</span> : ""}{" "}
+          {label}{" "}
+          {mandatory && asterisk ? <span className="mandatory">*</span> : ""}{" "}
         </label>
       )}
 
@@ -26,17 +29,16 @@ export const Select = ({
         className={className}
         id={id}
         name={name}
-        defaultValue={placeholder}
         {...(register &&
-          register(name, {
-            required: `${label} es requerido`,
-          }))}
+          (mandatory
+            ? register(name, { required: `${label} es requerido` })
+            : register(name, { required: false })))}
         value={value}
         onChange={onChange}
+        disabled={isReadOnly[name] ? true : false}
+        autoComplete="off"
       >
-        <option value={""} disabled hidden>
-          {placeholder}
-        </option>
+        {placeholder && <option value={""}>{placeholder}</option>}
 
         {options &&
           options.map((optionElement, index) => {

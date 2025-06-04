@@ -4,17 +4,22 @@
 
 .btn-primary {
   height: 40px;
-  width: 155px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-primary,
 .btn-tag {
-  border-radius: 5px;
+  border-radius: 8px;
+  border: none;
   font-size: var(--btn-font-primary);
-  background: linear-gradient(45deg, #333a73, #387adf);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   color: #fff;
   cursor: pointer;
-  padding: 5px;
+  padding: 0.75rem 1.5rem;
+  background-color: #2563eb;
+  font-weight: 600;
 }
 
 .config-btn-primary > label {
@@ -23,7 +28,8 @@
 }
 
 .btn-primary:hover {
-  background-color: #387adf;
+  background-color: var(--tertiary-color);
+  color: #000;
 }
 
 /*TAGS*/

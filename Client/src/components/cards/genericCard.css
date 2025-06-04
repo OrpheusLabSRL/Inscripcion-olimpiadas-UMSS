@@ -1,6 +1,7 @@
 .container-main-card {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .container-main-card > h1 {
@@ -8,9 +9,9 @@
 }
 
 .container-card {
-  max-width: 300px;
-  height: 380px;
+  max-width: 330px;
   background: linear-gradient(#fba834, #333a73);
+  border: 1px solid #333a73;
   border-radius: 10px;
   display: grid;
   color: #fff;
@@ -24,7 +25,11 @@
 }
 
 .container-card > p {
-  margin: 10px;
+  margin: 20px 20px;
+  text-align: center;
+  font-size: var(--pM-size);
+  line-height: 1.5;
+  font-weight: 300;
 }
 
 .image-card img {
@@ -34,11 +39,13 @@
 .link-card {
   display: grid;
   text-decoration: none;
+  margin: 20px;
 }
 
 .card-generic-btn {
-  justify-self: end;
+  justify-self: center;
   background: transparent;
   margin: 10px;
-  width: 100px;
+  width: 150px;
+  background-color: #2563eb;
 }

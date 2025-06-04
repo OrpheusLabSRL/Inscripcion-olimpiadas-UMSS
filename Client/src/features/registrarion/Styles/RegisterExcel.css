@@ -1,0 +1,422 @@
+.app-background {
+  background-color: #94b4c1;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.excel-container {
+  background-color: white;
+  max-width: 1200px;
+  width: 100%;
+  margin: 20px auto;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.excel-header {
+  margin-bottom: 30px;
+}
+
+.excel-header h1 {
+  color: #213448;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.download-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.instructions {
+  color: #ff0000;
+  margin: 0;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.action-btn {
+  background-color: #213448;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+}
+
+.action-btn:hover {
+  background-color: #1a2a38;
+}
+
+.upload-section {
+  margin: 30px 0;
+}
+
+.upload-section h2 {
+  color: #213448;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.file-input-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.file-input {
+  position: absolute;
+  left: -9999px;
+}
+
+.file-label {
+  display: inline-block;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.info-message {
+  background-color: #e7f5ff;
+  color: #1864ab;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.info-message h3 {
+  margin-top: 0;
+}
+
+.info-message ul {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+
+.validation-errors {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.validation-errors h3 {
+  margin-top: 0;
+}
+
+.validation-errors ul {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+
+.data-section {
+  margin-top: 30px;
+  position: relative;
+}
+
+.table-container {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table th {
+  background-color: #f1f3f5;
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #dee2e6;
+  position: sticky;
+  top: 0;
+  color: #213448;
+  font-weight: 600;
+}
+
+.data-table td {
+  padding: 12px;
+  border-bottom: 1px solid #dee2e6;
+  color: #495057;
+}
+
+.data-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.empty-cell {
+  background-color: #fff3cd;
+}
+
+.error-cell {
+  background-color: #f8d7da;
+  color: #721c24;
+  font-weight: bold;
+}
+
+.optional-field {
+  font-size: 0.8em;
+  color: #6c757d;
+  font-weight: normal;
+  margin-left: 5px;
+}
+
+.optional-empty {
+  background-color: #e9ecef;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.optional-filled {
+  background-color: #e6f7ff;
+}
+
+.optional-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  font-weight: bold;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.register-btn {
+  background-color: #213448;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.register-btn:hover {
+  background-color: #1a2a38;
+}
+
+@media (max-width: 768px) {
+  .excel-container {
+    padding: 15px;
+  }
+
+  .excel-header h1 {
+    font-size: 20px;
+  }
+
+  .download-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .table-container {
+    max-height: 400px;
+    font-size: 12px;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px;
+  }
+
+  .optional-field {
+    display: block;
+    margin-left: 0;
+    margin-top: 3px;
+  }
+  @media (max-width: 768px) {
+  .excel-container {
+    padding: 15px;
+    margin: 10px;
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+  }
+
+  .excel-header h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .download-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .instructions {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .action-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .upload-section h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .file-input-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .file-label {
+    text-align: center;
+  }
+
+  .file-name {
+    text-align: center;
+    display: block;
+    word-break: break-all;
+  }
+
+  .table-container {
+    max-height: 400px;
+    font-size: 12px;
+    overflow-x: auto;
+    display: block;
+  }
+
+  .data-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px;
+    min-width: 100px;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .data-table th {
+    font-size: 12px;
+    white-space: normal;
+    word-wrap: break-word;
+  }
+
+  .validation-errors {
+    font-size: 14px;
+  }
+
+  .validation-errors ul {
+    padding-left: 15px;
+  }
+
+  .error-message,
+  .success-message {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .empty-table-message {
+    font-size: 14px;
+    padding: 15px;
+    text-align: center;
+  }
+
+  .action-buttons-excel {
+    display: flex;
+    justify-content: center;
+  }
+
+  .register-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .btn-back {
+    font-size: 2rem;
+    margin-left: 10px;
+  }
+
+  .title-register {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .excel-container {
+    padding: 10px;
+  }
+
+  .excel-header h1 {
+    font-size: 18px;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 6px;
+    font-size: 11px;
+  }
+
+  .data-table th {
+    font-size: 11px;
+  }
+
+  .instructions {
+    font-size: 12px;
+  }
+
+  .validation-errors {
+    font-size: 12px;
+  }
+
+  .validation-errors h3 {
+    font-size: 14px;
+  }
+
+  .error-message,
+  .success-message {
+    font-size: 12px;
+  }
+}
+}

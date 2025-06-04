@@ -1,0 +1,12 @@
+.add-new-area-olympian {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.add-new-area-olympian > p {
+  text-decoration: underline;
+  color: var(--primary-color);
+}

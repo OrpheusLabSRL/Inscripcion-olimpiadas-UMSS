@@ -3,10 +3,10 @@
 
 :root {
   /*-------------------Paleta de Colores--------------------*/
-  --primary-color: #2563EB;
-  --secondary-color: #4f959d;
-  --tertiary-color: #98d2c0;
-  --quaternary-color: #f6f8d5;
+  --primary-color: #0ea5e9;
+  --secondary-color: #547792;
+  --tertiary-color: #94a6c1;
+  --quaternary-color: #ecefca;
 
   /*-------------------Padding botones----------------------*/
   --high-button: 12px;
@@ -25,9 +25,10 @@
   --pS-size: 12px; /* Texto de ayuda */
 
   --label: 16px;
-  --error-size: 14px; 
-  --principal-text: 60px; 
-  --background: #f8fafc;
+  --error-size: 14px;
+  --principal-text: 60px;
+  /* --background: #94b4c1; */
+  --background: #f0f9ff;
 }
 
 body {
@@ -50,16 +51,65 @@ body {
   grid-template-columns: 90px auto;
   transition: all 0.3s ease;
   flex: 1;
-  min-height: calc(100vh - 29px); 
+  min-height: calc(100vh - 29px);
+}
+
+@media (max-width: 768px) {
+  .main {
+    display: block;
+    grid-template-columns: none;
+  }
+
+  .content-area {
+    grid-column-start: unset;
+    width: 100%;
+    margin-left: 50px; /* Adjusted for mobile */
+  }
+
+  .content-area.no-margin {
+    margin-left: 0 !important;
+  }
+
+  .sidebar {
+    position: fixed;
+    transition: all 0.4s ease;
+    z-index: 1000;
+    bottom: 0; /* Asegura que el sidebar llegue al fondo de la pantalla */
+  }
+
+  .sidebar.active {
+    left: 0; /* Muestra el sidebar */
+    width: 250px; /* Ancho expandido */
+  }
+
+  /* Overlay para el fondo oscuro */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    display: none; /* Inicialmente oculto */
+  }
+
+  .sidebar-overlay.active {
+    display: block; /* Muestra el overlay cuando el sidebar está activo */
+  }
 }
 
 .main.active {
-  grid-template-columns: 260px auto;
+  grid-template-columns: 275px auto;
 }
 
 .content-area {
   grid-column-start: 2;
   width: 100%;
   overflow-x: hidden;
-  padding-bottom: 29px;
+  /*padding-bottom: 29px;*/
+}
+
+h1 {
+  color: #003f83;
 }

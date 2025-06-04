@@ -1,0 +1,92 @@
+.container-list-registered {
+  background-color: #fff;
+  color: #000;
+  max-width: 1140px;
+  margin: 50px auto;
+  border-radius: 10px;
+  box-shadow: 0px 5px 10px #00000043;
+  padding: 30px;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  gap: 15px;
+}
+
+.list-inscription-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.container-list {
+  border: 1px solid #0000004d;
+  overflow: auto;
+  max-height: 500px;
+}
+
+.btn-generar-boleta {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn-add-student-container {
+  display: flex;
+}
+
+.btn-add-student-disabled {
+  background-color: #0000004d;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.btn-add-student-disabled:hover {
+  background-color: #0000004d;
+}
+
+.btn-generate-payment {
+  width: 200px;
+  margin: auto;
+}
+
+@media (max-width: 930px) {
+  .list-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .list-header h2 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 650px) {
+  .list-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .list-header h2 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .list-header {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .list-header h1,
+  .list-header h2 {
+    margin: 0;
+  }
+
+  .btn-add-student {
+    margin-bottom: 20px;
+  }
+}

@@ -1,0 +1,328 @@
+/* Fuente base para todo el dropdown y elementos relacionados */
+.dropdown-container,
+.dropdown-wrapper,
+.dropdown-selected,
+.dropdown-display,
+.dropdown-option,
+.multi-dropdown-item,
+.multi-label,
+.category-option,
+.category-name,
+.category-grades,
+.selected-categories-container,
+.selected-categories-title,
+.selected-categories-list,
+.selected-category-item,
+.grade-list,
+.error-message {
+  font-family: "Inter", sans-serif;
+}
+
+/* Etiquetas y títulos destacados con Poppins */
+.dropdown-label,
+.dropdown-label.large,
+.selected-categories-title,
+.category-name {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+/* Contenedor principal */
+.dropdown-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 1.5rem;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Etiqueta */
+.dropdown-label {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: #1f2937;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.dropdown-label.large {
+  font-size: 1.1rem;
+  margin-bottom: 0.85rem;
+}
+
+/* Wrapper / encabezado */
+.dropdown-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  background-color: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-family: "Inter", sans-serif;
+}
+
+.dropdown-wrapper:hover {
+  border-color: #9ca3af;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-wrapper.disabled {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.dropdown-wrapper.small {
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+}
+
+.dropdown-wrapper.medium {
+  padding: 0.875rem 1.25rem;
+  font-size: 1rem;
+}
+
+.dropdown-wrapper.large {
+  padding: 1rem 1.5rem;
+  font-size: 1.125rem;
+}
+
+/* Selected value display */
+.dropdown-selected,
+.dropdown-display {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #1f2937;
+}
+
+/* Dropdown arrow */
+.dropdown-arrow {
+  margin-left: 0.75rem;
+  color: #6b7280;
+  font-size: 0.8rem;
+  transition: transform 0.2s ease;
+}
+
+/* Opciones desplegables */
+.dropdown-list,
+.multi-dropdown-options {
+  background-color: #fff;
+  position: absolute;
+  width: 100%;
+  z-index: 50;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  padding: 0.75rem 0;
+}
+
+.dropdown-list {
+  padding: 0.5rem 0;
+}
+
+.dropdown-list.active,
+.multi-dropdown-options.active {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+/* Opciones individuales */
+.dropdown-option,
+.multi-dropdown-item {
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-option:hover,
+.multi-dropdown-item:hover {
+  background-color: #f3f4f6;
+}
+
+.multi-dropdown-item {
+  padding: 0.625rem 1.25rem;
+}
+
+/* Multi-select checkboxes */
+.checkbox-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 0.75rem;
+}
+
+.hidden-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.custom-checkbox {
+  display: inline-block;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.hidden-checkbox:checked ~ .custom-checkbox {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.hidden-checkbox:checked ~ .custom-checkbox::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.multi-label {
+  flex: 1;
+  color: #1f2937;
+  font-size: 0.9375rem;
+}
+
+/* Estados de error */
+.error-border,
+.input-error {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  color: #ef4444;
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  padding: 0.5rem 0.75rem;
+  background-color: #fef2f2;
+  border-radius: 6px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.error-message svg {
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.has-error .dropdown-wrapper {
+  border-color: #ef4444;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Opciones de categoría */
+.category-option {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1.25rem;
+}
+
+.category-name {
+  font-weight: 500;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+.category-grades {
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+/* Contenedor y lista de categorías seleccionadas */
+.selected-categories-container {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px dashed #e5e7eb;
+}
+
+.selected-categories-title {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+.selected-categories-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.selected-category-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.selected-category-item:last-child {
+  border-bottom: none;
+}
+
+/* Lista de grados */
+.grade-list {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dropdown-wrapper {
+    padding: 0.75rem 1rem;
+  }
+
+  .dropdown-wrapper.large {
+    padding: 0.875rem 1.25rem;
+  }
+
+  .dropdown-list,
+  .multi-dropdown-options {
+    max-height: 250px;
+  }
+}

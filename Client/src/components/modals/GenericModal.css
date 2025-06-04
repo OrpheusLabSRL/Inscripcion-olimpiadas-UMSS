@@ -1,11 +1,18 @@
-.container-modal {
+.container-content-modal {
   background-color: #fff;
   color: #000;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  max-width: 600px;
   border-radius: 10px;
   column-gap: 20px;
+}
+
+.container-modal {
+  width: fit-content;
+  margin: 10% auto;
+  max-height: 500px;
+  overflow: auto;
+  padding: 10px;
 }
 
 .input-1c {
@@ -14,4 +21,27 @@
 
 .input-2c {
   grid-column: span 2;
+}
+
+@media (max-width: 855px) {
+  .container-modal {
+    margin: 10% 170px;
+  }
+}
+
+@media (max-width: 705px) {
+  .container-modal {
+    margin: 10% 150px;
+  }
+}
+
+@media (max-width: 605px) {
+  .container-content-modal {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  }
+}
+@media (max-width: 425px) {
+  .container-modal {
+    margin: 10% 110px;
+  }
 }

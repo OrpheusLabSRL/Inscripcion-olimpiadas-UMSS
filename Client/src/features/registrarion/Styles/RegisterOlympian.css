@@ -1,0 +1,24 @@
+.container-btn-next-olympian {
+  grid-column-start: 2;
+}
+
+.container-btn-back-olympian {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.container-btn-next-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-back-register {
+  background: #6b7280 !important;
+}
+
+.btn-cancel-register {
+  background: #dc2626 !important;
+}
