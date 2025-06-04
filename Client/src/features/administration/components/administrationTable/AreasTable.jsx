@@ -3,6 +3,7 @@ import {
   getAreas,
   updateAreaStatus,
   deleteArea,
+  verificarUsoArea, // Asegúrate de importar esto
 } from "../../../../api/Administration.api";
 import {
   FaSpinner,
@@ -18,13 +19,34 @@ const AreasTable = () => {
   const [areas, setAreas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
-  const [editingArea, setEditingArea] = useState(null); // NUEVO estado
+  const [editingArea, setEditingArea] = useState(null);
+  const [areasEnUso, setAreasEnUso] = useState(new Set());
 
   useEffect(() => {
     const fetchAreas = async () => {
       try {
         const data = await getAreas();
-        setAreas(Array.isArray(data) ? data : []);
+        const validAreas = Array.isArray(data) ? data : [];
+        setAreas(validAreas);
+
+        const usadas = new Set();
+        await Promise.all(
+          validAreas.map(async (area) => {
+            try {
+              const res = await verificarUsoArea(area.idArea);
+              if (res.enUso) {
+                usadas.add(area.idArea);
+              }
+            } catch (error) {
+              console.error(
+                "Error verificando uso del área",
+                area.idArea,
+                error
+              );
+            }
+          })
+        );
+        setAreasEnUso(usadas);
       } catch (error) {
         console.error("Error al obtener áreas:", error);
         setAreas([]);
@@ -107,6 +129,7 @@ const AreasTable = () => {
             areas.map((area) => {
               const shouldShowMore = needsExpand(area.descripcionArea);
               const isExpanded = expandedDescriptions[area.idArea];
+              const estaEnUso = areasEnUso.has(area.idArea);
 
               return (
                 <tr key={area.idArea}>
@@ -154,13 +177,29 @@ const AreasTable = () => {
                   <td className="table-actions">
                     <FaEdit
                       className="action-icon edit-icon"
-                      title="Editar área"
-                      onClick={() => handleEdit(area)}
+                      title={
+                        estaEnUso
+                          ? "No se puede editar un área en uso"
+                          : "Editar área"
+                      }
+                      onClick={() => !estaEnUso && handleEdit(area)}
+                      style={{
+                        cursor: estaEnUso ? "not-allowed" : "pointer",
+                        opacity: estaEnUso ? 0.5 : 1,
+                      }}
                     />
                     <FaTrash
                       className="action-icon delete-icon"
-                      title="Eliminar área"
-                      onClick={() => handleDelete(area.idArea)}
+                      title={
+                        estaEnUso
+                          ? "No se puede eliminar un área en uso"
+                          : "Eliminar área"
+                      }
+                      onClick={() => !estaEnUso && handleDelete(area.idArea)}
+                      style={{
+                        cursor: estaEnUso ? "not-allowed" : "pointer",
+                        opacity: estaEnUso ? 0.5 : 1,
+                      }}
                     />
                   </td>
                 </tr>
@@ -180,13 +219,12 @@ const AreasTable = () => {
         isOpen={!!editingArea}
         area={editingArea}
         onClose={() => setEditingArea(null)}
-        onSuccess={() => {
+        onSuccess={async () => {
           setEditingArea(null);
           setLoading(true);
-          getAreas().then((data) => {
-            setAreas(Array.isArray(data) ? data : []);
-            setLoading(false);
-          });
+          const data = await getAreas();
+          setAreas(Array.isArray(data) ? data : []);
+          setLoading(false);
         }}
       />
     </>
