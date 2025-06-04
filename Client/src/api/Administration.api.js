@@ -190,3 +190,15 @@ export const setUser = async (data) => {
   const response = await inscriptionApi.post("/usuarios", data);
   return response.data;
 };
+
+export const verificarUsoArea = async (idArea) => {
+  const response = await inscriptionApi.post("/verificar-uso-area", { idArea });
+  return response.data;
+};
+
+export const verificarUsoCategoria = async (idCategoria) => {
+  const response = await inscriptionApi.post("/verificar-uso-categoria", {
+    idCategoria,
+  });
+  return response.data;
+};

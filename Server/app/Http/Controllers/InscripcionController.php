@@ -444,5 +444,40 @@ public function finishRegister($idTutorResponsable, $codigoInscripcion)
     ]);
 }
 
+public function verificarUsoArea(Request $request)
+    {
+        $request->validate([
+            'idArea' => 'required|integer|exists:areas,idArea',
+        ]);
+
+        $idArea = $request->idArea;
+
+        $inscripciones = Inscripcion::whereHas('OlimpiadaAreaCategoria', function ($query) use ($idArea) {
+            $query->where('idArea', $idArea);
+        })->with('OlimpiadaAreaCategoria')->get();
+
+        return response()->json([
+            'enUso' => $inscripciones->isNotEmpty(),
+            'inscripciones' => $inscripciones,
+        ]);
+    }
+
+    public function verificarUsoCategoria(Request $request)
+    {
+        $request->validate([
+            'idCategoria' => 'required|integer|exists:categorias,idCategoria',
+        ]);
+
+        $idCategoria = $request->idCategoria;
+
+        $inscripciones = Inscripcion::whereHas('OlimpiadaAreaCategoria', function ($query) use ($idCategoria) {
+            $query->where('idCategoria', $idCategoria);
+        })->with('OlimpiadaAreaCategoria')->get();
+
+        return response()->json([
+            'enUso' => $inscripciones->isNotEmpty(),
+            'inscripciones' => $inscripciones,
+        ]);
+    }
 
 }
