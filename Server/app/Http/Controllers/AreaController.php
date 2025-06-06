@@ -55,15 +55,27 @@ class AreaController extends Controller
     }
 
     // Obtener estructura del programa (área + categoría + grados + costo)
-    public function getProgramaCompleto()
+    public function getProgramaCompleto($id)
     {
         // Solo áreas activas
-        $areas = Area::where('estadoArea', true)->with(['categorias' => function ($query) {
-            $query->where('estadoCategoria', true)
-                ->with(['grados' => function ($q) {
-                    $q->where('estadoGrado', true);
-                }]);
-        }])->get();
+        $idOlimpiada = $id  ; // el idOlimpiada que quieras filtrar
+
+        $areas = Area::where('estadoArea', true)
+                ->whereHas('categorias', function ($query) use ($idOlimpiada) {
+                    $query->where('estadoCategoria', true)
+                        ->where('olimpiadas_areas_categorias.idOlimpiada', $idOlimpiada)
+                        ->where('olimpiadas_areas_categorias.estado', true);
+                })
+                ->with(['categorias' => function ($query) use ($idOlimpiada) {
+                    $query->where('estadoCategoria', true)
+                        ->where('olimpiadas_areas_categorias.idOlimpiada', $idOlimpiada)
+                        ->where('olimpiadas_areas_categorias.estado', true)
+                        ->with(['grados' => function ($q) {
+                            $q->where('estadoGrado', true);
+                        }]);
+                }])
+                ->get();
+
 
         $programa = [];
 

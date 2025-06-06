@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Persona
-Route::get('/persona/{carnet}/data', [PersonaController::class, 'getPersonData']);
+Route::post('/persona/data', [PersonaController::class, 'getPersonData']);
 
 // Olimpistas
 Route::post('/register', [OlimpistaController::class, 'store']);
@@ -68,7 +68,7 @@ Route::get('/permisos', [PermisoController::class, 'index']);
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);
 Route::post('/registrarAreas', [AreaController::class, 'store']);
-Route::get('/catalogoCompleto', [AreaController::class, 'getProgramaCompleto']);
+Route::get('/catalogoCompleto/{id}', [AreaController::class, 'getProgramaCompleto']);
 Route::put('/areas/{id}', [AreaController::class, 'update']);
 Route::patch('/areas/{id}/estado', [AreaController::class, 'actualizarEstado']);
 Route::delete('/areas/{id}', [AreaController::class, 'destroy']);

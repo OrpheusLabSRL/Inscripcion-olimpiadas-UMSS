@@ -17,6 +17,7 @@ class InscripcionController extends Controller
     {
         // Validar los datos recibidos
         $validated = $request->validate([
+            'idOlimpiada' => 'required|integer',
             'olimpista' => 'required|array',
             'responsable' => 'required|array',
             'tutor_legal' => 'required|array',
@@ -70,7 +71,7 @@ class InscripcionController extends Controller
 
 
                 $areaCategoria = OlimpiadaAreaCategoria::where('idArea', $inscripcionData['area'])
-                ->where('idCategoria', $inscripcionData['categoria'])
+                ->where('idCategoria', $inscripcionData['categoria'])->where('idOlimpiada', $request['idOlimpiada'])
                 ->first();
 
 
