@@ -28,7 +28,7 @@ const OlympiadDetail = () => {
         const responseAreasCat = await getAreasCategoriasPorOlimpiada(id);
         const areasCategoriasData = responseAreasCat.data || responseAreasCat;
         setAreasCategorias(areasCategoriasData);
-        sessionStorage.setItem("idOlimpiada", id);
+        sessionStorage.setItem("OlympicData", JSON.stringify(found));
       } catch (error) {
         console.error("Error al obtener datos:", error);
       } finally {

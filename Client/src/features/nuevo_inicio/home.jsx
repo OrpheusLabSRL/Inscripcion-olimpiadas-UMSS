@@ -16,7 +16,6 @@ const Home = () => {
       try {
         const { data } = await getOlimpiadas();
         const activas = data.filter((o) => o.estadoOlimpiada === 1);
-        console.log("Olimpiadas activas:", activas);
         setOlympiads(activas);
       } catch (error) {
         console.error("Error al obtener olimpiadas:", error);

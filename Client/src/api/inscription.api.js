@@ -31,8 +31,8 @@ export const getAreasOlimpistaByCi = (ci) =>
 export const getTutoresOlimpista = (id) =>
   inscriptionApi.get(`/olimpista/${id}/tutores`);
 
-export const getOlimpistaEnable = (carnet) =>
-  inscriptionApi.get(`/olimpista/${carnet}/habilitado`);
+export const getOlimpistaEnable = (carnet, idOlimpiada) =>
+  inscriptionApi.get(`/olimpista/${carnet}/habilitado/${idOlimpiada}`);
 
 export const getPersonData = (data) =>
   inscriptionApi.post(`/persona/data`, data);
