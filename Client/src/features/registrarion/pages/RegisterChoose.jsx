@@ -16,9 +16,15 @@ export const RegisterChoose = () => {
     sessionStorage.setItem("pantallaActualRegistro", location.pathname);
   }, []);
 
+  const titleOlimpian = () => {
+    const dataOlimpian = JSON.parse(sessionStorage.getItem("OlympicData"));
+    console.log(dataOlimpian);
+    return dataOlimpian.nombreOlimpiada + " versión " + dataOlimpian.version;
+  };
+
   return (
     <div className="container-form">
-      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <h1 className="title-register">{titleOlimpian()}</h1>
       <div className="title-information">
         <h2>Tipo de Inscripción</h2>
         <p>Seleccione el método de inscripcion de desea utilizar</p>

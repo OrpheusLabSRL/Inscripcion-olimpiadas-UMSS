@@ -1,6 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getOlimpiadas, getAreasCategoriasPorOlimpiada } from "../../api/Administration.api";
+import {
+  getOlimpiadas,
+  getAreasCategoriasPorOlimpiada,
+} from "../../api/Administration.api";
 import "../detallesOlimpiada/OlympiadDetail.css";
 import HeaderProp from "../home_usuario/components/HeaderProp";
 import Footer from "../home_usuario/components/Footer";
@@ -17,13 +20,15 @@ const OlympiadDetail = () => {
     const fetchData = async () => {
       try {
         const allOlympiads = await getOlimpiadas();
-        const found = allOlympiads.data.find(o => o.idOlimpiada.toString() === id);
+        const found = allOlympiads.data.find(
+          (o) => o.idOlimpiada.toString() === id
+        );
         setOlympiad(found);
 
         const responseAreasCat = await getAreasCategoriasPorOlimpiada(id);
         const areasCategoriasData = responseAreasCat.data || responseAreasCat;
         setAreasCategorias(areasCategoriasData);
-
+        sessionStorage.setItem("OlympicData", JSON.stringify(found));
       } catch (error) {
         console.error("Error al obtener datos:", error);
       } finally {
@@ -35,7 +40,7 @@ const OlympiadDetail = () => {
   }, [id]);
 
   const toggleExpand = (idArea) => {
-    setExpandedAreaId(prev => (prev === idArea ? null : idArea));
+    setExpandedAreaId((prev) => (prev === idArea ? null : idArea));
   };
 
   if (loading) return <div>Cargando información de la olimpiada...</div>;
@@ -48,9 +53,13 @@ const OlympiadDetail = () => {
         <div className="olympiad-hero">
           <div className="olympiad-hero-overlay">
             <h2>{olympiad.nombreOlimpiada}</h2>
-            <p><strong>Versión:</strong> {olympiad.version}</p>
-            <p><strong>Inicio:</strong> {olympiad.fechaInicioOlimpiada} <strong>Fin:</strong> {olympiad.fechaFinOlimpiada}</p>
-
+            <p>
+              <strong>Versión:</strong> {olympiad.version}
+            </p>
+            <p>
+              <strong>Inicio:</strong> {olympiad.fechaInicioOlimpiada}{" "}
+              <strong>Fin:</strong> {olympiad.fechaFinOlimpiada}
+            </p>
           </div>
         </div>
 
@@ -62,7 +71,10 @@ const OlympiadDetail = () => {
             {areasCategorias.map((area) => (
               <div className="area-card-horizontal" key={area.idArea}>
                 <div className="area-card-image">
-                  <img src="https://img.freepik.com/vector-gratis/concepto-astronomia-iconos-dibujos-animados-ciencia-retro_1284-7503.jpg?semt=ais_hybrid&w=740" alt="Área" />
+                  <img
+                    src="https://img.freepik.com/vector-gratis/concepto-astronomia-iconos-dibujos-animados-ciencia-retro_1284-7503.jpg?semt=ais_hybrid&w=740"
+                    alt="Área"
+                  />
                 </div>
                 <div className="area-card-content">
                   <h4>{area.nombreArea}</h4>
@@ -70,8 +82,12 @@ const OlympiadDetail = () => {
                   <button
                     className="toggle-button"
                     onClick={() => toggleExpand(area.idArea)}
-                  > <i className="bi bi-eye"></i>
-                    {expandedAreaId === area.idArea ? "Ocultar" : "Ver más información"}
+                  >
+                    {" "}
+                    <i className="bi bi-eye"></i>
+                    {expandedAreaId === area.idArea
+                      ? "Ocultar"
+                      : "Ver más información"}
                   </button>
 
                   {expandedAreaId === area.idArea && (
@@ -84,12 +100,12 @@ const OlympiadDetail = () => {
                             <ul>
                               {categoria.grados.map((grado) => (
                                 <li key={grado.idGrado}>
-                                  Grado {grado.numeroGrado} - Nivel: {grado.nivel}
+                                  Grado {grado.numeroGrado} - Nivel:{" "}
+                                  {grado.nivel}
                                 </li>
                               ))}
                             </ul>
                           </li>
-
                         ))}
                       </ul>
                     </div>
@@ -100,10 +116,9 @@ const OlympiadDetail = () => {
           </div>
         )}
         <div className="inscripcion">
-           <h2>Proceso de Inscripción</h2>
-        <TutorForm />
+          <h2>Proceso de Inscripción</h2>
+          <TutorForm />
         </div>
-       
       </div>
       <Footer />
     </div>

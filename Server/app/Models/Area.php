@@ -34,6 +34,6 @@ class Area extends Model
             'idCategoria',  
             'idArea',      
             'idCategoria'   
-        )->withPivot('estado', 'costo');
+         )->withPivot('estado', 'costo', 'idOlimpiada');
     }
 }

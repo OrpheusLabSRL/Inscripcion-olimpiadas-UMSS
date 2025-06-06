@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { NextPage } from "../../../../components/Buttons/NextPage";
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
 import { ListElement } from "../ListElement/ListElement";
+import { data } from "react-router-dom";
 
 //api
 export const ListInscription = ({
@@ -15,14 +16,26 @@ export const ListInscription = ({
   index,
 }) => {
   const [registering, setRegistering] = useState(true);
+  const [nameOlimpian, setNameOlimpian] = useState("");
 
   useEffect(() => {
     setRegistering(dataOlympians[0].inscripciones[0].registrandose);
+    setNameOlimpian(
+      dataOlympians[0].inscripciones[0].nombreOlimpiada +
+        " versión " +
+        dataOlympians[0].inscripciones[0].versionOlimpiada
+    );
   }, []);
 
   const onClickAddStudent = () => {
+    const studentOlympiad = {
+      idOlimpiada: dataOlympians[0].inscripciones[0].idOlimpiada,
+      nombreOlimpiada: dataOlympians[0].inscripciones[0].nombreOlimpiada,
+      version: dataOlympians[0].inscripciones[0].versionOlimpiada,
+    };
     sessionStorage.setItem("prevPage", location.pathname);
     sessionStorage.setItem("codigoInscripcion", codigoInscripcion);
+    sessionStorage.setItem("OlympicData", JSON.stringify(studentOlympiad));
   };
 
   const finishRegister = async () => {
@@ -39,11 +52,9 @@ export const ListInscription = ({
       try {
         // Depurar valores de tutorId y codigoInscripcion
         const tutorId = sessionStorage.getItem("tutorInscripcionId");
-        console.log("tutorId:", tutorId);
-        console.log("codigoInscripcion (raw):", codigoInscripcion);
         let cleanCodigoInscripcion = "";
         if (typeof codigoInscripcion === "string") {
-          cleanCodigoInscripcion = codigoInscripcion.replace(/^\/+/, '');
+          cleanCodigoInscripcion = codigoInscripcion.replace(/^\/+/, "");
         } else if (typeof codigoInscripcion === "number") {
           cleanCodigoInscripcion = codigoInscripcion.toString();
         } else {
@@ -51,7 +62,11 @@ export const ListInscription = ({
         }
         console.log("codigoInscripcion (clean):", cleanCodigoInscripcion);
         if (!tutorId || !cleanCodigoInscripcion) {
-          Swal.fire("Error", "Faltan datos necesarios para finalizar el registro.", "error");
+          Swal.fire(
+            "Error",
+            "Faltan datos necesarios para finalizar el registro.",
+            "error"
+          );
           return;
         }
         const url = `/api/tutor/${tutorId}/${cleanCodigoInscripcion}/inscripciones/update`;
@@ -67,7 +82,6 @@ export const ListInscription = ({
     <div className="container-list-registered">
       <div className="list-header">
         <h1>{"Inscripción " + (index + 1)}</h1>
-        <h2>Estudiantes Registrados</h2>
 
         <NextPage
           value="+ Agregar Estudiante"
@@ -80,7 +94,7 @@ export const ListInscription = ({
           onClick={onClickAddStudent}
         />
       </div>
-
+      {nameOlimpian}
       <div className="container-list">
         {dataOlympians.map((estudiante) => (
           <ListElement data={estudiante} key={estudiante.id_olimpista} />

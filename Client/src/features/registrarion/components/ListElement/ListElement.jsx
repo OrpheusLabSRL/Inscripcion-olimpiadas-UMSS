@@ -51,14 +51,6 @@ export const ListElement = ({ data }) => {
               <td>{data.municipio}</td>
               <td>
                 <div>
-                  <MdDelete
-                    style={{
-                      fontSize: "25px",
-                      color: "red",
-                      marginRight: "8px",
-                      cursor: "pointer",
-                    }}
-                  />
                   <FaInfoCircle
                     style={{
                       fontSize: "25px",
