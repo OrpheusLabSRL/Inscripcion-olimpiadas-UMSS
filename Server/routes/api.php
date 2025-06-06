@@ -36,7 +36,7 @@ Route::post('/register', [OlimpistaController::class, 'store']);
 Route::get('/olimpista/{id}/areas', [InscripcionController::class, 'getAreaByOlimpista']);
 Route::get('/olimpista/{carnet_identidad}/areasByCi', [OlimpistaController::class, 'getAreaOlimpistaByCi']);
 Route::get('/olimpistas', [OlimpistaController::class, 'getAllOlimpistas']);
-Route::get('/olimpista/{carnet_identidad}/habilitado', [InscripcionController::class, 'enableForIncription']);
+Route::get('/olimpista/{carnet_identidad}/habilitado/{idOlimpiada}', [InscripcionController::class, 'enableForIncription']);
 Route::get('/olimpista/{id}/tutores', [TutorController::class, 'getTutoresByOlimpista']);
 Route::get('/tutores/all', [TutorController::class, 'getAllTutors']);
 
