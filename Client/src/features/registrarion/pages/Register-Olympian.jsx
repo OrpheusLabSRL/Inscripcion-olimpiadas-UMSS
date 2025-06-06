@@ -8,6 +8,7 @@ import { NextPage } from "../../../components/Buttons/NextPage";
 import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
+import React, { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -162,9 +163,12 @@ export const RegisterOlympian = () => {
 
   const autofill = async () => {
     try {
+      const idOlimpiada = JSON.parse(
+        sessionStorage.getItem("OlympicData")
+      ).idOlimpiada;
       const personData = await getPersonData({
         carnet_identidad: sessionStorage.getItem("CarnetIdentidadOlympian"),
-        id_olimpiada: sessionStorage.getItem("idOlimpiada"),
+        id_olimpiada: idOlimpiada,
       });
 
       if (personData.data.data.nombre) {
@@ -267,7 +271,8 @@ export const RegisterOlympian = () => {
   const onSubmit = async (data) => {
     try {
       await getOlimpistaEnable(
-        sessionStorage.getItem("CarnetIdentidadOlympian")
+        sessionStorage.getItem("CarnetIdentidadOlympian"),
+        JSON.parse(sessionStorage.getItem("OlympicData")).idOlimpiada
       );
       navigation("/register/olympian-area", data);
     } catch (error) {
@@ -275,9 +280,14 @@ export const RegisterOlympian = () => {
     }
   };
 
+  const titleOlimpian = useMemo(() => {
+    const dataOlimpian = JSON.parse(sessionStorage.getItem("OlympicData"));
+    return `${dataOlimpian.nombreOlimpiada} versión ${dataOlimpian.version}`;
+  }, []);
+
   return (
     <div className="container-form">
-      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <h1 className="title-register">{titleOlimpian}</h1>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <form
         className="container-form-inputs"

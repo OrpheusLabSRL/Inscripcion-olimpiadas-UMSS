@@ -9,7 +9,7 @@ import { NextPage } from "../../../components/Buttons/NextPage";
 import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import swal from "sweetalert";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
@@ -104,10 +104,10 @@ export const RegisterOlympianArea = () => {
   useEffect(() => {
     const allCatalogo = async () => {
       try {
-        const catalogo = await getCatalogoCompleto(
-          sessionStorage.getItem("idOlimpiada")
-        );
-        console.log(catalogo);
+        const idOlimpiada = JSON.parse(
+          sessionStorage.getItem("OlympicData")
+        ).idOlimpiada;
+        const catalogo = await getCatalogoCompleto(idOlimpiada);
         setCatalogo(catalogo);
       } catch (error) {
         console.log("Ocurrio un error");
@@ -258,9 +258,14 @@ export const RegisterOlympianArea = () => {
       sessionStorage.setItem("tutorInscripcionId", campoAConservar);
   };
 
+  const titleOlimpian = useMemo(() => {
+    const dataOlimpian = JSON.parse(sessionStorage.getItem("OlympicData"));
+    return `${dataOlimpian.nombreOlimpiada} versión ${dataOlimpian.version}`;
+  }, []);
+
   return (
     <div className="container-form">
-      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <h1 className="title-register">{titleOlimpian}</h1>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">

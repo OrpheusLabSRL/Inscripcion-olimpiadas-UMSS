@@ -9,7 +9,7 @@ import { NextPage } from "../../../components/Buttons/NextPage";
 import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
@@ -110,9 +110,12 @@ export const RegisterResponsible = () => {
 
   const autofill = async () => {
     try {
+      const idOlimpiada = JSON.parse(
+        sessionStorage.getItem("OlympicData")
+      ).idOlimpiada;
       const personData = await getPersonData({
         carnet_identidad: sessionStorage.getItem("CiResponsible"),
-        id_olimpiada: sessionStorage.getItem("idOlimpiada"),
+        id_olimpiada: idOlimpiada,
       });
       setIsTutorResponsible(personData.data.data.esTutorResponsable);
       if (personData.data.data.nombre) {
@@ -228,9 +231,14 @@ export const RegisterResponsible = () => {
     }
   };
 
+  const titleOlimpian = useMemo(() => {
+    const dataOlimpian = JSON.parse(sessionStorage.getItem("OlympicData"));
+    return `${dataOlimpian.nombreOlimpiada} versión ${dataOlimpian.version}`;
+  }, []);
+
   return (
     <div className="container-form">
-      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <h1 className="title-register">{titleOlimpian}</h1>
       {manual === "true" && (
         <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       )}

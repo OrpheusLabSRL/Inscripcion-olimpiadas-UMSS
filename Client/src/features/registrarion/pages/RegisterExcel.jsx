@@ -441,7 +441,12 @@ const RegisterExcel = () => {
         Email: sessionStorage.getItem("EmailResponsible"),
         Ci: sessionStorage.getItem("CiResponsible"),
       };
-      const response = await registerFromExcel(responsibleData, data);
+
+      const response = await registerFromExcel(
+        responsibleData,
+        data,
+        JSON.parse(sessionStorage.getItem("OlympicData")).idOlimpiada
+      );
 
       if (response.success) {
         // Guardar el ID del tutor en sessionStorage

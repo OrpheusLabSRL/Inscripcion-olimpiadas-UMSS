@@ -122,13 +122,16 @@ export const RegisterTutorOptional = () => {
 
   const autofill = async () => {
     try {
+      const idOlimpiada = JSON.parse(
+        sessionStorage.getItem("OlympicData")
+      ).idOlimpiada;
       const ci =
         area == "AreaPrincipal"
           ? sessionStorage.getItem("CiPrincipal", watchedCarnetIdentidad)
           : sessionStorage.getItem("CiSecundaria", watchedCarnetIdentidad);
       const personData = await getPersonData({
         carnet_identidad: ci,
-        id_olimpiada: sessionStorage.getItem("idOlimpiada"),
+        id_olimpiada: idOlimpiada,
       });
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
@@ -198,6 +201,8 @@ export const RegisterTutorOptional = () => {
 
     setIsReadOnly({});
   };
+
+  
 
   return (
     <div className="container-form">
