@@ -37,3 +37,8 @@
   background: #fba834;
   border-radius: 10px;
 }
+
+.btn-icon svg {
+  font-size: 20px;
+  margin: 5px;
+}
