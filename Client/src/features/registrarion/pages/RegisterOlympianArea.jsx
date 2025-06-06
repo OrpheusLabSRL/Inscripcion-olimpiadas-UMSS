@@ -104,7 +104,10 @@ export const RegisterOlympianArea = () => {
   useEffect(() => {
     const allCatalogo = async () => {
       try {
-        const catalogo = await getCatalogoCompleto();
+        const catalogo = await getCatalogoCompleto(
+          sessionStorage.getItem("idOlimpiada")
+        );
+        console.log(catalogo);
         setCatalogo(catalogo);
       } catch (error) {
         console.log("Ocurrio un error");

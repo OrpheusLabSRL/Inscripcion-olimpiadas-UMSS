@@ -126,7 +126,10 @@ export const RegisterTutorOptional = () => {
         area == "AreaPrincipal"
           ? sessionStorage.getItem("CiPrincipal", watchedCarnetIdentidad)
           : sessionStorage.getItem("CiSecundaria", watchedCarnetIdentidad);
-      const personData = await getPersonData(ci);
+      const personData = await getPersonData({
+        carnet_identidad: ci,
+        id_olimpiada: sessionStorage.getItem("idOlimpiada"),
+      });
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);

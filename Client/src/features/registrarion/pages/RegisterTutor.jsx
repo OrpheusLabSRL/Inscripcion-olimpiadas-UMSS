@@ -117,6 +117,7 @@ export const RegisterTutor = () => {
     if (confirmacion.isConfirmed) {
       const dataToSend = {
         codigoInscripcion: sessionStorage.getItem("codigoInscripcion") || "",
+        idOlimpiada: sessionStorage.getItem("idOlimpiada") || "",
         olimpista: {
           nombre: sessionStorage.getItem("NombreOlympian"),
           apellido: sessionStorage.getItem("ApellidoOlympian"),
@@ -209,7 +210,10 @@ export const RegisterTutor = () => {
 
   const autofill = async () => {
     try {
-      const personData = await getPersonData(sessionStorage.getItem("CiLegal"));
+      const personData = await getPersonData({
+        carnet_identidad: sessionStorage.getItem("CiLegal"),
+        id_olimpiada: sessionStorage.getItem("idOlimpiada"),
+      });
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);

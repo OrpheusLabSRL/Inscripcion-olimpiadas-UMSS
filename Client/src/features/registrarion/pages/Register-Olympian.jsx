@@ -162,9 +162,10 @@ export const RegisterOlympian = () => {
 
   const autofill = async () => {
     try {
-      const personData = await getPersonData(
-        sessionStorage.getItem("CarnetIdentidadOlympian")
-      );
+      const personData = await getPersonData({
+        carnet_identidad: sessionStorage.getItem("CarnetIdentidadOlympian"),
+        id_olimpiada: sessionStorage.getItem("idOlimpiada"),
+      });
 
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
@@ -442,7 +443,11 @@ export const RegisterOlympian = () => {
             to={previousPath}
             className="btn-back-register"
           />
-          <NextPage value="Cancelar" onClick={cancelInscription} className="btn-cancel-register"/>
+          <NextPage
+            value="Cancelar"
+            onClick={cancelInscription}
+            className="btn-cancel-register"
+          />
           <PrimaryButton type="submit" value="Siguiente" />
         </div>
       </form>

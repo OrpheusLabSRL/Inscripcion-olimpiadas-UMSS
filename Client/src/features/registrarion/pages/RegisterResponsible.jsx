@@ -110,9 +110,10 @@ export const RegisterResponsible = () => {
 
   const autofill = async () => {
     try {
-      const personData = await getPersonData(
-        sessionStorage.getItem("CiResponsible")
-      );
+      const personData = await getPersonData({
+        carnet_identidad: sessionStorage.getItem("CiResponsible"),
+        id_olimpiada: sessionStorage.getItem("idOlimpiada"),
+      });
       setIsTutorResponsible(personData.data.data.esTutorResponsable);
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
@@ -149,7 +150,7 @@ export const RegisterResponsible = () => {
     setValue("Numero_Celular", "");
     setValue("Email", "");
     setValue("Ci", "");
-
+    setIsTutorResponsible(false);
     setIsReadOnly({});
   };
 
