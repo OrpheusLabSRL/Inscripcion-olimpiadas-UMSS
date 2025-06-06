@@ -2,14 +2,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
 :root {
-    --azul-oscuro: #213448;
-    --azul-claro: #547792;
+    --azulOscuro: #213448;
+    --azulClaro: #547792;
     --blanco: #ffffff;
-    --gris-claro: #f5f5f5;
-    --texto-azul: #213448;
+    --grisClaro: #f5f5f5;
+    --textoAzul: #213448;
 }
 
-.consulta-wrapper {
+.consultaWrapper {
     display: flex;
     flex-wrap: wrap;
     min-height: 100vh;
@@ -17,53 +17,53 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.image-side {
+.imagenLado {
     flex: 1;
     min-width: 300px;
-    background-color: var(--azul-oscuro);
+    background-color: var(--azulOscuro);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.image-side img {
+.imagenLado img {
     max-width: 100%;
     height: auto;
 }
 
-.form-side {
+.formularioLado {
     flex: 2;
     min-width: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2.5rem;
-    background-color: var(--gris-claro);
+    background-color: var(--grisClaro);
 }
 
-.form-side h2 {
-  color: #333;
-  text-align: center;
-  margin-bottom: 2rem;
-  font-weight: 600;
-  font-size: 28px;
-  position: relative;
-  padding-bottom: 0.5rem;
-  font-family: 'Poppins', sans-serif;
+.formularioLado h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    font-size: 28px;
+    position: relative;
+    padding-bottom: 0.5rem;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Línea decorativa debajo del título */
-.form-side h2::after {
-  content: '';
-  width: 100px;
-  height: 3px;
-  background-color: var(--azul-claro, #007bff); /* Usa tu variable si tienes */
-  display: block;
-  margin: 8px auto 0;
-  border-radius: 2px;
+.formularioLado h2::after {
+    content: '';
+    width: 100px;
+    height: 3px;
+    background-color: var(--azulClaro);
+    display: block;
+    margin: 8px auto 0;
+    border-radius: 2px;
 }
 
-.form-group {
+.grupoFormulario {
     margin-bottom: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -88,28 +88,28 @@ select:focus {
     border-color: #0EA5E9;
 }
 
-.invalid-input {
+.entradaInvalida {
     border-color: #ef4444;
 }
 
-.valid-input {
+.entradaValida {
     border-color: #10b981;
 }
 
-.required-field {
+.campoRequerido {
     color: #ef4444;
     margin-left: 4px;
 }
 
-.error-message {
+.mensajeError {
     color: #ef4444;
     margin-top: 0.5rem;
     font-size: 13px;
     font-family: 'Poppins', sans-serif;
 }
 
-.submit-button {
-    background-color: var(--azul-claro);
+.botonEnviar {
+    background-color: var(--azulClaro);
     color: white;
     padding: 10px;
     border: none;
@@ -129,11 +129,11 @@ i {
     margin-right: 5px;
 }
 
-.submit-button:hover {
+.botonEnviar:hover {
     background-color: #0285c7;
 }
 
-.help-message {
+.mensajeAyuda {
     color: #ef4444;
     font-size: 13px;
     margin-top: 0.5rem;
@@ -141,11 +141,11 @@ i {
 }
 
 @media (max-width: 768px) {
-    .consulta-wrapper {
+    .consultaWrapper {
         flex-direction: column;
     }
 
-    .image-side {
+    .imagenLado {
         width: 100%;
         height: 100px;
         /* Altura limitada */
@@ -153,7 +153,7 @@ i {
         overflow: hidden;
     }
 
-    .image-side img {
+    .imagenLado img {
         width: 100%;
         height: 45vh;
         object-fit: cover;
@@ -161,7 +161,7 @@ i {
         object-position: center;
     }
 
-    .form-side {
+    .formularioLado {
         width: 100%;
         padding: 1.5rem 1rem;
     }
@@ -176,7 +176,7 @@ i {
         padding: 10px;
     }
 
-    .submit-button {
+    .botonEnviar {
         font-size: 13px;
         height: 38px;
     }

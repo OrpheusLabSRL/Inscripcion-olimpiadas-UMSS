@@ -8,11 +8,23 @@ use App\Models\Tutor;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\PaymentConfirmationMail;
+use App\Http\Controllers\MailController;
 
 class BoletaPagoController extends Controller
 {
+    /**
+     * @var MailController
+     */
+    protected $mailController;
+
+    /**
+     * Constructor
+     * @param MailController $mailController
+     */
+    public function __construct(MailController $mailController)
+    {
+        $this->mailController = $mailController;
+    }
 
     public function generarBoleta($idTutor, $codigoInscripcion)
     {
@@ -143,12 +155,9 @@ class BoletaPagoController extends Controller
         if ($tutor && $tutor->persona) {
             $email = $tutor->persona->correoElectronico;
             if (!empty($email)) {
-                try {
-                    \Log::info('Enviando correo de confirmación a: ' . $email);
-                    Mail::to($email)->send(new PaymentConfirmationMail($boleta, $tutor));
-                    \Log::info('Correo de confirmación enviado correctamente.');
-                } catch (\Exception $e) {
-                    \Log::error('Error al enviar correo de confirmación: ' . $e->getMessage());
+                $enviado = $this->mailController->enviarConfirmacionPago($boleta, $tutor);
+                if (!$enviado) {
+                    \Log::warning('No se pudo enviar el correo de confirmación al tutor.');
                 }
             } else {
                 \Log::warning('El tutor no tiene correo electrónico asignado.');

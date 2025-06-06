@@ -2,42 +2,42 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
 :root {
-  --azul-oscuro: #213448;
-  --azul-claro: #547792;
-  --gris-claro: #f5f5f5;
+  --azulOscuro: #213448;
+  --azulClaro: #547792;
+  --grisClaro: #f5f5f5;
 
-  --text-primary: #000000;
-  --text-secondary: #64748b;
-  --text-light: #94a3b8;
+  --textoBase: #000000;
+  --textoSecundario: #64748b;
+  --textoClaro: #94a3b8;
 
-  --border-color: #e2e8f0;
-  --border-radius: 10px;
+  --colorBorde: #e2e8f0;
+  --radioBorde: 10px;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --sombraSm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --sombraMd: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-  --h1-size: 2rem;
-  --h4-size: 1.25rem;
-  --h5-size: 1rem;
-  --h6-size: 0.875rem;
-  --error-size: 0.875rem;
+  --tamanoH1: 2rem;
+  --tamanoH4: 1.25rem;
+  --tamanoH5: 1rem;
+  --tamanoH6: 0.875rem;
+  --tamanoError: 0.875rem;
 
-  --high-button: 12px;
-  --broad-button: 24px;
-  --input-padding: 12px 16px;
+  --alturaBoton: 12px;
+  --anchoBoton: 24px;
+  --paddingInput: 12px 16px;
 }
 
-.contact-main-container {
+.contactoContenedor {
   display: flex;
   flex-wrap: wrap;
   min-height: 100vh;
-  background-color: var(--gris-claro);
+  background-color: var(--grisClaro);
 }
 
-.contact-sidebar {
+.contactoLateral {
   flex: 1;
   min-width: 300px;
-  background-color: var(--azul-oscuro);
+  background-color: var(--azulOscuro);
   color: var(--white);
   display: flex;
   flex-direction: column;
@@ -45,35 +45,35 @@
   align-items: center;
 }
 
-.contact-info {
+.contactoInfo {
   max-width: 300px;
   width: 100%;
 }
 
-.info-item {
+.infoItem {
   display: flex;
   align-items: center;
   gap: 15px;
   margin-bottom: 30px;
 }
 
-.info-item:last-child {
+.infoItem:last-child {
   margin-bottom: 0;
 }
 
-.info-content h3 {
+.infoContenido h3 {
   font-size: 25px;
   margin-bottom: 8px;
   font-weight: bold;
 }
 
-.info-content p {
+.infoContenido p {
   font-size: 14px;
   opacity: 0.9;
 }
 
 /* Formulario de contacto */
-.contact-main-container .contacto-form-wrapper {
+.contactoContenedor .formularioContactoWrapper {
   flex: 2;
   padding: 3.5rem;
   display: flex;
@@ -84,7 +84,7 @@
   max-width: none;
 }
 
-.contacto-form-wrapper h2 {
+.formularioContactoWrapper h2 {
   color: #333;
   text-align: center;
   margin-bottom: 2rem;
@@ -95,18 +95,18 @@
   font-family: 'Poppins', sans-serif;
 }
 
-.contacto-form-wrapper h2::after {
+.formularioContactoWrapper h2::after {
   content: '';
   width: 100px;
   height: 3px;
-  background-color: var(--azul-claro, #007bff);
+  background-color: var(--azulClaro, #007bff);
   /* Usa tu variable si tienes */
   display: block;
   margin: 8px auto 0;
   border-radius: 2px;
 }
 
-.form-group {
+.grupoFormulario {
   margin-bottom: 25px;
   position: relative;
   width: 100%;
@@ -114,24 +114,24 @@
   flex-direction: column;
 }
 
-.form-group label {
+.grupoFormulario label {
   margin-bottom: 8px;
   font-weight: 400px;
-  font-size: var(--h5-size);
-  color: var(--text-primary);
+  font-size: var(--tamanoH5);
+  color: var(--textoBase);
   width: 100%;
   font-family: 'Poppins', sans-serif;
 }
 
-.required {
+.campoRequerido {
   color: #dc2626;
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.grupoFormulario input,
+.grupoFormulario select,
+.grupoFormulario textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
@@ -145,47 +145,47 @@
     inset -2px -2px 5px rgba(255, 255, 255, 0.6);
 }
 
-.form-group input,
-.form-group select {
+.grupoFormulario input,
+.grupoFormulario select {
   height: 48px;
 }
 
-.form-group textarea {
+.grupoFormulario textarea {
   resize: vertical;
   min-height: 150px;
   width: 100%;
 }
 
-.form-group input::placeholder,
-.form-group select::placeholder {
-  color: var(--text-light);
+.grupoFormulario input::placeholder,
+.grupoFormulario select::placeholder {
+  color: var(--textoClaro);
   opacity: 1;
-  font-size: var(--h5-size);
+  font-size: var(--tamanoH5);
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.grupoFormulario input:focus,
+.grupoFormulario select:focus,
+.grupoFormulario textarea:focus {
   outline: none;
   border-color: #0EA5E9;
 }
 
-.valid-input {
+.entradaValida {
   border-color: #10b981 !important;
 }
 
-.invalid-input {
+.entradaInvalida {
   border-color: #ef4444 !important;
 }
 
-.error-message {
+.mensajeError {
   color: #ef4444;
   font-size: 13px;
   margin-top: 4px;
   font-family: 'Poppins', sans-serif;
 }
 
-.success-message {
+.mensajeExito {
   background-color: #e8f5e9;
   border-left: 4px solid #4caf50;
   padding: 12px;
@@ -194,15 +194,15 @@
   color: #2e7d32;
 }
 
-.form-buttons {
+.botonesFormulario {
   display: flex;
   justify-content: center;
   margin-top: 24px;
   width: 100%;
 }
 
-.submit-button {
-  background-color: var(--azul-claro);
+.botonEnviar {
+  background-color: var(--azulClaro);
   color: white;
   padding: 6px 16px;
   border: none;
@@ -221,7 +221,7 @@
   text-align: center;
 }
 
-.submit-button:hover {
+.botonEnviar:hover {
   background-color: #0285c7;
 }
 
@@ -232,32 +232,32 @@
 /* Responsive */
 @media (max-width: 768px) {
 
-  .contact-main-container {
+  .contactoContenedor {
     flex-direction: column;
   }
 
-  .contact-sidebar {
+  .contactoLateral {
     order: 2;
     flex: 0 0 100%;
     margin: 0px;
     padding: 5%;
   }
 
-  .contact-main-container .contacto-form-wrapper {
+  .contactoContenedor .formularioContactoWrapper {
     order: 1;
     padding: 5%;
   }
 
-  .submit-button {
+  .botonEnviar {
     width: 100%;
     max-width: 100%;
   }
 }
 
-.form-group select {
+.grupoFormulario select {
   width: 100%;
   padding: 16px 40px 16px 20px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--colorBorde);
   border-radius: 8px;
   font-size: 16px;
   transition: all 0.3s;
@@ -278,17 +278,17 @@
   line-height: 1.2;
 }
 
-.form-group select option {
+.grupoFormulario select option {
   padding: 16px;
   font-size: 16px;
   white-space: normal;
 }
 
-.form-group select:hover {
+.grupoFormulario select:hover {
   border-color: #547792;
 }
 
-.form-group select:focus {
+.grupoFormulario select:focus {
   outline: none;
   border-color: #547792;
   box-shadow: 0 0 0 2px rgba(84, 119, 146, 0.1);
