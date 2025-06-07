@@ -206,7 +206,7 @@ export default function Home() {
             <div className="adminActionIcon">
               <FaUserFriends size={32} color="#3498db" />
             </div>
-            <h3>Usuarios</h3>
+            <h3>Administrar Usuarios</h3>
             <p>Administrar los roles y usuarios con privilegios</p>
             <button onClick={() => navigate("/admin/users")}>
               Administrar usuarios
