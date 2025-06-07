@@ -6,12 +6,18 @@ use Illuminate\Support\ServiceProvider;
 use App\Repositories\Contracts\{
     AreaRepositoryInterface,
     CategoriaRepositoryInterface,
-    OlimpiadaRepositoryInterface
+    OlimpiadaRepositoryInterface,
+    OlimpiadaAreaCategoriaRepositoryInterface,
+    GradoRepositoryInterface,
+    CategoriaGradoRepositoryInterface
 };
 use App\Repositories\Eloquent\{
     AreaRepository,
     CategoriaRepository,
-    OlimpiadaRepository
+    OlimpiadaRepository,
+    OlimpiadaAreaCategoriaRepository,
+    GradoRepository,
+    CategoriaGradoRepository
 };
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -31,6 +37,21 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             OlimpiadaRepositoryInterface::class,
             OlimpiadaRepository::class
+        );
+
+        $this->app->bind(
+            OlimpiadaAreaCategoriaRepositoryInterface::class,
+            OlimpiadaAreaCategoriaRepository::class
+        );
+
+        $this->app->bind(
+            GradoRepositoryInterface::class,
+            GradoRepository::class
+        );
+
+        $this->app->bind(
+            CategoriaGradoRepositoryInterface::class,
+            CategoriaGradoRepository::class
         );
     }
 

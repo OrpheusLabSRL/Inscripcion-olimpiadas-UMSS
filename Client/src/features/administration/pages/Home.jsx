@@ -11,6 +11,7 @@ import {
   FaUser,
   FaChartBar,
   FaListAlt,
+  FaUserFriends,
 } from "react-icons/fa";
 import "../Styles/Home.css";
 
@@ -200,15 +201,15 @@ export default function Home() {
             </button>
           </div>
         )}
-        {tienePermiso("ver_reportes") && (
+        {tienePermiso("crear_usuarios") && (
           <div className="adminActionCard">
             <div className="adminActionIcon">
-              <FaChartBar size={32} color="#3498db" />
+              <FaUserFriends size={32} color="#3498db" />
             </div>
-            <h3>Generar Reportes</h3>
-            <p>Genera reportes personalizados con filtros</p>
-            <button onClick={() => navigate("/admin/reports")}>
-              Generar reportes
+            <h3>Usuarios</h3>
+            <p>Administrar los roles y usuarios con privilegios</p>
+            <button onClick={() => navigate("/admin/users")}>
+              Administrar usuarios
             </button>
           </div>
         )}
