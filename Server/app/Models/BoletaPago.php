@@ -11,6 +11,7 @@ class BoletaPago extends Model
 
     protected $table = 'boletas_pagos';
     protected $primaryKey = 'codigoBoleta';
+    public $timestamps = false;
 
     protected $fillable = [
         'idTutor',

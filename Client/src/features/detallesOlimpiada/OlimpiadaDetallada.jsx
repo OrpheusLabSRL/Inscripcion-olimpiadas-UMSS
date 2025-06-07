@@ -4,17 +4,20 @@ import {
   getOlimpiadas,
   getAreasCategoriasPorOlimpiada,
 } from "../../api/Administration.api";
-import "../detallesOlimpiada/OlympiadDetail.css";
+import "../detallesOlimpiada/OlimpiadaDetallada.css";
 import HeaderProp from "../home_usuario/components/HeaderProp";
 import Footer from "../home_usuario/components/Footer";
 import { TutorForm } from "../registrarion/pages/TutorForm";
+import { GenericModal } from "../../components/modals/GenericModal"; // Ajusta el path si es diferente
 
-const OlympiadDetail = () => {
+const OlimpiadaDetallada = () => {
   const { id } = useParams();
   const [olympiad, setOlympiad] = useState(null);
   const [areasCategorias, setAreasCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [expandedAreaId, setExpandedAreaId] = useState(null); // Para mostrar u ocultar detalles
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [areaSeleccionada, setAreaSeleccionada] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,8 +42,14 @@ const OlympiadDetail = () => {
     fetchData();
   }, [id]);
 
-  const toggleExpand = (idArea) => {
-    setExpandedAreaId((prev) => (prev === idArea ? null : idArea));
+  const openModal = (area) => {
+    setAreaSeleccionada(area);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setAreaSeleccionada(null);
   };
 
   if (loading) return <div>Cargando información de la olimpiada...</div>;
@@ -53,12 +62,20 @@ const OlympiadDetail = () => {
         <div className="olympiad-hero">
           <div className="olympiad-hero-overlay">
             <h2>{olympiad.nombreOlimpiada}</h2>
+            <p><strong>Versión:</strong> {olympiad.version}</p>
             <p>
-              <strong>Versión:</strong> {olympiad.version}
-            </p>
-            <p>
-              <strong>Inicio:</strong> {olympiad.fechaInicioOlimpiada}{" "}
-              <strong>Fin:</strong> {olympiad.fechaFinOlimpiada}
+              <strong>Desde</strong>{" "}
+              {new Date(olympiad.fechaInicioOlimpiada).toLocaleDateString("es-ES", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}{" "}
+              <strong>hasta</strong>{" "}
+              {new Date(olympiad.fechaFinOlimpiada).toLocaleDateString("es-ES", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
             </p>
           </div>
         </div>
@@ -81,48 +98,49 @@ const OlympiadDetail = () => {
                   <p>{area.descripcionArea}</p>
                   <button
                     className="toggle-button"
-                    onClick={() => toggleExpand(area.idArea)}
+                    onClick={() => openModal(area)}
                   >
-                    {" "}
-                    <i className="bi bi-eye"></i>
-                    {expandedAreaId === area.idArea
-                      ? "Ocultar"
-                      : "Ver más información"}
+                    <i className="bi bi-eye"></i> Ver más información
                   </button>
-
-                  {expandedAreaId === area.idArea && (
-                    <div className="categorias-desplegable">
-                      <h4>Categorías:</h4>
-                      <ul>
-                        {area.categorias.map((categoria) => (
-                          <li key={categoria.idCategoria}>
-                            <strong>{categoria.nombreCategoria}</strong>
-                            <ul>
-                              {categoria.grados.map((grado) => (
-                                <li key={grado.idGrado}>
-                                  Grado {grado.numeroGrado} - Nivel:{" "}
-                                  {grado.nivel}
-                                </li>
-                              ))}
-                            </ul>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
                 </div>
               </div>
             ))}
           </div>
         )}
+
         <div className="inscripcion">
           <h2>Proceso de Inscripción</h2>
           <TutorForm />
         </div>
       </div>
+
+      <GenericModal modalIsOpen={modalIsOpen} closeModal={closeModal}>
+        {areaSeleccionada && (
+          <>
+            <h3>{areaSeleccionada.nombreArea}</h3>
+            <p>{areaSeleccionada.descripcionArea}</p>
+            <h4>Categorías:</h4>
+            <ul>
+              {areaSeleccionada.categorias.map((categoria) => (
+                <li key={categoria.idCategoria}>
+                  <strong>{categoria.nombreCategoria}</strong>
+                  <ul>
+                    {categoria.grados.map((grado) => (
+                      <li key={grado.idGrado}>
+                        Grado {grado.numeroGrado} - Nivel: {grado.nivel}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </GenericModal>
+
       <Footer />
     </div>
   );
 };
 
-export default OlympiadDetail;
+export default OlimpiadaDetallada;

@@ -1,12 +1,19 @@
-/* ===== Sidebar Base ===== */
+:root {
+  --azul-oscuro: #213448;
+  --azul-claro: #547792;
+  --blanco: #ffffff;
+  --gris-claro: #f5f5f5;
+  --texto-azul: #213448;
+}
+
 .sidebar {
   position: fixed;
   top: 0;
-  height: 100vh; /* Changed from 95vh to 100vh */
-  background: var(--white);
-  color: #222;
-  padding: 25px 5px; /* un poco menos horizontal */
-  transition: all 0.4s ease; /* más rápido y suave */
+  height: 100vh;
+  background: var(--azul-oscuro);
+  color: var(--blanco);
+  padding: 25px 5px; 
+  transition: all 0.4s ease; 
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 
@@ -17,23 +24,32 @@
 
   &.sidebar ul li a {
     width: auto;
+    color: var(--blanco);
   }
 }
 
+.logoEncabezado {
+  height: 30px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: white;
+} 
+
 @media (max-width: 768px) {
   .sidebar {
-    width: 40px; /* Increased sidebar width on mobile */
+    width: 40px; 
     padding: 25px 15px;
-    bottom: 0; /* Ensure sidebar reaches bottom of screen */
-    height: unset; /* Initially hidden on mobile */
+    bottom: 0;
+    height: unset; 
   }
 
   .sidebar ul li a {
-    padding: 12px 15px; /* Align bottom buttons with top */
+    padding: 12px 15px;
   }
 
   .sidebar.active {
-    width: 250px; /* Expanded sidebar width on mobile */
+    width: 250px; 
   }
 
   .sidebar-overlay {
@@ -47,7 +63,6 @@
   }
 }
 
-/* ===== Sidebar Activo ===== */
 .sidebar.active {
   left: 0;
 
@@ -147,14 +162,15 @@
   align-items: center;
   gap: 8px;
   color: #b91c1c;
+  background-color: var(--blanco);
   font-weight: 600;
   font-size: 1rem;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .btn-logout:hover {
-  background-color: rgba(220, 38, 38, 0.1);
-  color: #dc2626;
+  background-color: #dc2626;
+  color: var(--blanco);
 }
 
 @media (max-width: 768px) {
@@ -175,17 +191,18 @@
 
 /* ===== Título Sidebar ===== */
 .sidebar-title {
-  font-size: var(--h3-size);
-  margin-right: 10px;
-  font-weight: 700;
-  color: #1e293b;
-  user-select: none;
+  margin: 0;
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: var(--blanco);
 }
 
 /* ===== Iconos Sidebar ===== */
 .sidebar-icons {
   font-size: 22px;
-  margin-right: 10px;
   color: inherit;
   transition: color 0.3s ease;
 }
@@ -197,11 +214,7 @@
   align-items: center;
 }
 
-.sidebar-header img {
-  width: 60px;
-  height: auto;
-  object-fit: contain;
-}
+
 
 /* ===== Header Sidebar Centrado ===== */
 .sidebar-header-contrain {
