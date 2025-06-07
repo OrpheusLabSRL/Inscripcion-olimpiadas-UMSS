@@ -32,7 +32,7 @@ export const ListRegistered = () => {
 
   return (
     <div className="container-form">
-      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <h1 className="title-register">Lista de Estudiantes Registrados</h1>
       {dataInscriptions.map((inscription, index) => {
         return (
           <ListInscription

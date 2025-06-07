@@ -71,7 +71,6 @@ export const filtrarAreasPorCurso = (curso, programaCompleto) => {
 
   programaCompleto.forEach((item) => {
     const gradosItem = normalizarTexto(item.grados);
-
     if (gradosItem.includes(cursoNormalizado)) {
       areasDisponibles.push({ area: item.area, area_id: item.area_id });
     } else if (gradosItem.includes(" a ")) {

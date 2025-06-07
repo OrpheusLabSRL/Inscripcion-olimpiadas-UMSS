@@ -10,7 +10,7 @@ import { NextPage } from "../../../components/Buttons/NextPage";
 import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useLocation } from "react-router-dom";
 import swal from "sweetalert";
@@ -113,10 +113,13 @@ export const RegisterTutor = () => {
       confirmButtonText: "Sí, aceptar",
       cancelButtonText: "Cancelar",
     });
+    console.log(sessionStorage.getItem("OlympicData"));
 
     if (confirmacion.isConfirmed) {
       const dataToSend = {
         codigoInscripcion: sessionStorage.getItem("codigoInscripcion") || "",
+        idOlimpiada:
+          JSON.parse(sessionStorage.getItem("OlympicData")).idOlimpiada || "",
         olimpista: {
           nombre: sessionStorage.getItem("NombreOlympian"),
           apellido: sessionStorage.getItem("ApellidoOlympian"),
@@ -209,7 +212,13 @@ export const RegisterTutor = () => {
 
   const autofill = async () => {
     try {
-      const personData = await getPersonData(sessionStorage.getItem("CiLegal"));
+      const idOlimpiada = JSON.parse(
+        sessionStorage.getItem("OlympicData")
+      ).idOlimpiada;
+      const personData = await getPersonData({
+        carnet_identidad: sessionStorage.getItem("CiLegal"),
+        id_olimpiada: idOlimpiada,
+      });
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
@@ -364,9 +373,14 @@ export const RegisterTutor = () => {
     }
   };
 
+  const titleOlimpian = useMemo(() => {
+    const dataOlimpian = JSON.parse(sessionStorage.getItem("OlympicData"));
+    return `${dataOlimpian.nombreOlimpiada} versión ${dataOlimpian.version}`;
+  }, []);
+
   return (
     <div className="container-form">
-      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <h1 className="title-register">{titleOlimpian}</h1>
       <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
       <form className="container-form-inputs" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-2c">
