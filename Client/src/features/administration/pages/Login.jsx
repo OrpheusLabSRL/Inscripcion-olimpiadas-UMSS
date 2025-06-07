@@ -12,7 +12,6 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Si ya está logueado, redirige automáticamente
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser && storedUser.role === "admin") {
@@ -45,26 +44,26 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="login-header">
-          <h2 className="login-title">Bienvenido al Sistema</h2>
-          <p className="login-subtitle">
+    <div className="loginContainer">
+      <div className="loginCard">
+        <div className="loginHeader">
+          <h2 className="loginTitle">Bienvenido al Sistema</h2>
+          <p className="loginSubtitle">
             Ingresa tus credenciales para continuar
           </p>
         </div>
 
         {error && (
-          <div className="login-error">
-            <MdErrorOutline className="login-error-icon" />
+          <div className="loginError">
+            <MdErrorOutline className="loginErrorIcon" />
             <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="login-form">
-          <div className="login-form-group">
-            <label htmlFor="email" className="login-form-label">
-              <FaEnvelope className="login-input-icon" />
+        <form onSubmit={handleLogin} className="loginForm">
+          <div className="loginFormGroup">
+            <label htmlFor="email" className="loginFormLabel">
+              <FaEnvelope className="loginInputIcon" />
               Correo electrónico
             </label>
             <input
@@ -73,14 +72,14 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="login-form-input"
+              className="loginFormInput"
               placeholder="tu@email.com"
             />
           </div>
 
-          <div className="login-form-group">
-            <label htmlFor="password" className="login-form-label">
-              <FaLock className="login-input-icon" />
+          <div className="loginFormGroup">
+            <label htmlFor="password" className="loginFormLabel">
+              <FaLock className="loginInputIcon" />
               Contraseña
             </label>
             <input
@@ -89,21 +88,21 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="login-form-input"
+              className="loginFormInput"
               placeholder="••••••••"
             />
           </div>
 
           <button
             type="submit"
-            className="login-submit-button"
+            className="loginSubmitButton"
             disabled={isLoading}
           >
             {isLoading ? (
-              <span className="login-spinner"></span>
+              <span className="loginSpinner"></span>
             ) : (
               <>
-                <FaSignInAlt className="login-button-icon" />
+                <FaSignInAlt className="loginButtonIcon" />
                 Iniciar Sesión
               </>
             )}

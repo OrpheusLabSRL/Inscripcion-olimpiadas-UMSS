@@ -2,78 +2,84 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categoria;
+use App\Services\CategoriaService;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
-    // Obtener todas las categorías
-    public function index()
+    protected $service;
+
+    public function __construct(CategoriaService $service)
     {
-        return response()->json(Categoria::all());
+        $this->service = $service;
     }
 
-    // Obtener una categoría por su ID
+    public function index(Request $request)
+    {
+        $filters = [
+            'activas' => $request->query('activas', false),
+            'nombre' => $request->query('nombre')
+        ];
+
+        $categorias = $this->service->getAllCategorias($filters);
+        return response()->json($categorias);
+    }
+
     public function show($id)
     {
-        $categoria = Categoria::find($id);
-
-        if (!$categoria) {
+        try {
+            $categoria = $this->service->getCategoriaById($id);
+            return response()->json($categoria);
+        } catch (\Exception $e) {
             return response()->json(['message' => 'Categoría no encontrada'], 404);
         }
-
-        return response()->json($categoria);
     }
 
-    // Crear una nueva categoría
     public function store(Request $request)
     {
-        $request->validate([
-            'nombreCategoria' => 'required|string|unique:categoria,nombreCategoria',
-            'estadoCategoria' => 'required|boolean',
+        $validated = $request->validate([
+            'nombreCategoria' => 'required|string|max:255',
+            'estadoCategoria' => 'sometimes|boolean'
         ]);
 
-        $categoria = Categoria::create($request->only(['nombreCategoria', 'estadoCategoria']));
-
-        return response()->json([
-            'message' => 'Categoría creada con éxito',
-            'data' => $categoria
-        ], 201);
+        try {
+            $categoria = $this->service->createCategoria($validated);
+            return response()->json([
+                'message' => 'Categoría creada con éxito',
+                'data' => $categoria
+            ], 201);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
     }
 
-    // Actualizar una categoría
     public function update(Request $request, $id)
     {
-        $categoria = Categoria::find($id);
+        $validated = $request->validate([
+            'nombreCategoria' => 'required|string|max:255',
+            'estadoCategoria' => 'required|boolean'
+        ]);
 
-        if (!$categoria) {
+        try {
+            $categoria = $this->service->updateCategoria($id, $validated);
+            return response()->json([
+                'message' => 'Categoría actualizada con éxito',
+                'data' => $categoria
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
+        } catch (\Exception $e) {
             return response()->json(['message' => 'Categoría no encontrada'], 404);
         }
-
-        $request->validate([
-            'nombreCategoria' => 'required|string|unique:categoria,nombreCategoria,' . $id . ',idCategoria',
-            'estadoCategoria' => 'required|boolean',
-        ]);
-
-        $categoria->update($request->only(['nombreCategoria', 'estadoCategoria']));
-
-        return response()->json([
-            'message' => 'Categoría actualizada con éxito',
-            'data' => $categoria
-        ]);
     }
 
-    // Eliminar una categoría
     public function destroy($id)
     {
-        $categoria = Categoria::find($id);
-
-        if (!$categoria) {
+        try {
+            $this->service->deleteCategoria($id);
+            return response()->json(['message' => 'Categoría eliminada']);
+        } catch (\Exception $e) {
             return response()->json(['message' => 'Categoría no encontrada'], 404);
         }
-
-        $categoria->delete();
-
-        return response()->json(['message' => 'Categoría eliminada']);
     }
 }

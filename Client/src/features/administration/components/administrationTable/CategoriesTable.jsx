@@ -196,21 +196,21 @@ const CategoriesTable = () => {
   };
 
   return (
-    <div className="category-table-wrapper">
-      <table className="category-table">
+    <div className="categoryTableWrapper">
+      <table className="categoryTable">
         <thead>
           <tr>
             <th>Categoría</th>
-            <th className="table-util-text-center">Grados Incluidos</th>
-            <th className="table-util-text-center">Estado</th>
-            <th className="table-util-text-center">Acciones</th>
+            <th className="tableUtilTextCenter">Grados Incluidos</th>
+            <th className="tableUtilTextCenter">Estado</th>
+            <th className="tableUtilTextCenter">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="4" className="table-util-loading">
-                <FaSpinner className="table-util-spinner" />
+              <td colSpan="4" className="tableUtilLoading">
+                <FaSpinner className="tableUtilSpinner" />
                 Cargando categorías...
               </td>
             </tr>
@@ -222,34 +222,34 @@ const CategoriesTable = () => {
                 return (
                   <React.Fragment key={index}>
                     <tr
-                      className={`category-table-row ${
+                      className={`categoryTableRow ${
                         expandedCategory === nombreCategoria ? "expanded" : ""
                       }`}
                     >
                       <td
-                        className="category-table-name"
+                        className="categoryTableName"
                         onClick={() => toggleExpand(nombreCategoria)}
                       >
-                        {nombreCategoria} <FaInfoCircle className="info-icon" />
+                        {nombreCategoria} <FaInfoCircle className="infoIcon" />
                       </td>
                       <td
-                        className="table-util-text-center"
+                        className="tableUtilTextCenter"
                         onClick={() => toggleExpand(nombreCategoria)}
                       >
                         {data.grados.slice(0, 3).join(", ")}
                         {data.grados.length > 3 && (
-                          <span className="category-table-more-count">
+                          <span className="categoryTableMoreCount">
                             +{data.grados.length - 3}
                           </span>
                         )}
                       </td>
-                      <td className="table-util-text-center">
+                      <td className="tableUtilTextCenter">
                         <span
-                          className={`table-util-status-badge ${
+                          className={`tableUtilStatusBadge ${
                             data.estadoCategoriaGrado
-                              ? "table-util-badge-success"
-                              : "table-util-badge-danger"
-                          } ${updating ? "table-util-disabled" : ""}`}
+                              ? "tableUtilBadgeSuccess"
+                              : "tableUtilBadgeDanger"
+                          } ${updating ? "tableUtilDisabled" : ""}`}
                           onClick={() =>
                             !updating && handleChangeStatus(nombreCategoria)
                           }
@@ -258,7 +258,7 @@ const CategoriesTable = () => {
                           }}
                         >
                           {updating ? (
-                            <FaSpinner className="table-util-spinner" />
+                            <FaSpinner className="tableUtilSpinner" />
                           ) : data.estadoCategoriaGrado ? (
                             "Activo"
                           ) : (
@@ -266,9 +266,9 @@ const CategoriesTable = () => {
                           )}
                         </span>
                       </td>
-                      <td className="table-actions">
+                      <td className="tableActions">
                         <FaEdit
-                          className="action-icon edit-icon"
+                          className="actionIcon editIcon"
                           title={
                             estaEnUso
                               ? "No se puede editar (en uso)"
@@ -282,7 +282,7 @@ const CategoriesTable = () => {
                           }
                         />
                         <FaTrash
-                          className="action-icon delete-icon"
+                          className="actionIcon deleteIcon"
                           title={
                             estaEnUso
                               ? "No se puede eliminar (en uso)"
@@ -302,12 +302,12 @@ const CategoriesTable = () => {
                       </td>
                     </tr>
                     {expandedCategory === nombreCategoria && (
-                      <tr className="category-table-details">
+                      <tr className="categoryTableDetails">
                         <td colSpan="4">
                           <h4>Grados completos:</h4>
-                          <div className="grades-list">
+                          <div className="gradesList">
                             {data.grados.map((grado, i) => (
-                              <span key={i} className="category-table-tag">
+                              <span key={i} className="categoryTableTag">
                                 {grado}
                               </span>
                             ))}
@@ -321,7 +321,7 @@ const CategoriesTable = () => {
             )
           ) : (
             <tr>
-              <td colSpan="4" className="table-util-empty">
+              <td colSpan="4" className="tableUtilEmpty">
                 No hay categorías registradas.
               </td>
             </tr>

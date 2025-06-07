@@ -70,25 +70,25 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
   };
 
   return (
-    <div className="admin-modal-overlay">
+    <div className="adminModalOverlay">
       <div
-        className="admin-modal-content"
+        className="adminModalContent"
         style={{ maxWidth: "850px", padding: "1.5rem" }}
       >
         <button
           type="button"
-          className="admin-modal-close-btn"
+          className="adminModalCloseBtn"
           onClick={onClose}
           aria-label="Cerrar modal"
         >
           ✖
         </button>
 
-        <h2 className="admin-modal-title" style={{ marginBottom: "1rem" }}>
+        <h2 className="adminModalTitle" style={{ marginBottom: "1rem" }}>
           Datos generales de la Olimpiada
         </h2>
 
-        <div className="admin-olympiad-info">
+        <div className="adminOlympiadInfo">
           <p>
             <strong>Nombre:</strong> {olimpiada.nombreOlimpiada}
           </p>
@@ -111,18 +111,18 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
           </p>
         </div>
 
-        <h3 className="admin-section-title">Áreas y Categorías</h3>
+        <h3 className="adminSectionTitle">Áreas y Categorías</h3>
 
-        <div className="admin-area-categorias-container">
+        <div className="adminAreaCategoriasContainer">
           {Object.keys(agrupado).length > 0 ? (
             Object.entries(agrupado).map(([areaId, area]) => (
-              <div className="admin-area-categoria-card" key={areaId}>
-                <div className="admin-area-info">
+              <div className="adminAreaCategoriaCard" key={areaId}>
+                <div className="adminAreaInfo">
                   <strong>Área:</strong> {area.nombreArea}
                 </div>
-                <div className="admin-categoria-info">
+                <div className="adminCategoriaInfo">
                   <strong>Categorías:</strong>
-                  <ul className="admin-categoria-list">
+                  <ul className="adminCategoriaList">
                     {area.categorias.map((cat) => (
                       <li key={cat.idCategoria}>
                         {cat.nombreCategoria}
@@ -154,7 +154,7 @@ const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
               </div>
             ))
           ) : (
-            <div className="admin-empty-state">
+            <div className="adminEmptyState">
               No existen Áreas ni Categorías registradas en esta Olimpiada.
             </div>
           )}

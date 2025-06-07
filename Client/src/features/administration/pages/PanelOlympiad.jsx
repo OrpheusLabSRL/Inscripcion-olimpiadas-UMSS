@@ -72,14 +72,14 @@ export default function PanelOlympiad() {
   };
 
   return (
-    <div className="panel-olymp-container">
-      <div className="panel-olymp-form-group">
-        <label htmlFor="olimpiada-select" className="panel-olymp-label">
+    <div className="panelOlympContainer">
+      <div className="panelOlympFormGroup">
+        <label htmlFor="olimpiada-select" className="panelOlympLabel">
           Selecciona una olimpiada
         </label>
         <select
           id="olimpiada-select"
-          className="panel-olymp-select"
+          className="panelOlympSelect"
           value={selectedId}
           onChange={handleOlympiadChange}
           disabled={isLoading}
@@ -94,7 +94,7 @@ export default function PanelOlympiad() {
       </div>
 
       {!selectedId && (
-        <div className="panel-olymp-no-selection">
+        <div className="panelOlympNoSelection">
           <FiInfo size={24} />
           No tienes ninguna olimpiada seleccionada. Por favor selecciona una.
         </div>
@@ -103,9 +103,9 @@ export default function PanelOlympiad() {
       {isLoadingAreas && selectedId && <p>Cargando áreas y categorías...</p>}
 
       {selectedId && (
-        <div className="panel-olymp-content">
-          <div className="panel-olymp-header">
-            <h3 className="panel-olymp-title">
+        <div className="panelOlympContent">
+          <div className="panelOlympHeader">
+            <h3 className="panelOlympTitle">
               Áreas y Categorías -{" "}
               {
                 olimpiadas.find((o) => o.idOlimpiada === selectedId)

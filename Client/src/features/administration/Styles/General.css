@@ -1,7 +1,7 @@
 /* === Contenedores Generales === */
-.admin-area-container,
-.admin-category-container,
-.admin-olympiads-container {
+.adminAreaContainer,
+.adminCategoryContainer,
+.adminOlympiadsContainer {
   max-width: 100%;
   display: flex;
   flex-direction: column;
@@ -10,11 +10,11 @@
   background-color: #f8fafc;
 }
 
-.admin-olympiads-container {
+.adminOlympiadsContainer {
   background-color: #f5f7fa;
 }
 
-.admin-content-wrapper {
+.adminContentWrapper {
   padding: 2rem;
   max-width: 1400px;
   width: 100%;
@@ -24,17 +24,17 @@
 
 /* Fuente base para todo el admin */
 body,
-.admin-area-container,
-.admin-category-container,
-.admin-olympiads-container,
-.admin-content-wrapper {
+.adminAreaContainer,
+.adminCategoryContainer,
+.adminOlympiadsContainer,
+.adminContentWrapper {
   font-family: "Inter", sans-serif;
 }
 
 /* Títulos principales con Poppins */
-.area-title,
-.category-title,
-.olympiads-title {
+.areaTitle,
+.categoryTitle,
+.olympiadsTitle {
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   font-size: 2rem;
@@ -43,40 +43,40 @@ body,
 }
 
 /* Subtítulos y textos generales */
-.area-subtitle,
-.category-subtitle,
-.olympiads-subtitle,
-.admin-table-wrapper,
-.admin-table-card,
-.btn-secondary,
-.btn-add,
-.btn-register,
-.btn-back {
+.areaSubtitle,
+.categorySubtitle,
+.olympiadsSubtitle,
+.adminTableWrapper,
+.adminTableCard,
+.btnSecondary,
+.btnAdd,
+.btnRegister,
+.btnBack {
   font-family: "Inter", sans-serif;
   color: #64748b;
   margin: 0;
 }
 
-.area-subtitle,
-.category-subtitle,
-.olympiads-subtitle {
+.areaSubtitle,
+.categorySubtitle,
+.olympiadsSubtitle {
   font-size: 1.1rem;
 }
 
-.category-title-group {
+.categoryTitleGroup {
   margin-top: 1.5rem;
 }
 
 /* === Cabeceras === */
-.area-header-section,
-.category-header-section,
-.olympiads-header-section {
+.areaHeaderSection,
+.categoryHeaderSection,
+.olympiadsHeaderSection {
   width: 90%;
   max-width: 1200px;
   margin-bottom: 2rem;
 }
 
-.olympiads-header-section {
+.olympiadsHeaderSection {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -84,14 +84,14 @@ body,
   gap: 1.5rem;
 }
 
-.olympiads-header-text {
+.olympiadsHeaderText {
   flex: 1;
   min-width: 300px;
 }
 
 /* === Tablas === */
-.admin-table-wrapper,
-.admin-table-card {
+.adminTableWrapper,
+.adminTableCard {
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -99,19 +99,19 @@ body,
   overflow-x: auto;
 }
 
-.admin-table-wrapper {
+.adminTableWrapper {
   padding: 2rem;
   max-width: 1200px;
 }
 
-.admin-table-card {
+.adminTableCard {
   padding: 1.5rem;
 }
 
 /* === Botones === */
-.btn-secondary,
-.btn-add,
-.btn-register {
+.btnSecondary,
+.btnAdd,
+.btnRegister {
   font-weight: 600;
   border: none;
   transition: all 0.2s ease;
@@ -124,32 +124,32 @@ body,
   gap: 0.5rem;
 }
 
-.btn-add,
-.btn-register {
+.btnAdd,
+.btnRegister {
   padding: 0.5rem 1rem;
   font-size: 0.95rem;
 }
 
-.btn-primary:hover,
-.btn-add:hover,
-.btn-register:hover {
+.btnPrimary:hover,
+.btnAdd:hover,
+.btnRegister:hover {
   background-color: #1d4ed8;
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(29, 78, 216, 0.5);
 }
 
-.btn-primary:active {
+.btnPrimary:active {
   background-color: #1e40af;
   box-shadow: 0 4px 8px rgba(30, 64, 175, 0.6);
   transform: translateY(0);
 }
 
-.btn-icon {
+.btnIcon {
   font-size: 0.9rem;
 }
 
 /* === Botón de Volver === */
-.btn-back {
+.btnBack {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -163,62 +163,62 @@ body,
   transition: all 0.2s ease;
 }
 
-.btn-back:hover {
+.btnBack:hover {
   color: #2563eb;
   transform: translateX(-2px);
 }
 
-.btn-back-icon {
+.btnBackIcon {
   font-size: 0.9rem;
 }
 
 /* === Responsive === */
 @media (max-width: 1024px) {
-  .admin-content-wrapper {
+  .adminContentWrapper {
     padding: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  .admin-area-container,
-  .admin-category-container,
-  .admin-olympiads-container {
+  .adminAreaContainer,
+  .adminCategoryContainer,
+  .adminOlympiadsContainer {
     padding: 1.5rem;
   }
 
-  .admin-table-wrapper,
-  .admin-table-card {
+  .adminTableWrapper,
+  .adminTableCard {
     padding: 1rem;
   }
 
-  .area-title,
-  .category-title,
-  .olympiads-title {
+  .areaTitle,
+  .categoryTitle,
+  .olympiadsTitle {
     font-size: 1.5rem;
   }
 
-  .category-subtitle,
-  .olympiads-subtitle {
+  .categorySubtitle,
+  .olympiadsSubtitle {
     font-size: 1rem;
   }
 
-  .olympiads-header-section {
+  .olympiadsHeaderSection {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .btn-primary {
+  .btnPrimary {
     width: 100%;
     padding: 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
-  .admin-content-wrapper {
+  .adminContentWrapper {
     padding: 1rem;
   }
 
-  .category-title {
+  .categoryTitle {
     font-size: 1.5rem;
   }
 }
