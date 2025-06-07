@@ -109,7 +109,7 @@ Route::get('/boletas/reimprimir/{codigoBoleta}', [BoletaPagoController::class, '
 Route::post('/boletaPago/check', [BoletaPagoController::class, 'generarPago']);
 Route::post('/boletaPago/confirmarPago', [BoletaPagoController::class, 'confirmarPago']);
 
-Route::get('/boletaPago/boletasByTutor/{tutorId}', [BoletaPagoController::class, 'getBoletasByTutor']);
+Route::get('/boletaPago/boletasByTutor/{tutorId}', [BoletaPagoController::class, 'getBoletasPorTutor']);
 
 // Excel
 Route::post('/register-from-excel', [ExcelController::class, 'registerFromExcel']);
