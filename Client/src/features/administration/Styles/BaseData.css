@@ -1,5 +1,4 @@
-/* ===== CONTENEDOR BASE ===== */
-.base-config-container {
+.baseConfigContainer {
   max-width: 90%;
   padding: 1rem;
   margin: 0 auto;
@@ -9,39 +8,36 @@
   font-family: "Inter", sans-serif;
 }
 
-/* ===== TIPOGRAFÍA ===== */
-.base-config-title,
-.base-config-card h3 {
+.baseConfigTitle,
+.baseConfigCard h3 {
   font-family: "Poppins", sans-serif;
   font-weight: 700;
 }
 
-.base-config-subtitle,
-.base-config-card p,
-.base-config-button {
+.baseConfigSubtitle,
+.baseConfigCard p,
+.baseConfigButton {
   font-family: "Inter", sans-serif;
 }
 
-/* ===== ESTRUCTURA ===== */
-.base-config-back,
-.base-config-header,
-.base-config-grid {
+.baseConfigBack,
+.baseConfigHeader,
+.baseConfigGrid {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   padding: 0 0.5rem;
 }
 
-.base-config-back {
+.baseConfigBack {
   margin: 2rem auto 0;
 }
 
-.base-config-header {
+.baseConfigHeader {
   margin-bottom: 3rem;
 }
 
-/* ===== TÍTULOS ===== */
-.base-config-title {
+.baseConfigTitle {
   color: #2c3e50;
   font-size: 2rem;
   margin-bottom: 0.75rem;
@@ -49,7 +45,7 @@
   display: inline-block;
 }
 
-.base-config-title::after {
+.baseConfigTitle::after {
   content: "";
   position: absolute;
   bottom: -8px;
@@ -60,7 +56,7 @@
   border-radius: 2px;
 }
 
-.base-config-subtitle {
+.baseConfigSubtitle {
   color: #7f8c8d;
   font-size: 1.1rem;
   margin-bottom: 1.5rem;
@@ -68,16 +64,14 @@
   max-width: 800px;
 }
 
-/* ===== GRID ===== */
-.base-config-grid {
+.baseConfigGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
 
-/* ===== TARJETAS ===== */
-.base-config-card {
+.baseConfigCard {
   background: #fff;
   border-radius: 12px;
   padding: 2rem 1.5rem;
@@ -92,7 +86,7 @@
   border: none;
 }
 
-.base-config-card::before {
+.baseConfigCard::before {
   content: "";
   position: absolute;
   top: 0;
@@ -102,13 +96,12 @@
   background-color: #3498db;
 }
 
-.base-config-card:hover {
+.baseConfigCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-/* ===== ICONOS ===== */
-.base-config-icon {
+.baseConfigIcon {
   width: 60px;
   height: 60px;
   background: linear-gradient(135deg, #3498db, #2980b9);
@@ -122,23 +115,21 @@
   box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
 }
 
-/* ===== TEXTO DE TARJETA ===== */
-.base-config-card h3 {
+.baseConfigCard h3 {
   font-size: 1.25rem;
   margin: 0;
   color: #2c3e50;
   font-weight: 700;
 }
 
-.base-config-card p {
+.baseConfigCard p {
   font-size: 0.9375rem;
   line-height: 1.6;
   margin: 0;
   color: #7f8c8d;
 }
 
-/* ===== BOTÓN ===== */
-.base-config-button {
+.baseConfigButton {
   background: linear-gradient(to right, #3498db, #2980b9);
   color: white;
   border: none;
@@ -154,51 +145,50 @@
   gap: 0.5rem;
 }
 
-.base-config-button:hover {
+.baseConfigButton:hover {
   background: linear-gradient(to right, #2980b9, #3498db);
   box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
 }
 
-.base-config-button::after {
+.baseConfigButton::after {
   content: "→";
   transition: transform 0.3s ease;
 }
 
-.base-config-button:hover::after {
+.baseConfigButton:hover::after {
   transform: translateX(3px);
 }
 
-/* ===== MEDIA QUERIES ===== */
 @media (max-width: 768px) {
-  .base-config-container {
+  .baseConfigContainer {
     padding: 1.5rem 1rem;
     max-width: 100%;
   }
 
-  .base-config-header {
+  .baseConfigHeader {
     margin-bottom: 2rem;
   }
 
-  .base-config-title {
+  .baseConfigTitle {
     font-size: 1.75rem;
   }
 
-  .base-config-subtitle {
+  .baseConfigSubtitle {
     font-size: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .base-config-grid {
+  .baseConfigGrid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
-  .base-config-card {
+  .baseConfigCard {
     padding: 1.5rem;
   }
 
-  .base-config-title {
+  .baseConfigTitle {
     font-size: 1.5rem;
   }
 }

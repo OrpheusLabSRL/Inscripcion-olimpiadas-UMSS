@@ -1,43 +1,43 @@
 /* Fuente base para todo el modal y formularios */
 body,
-.admin-modal-content,
-.admin-form-label,
-.admin-form-input,
-.admin-form-textarea,
-.admin-form-select,
-.admin-modal-btn,
-.admin-empty-state,
-.admin-error-message,
-.admin-status-badge,
-.admin-tabs-container,
-.admin-tab,
-.admin-area-categoria-card,
-.admin-areas-table,
-.admin-areas-table td,
-.admin-areas-table th {
+.adminModalContent,
+.adminFormLabel,
+.adminFormInput,
+.adminFormTextarea,
+.adminFormSelect,
+.adminModalBtn,
+.adminEmptyState,
+.adminErrorMessage,
+.adminStatusBadge,
+.adminTabsContainer,
+.adminTab,
+.adminAreaCategoriaCard,
+.adminAreasTable,
+.adminAreasTable td,
+.adminAreasTable th {
   font-family: "Inter", sans-serif;
 }
 
 /* Títulos principales y subtítulos destacados en Poppins */
-.admin-modal-title,
-.admin-section-subtitle,
-.admin-area-categoria-card h3,
-.admin-error-message,
-.admin-empty-state svg {
+.adminModalTitle,
+.adminSectionSubtitle,
+.adminAreaCategoriaCard h3,
+.adminErrorMessage,
+.adminEmptyState svg {
   font-family: "Poppins", sans-serif;
   font-weight: 700;
 }
 
 /* Botones y tabs usan Inter para consistencia */
-.admin-modal-btn,
+.adminModalBtn,
 .btn-secondary,
-.admin-tabs-container,
-.admin-tab {
+.adminTabsContainer,
+.adminTab {
   font-family: "Inter", sans-serif;
 }
 
 /* Labels para legibilidad */
-.admin-form-label {
+.adminFormLabel {
   font-weight: 600;
   color: #4b5563;
   font-size: 1rem;
@@ -48,7 +48,7 @@ body,
 }
 
 /* Indicador de campo obligatorio */
-.admin-required-field {
+.adminRequiredField {
   color: #ef4444;
   margin-left: 0.4rem;
   font-size: 1.3rem;
@@ -58,7 +58,7 @@ body,
 }
 
 /* ====== Base Modal Styles ====== */
-.admin-modal-overlay {
+.adminModalOverlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
@@ -72,12 +72,12 @@ body,
   transition: opacity 0.3s ease;
 }
 
-.admin-modal-overlay.show .admin-modal-content {
+.adminModalOverlay.show .adminModalContent {
   transform: translateY(0) scale(1);
   opacity: 1;
 }
 
-.admin-modal-content {
+.adminModalContent {
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   border-radius: 24px;
   padding: 3.5rem;
@@ -98,24 +98,24 @@ body,
   scrollbar-color: #94a3b8 transparent;
 }
 
-.admin-modal-content::-webkit-scrollbar {
+.adminModalContent::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-.admin-modal-content::-webkit-scrollbar-thumb {
+.adminModalContent::-webkit-scrollbar-thumb {
   background-color: #94a3b8;
   border-radius: 4px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 
-.admin-modal-content::-webkit-scrollbar-track {
+.adminModalContent::-webkit-scrollbar-track {
   background: transparent;
 }
 
 /* ====== Modal Header ====== */
-.admin-modal-header {
+.adminModalHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -125,7 +125,7 @@ body,
   position: relative;
 }
 
-.admin-modal-header::after {
+.adminModalHeader::after {
   content: "";
   position: absolute;
   bottom: -1px;
@@ -137,7 +137,7 @@ body,
   filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3));
 }
 
-.admin-modal-title {
+.adminModalTitle {
   font-size: 2rem;
   font-weight: 800;
   color: transparent;
@@ -151,7 +151,7 @@ body,
   padding-left: 2rem;
 }
 
-.admin-modal-title::before {
+.adminModalTitle::before {
   content: "";
   position: absolute;
   left: 0;
@@ -165,7 +165,7 @@ body,
 }
 
 /* ====== Close Button ====== */
-.admin-modal-close-btn {
+.adminModalCloseBtn {
   position: absolute;
   top: 2rem;
   right: 2rem;
@@ -186,7 +186,7 @@ body,
   line-height: 1;
 }
 
-.admin-modal-close-btn:hover {
+.adminModalCloseBtn:hover {
   background: #f3f4f6;
   color: #1f2937;
   transform: rotate(90deg) scale(1.1);
@@ -194,23 +194,23 @@ body,
 }
 
 /* ====== Form Structure ====== */
-.admin-modal-form {
+.adminModalForm {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.admin-form-section {
+.adminFormSection {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   margin-bottom: 1rem;
 }
 
-.admin-form-section:last-child {
+.adminFormSection:last-child {
   border-bottom: none;
   margin-bottom: 0;
 }
 
-.admin-section-subtitle {
+.adminSectionSubtitle {
   font-size: 1.4rem;
   color: #1e40af;
   margin-bottom: 1rem;
@@ -220,26 +220,26 @@ body,
 }
 
 /* ====== Form Groups ====== */
-.admin-form-group {
+.adminFormGroup {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
-.admin-form-row {
+.adminFormRow {
   display: flex;
   justify-content: space-between;
   gap: 2.5rem;
 }
 
-.admin-form-row .admin-form-group {
+.adminFormRow .adminFormGroup {
   flex: 1;
 }
 
 /* ====== Form Inputs ====== */
-.admin-form-input,
-.admin-form-textarea {
+.adminFormInput,
+.adminFormTextarea {
   width: 95%;
   padding: 1.25rem 1.75rem;
   border: 1.5px solid #e5e7eb;
@@ -252,14 +252,14 @@ body,
   color: #1f2937;
 }
 
-.admin-form-textarea {
+.adminFormTextarea {
   min-height: 160px;
   resize: vertical;
   line-height: 1.6;
 }
 
-.admin-form-input:focus,
-.admin-form-textarea:focus {
+.adminFormInput:focus,
+.adminFormTextarea:focus {
   outline: none;
   border-color: #93c5fd;
   box-shadow: 0 0 0 4px rgba(147, 197, 253, 0.3);
@@ -267,13 +267,13 @@ body,
 }
 
 /* ====== Input with Icon ====== */
-.admin-input-with-icon {
+.adminInputWithIcon {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.admin-input-icon {
+.adminInputIcon {
   position: absolute;
   left: 1.5rem;
   color: #9ca3af;
@@ -281,12 +281,12 @@ body,
   font-size: 1.2rem;
 }
 
-.admin-input-with-icon input {
+.adminInputWithIcon input {
   padding-left: 3.5rem !important;
 }
 
 /* ====== Select Dropdown ====== */
-.admin-form-select {
+.adminFormSelect {
   width: 100%;
   max-width: 500px;
   appearance: none;
@@ -306,20 +306,20 @@ body,
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.admin-form-select:focus {
+.adminFormSelect:focus {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
   background-color: #f9fafb;
 }
 
-.admin-form-select:disabled {
+.adminFormSelect:disabled {
   background-color: #f1f5f9;
   opacity: 0.7;
 }
 
 /* ====== Version Display ====== */
-.admin-version-display {
+.adminVersionDisplay {
   padding: 1.25rem 1.75rem;
   border-radius: 12px;
   background-color: #f1f5f9;
@@ -331,7 +331,7 @@ body,
 }
 
 /* ====== Buttons ====== */
-.admin-modal-actions {
+.adminModalActions {
   display: flex;
   justify-content: flex-end;
   gap: 1.5rem;
@@ -341,7 +341,7 @@ body,
   position: relative;
 }
 
-.admin-modal-actions::before {
+.adminModalActions::before {
   content: "";
   position: absolute;
   top: -1px;
@@ -353,7 +353,7 @@ body,
   filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3));
 }
 
-.admin-modal-btn {
+.adminModalBtn {
   padding: 1.25rem 2.5rem;
   border-radius: 14px;
   font-weight: 600;
@@ -369,7 +369,7 @@ body,
   overflow: hidden;
 }
 
-.admin-modal-btn::after {
+.adminModalBtn::after {
   content: "";
   position: absolute;
   top: 0;
@@ -381,11 +381,11 @@ body,
   transition: opacity 0.3s ease;
 }
 
-.admin-modal-btn:hover::after {
+.adminModalBtn:hover::after {
   opacity: 1;
 }
 
-.admin-modal-btn-cancel {
+.adminModalBtnCancel {
   background: #ffffff;
   color: #4b5563;
   border: 1.5px solid #e5e7eb;
@@ -398,19 +398,19 @@ body,
   transition: all 0.3s ease;
 }
 
-.admin-modal-btn-cancel:hover {
+.adminModalBtnCancel:hover {
   background: #f9fafb;
   border-color: #cbd5e1;
   transform: translateY(-3px);
   box-shadow: 0 8px 14px rgba(0, 0, 0, 0.1);
 }
 
-.admin-modal-btn-cancel:focus {
+.adminModalBtnCancel:focus {
   outline: 3px solid #2563eb;
   outline-offset: 2px;
 }
 
-.admin-modal-btn-save {
+.adminModalBtnSave {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
   box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
@@ -423,19 +423,19 @@ body,
   border: none;
 }
 
-.admin-modal-btn-save:hover {
+.adminModalBtnSave:hover {
   background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
   transform: translateY(-3px);
   box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
 }
 
-.admin-modal-btn-save:focus {
+.adminModalBtnSave:focus {
   outline: 3px solid #93c5fd;
   outline-offset: 2px;
 }
 
 /* ====== Spinner ====== */
-.admin-spinner {
+.adminSpinner {
   display: inline-block;
   width: 1.5rem;
   height: 1.5rem;
@@ -446,14 +446,14 @@ body,
 }
 
 /* ====== Tables ====== */
-.admin-areas-table {
+.adminAreasTable {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0 0.75rem;
   background: transparent;
 }
 
-.admin-areas-table th {
+.adminAreasTable th {
   padding: 1.5rem 2rem;
   text-align: left;
   font-weight: 700;
@@ -469,7 +469,7 @@ body,
   z-index: 10;
 }
 
-.admin-areas-table td {
+.adminAreasTable td {
   padding: 1.5rem 2rem;
   text-align: left;
   background-color: #ffffff;
@@ -480,14 +480,14 @@ body,
   transition: all 0.3s ease;
 }
 
-.admin-areas-table tr:hover td {
+.adminAreasTable tr:hover td {
   background-color: #f9fafb;
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 /* ====== Status Badges ====== */
-.admin-status-badge {
+.adminStatusBadge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -502,7 +502,7 @@ body,
   letter-spacing: 0.02em;
 }
 
-.admin-status-badge-active {
+.adminStatusBadgeActive {
   background: linear-gradient(
     135deg,
     rgba(16, 185, 129, 0.15) 0%,
@@ -512,7 +512,7 @@ body,
   border: 1.5px solid rgba(16, 185, 129, 0.3);
 }
 
-.admin-status-badge-inactive {
+.adminStatusBadgeInactive {
   background: linear-gradient(
     135deg,
     rgba(239, 68, 68, 0.15) 0%,
@@ -523,7 +523,7 @@ body,
 }
 
 /* ====== Tabs ====== */
-.admin-tabs-container {
+.adminTabsContainer {
   display: inline-flex;
   background: #f3f4f6;
   padding: 0.5rem;
@@ -534,11 +534,11 @@ body,
   overflow-x: auto;
 }
 
-.admin-tabs-container::-webkit-scrollbar {
+.adminTabsContainer::-webkit-scrollbar {
   height: 6px;
 }
 
-.admin-tab {
+.adminTab {
   padding: 1rem 2rem;
   background: transparent;
   border: none;
@@ -552,13 +552,13 @@ body,
   white-space: nowrap;
 }
 
-.admin-tab.active {
+.adminTab.active {
   background-color: #ffffff;
   color: #3b82f6;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.admin-tab.active::after {
+.adminTab.active::after {
   content: "";
   position: absolute;
   bottom: -6px;
@@ -571,7 +571,7 @@ body,
 }
 
 /* ====== Cards ====== */
-.admin-area-categoria-card {
+.adminAreaCategoriaCard {
   background: linear-gradient(145deg, #ffffff 0%, #f9fafb 100%);
   border-radius: 16px;
   padding: 2rem;
@@ -583,7 +583,7 @@ body,
   overflow: hidden;
 }
 
-.admin-area-categoria-card::before {
+.adminAreaCategoriaCard::before {
   content: "";
   position: absolute;
   top: 0;
@@ -593,13 +593,13 @@ body,
   background: linear-gradient(to bottom, #3b82f6 0%, #6366f1 100%);
 }
 
-.admin-area-categoria-card:hover {
+.adminAreaCategoriaCard:hover {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   transform: translateY(-3px);
 }
 
 /* ====== Empty State ====== */
-.admin-empty-state {
+.adminEmptyState {
   padding: 3rem 2rem;
   text-align: center;
   background-color: #f8fafc;
@@ -608,20 +608,20 @@ body,
   border: 2px dashed #e2e8f0;
 }
 
-.admin-empty-state svg {
+.adminEmptyState svg {
   margin-bottom: 1.5rem;
   opacity: 0.5;
   font-size: 3rem;
 }
 
 /* ====== Error States ====== */
-.admin-input-error,
-.admin-has-error .admin-dropdown-wrapper {
+.adminInputError,
+.adminHasError .adminDropdownWrapper {
   border-color: #ef4444 !important;
   background-color: #fff5f5 !important;
 }
 
-.admin-error-message {
+.adminErrorMessage {
   color: #ef4444;
   font-size: 0.9rem;
   margin-top: 0.75rem;
@@ -638,7 +638,7 @@ body,
 .swal2-container {
   z-index: 20000 !important;
 }
-.admin-char-counter {
+.adminCharCounter {
   font-size: 0.9rem;
   color: #6b7280;
   margin-top: 0.5rem;
@@ -663,31 +663,31 @@ body,
 
 /* ====== Responsive ====== */
 @media (max-width: 768px) {
-  .admin-modal-content {
+  .adminModalContent {
     font-family: "Inter", sans-serif;
     width: 95%;
     padding: 2.5rem 1.5rem;
     border-radius: 20px;
   }
 
-  .admin-form-row {
+  .adminFormRow {
     flex-direction: column;
     gap: 2rem;
   }
 
-  .admin-modal-actions {
+  .adminModalActions {
     flex-direction: column-reverse;
     gap: 1rem;
   }
 
-  .admin-modal-btn {
+  .adminModalBtn {
     width: 100%;
     justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
-  .admin-tabs-container {
+  .adminTabsContainer {
     padding-bottom: 0.75rem;
   }
 }

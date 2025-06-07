@@ -1,5 +1,4 @@
-/* Fuente base para todo el contenedor */
-.panel-olymp-container {
+.panelOlympContainer {
   font-family: "Inter", sans-serif;
   padding: 2rem;
   background: #f8fafc;
@@ -9,8 +8,7 @@
   margin: 1rem 1rem 1rem auto;
 }
 
-/* Títulos principales con Poppins */
-.panel-olymp-title {
+.panelOlympTitle {
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   font-size: 1.5rem;
@@ -19,19 +17,18 @@
   line-height: 1.3;
 }
 
-/* Botones, selects y labels con Inter para consistencia */
-.panel-olymp-button,
-.panel-olymp-select,
-.panel-olymp-label {
+.panelOlympButton,
+.panelOlympSelect,
+.panelOlympLabel {
   font-family: "Inter", sans-serif;
 }
 
-.panel-olymp-form-group {
+.panelOlympFormGroup {
   margin-bottom: 2rem;
   position: relative;
 }
 
-.panel-olymp-label {
+.panelOlympLabel {
   display: block;
   margin-bottom: 0.75rem;
   font-weight: 600;
@@ -39,7 +36,7 @@
   font-size: 1.1rem;
 }
 
-.panel-olymp-select {
+.panelOlympSelect {
   padding: 0.75rem 1rem;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
@@ -56,18 +53,18 @@
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.panel-olymp-select:focus {
+.panelOlympSelect:focus {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
-.panel-olymp-select:disabled {
+.panelOlympSelect:disabled {
   background-color: #f1f5f9;
   opacity: 0.7;
 }
 
-.panel-olymp-content {
+.panelOlympContent {
   margin-top: 2.5rem;
   background: #fff;
   border-radius: 12px;
@@ -75,7 +72,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.panel-olymp-header {
+.panelOlympHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -86,7 +83,7 @@
   border-bottom: 1px solid #e2e8f0;
 }
 
-.panel-olymp-button {
+.panelOlympButton {
   background: linear-gradient(to right, #3498db, #2980b9);
   color: #fff;
   border: none;
@@ -102,18 +99,17 @@
   font-size: 1rem;
 }
 
-.panel-olymp-button:hover {
+.panelOlympButton:hover {
   background: linear-gradient(to right, #2980b9, #3498db);
   box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
   transform: translateY(-1px);
 }
 
-.panel-olymp-button:active {
+.panelOlympButton:active {
   transform: translateY(0);
 }
 
-/* Loading message style */
-.panel-olymp-container > p {
+.panelOlympContainer > p {
   color: #4a5568;
   font-style: italic;
   margin: 1rem 0;
@@ -123,8 +119,7 @@
   display: inline-block;
 }
 
-/* Modal styles */
-.panel-olymp-no-selection {
+.panelOlympNoSelection {
   margin-top: 2rem;
   background-color: #e0f2fe;
   color: #0369a1;
@@ -142,41 +137,41 @@
   margin-left: auto;
   margin-right: auto;
 }
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
   .admin-modal-content {
     font-family: "Inter", sans-serif;
   }
 
-  .panel-olymp-container {
+  .panelOlympContainer {
     padding: 1.5rem;
   }
 
-  .panel-olymp-header {
+  .panelOlympHeader {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .panel-olymp-title {
+  .panelOlympTitle {
     font-size: 1.3rem;
   }
 
-  .panel-olymp-button {
+  .panelOlympButton {
     width: 100%;
     justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
-  .panel-olymp-container {
+  .panelOlympContainer {
     padding: 1rem;
   }
 
-  .panel-olymp-content {
+  .panelOlympContent {
     padding: 1rem;
   }
 
-  .panel-olymp-select {
+  .panelOlympSelect {
     max-width: 100%;
   }
 }

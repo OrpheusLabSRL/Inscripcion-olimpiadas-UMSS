@@ -78,7 +78,7 @@ const EditAreaModal = ({ isOpen, onClose, area, onSuccess }) => {
         icon: "warning",
         title: "Campos incompletos",
         text: "Completa todos los campos correctamente.",
-        customClass: { container: "swal2-container" },
+        customClass: { container: "swal2Container" },
       });
       return;
     }
@@ -91,7 +91,7 @@ const EditAreaModal = ({ isOpen, onClose, area, onSuccess }) => {
       confirmButtonText: "Sí, guardar",
       cancelButtonText: "Cancelar",
       reverseButtons: true,
-      customClass: { container: "swal2-container" },
+      customClass: { container: "swal2Container" },
     });
 
     if (!result.isConfirmed) return;
@@ -110,7 +110,7 @@ const EditAreaModal = ({ isOpen, onClose, area, onSuccess }) => {
         text: "El área se actualizó correctamente.",
         timer: 1800,
         showConfirmButton: false,
-        customClass: { container: "swal2-container" },
+        customClass: { container: "swal2Container" },
       });
 
       onSuccess?.();
@@ -121,7 +121,7 @@ const EditAreaModal = ({ isOpen, onClose, area, onSuccess }) => {
         icon: "error",
         title: "Error",
         text: "No se pudo actualizar el área.",
-        customClass: { container: "swal2-container" },
+        customClass: { container: "swal2Container" },
       });
     } finally {
       setIsSubmitting(false);
@@ -131,27 +131,27 @@ const EditAreaModal = ({ isOpen, onClose, area, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="admin-modal-overlay" onClick={handleClose}>
+    <div className="adminModalOverlay" onClick={handleClose}>
       <div
-        className="admin-modal-content"
+        className="adminModalContent"
         style={{ maxWidth: "700px" }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="admin-modal-close-btn"
+          className="adminModalCloseBtn"
           onClick={handleClose}
           aria-label="Cerrar modal"
         >
           ✖
         </button>
-        <div className="admin-modal-header">
-          <h3 className="admin-modal-title">Editar Área</h3>
+        <div className="adminModalHeader">
+          <h3 className="adminModalTitle">Editar Área</h3>
         </div>
 
-        <form onSubmit={handleSubmit} className="admin-modal-form">
-          <div className="admin-form-group">
-            <label htmlFor="nombreArea" className="admin-form-label">
-              Nombre del Área <span className="admin-required-field">*</span>
+        <form onSubmit={handleSubmit} className="adminModalForm">
+          <div className="adminFormGroup">
+            <label htmlFor="nombreArea" className="adminFormLabel">
+              Nombre del Área <span className="adminRequiredField">*</span>
             </label>
             <input
               id="nombreArea"
@@ -159,52 +159,51 @@ const EditAreaModal = ({ isOpen, onClose, area, onSuccess }) => {
               type="text"
               value={formData.nombreArea}
               onChange={handleChange}
-              className={`admin-form-input ${
-                errors.nombreArea ? "admin-input-error" : ""
+              className={`adminFormInput ${
+                errors.nombreArea ? "adminInputError" : ""
               }`}
               placeholder="Ej: Matemáticas, Química, etc."
               maxLength="50"
               disabled={isSubmitting}
             />
             {errors.nombreArea && (
-              <p className="admin-error-message">
+              <p className="adminErrorMessage">
                 <FiAlertCircle /> {errors.nombreArea}
               </p>
             )}
           </div>
 
-          <div className="admin-form-group">
-            <label htmlFor="descripcionArea" className="admin-form-label">
-              Descripción del Área{" "}
-              <span className="admin-required-field">*</span>
+          <div className="adminFormGroup">
+            <label htmlFor="descripcionArea" className="adminFormLabel">
+              Descripción del Área <span className="adminRequiredField">*</span>
             </label>
             <textarea
               id="descripcionArea"
               name="descripcionArea"
               value={formData.descripcionArea}
               onChange={handleChange}
-              className={`admin-form-input ${
-                errors.descripcionArea ? "admin-input-error" : ""
+              className={`adminFormInput ${
+                errors.descripcionArea ? "adminInputError" : ""
               }`}
               placeholder="Breve descripción del área"
               maxLength="200"
               rows="3"
               disabled={isSubmitting}
             />
-            <div className="admin-char-counter">
+            <div className="adminCharCounter">
               {formData.descripcionArea.length}/200 caracteres
             </div>
             {errors.descripcionArea && (
-              <p className="admin-error-message">
+              <p className="adminErrorMessage">
                 <FiAlertCircle /> {errors.descripcionArea}
               </p>
             )}
           </div>
 
-          <div className="admin-modal-actions">
+          <div className="adminModalActions">
             <button
               type="button"
-              className="admin-modal-btn-cancel"
+              className="adminModalBtnCancel"
               onClick={handleClose}
               disabled={isSubmitting}
             >
@@ -212,7 +211,7 @@ const EditAreaModal = ({ isOpen, onClose, area, onSuccess }) => {
             </button>
             <button
               type="submit"
-              className="admin-modal-btn-save"
+              className="adminModalBtnSave"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Guardando..." : "Guardar Cambios"}
