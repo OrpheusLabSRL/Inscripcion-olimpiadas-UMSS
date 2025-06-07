@@ -1,4 +1,4 @@
-.access-denied-container {
+.accessDeniedContainer {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -10,7 +10,7 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.access-denied-content {
+.accessDeniedContent {
   background: #ffffff;
   border: 1px solid #e9ecef;
   border-radius: 24px;
@@ -35,13 +35,13 @@
   }
 }
 
-.access-denied-icon-wrapper {
+.accessDeniedIconWrapper {
   position: relative;
   margin-bottom: 40px;
   display: inline-block;
 }
 
-.access-denied-shield-bg {
+.accessDeniedShieldBg {
   background: linear-gradient(135deg, #ff6b6b, #ee5a52);
   border-radius: 50%;
   padding: 30px;
@@ -62,12 +62,12 @@
   }
 }
 
-.access-denied-shield-icon {
+.accessDeniedShieldIcon {
   color: white;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-.access-denied-lock-overlay {
+.accessDeniedLockOverlay {
   position: absolute;
   bottom: -5px;
   right: -5px;
@@ -87,15 +87,15 @@
   }
 }
 
-.access-denied-lock-icon {
+.accessDeniedLockIcon {
   color: white;
 }
 
-.access-denied-text-section {
+.accessDeniedTextSection {
   margin-bottom: 35px;
 }
 
-.access-denied-title {
+.accessDeniedTitle {
   font-size: 48px;
   font-weight: 700;
   color: #2c3e50;
@@ -107,14 +107,14 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.access-denied-subtitle {
+.accessDeniedSubtitle {
   font-size: 20px;
   color: #e74c3c;
   margin: 0 0 20px 0;
   font-weight: 600;
 }
 
-.access-denied-description {
+.accessDeniedDescription {
   font-size: 16px;
   color: #7f8c8d;
   line-height: 1.6;
@@ -124,7 +124,7 @@
   margin-right: auto;
 }
 
-.access-denied-error-code {
+.accessDeniedErrorCode {
   background: linear-gradient(135deg, #f8f9fa, #e9ecef);
   border: 2px solid #dee2e6;
   border-radius: 12px;
@@ -135,7 +135,7 @@
   gap: 15px;
 }
 
-.access-denied-code-label {
+.accessDeniedCodeLabel {
   font-size: 14px;
   color: #6c757d;
   font-weight: 500;
@@ -143,14 +143,14 @@
   letter-spacing: 1px;
 }
 
-.access-denied-code-number {
+.accessDeniedCodeNumber {
   font-size: 32px;
   font-weight: 800;
   color: #dc3545;
   font-family: "Courier New", monospace;
 }
 
-.access-denied-actions {
+.accessDeniedActions {
   display: flex;
   gap: 20px;
   justify-content: center;
@@ -158,7 +158,7 @@
   flex-wrap: wrap;
 }
 
-.access-denied-btn {
+.accessDeniedBtn {
   padding: 14px 28px;
   border: none;
   border-radius: 12px;
@@ -174,48 +174,48 @@
   justify-content: center;
 }
 
-.access-denied-btn-primary {
+.accessDeniedBtnPrimary {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
 
-.access-denied-btn-primary:hover {
+.accessDeniedBtnPrimary:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
 }
 
-.access-denied-btn-secondary {
+.accessDeniedBtnSecondary {
   background: white;
   color: #6c757d;
   border: 2px solid #dee2e6;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
-.access-denied-btn-secondary:hover {
+.accessDeniedBtnSecondary:hover {
   background: #f8f9fa;
   border-color: #adb5bd;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
-.access-denied-btn:active {
+.accessDeniedBtn:active {
   transform: translateY(0);
 }
 
-.access-denied-help {
+.accessDeniedHelp {
   border-top: 1px solid #e9ecef;
   padding-top: 25px;
   margin-top: 25px;
 }
 
-.access-denied-help-text {
+.accessDeniedHelpText {
   font-size: 14px;
   color: #6c757d;
   margin: 0;
 }
 
-.access-denied-help-link {
+.accessDeniedHelpLink {
   color: #667eea;
   text-decoration: none;
   font-weight: 600;
@@ -223,63 +223,63 @@
   transition: color 0.3s ease;
 }
 
-.access-denied-help-link:hover {
+.accessDeniedHelpLink:hover {
   color: #764ba2;
   text-decoration: underline;
 }
 
 @media (max-width: 768px) {
-  .access-denied-container {
+  .accessDeniedContainer {
     padding: 15px;
   }
 
-  .access-denied-content {
+  .accessDeniedContent {
     padding: 40px 25px;
   }
 
-  .access-denied-title {
+  .accessDeniedTitle {
     font-size: 36px;
   }
 
-  .access-denied-subtitle {
+  .accessDeniedSubtitle {
     font-size: 18px;
   }
 
-  .access-denied-description {
+  .accessDeniedDescription {
     font-size: 14px;
   }
 
-  .access-denied-actions {
+  .accessDeniedActions {
     flex-direction: column;
     align-items: center;
   }
 
-  .access-denied-btn {
+  .accessDeniedBtn {
     width: 100%;
     max-width: 280px;
   }
 }
 
 @media (max-width: 480px) {
-  .access-denied-shield-bg {
+  .accessDeniedShieldBg {
     padding: 20px;
   }
 
-  .access-denied-shield-icon {
+  .accessDeniedShieldIcon {
     width: 60px;
     height: 60px;
   }
 
-  .access-denied-lock-icon {
+  .accessDeniedLockIcon {
     width: 24px;
     height: 24px;
   }
 
-  .access-denied-title {
+  .accessDeniedTitle {
     font-size: 28px;
   }
 
-  .access-denied-code-number {
+  .accessDeniedCodeNumber {
     font-size: 24px;
   }
 }

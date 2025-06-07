@@ -130,7 +130,7 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
         icon: "warning",
         title: "Campos incompletos",
         text: "Completa todos los campos correctamente.",
-        customClass: { container: "swal2-container" },
+        customClass: { container: "swal2Container" },
       });
       return;
     }
@@ -143,7 +143,7 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
       confirmButtonText: "Sí, guardar",
       cancelButtonText: "Cancelar",
       reverseButtons: true,
-      customClass: { container: "swal2-container" },
+      customClass: { container: "swal2Container" },
     });
 
     if (!result.isConfirmed) return;
@@ -163,7 +163,7 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
         text: "La categoría se actualizó correctamente.",
         timer: 1800,
         showConfirmButton: false,
-        customClass: { container: "swal2-container" },
+        customClass: { container: "swal2Container" },
       });
 
       onSuccess?.();
@@ -174,7 +174,7 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
         icon: "error",
         title: "Error",
         text: "No se pudo actualizar la categoría.",
-        customClass: { container: "swal2-container" },
+        customClass: { container: "swal2Container" },
       });
     } finally {
       setIsSubmitting(false);
@@ -184,28 +184,28 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="admin-modal-overlay" onClick={handleClose}>
+    <div className="adminModalOverlay" onClick={handleClose}>
       <div
-        className="admin-modal-content"
+        className="adminModalContent"
         style={{ maxWidth: "700px" }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="admin-modal-close-btn"
+          className="adminModalCloseBtn"
           onClick={handleClose}
           aria-label="Cerrar modal"
         >
           ✖
         </button>
-        <div className="admin-modal-header">
-          <h3 className="admin-modal-title">Editar Categoría</h3>
+        <div className="adminModalHeader">
+          <h3 className="adminModalTitle">Editar Categoría</h3>
         </div>
 
-        <form onSubmit={handleSubmit} className="admin-modal-form">
-          <div className="admin-form-group">
-            <label htmlFor="nombreCategoria" className="admin-form-label">
+        <form onSubmit={handleSubmit} className="adminModalForm">
+          <div className="adminFormGroup">
+            <label htmlFor="nombreCategoria" className="adminFormLabel">
               Nombre de la Categoría{" "}
-              <span className="admin-required-field">*</span>
+              <span className="adminRequiredField">*</span>
             </label>
             <input
               id="nombreCategoria"
@@ -213,27 +213,27 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
               type="text"
               value={formData.nombreCategoria}
               onChange={handleChange}
-              className={`admin-form-input ${
-                errors.nombreCategoria ? "admin-input-error" : ""
+              className={`adminFormInput ${
+                errors.nombreCategoria ? "adminInputError" : ""
               }`}
               placeholder="Ej: Primaria, Secundaria, etc."
               maxLength="50"
               disabled={isSubmitting}
             />
             {errors.nombreCategoria && (
-              <p className="admin-error-message">
+              <p className="adminErrorMessage">
                 <FiAlertCircle /> {errors.nombreCategoria}
               </p>
             )}
           </div>
 
-          <div className="admin-form-group">
-            <label className="admin-form-label">
-              Grados Asociados <span className="admin-required-field">*</span>
+          <div className="adminFormGroup">
+            <label className="adminFormLabel">
+              Grados Asociados <span className="adminRequiredField">*</span>
             </label>
             <div
-              className={`admin-dropdown-wrapper ${
-                errors.grados ? "admin-input-error" : ""
+              className={`adminDropdownWrapper ${
+                errors.grados ? "adminInputError" : ""
               }`}
             >
               <MultiSelectDropdown
@@ -251,16 +251,16 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
               />
             </div>
             {errors.grados && (
-              <p className="admin-error-message">
+              <p className="adminErrorMessage">
                 <FiAlertCircle /> {errors.grados}
               </p>
             )}
           </div>
 
-          <div className="admin-modal-actions">
+          <div className="adminModalActions">
             <button
               type="button"
-              className="admin-modal-btn-cancel"
+              className="adminModalBtnCancel"
               onClick={handleClose}
               disabled={isSubmitting}
             >
@@ -268,7 +268,7 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
             </button>
             <button
               type="submit"
-              className="admin-modal-btn-save"
+              className="adminModalBtnSave"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Guardando..." : "Guardar Cambios"}

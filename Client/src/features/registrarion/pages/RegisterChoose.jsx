@@ -24,10 +24,10 @@ export const RegisterChoose = () => {
 
   return (
     <div className="container-form">
-      <h1 className="title-register">{titleOlimpian()}</h1>
+
       <div className="title-information">
         <h2>Tipo de Inscripción</h2>
-        <p>Seleccione el método de inscripcion de desea utilizar</p>
+        <p>Seleccione el método de inscripcion de desea utilizar para inscribirse a <strong>{titleOlimpian()}</strong></p>
       </div>
 
       <div className="container-cards-choose">

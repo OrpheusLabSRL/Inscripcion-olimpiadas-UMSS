@@ -8,26 +8,26 @@ const ManageOlympiads = () => {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
   return (
-    <div className="admin-olympiads-container">
-      <div className="admin-content-wrapper">
-        <div className="olympiads-header-section">
-          <div className="olympiads-header-text">
-            <h1 className="olympiads-title">Gestión de Olimpiadas</h1>
-            <p className="olympiads-subtitle">
+    <div className="adminOlympiadsContainer">
+      <div className="adminContentWrapper">
+        <div className="olympiadsHeaderSection">
+          <div className="olympiadsHeaderText">
+            <h1 className="olympiadsTitle">Gestión de Olimpiadas</h1>
+            <p className="olympiadsSubtitle">
               Administra y configura todas las olimpiadas académicas
             </p>
           </div>
 
           <button
-            className="btn-primary"
+            className="btnPrimary"
             onClick={() => setIsRegisterModalOpen(true)}
           >
-            <FaPlus className="btn-icon" />
+            <FaPlus className="btnIcon" />
             <span>Nueva Olimpiada</span>
           </button>
         </div>
 
-        <div className="admin-table-card">
+        <div className="adminTableCard">
           <OlympiadsTable />
         </div>
       </div>

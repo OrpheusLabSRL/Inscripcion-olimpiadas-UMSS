@@ -183,7 +183,7 @@ export const OCRValidation = () => {
   return (
   <div className={`ocrvalidation-container ${sidebarOpen ? "sidebar-collapsed" : ""}`}>
     <h1>Subir foto del comprobante de pago</h1>
-    <p>Suba una imagen para validar mediante OCR.</p>
+    <p>Sube una foto clara de tu comprobante de pago para validar tu inscripción automáticamente.</p>
     <div className="reports__content">
       <form
         onSubmit={handleSubmit}

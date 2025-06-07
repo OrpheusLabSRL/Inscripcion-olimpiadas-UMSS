@@ -1,27 +1,26 @@
-.footer {
+.piePagina {
   display: flex;
   justify-content: space-between;
   background-color: var(--azul-oscuro);
   color: white;
-  /* padding: 2rem; */
   flex-wrap: wrap;
 }
 
-.footer-column {
+.columnaPie {
   flex: 1 1 30%;
   margin: 1rem;
 }
 
-.footer-column h3 {
+.columnaPie h3 {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
 }
 
-.footer-column p {
+.columnaPie p {
   margin: 0.2rem 0;
 }
 
-.social-icons a {
+.iconosSociales a {
   color: white;
   font-size: 1.4rem;
   margin-right: 10px;
@@ -29,6 +28,6 @@
   transition: color 0.3s;
 }
 
-.social-icons a:hover {
+.iconosSociales a:hover {
   color: #ffcc00;
 }

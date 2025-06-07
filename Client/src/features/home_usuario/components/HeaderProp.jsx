@@ -6,46 +6,38 @@ import { NextPage } from "../../../components/Buttons/NextPage";
 
 function HeaderProp() {
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
-  const toggleMenu = () => setMenuOpen(!menuOpen);
-  const closeMenu = () => setMenuOpen(false);
+  const alternarMenu = () => setMenuAbierto(!menuAbierto);
+  const cerrarMenu = () => setMenuAbierto(false);
 
   return (
-    <header className="header-container">
-      <div className="header-content">
-        <div className="header-left" onClick={() => navigate("/")}>
-          <img src={Logo} alt="University Logo" className="header-logo" />
+    <header className="contenedorEncabezado">
+      <div className="contenidoEncabezado">
+        <div className="encabezadoIzquierdo" onClick={() => navigate("/")}>
+          <img src={Logo} alt="Logotipo Universidad" className="logoEncabezado" />
           <h2>O!Sansi</h2>
         </div>
 
         <button
-          className="menu-toggle"
-          onClick={toggleMenu}
+          className="botonMenu"
+          onClick={alternarMenu}
           aria-label="Abrir o cerrar menú"
         >
           ☰
         </button>
 
-        <nav className={`header-nav ${menuOpen ? "open" : ""}`}>
+        <nav className={`navegacionEncabezado ${menuAbierto ? "abierto" : ""}`}>
           <ul>
-            <li onClick={() => { navigate("/"); closeMenu(); }}>
+            <li onClick={() => { navigate("/"); cerrarMenu(); }}>
               <i className="bi bi-house"></i> Inicio
             </li>
-            <li onClick={() => { navigate("/consultar-inscripcion"); closeMenu(); }}>
+            <li onClick={() => { navigate("/consultar-inscripcion"); cerrarMenu(); }}>
               <i className="bi bi-clipboard-check"></i> Estado de inscripción
             </li>
-            <li onClick={() => { navigate("/contacto"); closeMenu(); }}>
+            <li onClick={() => { navigate("/contacto"); cerrarMenu(); }}>
               <i className="bi bi-telephone"></i> Contacto
             </li>
-            {/* <li onClick={() => { navigate("/register/tutor-form");
-                closeMenu();
-              }}
-              className="header-nav-item inscribirse-item"
-            >
-              <i className="bi bi-person-plus"></i> Inscribirse
-            </li> */}
-
           </ul>
         </nav>
       </div>

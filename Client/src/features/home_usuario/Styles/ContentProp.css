@@ -395,10 +395,10 @@ section {
   }
 
   .event-description h2 {
-    font-size: var(--h3-size); /* Usando la variable de tamaño de fuente */
+    font-size: var(--h3-size); 
   }
   
   .event-description p {
-    font-size: var(--pS-size); /* Usando la variable de tamaño de fuente */
+    font-size: var(--pS-size); 
   }
 }

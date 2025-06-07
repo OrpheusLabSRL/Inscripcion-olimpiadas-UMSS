@@ -11,6 +11,7 @@ import {
   FaUser,
   FaChartBar,
   FaListAlt,
+  FaUserFriends,
 } from "react-icons/fa";
 import "../Styles/Home.css";
 
@@ -116,43 +117,43 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="admin-loading-container">
-        <div className="admin-spinner"></div>
+      <div className="adminLoadingContainer">
+        <div className="adminSpinner"></div>
         <p>Cargando datos...</p>
       </div>
     );
   }
 
   return (
-    <div className="admin-dashboard-container">
-      <div className="admin-dashboard-header">
+    <div className="adminDashboardContainer">
+      <div className="adminDashboardHeader">
         <h1>Panel de Control</h1>
         <p>
           {user ? `Bienvenido de nuevo, ${user.nombre}` : "Bienvenido de nuevo"}
         </p>
       </div>
 
-      <div className="admin-user-card">
-        <div className="admin-user-avatar">
+      <div className="adminUserCard">
+        <div className="adminUserAvatar">
           <FaUser size={24} />
         </div>
-        <div className="admin-user-info">
+        <div className="adminUserInfo">
           <h2>{user ? user.nombre : "Usuario"}</h2>
           <p>{user?.rol?.nombreRol || "Rol no asignado"}</p>
         </div>
       </div>
 
-      <div className="admin-summary-section">
-        <div className="admin-summary-card">
+      <div className="adminSummarySection">
+        <div className="adminSummaryCard">
           <h3>Olimpiadas Activas</h3>
           {activeOlimpiadas.length > 0 ? (
-            <div className="admin-olimpiada-slider">
+            <div className="adminOlimpiadaSlider">
               {activeOlimpiadas.length > 1 && (
                 <button onClick={handlePrev} aria-label="Anterior">
                   <FaArrowLeft />
                 </button>
               )}
-              <p className="admin-big-text">
+              <p className="adminBigText">
                 {currentOlimpiada?.nombreOlimpiada}
               </p>
               {activeOlimpiadas.length > 1 && (
@@ -162,35 +163,35 @@ export default function Home() {
               )}
             </div>
           ) : (
-            <p className="admin-big-text">No hay olimpiadas activas</p>
+            <p className="adminBigText">No hay olimpiadas activas</p>
           )}
         </div>
 
-        <div className="admin-summary-card">
+        <div className="adminSummaryCard">
           <h3>Áreas Registradas</h3>
-          <p className="admin-big-text">{currentAreas.length}</p>
+          <p className="adminBigText">{currentAreas.length}</p>
           <p>Áreas en {currentOlimpiada?.nombreOlimpiada || "la olimpiada"}</p>
         </div>
 
-        <div className="admin-summary-card">
+        <div className="adminSummaryCard">
           <h3>Participantes</h3>
-          <p className="admin-big-text">{participantes}</p>
+          <p className="adminBigText">{participantes}</p>
           <p>Estudiantes inscritos</p>
         </div>
 
-        <div className="admin-summary-card">
+        <div className="adminSummaryCard">
           <h3>Pagos Pendientes</h3>
-          <p className="admin-big-text">{pagosPendientes}</p>
+          <p className="adminBigText">{pagosPendientes}</p>
           <p>Pendientes de confirmación</p>
         </div>
       </div>
 
-      <h2 className="admin-section-title">Acciones Rápidas</h2>
+      <h2 className="adminSectionTitle">Acciones Rápidas</h2>
 
-      <div className="admin-actions-section">
+      <div className="adminActionsSection">
         {tienePermiso("gestionar_datos_base") && (
-          <div className="admin-action-card">
-            <div className="admin-action-icon">
+          <div className="adminActionCard">
+            <div className="adminActionIcon">
               <FaListAlt size={32} color="#3498db" />
             </div>
             <h3>Áreas y Categorías</h3>
@@ -200,15 +201,15 @@ export default function Home() {
             </button>
           </div>
         )}
-        {tienePermiso("ver_reportes") && (
-          <div className="admin-action-card">
-            <div className="admin-action-icon">
-              <FaChartBar size={32} color="#3498db" />
+        {tienePermiso("crear_usuarios") && (
+          <div className="adminActionCard">
+            <div className="adminActionIcon">
+              <FaUserFriends size={32} color="#3498db" />
             </div>
-            <h3>Generar Reportes</h3>
-            <p>Genera reportes personalizados con filtros</p>
-            <button onClick={() => navigate("/admin/reports")}>
-              Generar reportes
+            <h3>Administrar Usuarios</h3>
+            <p>Administrar los roles y usuarios con privilegios</p>
+            <button onClick={() => navigate("/admin/users")}>
+              Administrar usuarios
             </button>
           </div>
         )}

@@ -108,7 +108,7 @@ const AreasTable = () => {
 
   return (
     <>
-      <table className="area-table">
+      <table className="areaTable">
         <thead>
           <tr>
             <th>Nombre</th>
@@ -120,8 +120,8 @@ const AreasTable = () => {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="4" className="table-util-loading">
-                <FaSpinner className="table-util-spinner" />
+              <td colSpan="4" className="tableUtilLoading">
+                <FaSpinner className="tableUtilSpinner" />
                 Cargando áreas...
               </td>
             </tr>
@@ -133,20 +133,20 @@ const AreasTable = () => {
 
               return (
                 <tr key={area.idArea}>
-                  <td className="table-util-text-left">{area.nombreArea}</td>
+                  <td className="tableUtilTextLeft">{area.nombreArea}</td>
                   <td>
                     <div
-                      className={`area-table-description-container ${
-                        shouldShowMore && !isExpanded ? "has-more" : ""
+                      className={`areaTableDescriptionContainer ${
+                        shouldShowMore && !isExpanded ? "hasMore" : ""
                       } ${isExpanded ? "expanded" : ""}`}
                     >
-                      <span className="area-table-description-content">
+                      <span className="areaTableDescriptionContent">
                         {area.descripcionArea || "—"}
                       </span>
                     </div>
                     {shouldShowMore && (
                       <span
-                        className="area-table-see-more"
+                        className="areaTableSeeMore"
                         onClick={() => toggleDescription(area.idArea)}
                       >
                         {isExpanded ? (
@@ -161,12 +161,12 @@ const AreasTable = () => {
                       </span>
                     )}
                   </td>
-                  <td className="table-util-text-center">
+                  <td className="tableUtilTextCenter">
                     <span
-                      className={`table-util-status-badge ${
+                      className={`tableUtilStatusBadge ${
                         area.estadoArea
-                          ? "table-util-badge-success"
-                          : "table-util-badge-danger"
+                          ? "tableUtilBadgeSuccess"
+                          : "tableUtilBadgeDanger"
                       }`}
                       onClick={() => toggleEstado(area.idArea, area.estadoArea)}
                       style={{ cursor: "pointer" }}
@@ -174,9 +174,9 @@ const AreasTable = () => {
                       {area.estadoArea ? "Activo" : "Inactivo"}
                     </span>
                   </td>
-                  <td className="table-actions">
+                  <td className="tableActions">
                     <FaEdit
-                      className="action-icon edit-icon"
+                      className="actionIcon editIcon"
                       title={
                         estaEnUso
                           ? "No se puede editar un área en uso"
@@ -189,7 +189,7 @@ const AreasTable = () => {
                       }}
                     />
                     <FaTrash
-                      className="action-icon delete-icon"
+                      className="actionIcon deleteIcon"
                       title={
                         estaEnUso
                           ? "No se puede eliminar un área en uso"
@@ -207,7 +207,7 @@ const AreasTable = () => {
             })
           ) : (
             <tr>
-              <td colSpan="4" className="table-util-empty">
+              <td colSpan="4" className="tableUtilEmpty">
                 No hay áreas registradas.
               </td>
             </tr>

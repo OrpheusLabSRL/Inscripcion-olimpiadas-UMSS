@@ -17,36 +17,35 @@ const Dropdown = ({
 
   const handleSelect = (option) => {
     setIsOpen(false);
-    // Simula un evento onChange nativo
     onChange({ target: { value: option.value, name } });
   };
 
   return (
-    <div className="dropdown-container">
+    <div className="dropdownContainer">
       {name && (
         <label
           htmlFor={name}
-          className={`dropdown-label ${size === "large" ? "large" : ""}`}
+          className={`dropdownLabel ${size === "large" ? "large" : ""}`}
         >
           {placeholder}
         </label>
       )}
       <div
-        className={`dropdown-wrapper ${size} ${error ? "error-border" : ""}`}
+        className={`dropdownWrapper ${size} ${error ? "errorBorder" : ""}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="dropdown-display">
+        <div className="dropdownDisplay">
           {selectedOption ? selectedOption.label : placeholder}
-          <span className="dropdown-arrow">▼</span>
+          <span className="dropdownArrow">▼</span>
         </div>
       </div>
 
       {isOpen && (
-        <div className="dropdown-list">
+        <div className="dropdownList">
           {options.map((option) => (
             <div
               key={option.value}
-              className="dropdown-option"
+              className="dropdownOption"
               onClick={() => handleSelect(option)}
             >
               {option.label}
@@ -55,7 +54,7 @@ const Dropdown = ({
         </div>
       )}
 
-      {error && <div className="error-message">{errorMessage}</div>}
+      {error && <div className="errorMessage">{errorMessage}</div>}
     </div>
   );
 };

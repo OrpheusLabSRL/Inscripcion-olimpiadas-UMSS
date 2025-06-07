@@ -104,15 +104,15 @@ const OlympiadsTable = () => {
     const fechaFin = new Date(olympiad.fechaFinOlimpiada);
     const isActive = olympiad.estadoOlimpiada === 1;
 
-    if (fechaFin < hoy) return "table-util-badge-neutral";
-    if (fechaInicio > hoy && isActive) return "table-util-badge-default";
-    if (isActive) return "table-util-badge-success";
-    return "table-util-badge-warning";
+    if (fechaFin < hoy) return "tableUtilBadgeNeutral";
+    if (fechaInicio > hoy && isActive) return "tableUtilBadgeDefault";
+    if (isActive) return "tableUtilBadgeSuccess";
+    return "tableUtilBadgeWarning";
   };
 
   return (
-    <div className="olympiad-table-wrapper">
-      <table className="olympiad-table">
+    <div className="olympiadTableWrapper">
+      <table className="olympiadTable">
         <thead>
           <tr>
             <th>Nombre</th>
@@ -126,14 +126,14 @@ const OlympiadsTable = () => {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="6" className="table-util-loading">
-                <FaSpinner className="table-util-spinner" />
+              <td colSpan="6" className="tableUtilLoading">
+                <FaSpinner className="tableUtilSpinner" />
                 Cargando olimpiadas...
               </td>
             </tr>
           ) : olympiads.length > 0 ? (
             olympiads.map((item) => (
-              <tr key={item.idOlimpiada} className="olympiad-table-row">
+              <tr key={item.idOlimpiada} className="olympiadTableRow">
                 <td>{item.nombreOlimpiada}</td>
                 <td>{item.version}</td>
                 <td>{item.fechaInicioOlimpiada}</td>
@@ -141,14 +141,14 @@ const OlympiadsTable = () => {
                 <td>
                   <button
                     onClick={() => toggleEstado(item)}
-                    className={`table-util-status-badge ${getBadgeClass(item)}`}
+                    className={`tableUtilStatusBadge ${getBadgeClass(item)}`}
                   >
                     {getEstadoLabel(item)}
                   </button>
                 </td>
-                <td className="olympiad-table-actions">
+                <td className="olympiadTableActions">
                   <button
-                    className="olympiad-table-view-btn"
+                    className="olympiadTableViewBtn"
                     onClick={() => handleView(item)}
                     title="Ver detalles"
                   >
@@ -159,7 +159,7 @@ const OlympiadsTable = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="table-util-empty">
+              <td colSpan="6" className="tableUtilEmpty">
                 No hay olimpiadas registradas.
               </td>
             </tr>

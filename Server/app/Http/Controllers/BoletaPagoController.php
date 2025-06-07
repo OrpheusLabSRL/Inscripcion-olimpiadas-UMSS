@@ -169,7 +169,7 @@ class BoletaPagoController extends Controller
         return response()->json(['message' => 'Pago confirmado exitosamente.']);
     }
 
-    public function getBoletasByTutor($tutorId)
+    public function getBoletasPorTutor($tutorId)
     {
         if (!$tutorId) {
             return response()->json(['message' => 'Tutor ID no proporcionado.'], 400);

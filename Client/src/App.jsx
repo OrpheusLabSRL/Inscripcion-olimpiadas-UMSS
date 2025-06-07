@@ -30,7 +30,7 @@ import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
 import { OCRValidation } from "./features/registrarion/pages/OCRValidation";
 import { GenerateOrder } from "./features/registrarion/pages/GenerateOrder";
-import OlympiadDetail from "./features/detallesOlimpiada/OlympiadDetail";
+import OlimpiadaDetallada from "./features/detallesOlimpiada/OlimpiadaDetallada";
 
 import { useEffect } from "react";
 
@@ -92,7 +92,7 @@ function App() {
         <div className={`content-area ${(hideSidebarRoutes.includes(location.pathname) || location.pathname.startsWith("/olimpiada/")) ? "no-margin" : ""}`}>
           <Routes>
             <Route path="/" element={<MainHome />} />
-            <Route path="/olimpiada/:id" element={<OlympiadDetail />} />
+            <Route path="/olimpiada/:id" element={<OlimpiadaDetallada />} />
             <Route path="/register" element={<RegisterChoose />} />
             <Route path="/register/olympian" element={<RegisterOlympian />} />
             <Route path="/register/tutor-legal" element={<RegisterTutor />} />

@@ -94,7 +94,7 @@ const Home = () => {
                 />
               ) : (
                 <PrimaryButton
-                  value="Más información"
+                  value="Más información sobre la olimpiada"
                   onClick={() => handleView(olympiad.idOlimpiada)}
                   icon={<CiSearch />}
                 />
