@@ -4,12 +4,12 @@ import {
   getOlimpiadas,
   getAreasCategoriasPorOlimpiada,
 } from "../../api/Administration.api";
-import "../detallesOlimpiada/OlympiadDetail.css";
+import "../detallesOlimpiada/OlimpiadaDetallada.css";
 import HeaderProp from "../home_usuario/components/HeaderProp";
 import Footer from "../home_usuario/components/Footer";
 import { TutorForm } from "../registrarion/pages/TutorForm";
 
-const OlympiadDetail = () => {
+const OlimpiadaDetallada = () => {
   const { id } = useParams();
   const [olympiad, setOlympiad] = useState(null);
   const [areasCategorias, setAreasCategorias] = useState([]);
@@ -125,4 +125,4 @@ const OlympiadDetail = () => {
   );
 };
 
-export default OlympiadDetail;
+export default OlimpiadaDetallada;
