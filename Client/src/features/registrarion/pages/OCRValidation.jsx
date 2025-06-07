@@ -182,8 +182,10 @@ export const OCRValidation = () => {
 
   return (
   <div className={`ocrvalidation-container ${sidebarOpen ? "sidebar-collapsed" : ""}`}>
-    <h1>Subir foto del comprobante de pago</h1>
-    <p>Suba una imagen para validar mediante OCR.</p>
+    <h2 className="titulo">Subir foto del comprobante de pago</h2>
+    <p style={{ 
+            textAlign:"center"
+          }}>Sube una foto clara de tu comprobante de pago para validar tu inscripción automáticamente.</p>
     <div className="reports__content" style={{ marginTop: "20px" }}>
       <form
         onSubmit={handleSubmit}
@@ -199,7 +201,6 @@ export const OCRValidation = () => {
           maxWidth: "660px",
         }}
       >
-        {/* Contenedor del input de archivo personalizado */}
         <div 
           style={{ 
             position: "relative", 
@@ -265,7 +266,6 @@ export const OCRValidation = () => {
           value={processing ? "Procesando..." : "Procesar Imagen"}
           disabled={processing || !uploadEnabled || !file}
           style={{
-            width: "150px",
             height: "40px",
             backgroundColor: "#1e40af",
             borderColor: "#1e40af",
@@ -277,23 +277,6 @@ export const OCRValidation = () => {
         />
       </form>
 
-      {/* {ocrResult && (
-        <div
-          style={{
-            marginTop: "10px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            gap: "0.5rem",
-          }}
-        >
-          <div>
-            <strong>Código de Control detectado:</strong>{" "}
-            <span>{controlBoleta ? controlBoleta : "N/A"}</span>
-          </div>
-        </div>
-      )} */}
 
       {controlBoleta && (
         <button
@@ -302,7 +285,7 @@ export const OCRValidation = () => {
           style={{
             marginTop: "10px",
             marginRight: "10px",
-            width: "150px",
+            
             height: "40px",
             borderRadius: "6px",
             border: "1px solid #1e40af",
