@@ -10,7 +10,7 @@ import { GrDocumentUpdate } from "react-icons/gr";
 import { HiOutlineClipboardDocument } from "react-icons/hi2";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { GiAchievement } from "react-icons/gi";
-
+import Logo from "../../assets/images/ohsansi.jpg";
 //css
 import "./Sidebar.css";
 
@@ -44,10 +44,10 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
           }`}
         >
           <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/7330cc38170480eadf5800dd915ae76c4a5737cb"
-            alt="LOGO O SANSI"
+            src={Logo}
+            alt="LOGO O SANSI" className="logoEncabezado"
           />
-          {isOpen && <h2 className="sidebar-title">Oh! SanSi</h2>}
+          {isOpen && <h2 className="sidebar-title">O! SanSi</h2>}
         </div>
         <ul>
           {admin ? (
@@ -55,26 +55,26 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
               <li>
                 <Link to="/admin/home">
                   <FaHome className="sidebar-icons" />
-                  {isOpen ? "Inicio" : ""}
+                  {isOpen ? " Inicio" : ""}
                 </Link>
               </li>
               <li>
                 <Link to="/admin/olimpiadas">
                   <GiAchievement className="sidebar-icons" />
-                  {isOpen ? "Olimpiadas" : ""}
+                  {isOpen ? " Olimpiadas" : ""}
                 </Link>
               </li>
               <li>
                 <Link to="/admin/panelOlympiad">
                   <FaRegEdit className="sidebar-icons" />
-                  {isOpen ? "Gestionar" : ""}
+                  {isOpen ? " Gestionar" : ""}
                 </Link>
               </li>
 
               <li>
                 <Link to="/admin/reports">
                   <HiOutlineClipboardDocument className="sidebar-icons" />
-                  {isOpen ? "Reportes" : ""}
+                  {isOpen ? " Reportes" : ""}
                 </Link>
               </li>
             </>
@@ -90,7 +90,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                   className={({ isActive }) => (isActive ? "active-link" : "")}
                 >
                   <FaHome className="sidebar-icons" />
-                  {isOpen ? "Registro" : ""}
+                  {isOpen ? " Registro" : ""}
                 </NavLink>
               </li>
 
@@ -100,7 +100,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                   className={({ isActive }) => (isActive ? "active-link" : "")}
                 >
                   <GrDocumentDownload className="sidebar-icons" />
-                  {isOpen ? "Generar orden de pago" : ""}
+                  {isOpen ? " Generar orden de pago" : ""}
                 </NavLink>
               </li>
 
@@ -110,7 +110,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                   className={({ isActive }) => (isActive ? "active-link" : "")}
                 >
                   <GrDocumentUpdate className="sidebar-icons" />
-                  {isOpen ? "Subir comprobante" : ""}
+                  {isOpen ? " Subir comprobante" : ""}
                 </NavLink>
               </li>
 
@@ -120,7 +120,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                   className={({ isActive }) => (isActive ? "active-link" : "")}
                 >
                   <IoDocumentTextOutline className="sidebar-icons" />
-                  {isOpen ? "Contacto" : ""}
+                  {isOpen ? " Contacto" : ""}
                 </NavLink>
               </li>
             </>
