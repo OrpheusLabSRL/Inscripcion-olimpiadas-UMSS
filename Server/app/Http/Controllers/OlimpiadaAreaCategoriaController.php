@@ -2,58 +2,111 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\OlimpiadaAreaCategoriaService;
 use Illuminate\Http\Request;
+use App\Models\OlimpiadaAreaCategoria;
+use Illuminate\Support\Facades\Validator;
 
 class OlimpiadaAreaCategoriaController extends Controller
 {
-    protected $service;
-
-    public function __construct(OlimpiadaAreaCategoriaService $service)
-    {
-        $this->service = $service;
-    }
-
+    // Obtener todas las combinaciones con relaciones
     public function index()
     {
-        $combinaciones = $this->service->getAllCombinations();
-        return response()->json($combinaciones);
+        return OlimpiadaAreaCategoria::with(['olimpiada', 'area', 'categoria'])->get();
     }
 
+    // Crear nuevas combinaciones (puede recibir múltiples)
     public function store(Request $request)
     {
-        try {
-            $results = $this->service->createOrUpdateCombinations($request->all());
-            return response()->json([
-                'message' => 'Combinaciones registradas con éxito',
-                'data' => $results
-            ], 201);
-        } catch (\InvalidArgumentException $e) {
-            $errors = json_decode($e->getMessage(), true);
-            return response()->json([
-                'message' => 'Error en algunas combinaciones',
-                'errors' => $errors
-            ], 422);
+        $data = $request->all();
+
+        foreach ($data as $item) {
+            $validator = Validator::make($item, [
+                'idOlimpiada' => 'required|exists:olimpiadas,idOlimpiada',
+                'idArea' => 'required|exists:areas,idArea',
+                'idCategoria' => 'required|exists:categorias,idCategoria',
+                'costo' => 'required|numeric|min:0',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Error de validación',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            OlimpiadaAreaCategoria::firstOrCreate(
+                [
+                    'idOlimpiada' => $item['idOlimpiada'],
+                    'idArea' => $item['idArea'],
+                    'idCategoria' => $item['idCategoria'],
+                ],
+                [
+                    'estado' => true,
+                    'costo' => $item['costo'],
+                ]
+            );
         }
+
+        return response()->json([
+            'message' => 'Combinaciones registradas con éxito',
+        ], 201);
     }
 
+    // Eliminar una combinación específica
     public function destroy($id)
     {
-        $this->service->deleteCombination($id);
-        return response()->json(['message' => 'Combinación eliminada']);
+        $item = OlimpiadaAreaCategoria::findOrFail($id);
+        $item->delete();
+
+        return response()->json(['mensaje' => 'Combinación eliminada']);
     }
 
+    // Obtener combinaciones de una olimpiada (agrupadas por área)
     public function porOlimpiada($idOlimpiada)
     {
-        $resultados = $this->service->getByOlimpiadaGrouped($idOlimpiada);
+        $combinaciones = OlimpiadaAreaCategoria::where('idOlimpiada', $idOlimpiada)
+            ->with(['area', 'categoria.grados'])
+            ->get()
+            ->groupBy('idArea');
+
+        $resultados = [];
+
+        foreach ($combinaciones as $idArea => $grupo) {
+            $area = $grupo->first()->area;
+
+            $categorias = $grupo->map(function ($combinacion) {
+                $cat = $combinacion->categoria;
+                return [
+                    'idCategoria' => $cat->idCategoria,
+                    'nombreCategoria' => $cat->nombreCategoria,
+                    'costo' => $combinacion->costo,
+                    'grados' => $cat->grados->map(function ($grado) {
+                        return [
+                            'idGrado' => $grado->idGrado,
+                            'numeroGrado' => $grado->numeroGrado,
+                            'nivel' => $grado->nivel,
+                        ];
+                    })
+                ];
+            });
+
+            $resultados[] = [
+                'idArea' => $area->idArea,
+                'nombreArea' => $area->nombreArea,
+                'descripcionArea' => $area->descripcionArea,
+                'categorias' => $categorias,
+            ];
+        }
+
         return response()->json($resultados);
     }
 
-    public function eliminarPorOlimpiadaYArea($idOlimpiada, $idArea)
+   public function eliminarPorOlimpiadaYArea($idOlimpiada, $idArea)
     {
-        $this->service->deleteByOlimpiadaAndArea($idOlimpiada, $idArea);
-        return response()->json([
-            'message' => 'Combinaciones del área eliminadas correctamente'
-        ]);
+        OlimpiadaAreaCategoria::where('idOlimpiada', $idOlimpiada)
+            ->where('idArea', $idArea)
+            ->delete();
+
+        return response()->json(['message' => 'Combinaciones del área eliminadas correctamente.']);
     }
 }

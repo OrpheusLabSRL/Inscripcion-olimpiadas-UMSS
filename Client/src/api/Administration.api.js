@@ -196,9 +196,9 @@ export const verificarUsoArea = async (idArea) => {
   return response.data;
 };
 
-export const verificarUsoCategoria = async (idCategoria) => {
-  const response = await inscriptionApi.post("/verificar-uso-categoria", {
-    idCategoria,
+export const verificarUsoCategoriasMasivo = async (ids) => {
+  const response = await inscriptionApi.post("/api/verificar-uso-categorias", {
+    ids,
   });
-  return response.data;
+  return response.data; // esto será un objeto tipo { 1: true, 2: false, ... }
 };

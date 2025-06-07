@@ -2,29 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\OlimpiadaService;
+use App\Models\Olimpiada;
 use Illuminate\Http\Request;
 
 class OlimpiadaController extends Controller
 {
-    protected $service;
-
-    public function __construct(OlimpiadaService $service)
+    // API - Listar todas las olimpiadas
+    public function mostrarOlimpiada()
     {
-        $this->service = $service;
-    }
-
-    public function mostrarOlimpiada(Request $request)
-    {
-        $filters = [
-            'activas' => $request->query('activas', false),
-            'nombre' => $request->query('nombre')
-        ];
-
-        $olimpiadas = $this->service->getAllOlimpiadas($filters);
+        $olimpiadas = Olimpiada::all();
         return response()->json(['data' => $olimpiadas]);
     }
 
+    // API - Crear nueva olimpiada
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -34,64 +24,63 @@ class OlimpiadaController extends Controller
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
         ]);
 
-        try {
-            $olimpiada = $this->service->createOlimpiada($validated);
-            return response()->json([
-                'message' => 'Olimpiada creada exitosamente',
-                'data' => $olimpiada
-            ], 201);
-        } catch (\InvalidArgumentException $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
-        }
+        $validated['estadoOlimpiada'] = false;
+        $validated['idUsuario'] = 1;
+        $olimpiada = Olimpiada::create($validated);
+
+        return response()->json([
+            'message' => 'Olimpiada creada exitosamente',
+            'data' => $olimpiada
+        ], 201);
     }
 
+    // API - Actualizar olimpiada
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'nombreOlimpiada' => 'required|string|max:100',
+        $olimpiada = Olimpiada::findOrFail($id);
+
+        $request->validate([
+            'nombreOlimpiada' => 'required|string|max:100,' . $id . ',idOlimpiada',
             'version' => 'required|integer|min:1',
             'fechaInicioOlimpiada' => 'required|date',
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
             'estadoOlimpiada' => 'required|boolean',
         ]);
 
-        try {
-            $olimpiada = $this->service->updateOlimpiada($id, $validated);
-            return response()->json([
-                'message' => 'Olimpiada actualizada correctamente',
-                'data' => $olimpiada
-            ]);
-        } catch (\InvalidArgumentException $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Olimpiada no encontrada'], 404);
-        }
+        $olimpiada->update($request->all());
+
+        return response()->json([
+            'message' => 'Olimpiada actualizada correctamente',
+            'data' => $olimpiada
+        ]);
     }
 
+    // API - Cambiar estado de una olimpiada
     public function cambiarEstado(Request $request, $id)
     {
+        $olimpiada = Olimpiada::findOrFail($id);
+
         $request->validate([
             'estadoOlimpiada' => 'required|boolean',
         ]);
 
-        try {
-            $olimpiada = $this->service->changeOlimpiadaStatus($id, $request->estadoOlimpiada);
-            return response()->json([
-                'message' => 'Estado actualizado correctamente',
-                'data' => $olimpiada
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Olimpiada no encontrada'], 404);
-        }
+        $olimpiada->estadoOlimpiada = $request->estadoOlimpiada;
+        $olimpiada->save();
+
+        return response()->json([
+            'message' => 'Estado actualizado correctamente',
+            'data' => $olimpiada
+        ]);
     }
 
+    // API - Eliminar olimpiada
     public function destroy($id)
     {
-        try {
-            $this->service->deleteOlimpiada($id);
-            return response()->json(['message' => 'Olimpiada eliminada correctamente']);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Olimpiada no encontrada'], 404);
-        }
+        $olimpiada = Olimpiada::findOrFail($id);
+        $olimpiada->delete();
+
+        return response()->json([
+            'message' => 'Olimpiada eliminada correctamente'
+        ]);
     }
 }

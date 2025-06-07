@@ -2,84 +2,78 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\CategoriaService;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
-    protected $service;
-
-    public function __construct(CategoriaService $service)
+    // Obtener todas las categorías
+    public function index()
     {
-        $this->service = $service;
+        return response()->json(Categoria::all());
     }
 
-    public function index(Request $request)
-    {
-        $filters = [
-            'activas' => $request->query('activas', false),
-            'nombre' => $request->query('nombre')
-        ];
-
-        $categorias = $this->service->getAllCategorias($filters);
-        return response()->json($categorias);
-    }
-
+    // Obtener una categoría por su ID
     public function show($id)
     {
-        try {
-            $categoria = $this->service->getCategoriaById($id);
-            return response()->json($categoria);
-        } catch (\Exception $e) {
+        $categoria = Categoria::find($id);
+
+        if (!$categoria) {
             return response()->json(['message' => 'Categoría no encontrada'], 404);
         }
+
+        return response()->json($categoria);
     }
 
+    // Crear una nueva categoría
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nombreCategoria' => 'required|string|max:255',
-            'estadoCategoria' => 'sometimes|boolean'
+        $request->validate([
+            'nombreCategoria' => 'required|string|unique:categoria,nombreCategoria',
+            'estadoCategoria' => 'required|boolean',
         ]);
 
-        try {
-            $categoria = $this->service->createCategoria($validated);
-            return response()->json([
-                'message' => 'Categoría creada con éxito',
-                'data' => $categoria
-            ], 201);
-        } catch (\InvalidArgumentException $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
-        }
+        $categoria = Categoria::create($request->only(['nombreCategoria', 'estadoCategoria']));
+
+        return response()->json([
+            'message' => 'Categoría creada con éxito',
+            'data' => $categoria
+        ], 201);
     }
 
+    // Actualizar una categoría
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'nombreCategoria' => 'required|string|max:255',
-            'estadoCategoria' => 'required|boolean'
+        $categoria = Categoria::find($id);
+
+        if (!$categoria) {
+            return response()->json(['message' => 'Categoría no encontrada'], 404);
+        }
+
+        $request->validate([
+            'nombreCategoria' => 'required|string|unique:categoria,nombreCategoria,' . $id . ',idCategoria',
+            'estadoCategoria' => 'required|boolean',
         ]);
 
-        try {
-            $categoria = $this->service->updateCategoria($id, $validated);
-            return response()->json([
-                'message' => 'Categoría actualizada con éxito',
-                'data' => $categoria
-            ]);
-        } catch (\InvalidArgumentException $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Categoría no encontrada'], 404);
-        }
+        $categoria->update($request->only(['nombreCategoria', 'estadoCategoria']));
+
+        return response()->json([
+            'message' => 'Categoría actualizada con éxito',
+            'data' => $categoria
+        ]);
     }
 
+    // Eliminar una categoría
     public function destroy($id)
     {
-        try {
-            $this->service->deleteCategoria($id);
-            return response()->json(['message' => 'Categoría eliminada']);
-        } catch (\Exception $e) {
+        $categoria = Categoria::find($id);
+
+        if (!$categoria) {
             return response()->json(['message' => 'Categoría no encontrada'], 404);
         }
+
+        $categoria->delete();
+
+        return response()->json(['message' => 'Categoría eliminada']);
     }
 }

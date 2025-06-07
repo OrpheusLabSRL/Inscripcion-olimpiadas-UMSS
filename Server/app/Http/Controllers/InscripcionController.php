@@ -469,22 +469,25 @@ public function verificarUsoArea(Request $request)
         ]);
     }
 
-    public function verificarUsoCategoria(Request $request)
+    public function verificarUsoCategoriasMasivo(Request $request)
     {
         $request->validate([
-            'idCategoria' => 'required|integer|exists:categorias,idCategoria',
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:categorias,idCategoria',
         ]);
 
-        $idCategoria = $request->idCategoria;
+        $resultados = [];
 
-        $inscripciones = Inscripcion::whereHas('OlimpiadaAreaCategoria', function ($query) use ($idCategoria) {
-            $query->where('idCategoria', $idCategoria);
-        })->with('OlimpiadaAreaCategoria')->get();
+        foreach ($request->ids as $idCategoria) {
+            $enUso = Inscripcion::whereHas('OlimpiadaAreaCategoria', function ($query) use ($idCategoria) {
+                $query->where('idCategoria', $idCategoria);
+            })->exists();
 
-        return response()->json([
-            'enUso' => $inscripciones->isNotEmpty(),
-            'inscripciones' => $inscripciones,
-        ]);
+            $resultados[$idCategoria] = $enUso;
+        }
+
+        return response()->json($resultados);
     }
+
 
 }

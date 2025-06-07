@@ -87,7 +87,8 @@ Route::get('/obtenerInscripciones/olimpiadas', [InscripcionController::class, 'g
 Route::post('/consultar-inscripcion-olimpista', [InscripcionController::class, 'consultarInscripcion']);
 Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class, 'consultar']); 
 Route::post('/verificar-uso-area', [InscripcionController::class, 'verificarUsoArea']);
-Route::post('/verificar-uso-categoria', [InscripcionController::class, 'verificarUsoCategoria']);
+Route::post('/verificar-uso-categorias', [InscripcionController::class, 'verificarUsoCategoriasMasivo']);
+
 // Categoría - Grado
 Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
 Route::patch('/changeEstadoCategoriaGrado/{id}', [CategoriaGradoController::class, 'cambiarEstado']);
