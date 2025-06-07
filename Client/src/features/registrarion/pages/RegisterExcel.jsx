@@ -291,13 +291,13 @@ const RegisterExcel = () => {
 
   const getCellClassName = (rowIndex, cellIndex, cellValue) => {
     if (errorCells[`${rowIndex}-${cellIndex}`]) {
-      return "error-cell";
+      return "excelErrorCell";
     }
     if (cellIndex >= 17 && cellIndex <= 21) {
-      if (!cellValue || cellValue === "-") return "optional-empty";
-      return "optional-filled";
+      if (!cellValue || cellValue === "-") return "excelOptionalEmpty";
+      return "excelOptionalFilled";
     }
-    if (!cellValue && cellIndex < 17) return "empty-cell";
+    if (!cellValue && cellIndex < 17) return "excelEmptyCell";
     return "";
   };
 
@@ -449,13 +449,11 @@ const RegisterExcel = () => {
       );
 
       if (response.success) {
-        // Guardar el ID del tutor en sessionStorage
         sessionStorage.setItem(
           "tutorInscripcionId",
           response.data.tutor_responsable_id
         );
 
-        // Limpiar solo los datos temporales, manteniendo el ID del tutor
         const camposAConservar = {
           tutorInscripcionId: response.data.tutor_responsable_id,
         };
@@ -465,14 +463,12 @@ const RegisterExcel = () => {
           camposAConservar.tutorInscripcionId
         );
 
-        // Mostrar confirmación y redirigir
         await swal({
           title: "¡Registro exitoso!",
           text: response.message,
           icon: "success",
         });
 
-        // Redirigir a ListRegistered con el estado necesario
         navigation("/register/listRegistered", {
           state: {
             freshRegistration: true,
@@ -499,49 +495,52 @@ const RegisterExcel = () => {
   };
 
   return (
-    <div>
+    <div className="excelMainContainer">
       <NavLink to={"/register/responsible"}>
-        <IoArrowBackCircle className="btn-back" />
+        <IoArrowBackCircle className="excelBackButton" />
       </NavLink>
-      <h1 className="title-register">Registro Olimpiadas O! Sansi 2025</h1>
+      <h1 className="excelTitle">Registro Olimpiadas O! Sansi 2025</h1>
 
-      <div className="excel-container">
-        <div className="excel-header">
+      <div className="excelContentContainer">
+        <div className="excelHeaderContainer">
           <h1>Inscribir Olimpistas Mediante Archivo Excel</h1>
-          <div className="download-section">
-            <p className="instructions">
+          <div className="excelDownloadSection">
+            <p className="excelInstructions">
               *Para evitar inconvenientes con el formato y la información del
               archivo .xlsx, descargue la plantilla*
               <br />
               *Los campos marcados con (*) son opcionales, pero si se completa
               uno deben completarse todos*
             </p>
-            <button onClick={downloadTemplate} className="action-btn">
+            <button onClick={downloadTemplate} className="excelActionButton">
               Descargar Plantilla
             </button>
           </div>
         </div>
-        <div className="upload-section">
+        <div className="excelUploadSection">
           <h2>Sube tu archivo en formato .xlsx</h2>
-          <div className="file-input-container">
+          <div className="excelFileInputContainer">
             <input
               type="file"
               accept=".xlsx,.xls"
               onChange={handleFileUpload}
               id="excel-upload"
-              className="file-input"
+              className="excelFileInput"
               disabled={isLoading}
             />
-            <label htmlFor="excel-upload" className="action-btn file-label">
+            <label
+              htmlFor="excel-upload"
+              className="excelActionButton excelFileLabel"
+            >
               {isLoading ? "Procesando..." : "Seleccionar Archivo"}
             </label>
-            {fileName && <span className="file-name">{fileName}</span>}
+            {fileName && <span className="excelFileName">{fileName}</span>}
           </div>
         </div>
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
+        {error && <div className="excelErrorMessage">{error}</div>}
+        {success && <div className="excelSuccessMessage">{success}</div>}
         {validationErrors.length > 0 && (
-          <div className="validation-errors">
+          <div className="excelValidationErrors">
             <h3>Errores de validación:</h3>
             <ul>
               {validationErrors.map((error, index) => (
@@ -550,9 +549,9 @@ const RegisterExcel = () => {
             </ul>
           </div>
         )}
-        <div className="data-section-excel">
-          <div className="table-container">
-            <table className="data-table">
+        <div className="excelDataSection">
+          <div className="excelTableContainer">
+            <table className="excelDataTable">
               <thead>
                 <tr>
                   {headers.map((header, i) => (
@@ -583,7 +582,7 @@ const RegisterExcel = () => {
                   <tr>
                     <td
                       colSpan={headers.length}
-                      className="empty-table-message"
+                      className="excelEmptyTableMessage"
                     >
                       No hay datos cargados. Seleccione un archivo Excel para
                       visualizar los datos.
@@ -594,9 +593,9 @@ const RegisterExcel = () => {
             </table>
           </div>
           {data.length > 0 && validationErrors.length === 0 && (
-            <div className="action-buttons-excel">
+            <div className="excelActionButtons">
               <button
-                className="action-btn register-btn"
+                className="excelActionButton excelRegisterButton"
                 onClick={handleRegister}
                 disabled={isLoading}
               >
