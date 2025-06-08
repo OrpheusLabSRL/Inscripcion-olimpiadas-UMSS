@@ -7,7 +7,7 @@ import { getOlimpiadas } from "../../../../api/inscription.api";
 import OlympiadsModal from "../administrationModal/OlympiadsModal";
 import BaseDataModal from "../administrationModal/BaseDataModal";
 import { CiCircleInfo } from "react-icons/ci";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaTrash } from "react-icons/fa";
 import "../../Styles/Tables.css";
 
 const OlympiadsTable = () => {
@@ -38,6 +38,17 @@ const OlympiadsTable = () => {
     setIsModalOpen(true);
   };
 
+  const handleDelete = (olympiad) => {
+    if (
+      window.confirm(
+        `¿Estás seguro que deseas eliminar la olimpiada "${olympiad.nombreOlimpiada}"?`
+      )
+    ) {
+      // Aquí iría tu lógica de eliminación (API, estado, etc.)
+      console.log("Eliminar olimpiada con ID:", olympiad.idOlimpiada);
+    }
+  };
+
   const toggleEstado = async (olympiad) => {
     const hoy = new Date();
     const fechaInicio = new Date(olympiad.fechaInicioOlimpiada);
@@ -49,7 +60,7 @@ const OlympiadsTable = () => {
       return;
     }
     if (fechaInicio <= hoy) {
-      alert("No puedes modificar una olimpiada que ya comenzo.");
+      alert("No puedes modificar una olimpiada que ya comenzó.");
       return;
     }
 
@@ -64,7 +75,6 @@ const OlympiadsTable = () => {
       return;
     }
 
-    // Si está inactiva y en fechas válidas → reactivar
     try {
       const response = await getAreasCategoriasPorOlimpiada(
         olympiad.idOlimpiada
@@ -74,10 +84,10 @@ const OlympiadsTable = () => {
       const tieneAsignaciones =
         data.length > 0 && data.some((a) => a.categorias.length > 0);
 
-      /*if (!tieneAsignaciones) {
-        alert("Debes asignar al menos un área y categoría para activarla.");
-        return;
-      }*/
+      // if (!tieneAsignaciones) {
+      //   alert("Debes asignar al menos un área y categoría para activarla.");
+      //   return;
+      // }
 
       await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
       await fetchOlimpiads();
@@ -154,6 +164,7 @@ const OlympiadsTable = () => {
                   >
                     <CiCircleInfo />
                   </button>
+                  <FaTrash className="actionIcon deleteIcon" />{" "}
                 </td>
               </tr>
             ))

@@ -58,7 +58,7 @@ class CategoriaGradoRepository implements CategoriaGradoRepositoryInterface
         }
 
         return DB::transaction(function () use ($categoriaId, $syncData) {
-            return Categoria::findOrFail($categoriaId)->grados()->sync($syncData);
+            return CategoriaGradoRepository::findOrFail($categoriaId)->grados()->sync($syncData);
         });
     }
 }

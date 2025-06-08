@@ -609,6 +609,7 @@ body,
 }
 
 .panelOlympiadEditBtn {
+  transform: translateY(-6px);
   background: none;
   border: none;
   color: #3b82f6;
@@ -625,7 +626,6 @@ body,
 
 .panelOlympiadEditBtn:hover {
   background-color: #dbeafe;
-  transform: scale(1.1);
 }
 
 .panelOlympiadEditBtn:disabled {

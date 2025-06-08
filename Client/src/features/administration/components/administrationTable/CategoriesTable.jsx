@@ -3,7 +3,7 @@ import {
   getCategoriaGrado,
   changeEstadoCategoriaGrado,
   deleteCategoriaGrado,
-  verificarUsoCategoriasMasivo, // nuevo endpoint importado
+  verificarUsoCategoriasMasivo,
 } from "../../../../api/Administration.api";
 import { FaSpinner, FaInfoCircle, FaEdit, FaTrash } from "react-icons/fa";
 import "../../Styles/Tables.css";
@@ -59,14 +59,13 @@ const CategoriesTable = () => {
         }
       }
 
-      // Verificar uso de categorías (optimizado)
       const ids = Object.values(agrupado)
         .map((cat) => cat.idCategoria)
-        .filter((id) => id); // evitar null/undefined
+        .filter((id) => id);
 
       let uso = {};
       try {
-        uso = await verificarUsoCategoriasMasivo(ids); // llamada masiva
+        uso = await verificarUsoCategoriasMasivo(ids);
       } catch (e) {
         console.error("Error al verificar uso de categorías:", e);
         uso = {};
@@ -90,9 +89,38 @@ const CategoriesTable = () => {
 
   const handleChangeStatus = async (nombreCategoria) => {
     try {
-      setUpdating(true);
       const categoria = categoriasAgrupadas[nombreCategoria];
       const nuevoEstado = !categoria.estadoCategoriaGrado;
+
+      // Mostrar advertencia solo cuando se va a desactivar
+      if (nuevoEstado === false) {
+        const result = await Swal.fire({
+          title: "¿Estás seguro?",
+          html: `
+            <p>Al desactivar esta categoría:</p>
+            <ul style="text-align: left; margin-left: 20px;">
+              <li>No estará disponible para nuevas olimpiadas</li>
+              <li>Las olimpiadas existentes que ya la incluyen <strong>NO</strong> se verán afectadas</li>
+              <li>Los grados asociados mantendrán su estado actual</li>
+            </ul>
+            <p>¿Deseas continuar?</p>
+          `,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Sí, desactivar",
+          cancelButtonText: "Cancelar",
+          customClass: {
+            container: "swal2-container",
+            popup: "swal2-popup-custom",
+          },
+        });
+
+        if (!result.isConfirmed) {
+          return;
+        }
+      }
+
+      setUpdating(true);
 
       await Promise.all(
         categoria.rawData.map((item) =>

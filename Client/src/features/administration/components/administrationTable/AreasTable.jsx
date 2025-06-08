@@ -3,7 +3,7 @@ import {
   getAreas,
   updateAreaStatus,
   deleteArea,
-  verificarUsoAreasMasivo, // ✅ Nueva función
+  verificarUsoAreasMasivo,
 } from "../../../../api/Administration.api";
 import {
   FaSpinner,
@@ -14,6 +14,7 @@ import {
 } from "react-icons/fa";
 import EditAreaModal from "../administrationModal/EditAreaModal";
 import "../../Styles/Tables.css";
+import Swal from "sweetalert2";
 
 const AreasTable = () => {
   const [areas, setAreas] = useState([]);
@@ -66,6 +67,33 @@ const AreasTable = () => {
 
   const toggleEstado = async (id, currentEstado) => {
     try {
+      // Mostrar advertencia solo cuando se va a desactivar
+      if (currentEstado) {
+        const result = await Swal.fire({
+          title: "¿Estás seguro?",
+          html: `
+            <p>Al desactivar esta área:</p>
+            <ul style="text-align: left; margin-left: 20px;">
+              <li>No estará disponible para nuevas olimpiadas</li>
+              <li>Las olimpiadas existentes que ya la incluyen <strong>NO</strong> se verán afectadas</li>
+            </ul>
+            <p>¿Deseas continuar?</p>
+          `,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Sí, desactivar",
+          cancelButtonText: "Cancelar",
+          customClass: {
+            container: "swal2-container",
+            popup: "swal2-popup-custom",
+          },
+        });
+
+        if (!result.isConfirmed) {
+          return;
+        }
+      }
+
       const nuevoEstado = !currentEstado;
       await updateAreaStatus(id, nuevoEstado);
       setAreas((prev) =>
@@ -73,9 +101,21 @@ const AreasTable = () => {
           area.idArea === id ? { ...area, estadoArea: nuevoEstado } : area
         )
       );
+
+      Swal.fire({
+        icon: "success",
+        title: "Estado actualizado",
+        text: `El area ha sido ${nuevoEstado ? "activada" : "desactivada"}`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error("Error al cambiar estado:", error);
-      alert("No se pudo actualizar el estado del área.");
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo actualizar el estado del área",
+        icon: "error",
+      });
     }
   };
 
@@ -84,17 +124,37 @@ const AreasTable = () => {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "¿Estás seguro de que deseas eliminar esta área?"
-    );
-    if (!confirmDelete) return;
+    const confirmDelete = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¿Deseas eliminar permanentemente esta área?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      customClass: {
+        container: "swal2-container",
+      },
+    });
+
+    if (!confirmDelete.isConfirmed) return;
 
     try {
       await deleteArea(id);
       setAreas((prev) => prev.filter((area) => area.idArea !== id));
+      Swal.fire({
+        title: "Eliminada",
+        text: "El área ha sido eliminada correctamente",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error("Error al eliminar área:", error);
-      alert("No se pudo eliminar el área.");
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo eliminar el área",
+        icon: "error",
+      });
     }
   };
 

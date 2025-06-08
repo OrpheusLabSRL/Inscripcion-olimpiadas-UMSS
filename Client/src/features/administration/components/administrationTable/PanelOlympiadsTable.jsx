@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FiEdit2, FiPlus, FiLayers } from "react-icons/fi";
+import { FaTrash } from "react-icons/fa";
 import RegisterCategoriaModal from "../administrationModal/RegisterCategoriaModal";
 import RegisterAreaModal from "../administrationModal/RegisterAreaModal";
 import RegisterNewAreaModal from "../administrationModal/RegisterNewAreaModal";
@@ -170,6 +171,7 @@ export default function PanelOlympiadsTable({
                               <div className="tooltipArrow"></div>
                             </div>
                           )}
+                          <FaTrash className="actionIcon deleteIcon" />{" "}
                         </div>
                       </td>
                     </tr>
