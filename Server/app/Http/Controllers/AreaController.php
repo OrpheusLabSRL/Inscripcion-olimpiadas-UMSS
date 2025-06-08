@@ -19,45 +19,39 @@ class AreaController extends Controller
         $areas = $this->service->getAllAreas([
             'estado' => $request->query('estadoArea')
         ]);
-        
-        return response()->json($areas);
+
+        return response()->json($areas, 200);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nombreArea' => 'required|string|max:255',
+            'nombreArea' => 'required|string',
             'descripcionArea' => 'nullable|string',
             'estadoArea' => 'sometimes|boolean',
         ]);
 
-        $area = $this->service->createArea($validated);
-        
-        return response()->json([
-            'message' => 'Área creada exitosamente',
-            'data' => $area
-        ], 201);
+        $this->service->createArea($validated);
+
+        return response()->json(['message' => 'Área registrada correctamente']);
     }
 
-    public function getProgramaCompleto($olimpiadaId)
+    public function getProgramaCompleto()
     {
-        $programa = $this->service->getFormattedProgram($olimpiadaId);
+        $programa = $this->service->getProgramaCompleto();
         return response()->json($programa);
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'nombreArea' => 'required|string|max:255',
+            'nombreArea' => 'required|string',
             'descripcionArea' => 'nullable|string',
         ]);
 
-        $area = $this->service->updateArea($id, $validated);
-        
-        return response()->json([
-            'message' => 'Área actualizada exitosamente',
-            'data' => $area
-        ]);
+        $this->service->updateArea($id, $validated);
+
+        return response()->json(['message' => 'Área actualizada correctamente']);
     }
 
     public function actualizarEstado(Request $request, $id)
@@ -66,17 +60,14 @@ class AreaController extends Controller
             'estadoArea' => 'required|boolean',
         ]);
 
-        $area = $this->service->changeAreaStatus($id, $validated['estadoArea']);
-        
-        return response()->json([
-            'message' => 'Estado del área actualizado',
-            'data' => $area
-        ]);
+        $this->service->changeAreaStatus($id, $validated['estadoArea']);
+
+        return response()->json(['message' => 'Estado del área actualizado correctamente']);
     }
 
     public function destroy($id)
     {
         $this->service->deleteArea($id);
-        return response()->json(['message' => 'Área eliminada exitosamente']);
+        return response()->json(['message' => 'Área eliminada correctamente']);
     }
 }

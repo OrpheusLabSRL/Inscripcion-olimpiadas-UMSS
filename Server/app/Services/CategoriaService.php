@@ -13,46 +13,35 @@ class CategoriaService
         $this->repository = $repository;
     }
 
-    public function getAllCategorias(array $filters = [])
+    public function getAllCategorias()
     {
-        return $this->repository->all($filters);
+        return $this->repository->getAll();
     }
 
-    public function getCategoriaById(int $id)
+    public function getCategoria($id)
     {
-        return $this->repository->find($id);
+        return $this->repository->getById($id);
     }
 
     public function createCategoria(array $data)
     {
-        // Validar nombre único
-        if ($this->repository->findByName($data['nombreCategoria'])) {
-            throw new \InvalidArgumentException('El nombre de categoría ya existe');
+        if ($this->repository->checkNameExists($data['nombreCategoria'])) {
+            throw new \Exception('El nombre de categoría ya existe');
         }
 
-        return $this->repository->create([
-            'nombreCategoria' => $data['nombreCategoria'],
-            'estadoCategoria' => $data['estadoCategoria'] ?? true
-        ]);
+        return $this->repository->create($data);
     }
 
-    public function updateCategoria(int $id, array $data)
+    public function updateCategoria($id, array $data)
     {
-        $categoria = $this->repository->find($id);
-
-        // Validar nombre único excluyendo el actual
-        $existing = $this->repository->findByName($data['nombreCategoria']);
-        if ($existing && $existing->idCategoria != $id) {
-            throw new \InvalidArgumentException('El nombre de categoría ya existe');
+        if ($this->repository->checkNameExists($data['nombreCategoria'], $id)) {
+            throw new \Exception('El nombre de categoría ya existe');
         }
 
-        return $this->repository->update($id, [
-            'nombreCategoria' => $data['nombreCategoria'],
-            'estadoCategoria' => $data['estadoCategoria']
-        ]);
+        return $this->repository->update($id, $data);
     }
 
-    public function deleteCategoria(int $id)
+    public function deleteCategoria($id)
     {
         return $this->repository->delete($id);
     }

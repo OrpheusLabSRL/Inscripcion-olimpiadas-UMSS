@@ -14,14 +14,9 @@ class OlimpiadaController extends Controller
         $this->service = $service;
     }
 
-    public function mostrarOlimpiada(Request $request)
+    public function mostrarOlimpiada()
     {
-        $filters = [
-            'activas' => $request->query('activas', false),
-            'nombre' => $request->query('nombre')
-        ];
-
-        $olimpiadas = $this->service->getAllOlimpiadas($filters);
+        $olimpiadas = $this->service->getAllOlimpiadas();
         return response()->json(['data' => $olimpiadas]);
     }
 
@@ -34,38 +29,30 @@ class OlimpiadaController extends Controller
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
         ]);
 
-        try {
-            $olimpiada = $this->service->createOlimpiada($validated);
-            return response()->json([
-                'message' => 'Olimpiada creada exitosamente',
-                'data' => $olimpiada
-            ], 201);
-        } catch (\InvalidArgumentException $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
-        }
+        $olimpiada = $this->service->createOlimpiada($validated);
+
+        return response()->json([
+            'message' => 'Olimpiada creada exitosamente',
+            'data' => $olimpiada
+        ], 201);
     }
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'nombreOlimpiada' => 'required|string|max:100',
+        $request->validate([
+            'nombreOlimpiada' => 'required|string|max:100,' . $id . ',idOlimpiada',
             'version' => 'required|integer|min:1',
             'fechaInicioOlimpiada' => 'required|date',
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
             'estadoOlimpiada' => 'required|boolean',
         ]);
 
-        try {
-            $olimpiada = $this->service->updateOlimpiada($id, $validated);
-            return response()->json([
-                'message' => 'Olimpiada actualizada correctamente',
-                'data' => $olimpiada
-            ]);
-        } catch (\InvalidArgumentException $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Olimpiada no encontrada'], 404);
-        }
+        $olimpiada = $this->service->updateOlimpiada($id, $request->all());
+
+        return response()->json([
+            'message' => 'Olimpiada actualizada correctamente',
+            'data' => $olimpiada
+        ]);
     }
 
     public function cambiarEstado(Request $request, $id)
@@ -74,24 +61,19 @@ class OlimpiadaController extends Controller
             'estadoOlimpiada' => 'required|boolean',
         ]);
 
-        try {
-            $olimpiada = $this->service->changeOlimpiadaStatus($id, $request->estadoOlimpiada);
-            return response()->json([
-                'message' => 'Estado actualizado correctamente',
-                'data' => $olimpiada
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Olimpiada no encontrada'], 404);
-        }
+        $olimpiada = $this->service->changeOlimpiadaStatus($id, $request->estadoOlimpiada);
+
+        return response()->json([
+            'message' => 'Estado actualizado correctamente',
+            'data' => $olimpiada
+        ]);
     }
 
     public function destroy($id)
     {
-        try {
-            $this->service->deleteOlimpiada($id);
-            return response()->json(['message' => 'Olimpiada eliminada correctamente']);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Olimpiada no encontrada'], 404);
-        }
+        $this->service->deleteOlimpiada($id);
+        return response()->json([
+            'message' => 'Olimpiada eliminada correctamente'
+        ]);
     }
 }

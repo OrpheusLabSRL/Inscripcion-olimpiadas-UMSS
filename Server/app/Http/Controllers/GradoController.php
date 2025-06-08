@@ -14,25 +14,21 @@ class GradoController extends Controller
         $this->service = $service;
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $filters = [
-            'activos' => $request->query('activos', false),
-            'nivel' => $request->query('nivel')
-        ];
-
-        $grados = $this->service->getAllGrados($filters);
+        $grados = $this->service->getAllGrados();
         return response()->json($grados);
     }
 
-    public function show($id)
+    public function show($idGrado)
     {
-        try {
-            $grado = $this->service->getGradoById($id);
-            return response()->json($grado);
-        } catch (\Exception $e) {
+        $grado = $this->service->getGrado($idGrado);
+
+        if (!$grado) {
             return response()->json(['message' => 'Grado no encontrado'], 404);
         }
+
+        return response()->json($grado);
     }
 
     public function store(Request $request)
@@ -43,49 +39,37 @@ class GradoController extends Controller
                 'message' => 'Grado creado correctamente',
                 'data' => $grado
             ], 201);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\InvalidArgumentException $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $idGrado)
     {
         try {
-            $grado = $this->service->updateGrado($id, $request->all());
+            $grado = $this->service->updateGrado($idGrado, $request->all());
+            
+            if (!$grado) {
+                return response()->json(['message' => 'Grado no encontrado'], 404);
+            }
+
             return response()->json([
                 'message' => 'Grado actualizado correctamente',
                 'data' => $grado
             ]);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\InvalidArgumentException $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 422);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Grado no encontrado'
-            ], 404);
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
     }
 
-    public function destroy($id)
+    public function destroy($idGrado)
     {
-        try {
-            $this->service->deleteGrado($id);
-            return response()->json(['message' => 'Grado eliminado correctamente']);
-        } catch (\Exception $e) {
+        $success = $this->service->deleteGrado($idGrado);
+        
+        if (!$success) {
             return response()->json(['message' => 'Grado no encontrado'], 404);
         }
+
+        return response()->json(['message' => 'Grado eliminado correctamente']);
     }
 }

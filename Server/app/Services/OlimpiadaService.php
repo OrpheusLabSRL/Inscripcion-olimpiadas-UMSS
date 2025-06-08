@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\Contracts\OlimpiadaRepositoryInterface;
-use Exception;
 
 class OlimpiadaService
 {
@@ -14,55 +13,31 @@ class OlimpiadaService
         $this->repository = $repository;
     }
 
-    public function getAllOlimpiadas(array $filters = [])
+    public function getAllOlimpiadas()
     {
-        return $this->repository->all($filters);
-    }
-
-    public function getOlimpiadaById(int $id)
-    {
-        return $this->repository->find($id);
+        return $this->repository->getAll();
     }
 
     public function createOlimpiada(array $data)
     {
-        // Validar nombre y versión únicos
-        if ($this->repository->findByNameAndVersion($data['nombreOlimpiada'], $data['version'])) {
-            throw new \InvalidArgumentException('Ya existe una olimpiada con ese nombre y versión');
-        }
-
-        // Establecer valores por defecto
-        $data['estadoOlimpiada'] = $data['estadoOlimpiada'] ?? false;
-        $data['idUsuario'] = $data['idUsuario'] ?? auth()->id();
-
-        try {
-            return $this->repository->create($data);
-        } catch (Exception $e) {
-            throw new \InvalidArgumentException($e->getMessage());
-        }
+        // Manteniendo los mismos valores por defecto
+        $data['estadoOlimpiada'] = false;
+        $data['idUsuario'] = 1;
+        
+        return $this->repository->create($data);
     }
 
-    public function updateOlimpiada(int $id, array $data)
+    public function updateOlimpiada($id, array $data)
     {
-        // Validar nombre y versión únicos excluyendo el actual
-        $existing = $this->repository->findByNameAndVersion($data['nombreOlimpiada'], $data['version']);
-        if ($existing && $existing->idOlimpiada != $id) {
-            throw new \InvalidArgumentException('Ya existe una olimpiada con ese nombre y versión');
-        }
-
-        try {
-            return $this->repository->update($id, $data);
-        } catch (Exception $e) {
-            throw new \InvalidArgumentException($e->getMessage());
-        }
+        return $this->repository->update($id, $data);
     }
 
-    public function deleteOlimpiada(int $id)
+    public function deleteOlimpiada($id)
     {
         return $this->repository->delete($id);
     }
 
-    public function changeOlimpiadaStatus(int $id, bool $status)
+    public function changeOlimpiadaStatus($id, $status)
     {
         return $this->repository->changeStatus($id, $status);
     }

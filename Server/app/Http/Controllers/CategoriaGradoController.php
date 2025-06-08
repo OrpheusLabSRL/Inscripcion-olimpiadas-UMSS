@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\CategoriaGradoService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class CategoriaGradoController extends Controller
 {
@@ -29,25 +28,8 @@ class CategoriaGradoController extends Controller
                 'message' => 'Relación creada correctamente',
                 'data' => $relacion
             ], 201);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\InvalidArgumentException $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 422);
-        }
-    }
-
-    public function show($id)
-    {
-        try {
-            $relacion = $this->service->getRelationById($id);
-            return response()->json($relacion);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Relación no encontrada'], 404);
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
     }
 
@@ -59,17 +41,8 @@ class CategoriaGradoController extends Controller
                 'message' => 'Relación actualizada',
                 'data' => $relacion
             ]);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\InvalidArgumentException $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 422);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Relación no encontrada'], 404);
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
     }
 
@@ -79,44 +52,33 @@ class CategoriaGradoController extends Controller
             $this->service->deleteRelation($id);
             return response()->json(['message' => 'Relación eliminada']);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Relación no encontrada'], 404);
+            return response()->json(['message' => $e->getMessage()], 404);
         }
     }
 
     public function cambiarEstado(Request $request, $id)
     {
         try {
-            $request->validate([
-                'estadoCategoriaGrado' => 'required|boolean'
-            ]);
-
-            $relacion = $this->service->changeRelationStatus($id, $request->estadoCategoriaGrado);
+            $relacion = $this->service->updateRelationStatus($id, $request->estadoCategoriaGrado);
             return response()->json([
                 'message' => 'Estado de la relación actualizado',
                 'data' => $relacion
             ]);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Relación no encontrada'], 404);
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
     }
 
     public function actualizarCategoriaYGrados(Request $request, $idCategoria)
     {
         try {
-            $categoria = $this->service->updateCategoriaAndGrados($idCategoria, $request->all());
+            $result = $this->service->updateCategoriaAndGrados($idCategoria, $request->all());
             return response()->json([
                 'message' => 'Categoría y grados asociados actualizados correctamente',
-                'data' => $categoria
+                'data' => $result
             ]);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 400);
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
     }
 }
