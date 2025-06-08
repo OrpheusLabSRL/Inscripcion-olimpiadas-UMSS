@@ -3,7 +3,7 @@ import {
   getAreas,
   updateAreaStatus,
   deleteArea,
-  verificarUsoArea, // Asegúrate de importar esto
+  verificarUsoAreasMasivo, // ✅ Nueva función
 } from "../../../../api/Administration.api";
 import {
   FaSpinner,
@@ -29,23 +29,15 @@ const AreasTable = () => {
         const validAreas = Array.isArray(data) ? data : [];
         setAreas(validAreas);
 
-        const usadas = new Set();
-        await Promise.all(
-          validAreas.map(async (area) => {
-            try {
-              const res = await verificarUsoArea(area.idArea);
-              if (res.enUso) {
-                usadas.add(area.idArea);
-              }
-            } catch (error) {
-              console.error(
-                "Error verificando uso del área",
-                area.idArea,
-                error
-              );
-            }
-          })
+        const ids = validAreas.map((area) => area.idArea);
+        const resultados = await verificarUsoAreasMasivo(ids);
+
+        const usadas = new Set(
+          Object.entries(resultados)
+            .filter(([_, info]) => info.enUso)
+            .map(([id]) => parseInt(id))
         );
+
         setAreasEnUso(usadas);
       } catch (error) {
         console.error("Error al obtener áreas:", error);

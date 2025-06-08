@@ -191,14 +191,16 @@ export const setUser = async (data) => {
   return response.data;
 };
 
-export const verificarUsoArea = async (idArea) => {
-  const response = await inscriptionApi.post("/verificar-uso-area", { idArea });
+export const verificarUsoAreasMasivo = async (ids) => {
+  const response = await inscriptionApi.post("/verificar-uso-areas", {
+    ids,
+  });
   return response.data;
 };
 
 export const verificarUsoCategoriasMasivo = async (ids) => {
-  const response = await inscriptionApi.post("/api/verificar-uso-categorias", {
+  const response = await inscriptionApi.post("/verificar-uso-categorias", {
     ids,
   });
-  return response.data; // esto será un objeto tipo { 1: true, 2: false, ... }
+  return response.data;
 };

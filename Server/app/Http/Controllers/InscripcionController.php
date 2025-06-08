@@ -451,23 +451,32 @@ public function finishRegister($idTutorResponsable, $codigoInscripcion)
     ]);
 }
 
-public function verificarUsoArea(Request $request)
+    public function verificarUsoAreasMasivo(Request $request)
     {
         $request->validate([
-            'idArea' => 'required|integer|exists:areas,idArea',
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:areas,idArea',
         ]);
 
-        $idArea = $request->idArea;
+        $resultados = [];
 
-        $inscripciones = Inscripcion::whereHas('OlimpiadaAreaCategoria', function ($query) use ($idArea) {
-            $query->where('idArea', $idArea);
+        $areasEnUso = Inscripcion::whereHas('OlimpiadaAreaCategoria', function ($query) use ($request) {
+            $query->whereIn('idArea', $request->ids);
         })->with('OlimpiadaAreaCategoria')->get();
 
-        return response()->json([
-            'enUso' => $inscripciones->isNotEmpty(),
-            'inscripciones' => $inscripciones,
-        ]);
+        // Agrupa las inscripciones por idArea
+        $agrupadas = $areasEnUso->groupBy(fn ($inscripcion) => $inscripcion->OlimpiadaAreaCategoria->idArea);
+
+        foreach ($request->ids as $idArea) {
+            $resultados[$idArea] = [
+                'enUso' => $agrupadas->has($idArea),
+                'inscripciones' => $agrupadas->get($idArea, collect()),
+            ];
+        }
+
+        return response()->json($resultados);
     }
+
 
     public function verificarUsoCategoriasMasivo(Request $request)
     {

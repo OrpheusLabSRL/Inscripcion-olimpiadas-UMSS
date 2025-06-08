@@ -26,27 +26,15 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
       const fetchData = async () => {
         try {
           const gradosResponse = await getGrados();
-
-          // Debug: Verificar estructura de datos
           console.log("Grados disponibles:", gradosResponse);
-          console.log("Datos de categoría recibidos:", categoria);
-
           setGradosDisponibles(gradosResponse || []);
-
-          // SOLUCIÓN PRINCIPAL: Usar categoria.grados en lugar de categoria.rawData
           const gradosActuales = Array.isArray(categoria.grados)
             ? categoria.grados
             : [];
 
-          console.log("IDs de grados actuales:", gradosActuales);
-          console.log(
-            "IDs de grados disponibles:",
-            gradosResponse.map((g) => g.idGrado)
-          );
-
           setFormData({
             nombreCategoria: categoria.nombreCategoria || "",
-            grados: gradosActuales, // Esto ahora debería ser [3, 2] según tus logs
+            grados: gradosActuales,
           });
           setErrors({});
         } catch (error) {
@@ -81,7 +69,6 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
   };
 
   const handleGradosChange = (selectedGrados) => {
-    // Asegurar que los valores son números (consistentes con la API)
     const gradosNumericos = selectedGrados.map(Number);
 
     setFormData((prev) => ({
