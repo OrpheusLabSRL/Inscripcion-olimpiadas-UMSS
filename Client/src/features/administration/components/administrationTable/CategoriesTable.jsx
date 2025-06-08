@@ -180,7 +180,7 @@ const CategoriesTable = () => {
 
         await Promise.all(
           categoria.rawData.map((item) =>
-            deleteCategoriaGrado(item.id_CategoriaGrado)
+            deleteCategoriaGrado(item.idCategoriaGrado)
           )
         );
 
