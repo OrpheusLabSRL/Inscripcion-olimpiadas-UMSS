@@ -44,50 +44,50 @@ const MultiSelectDropdown = ({
 
   return (
     <div
-      className={`dropdown-container ${error ? "has-error" : ""} ${className}`}
+      className={`dropdownContainer ${error ? "hasError" : ""} ${className}`}
       ref={dropdownRef}
     >
       {label && (
-        <label className={`dropdown-label ${size === "large" ? "large" : ""}`}>
+        <label className={`dropdownLabel ${size === "large" ? "large" : ""}`}>
           {label}
         </label>
       )}
 
       <div
-        className={`dropdown-wrapper ${size} ${error ? "input-error" : ""} ${
+        className={`dropdownWrapper ${size} ${error ? "inputError" : ""} ${
           disabled ? "disabled" : ""
         }`}
         onClick={() => !disabled && setIsOpen(!isOpen)}
       >
-        <span className="dropdown-selected">
+        <span className="dropdownSelected">
           {selectedLabels || placeholder}
         </span>
-        <span className="dropdown-arrow">{isOpen ? "▲" : "▼"}</span>
+        <span className="dropdownArrow">{isOpen ? "▲" : "▼"}</span>
       </div>
 
       {isOpen && !disabled && (
-        <div className="multi-dropdown-options">
+        <div className="multiDropdownOptions">
           {options.map((option) => (
-            <label key={option.value} className="multi-dropdown-item">
-              <div className="checkbox-container">
+            <label key={option.value} className="multiDropdownItem">
+              <div className="checkboxContainer">
                 <input
                   type="checkbox"
                   name={name}
                   value={option.value}
                   checked={selectedValues.includes(option.value)}
                   onChange={() => toggleOption(option.value)}
-                  className="hidden-checkbox"
+                  className="hiddenCheckbox"
                 />
-                <span className="custom-checkbox"></span>
+                <span className="customCheckbox"></span>
               </div>
-              <span className="multi-label">{option.label}</span>
+              <span className="multiLabel">{option.label}</span>
             </label>
           ))}
         </div>
       )}
 
       {error && errorMessage && (
-        <p className="error-message">
+        <p className="errorMessage">
           <FiAlertCircle style={{ marginRight: "4px" }} />
           {errorMessage}
         </p>

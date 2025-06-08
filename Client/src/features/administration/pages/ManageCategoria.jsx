@@ -9,27 +9,27 @@ const CategoryList = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="admin-category-container">
-      <div className="admin-content-wrapper">
-        <div className="category-header-section">
+    <div className="adminCategoryContainer">
+      <div className="adminContentWrapper">
+        <div className="categoryHeaderSection">
           <BackButton
             onClick={() => navigate("/admin/view-base")}
-            className="btn-back"
+            className="btnBack"
           >
-            <FaArrowLeft className="btn-back-icon" />
+            <FaArrowLeft className="btnBackIcon" />
             Volver a Datos Base
           </BackButton>
 
-          <div className="category-title-group">
-            <h1 className="category-title">Gestión de Categorías</h1>
-            <p className="category-subtitle">
+          <div className="categoryTitleGroup">
+            <h1 className="categoryTitle">Gestión de Categorías</h1>
+            <p className="categorySubtitle">
               Administra las categorías asociadas a las diferentes áreas
               académicas
             </p>
           </div>
         </div>
 
-        <div className="admin-table-card">
+        <div className="adminTableCard">
           <CategoriesTable />
         </div>
       </div>

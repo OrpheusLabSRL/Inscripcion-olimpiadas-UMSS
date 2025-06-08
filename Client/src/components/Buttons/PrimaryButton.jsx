@@ -21,6 +21,7 @@ export const PrimaryButton = ({
         style={style}
         disabled={disabled}
       >
+        {icon && <span className="btn-icon">{icon}</span>}
         {value}
       </button>
     </div>

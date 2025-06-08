@@ -32,22 +32,22 @@ class InscripcionController extends Controller
         try {
             // 1. Procesar el olimpista
             $olimpistaData = $request->olimpista;
-            $personaOlimpista = $this->buscarOCrearPersona($olimpistaData);
-            $olimpista = $this->buscarOCrearOlimpista($personaOlimpista->idPersona, $olimpistaData);
+            $personaOlimpista = $this->actualizarOCrearPersona($olimpistaData);
+            $olimpista = $this->actualizarOCrearOlimpista($personaOlimpista->idPersona, $olimpistaData);
 
             // 2. Procesar el tutor responsable
             $responsableData = $request->responsable;
             if (isset($responsableData['id_persona'])) {
                 $tutorResponsable = Tutor::find($responsableData['id_persona']);
             } else {
-                $personaResponsable = $this->buscarOCrearPersona($responsableData);
-                $tutorResponsable = $this->buscarOCrearTutor($personaResponsable->idPersona, $responsableData);
+                $personaResponsable = $this->actualizarOCrearPersona($responsableData);
+                $tutorResponsable = $this->actualizarOCrearTutor($personaResponsable->idPersona, $responsableData);
             }
 
             // 3. Procesar el tutor legal
             $tutorLegalData = $request->tutor_legal;
-            $personaTutorLegal = $this->buscarOCrearPersona($tutorLegalData);
-            $tutorLegal = $this->buscarOCrearTutor($personaTutorLegal->idPersona, $tutorLegalData);
+            $personaTutorLegal = $this->actualizarOCrearPersona($tutorLegalData);
+            $tutorLegal = $this->actualizarOCrearTutor($personaTutorLegal->idPersona, $tutorLegalData);
 
             if ($request->filled('codigoInscripcion')) {
                     $codigoGrupo = $request->codigoInscripcion;
@@ -64,13 +64,13 @@ class InscripcionController extends Controller
                 if (isset($inscripcionData['existeTutor']) &&
                     filter_var($inscripcionData['existeTutor'], FILTER_VALIDATE_BOOLEAN) &&
                     isset($inscripcionData['tutorArea'])) {
-                    $personaTutorArea = $this->buscarOCrearPersona($inscripcionData['tutorArea']);
-                    $tutorArea = $this->buscarOCrearTutor($personaTutorArea->idPersona, $inscripcionData['tutorArea']);
+                    $personaTutorArea = $this->actualizarOCrearPersona($inscripcionData['tutorArea']);
+                    $tutorArea = $this->actualizarOCrearTutor($personaTutorArea->idPersona, $inscripcionData['tutorArea']);
                 }
 
 
                 $areaCategoria = OlimpiadaAreaCategoria::where('idArea', $inscripcionData['area'])
-                ->where('idCategoria', $inscripcionData['categoria'])
+                ->where('idCategoria', $inscripcionData['categoria'])->where('idOlimpiada', $request['idOlimpiada'])
                 ->first();
 
 
@@ -113,9 +113,9 @@ class InscripcionController extends Controller
     /**
      * Busca una persona por carnet de identidad o crea una nueva si no existe
      */
-    private function buscarOCrearPersona(array $data)
+        private function actualizarOCrearPersona(array $data)
     {
-        return Persona::firstOrCreate(
+        return Persona::updateOrCreate(
             ['carnetIdentidad' => $data['carnet_identidad']],
             [
                 'nombre' => $data['nombre'],
@@ -126,11 +126,11 @@ class InscripcionController extends Controller
     }
 
     /**
-     * Busca un clímpista por idPersona o crea uno nuevo si no existe
+     * Busca un olimpista por idPersona o lo actualiza/crea si no existe
      */
-    private function buscarOCrearOlimpista($idPersona, array $data)
+    private function actualizarOCrearOlimpista($idPersona, array $data)
     {
-        return Olimpista::firstOrCreate(
+        return Olimpista::updateOrCreate(
             ['idPersona' => $idPersona],
             [
                 'fechaNacimiento' => $data['fecha_nacimiento'],
@@ -143,11 +143,11 @@ class InscripcionController extends Controller
     }
 
     /**
-     * Busca un tutor por idPersona o crea uno nuevo si no existe
+     * Busca un tutor por idPersona o lo actualiza/crea si no existe
      */
-    private function buscarOCrearTutor($idPersona, array $data)
+    private function actualizarOCrearTutor($idPersona, array $data)
     {
-        return Tutor::firstOrCreate(
+        return Tutor::updateOrCreate(
             ['idPersona' => $idPersona],
             [
                 'tipoTutor' => $data['tipo_tutor'],
@@ -157,10 +157,17 @@ class InscripcionController extends Controller
     }
 
 
-    public function enableForIncription($carnet_identidad){
+
+    public function enableForIncription($carnet_identidad, $idOlimpiada){
         $olimpista = Persona::where("carnetIdentidad", $carnet_identidad)->first();
         if(!$olimpista) return;
-        $inscripcionesExistentes = Inscripcion::where('idOlimpista', $olimpista->idPersona)->count();
+        $inscripcionesExistentes = Inscripcion::where('idOlimpista', $olimpista->idPersona)
+                    ->whereHas('olimpiadaAreaCategoria', function ($query) use ($idOlimpiada) {
+                        $query->where('idOlimpiada', $idOlimpiada);
+                    })
+                    ->count();
+
+            Log::info('Inscripciones existentes para el olimpista: ' . $inscripcionesExistentes);
             
             if ($inscripcionesExistentes >= 2) {
                 return response()->json([
@@ -444,5 +451,42 @@ public function finishRegister($idTutorResponsable, $codigoInscripcion)
     ]);
 }
 
+public function verificarUsoArea(Request $request)
+    {
+        $request->validate([
+            'idArea' => 'required|integer|exists:areas,idArea',
+        ]);
+
+        $idArea = $request->idArea;
+
+        $inscripciones = Inscripcion::whereHas('OlimpiadaAreaCategoria', function ($query) use ($idArea) {
+            $query->where('idArea', $idArea);
+        })->with('OlimpiadaAreaCategoria')->get();
+
+        return response()->json([
+            'enUso' => $inscripciones->isNotEmpty(),
+            'inscripciones' => $inscripciones,
+        ]);
+    }
+
+    public function verificarUsoCategoriasMasivo(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:categorias,idCategoria',
+        ]);
+
+        $resultados = [];
+
+        foreach ($request->ids as $idCategoria) {
+            $enUso = Inscripcion::whereHas('OlimpiadaAreaCategoria', function ($query) use ($idCategoria) {
+                $query->where('idCategoria', $idCategoria);
+            })->exists();
+
+            $resultados[$idCategoria] = $enUso;
+        }
+
+        return response()->json($resultados);
+    }
 
 }

@@ -13,48 +13,48 @@ const Unauthorized = () => {
   };
 
   return (
-    <div className="access-denied-container">
-      <div className="access-denied-content">
+    <div className="accessDeniedContainer">
+      <div className="accessDeniedContent">
         {/* Icono principal animado */}
-        <div className="access-denied-icon-wrapper">
-          <div className="access-denied-shield-bg">
-            <Shield className="access-denied-shield-icon" size={80} />
+        <div className="accessDeniedIconWrapper">
+          <div className="accessDeniedShieldBg">
+            <Shield className="accessDeniedShieldIcon" size={80} />
           </div>
-          <div className="access-denied-lock-overlay">
-            <Lock className="access-denied-lock-icon" size={32} />
+          <div className="accessDeniedLockOverlay">
+            <Lock className="accessDeniedLockIcon" size={32} />
           </div>
         </div>
 
         {/* Contenido principal */}
-        <div className="access-denied-text-section">
-          <h1 className="access-denied-title">Acceso Denegado</h1>
-          <p className="access-denied-subtitle">
+        <div className="accessDeniedTextSection">
+          <h1 className="accessDeniedTitle">Acceso Denegado</h1>
+          <p className="accessDeniedSubtitle">
             No tienes los permisos necesarios para acceder a esta página
           </p>
-          <p className="access-denied-description">
+          <p className="accessDeniedDescription">
             Si crees que esto es un error, por favor contacta al administrador
             del sistema o verifica que tu cuenta tenga los permisos adecuados.
           </p>
         </div>
 
         {/* Código de error */}
-        <div className="access-denied-error-code">
-          <span className="access-denied-code-label">Código de Error:</span>
-          <span className="access-denied-code-number">403</span>
+        <div className="accessDeniedErrorCode">
+          <span className="accessDeniedCodeLabel">Código de Error:</span>
+          <span className="accessDeniedCodeNumber">403</span>
         </div>
 
         {/* Botones de acción */}
-        <div className="access-denied-actions">
+        <div className="accessDeniedActions">
           <button
             onClick={handleGoBack}
-            className="access-denied-btn access-denied-btn-secondary"
+            className="accessDeniedBtn accessDeniedBtnSecondary"
           >
             <ArrowLeft size={20} />
             Volver Atrás
           </button>
           <button
             onClick={handleGoHome}
-            className="access-denied-btn access-denied-btn-primary"
+            className="accessDeniedBtn accessDeniedBtnPrimary"
           >
             <Home size={20} />
             Ir al Inicio
@@ -62,10 +62,10 @@ const Unauthorized = () => {
         </div>
 
         {/* Información adicional */}
-        <div className="access-denied-help">
-          <p className="access-denied-help-text">
+        <div className="accessDeniedHelp">
+          <p className="accessDeniedHelpText">
             ¿Necesitas ayuda?
-            <a href="/contacto" className="access-denied-help-link">
+            <a href="/contacto" className="accessDeniedHelpLink">
               Contacta soporte técnico
             </a>
           </p>

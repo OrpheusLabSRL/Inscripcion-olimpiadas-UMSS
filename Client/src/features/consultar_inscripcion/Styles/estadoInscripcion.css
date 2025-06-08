@@ -2,46 +2,46 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
 :root {
-    --azul-oscuro: #213448;
-    --azul-claro: #547792;
-    --blanco: #ffffff;
-    --gris-claro: #f5f5f5;
-    --texto-azul: #213448;
+  --azulOscuro: #213448;
+  --azulClaro: #547792;
+  --blanco: #ffffff;
+  --grisClaro: #f5f5f5;
+  --textoAzul: #213448;
 }
 
-.consulta-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    min-height: 100vh;
-    background-color: var(--blanco);
-    font-family: 'Poppins', sans-serif;
+.consultaWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  background-color: var(--blanco);
+  font-family: "Poppins", sans-serif;
 }
 
-.image-side {
-    flex: 1;
-    min-width: 300px;
-    background-color: var(--azul-oscuro);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.imagenLado {
+  flex: 1;
+  min-width: 300px;
+  background-color: var(--azulOscuro);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.image-side img {
-    max-width: 100%;
-    height: auto;
+.imagenLado img {
+  max-width: 100%;
+  height: auto;
 }
 
-.form-side {
-    flex: 2;
-    min-width: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2.5rem;
-    background-color: var(--gris-claro);
+.formularioLado {
+  flex: 2;
+  min-width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  background-color: var(--grisClaro);
 }
 
-.form-side h2 {
+.formularioLado h2 {
   color: #333;
   text-align: center;
   margin-bottom: 2rem;
@@ -49,135 +49,134 @@
   font-size: 28px;
   position: relative;
   padding-bottom: 0.5rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Línea decorativa debajo del título */
-.form-side h2::after {
-  content: '';
+.formularioLado h2::after {
+  content: "";
   width: 100px;
   height: 3px;
-  background-color: var(--azul-claro, #007bff); /* Usa tu variable si tienes */
+  background-color: var(--azulClaro);
   display: block;
   margin: 8px auto 0;
   border-radius: 2px;
 }
 
-.form-group {
-    margin-bottom: 1.5rem;
-    display: flex;
-    flex-direction: column;
+.grupoFormulario {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
 }
 
 input,
 select {
-    width: 100%;
-    padding: 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: 'Poppins', sans-serif;
-    transition: border-color 0.3s ease;
-    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
-        inset -2px -2px 5px rgba(255, 255, 255, 0.6);
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  transition: border-color 0.3s ease;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -2px -2px 5px rgba(255, 255, 255, 0.6);
 }
 
 input:focus,
 select:focus {
-    outline: none;
-    border-color: #0EA5E9;
+  outline: none;
+  border-color: #0ea5e9;
 }
 
-.invalid-input {
-    border-color: #ef4444;
+.entradaInvalida {
+  border-color: #ef4444;
 }
 
-.valid-input {
-    border-color: #10b981;
+.entradaValida {
+  border-color: #10b981;
 }
 
-.required-field {
-    color: #ef4444;
-    margin-left: 4px;
+.campoRequerido {
+  color: #ef4444;
+  margin-left: 4px;
 }
 
-.error-message {
-    color: #ef4444;
-    margin-top: 0.5rem;
-    font-size: 13px;
-    font-family: 'Poppins', sans-serif;
+.mensajeError {
+  color: #ef4444;
+  margin-top: 0.5rem;
+  font-size: 13px;
+  font-family: "Poppins", sans-serif;
 }
 
-.submit-button {
-    background-color: var(--azul-claro);
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 20px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    width: 100%;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
+.botonEnviar {
+  background-color: var(--azulClaro);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
 }
 
 i {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
-.submit-button:hover {
-    background-color: #0285c7;
+.botonEnviar:hover {
+  background-color: #0285c7;
 }
 
-.help-message {
-    color: #ef4444;
-    font-size: 13px;
-    margin-top: 0.5rem;
-    font-family: 'Poppins', sans-serif;
+.mensajeAyuda {
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 0.5rem;
+  font-family: "Poppins", sans-serif;
 }
 
 @media (max-width: 768px) {
-    .consulta-wrapper {
-        flex-direction: column;
-    }
+  .consultaWrapper {
+    flex-direction: column;
+  }
 
-    .image-side {
-        width: 100%;
-        height: 100px;
-        /* Altura limitada */
-        padding: 0;
-        overflow: hidden;
-    }
+  .imagenLado {
+    width: 100%;
+    height: 100px;
+    /* Altura limitada */
+    padding: 0;
+    overflow: hidden;
+  }
 
-    .image-side img {
-        width: 100%;
-        height: 45vh;
-        object-fit: cover;
-        /* Recorta la imagen manteniendo buena estética */
-        object-position: center;
-    }
+  .imagenLado img {
+    width: 100%;
+    height: 45vh;
+    object-fit: cover;
+    /* Recorta la imagen manteniendo buena estética */
+    object-position: center;
+  }
 
-    .form-side {
-        width: 100%;
-        padding: 1.5rem 1rem;
-    }
+  .formularioLado {
+    width: 100%;
+    padding: 1.5rem 1rem;
+  }
 
-    h2 {
-        font-size: 20px;
-    }
+  h2 {
+    font-size: 20px;
+  }
 
-    input,
-    select {
-        font-size: 13px;
-        padding: 10px;
-    }
+  input,
+  select {
+    font-size: 13px;
+    padding: 10px;
+  }
 
-    .submit-button {
-        font-size: 13px;
-        height: 38px;
-    }
+  .botonEnviar {
+    font-size: 13px;
+    height: 38px;
+  }
 }

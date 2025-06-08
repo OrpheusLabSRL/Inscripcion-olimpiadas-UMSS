@@ -163,32 +163,26 @@ const PaginaContacto = () => {
     }
   };
 
-
-
-
-
-
-
   const getInputClass = (name) => {
     if (!touched[name]) return "";
-    return errors[name] ? "invalid-input" : "valid-input";
+    return errors[name] ? "entradaInvalida" : "entradaValida";
   };
 
   return (
     <div>
       <HeaderProp />
-      <div className="contact-main-container">
-        <div className="contact-sidebar">
-          <div className="contact-info">
-            <div className="info-item">
-              <div className="info-content">
+      <div className="contactoContenedor">
+        <div className="contactoLateral">
+          <div className="contactoInfo">
+            <div className="infoItem">
+              <div className="infoContenido">
                 <h3> <i className="bi bi-envelope-fill"></i> Escríbenos</h3>
                 <p>ohsansi@umss.edu</p>
               </div>
             </div>
 
-            <div className="info-item">
-              <div className="info-content">
+            <div className="infoItem">
+              <div className="infoContenido">
                 <h3> <i className="bi bi-geo-alt-fill"></i> Ubicación</h3>
                 <p>
                   El Departamento de Sistemas e Informática de la Universidad Mayor de San Simón (UMSS) - Calle Sucre y parque La Torre
@@ -196,8 +190,8 @@ const PaginaContacto = () => {
               </div>
             </div>
 
-            <div className="info-item">
-              <div className="info-content">
+            <div className="infoItem">
+              <div className="infoContenido">
                 <h3> <i className="bi bi-clock-fill"></i> Hora de atención</h3>
                 <p>Lunes a Viernes de 8:00 a 16:00</p>
               </div>
@@ -205,17 +199,15 @@ const PaginaContacto = () => {
           </div>
         </div>
 
+        <div className="formularioContactoWrapper">
+          {submitError && <div className="mensajeError">{submitError}</div>}
+          {submitSuccess && <div className="mensajeExito">{submitSuccess}</div>}
 
-
-        <div className="contacto-form-wrapper">
-          {submitError && <div className="error-message">{submitError}</div>}
-          {submitSuccess && <div className="success-message">{submitSuccess}</div>}
-
-          <h2 name="titulo-contacto">Contactanos</h2>
-          <form onSubmit={handleSubmit} className="contacto-form" noValidate>
-            <div className="form-group">
+          <h2 name="titulo-contacto">Contáctanos</h2>
+          <form onSubmit={handleSubmit} className="formularioContacto" noValidate>
+            <div className="grupoFormulario">
               <label htmlFor="nombreCompleto">
-                <i className="bi bi-person-circle"></i> Nombre Completo <span className="required">*</span>
+                <i className="bi bi-person-circle"></i> Nombre Completo <span className="campoRequerido">*</span>
               </label>
               <input
                 type="text"
@@ -228,13 +220,13 @@ const PaginaContacto = () => {
                 className={getInputClass("nombreCompleto")}
               />
               {touched.nombreCompleto && errors.nombreCompleto && (
-                <span className="error-message">{errors.nombreCompleto}</span>
+                <span className="mensajeError">{errors.nombreCompleto}</span>
               )}
             </div>
 
-            <div className="form-group">
+            <div className="grupoFormulario">
               <label htmlFor="correo">
-                <i className="bi bi-envelope"></i> Correo Electrónico <span className="required">*</span>
+                <i className="bi bi-envelope"></i> Correo Electrónico <span className="campoRequerido">*</span>
               </label>
               <input
                 type="email"
@@ -247,13 +239,13 @@ const PaginaContacto = () => {
                 className={getInputClass("correo")}
               />
               {touched.correo && errors.correo && (
-                <span className="error-message">{errors.correo}</span>
+                <span className="mensajeError">{errors.correo}</span>
               )}
             </div>
 
-            <div className="form-group">
+            <div className="grupoFormulario">
               <label htmlFor="celular">
-                <i className="bi bi-telephone"></i> Número de Celular <span className="required">*</span>
+                <i className="bi bi-telephone"></i> Número de Celular <span className="campoRequerido">*</span>
               </label>
               <input
                 type="tel"
@@ -267,13 +259,13 @@ const PaginaContacto = () => {
                 maxLength={8}
               />
               {touched.celular && errors.celular && (
-                <span className="error-message">{errors.celular}</span>
+                <span className="mensajeError">{errors.celular}</span>
               )}
             </div>
 
-            <div className="form-group">
+            <div className="grupoFormulario">
               <label htmlFor="seleccion">
-                <i className="bi bi-question-circle"></i> Motivo de la Consulta <span className="required">*</span>
+                <i className="bi bi-question-circle"></i> Motivo de la Consulta <span className="campoRequerido">*</span>
               </label>
               <select
                 id="seleccion"
@@ -290,13 +282,13 @@ const PaginaContacto = () => {
                 <option value="otro">Otro</option>
               </select>
               {touched.seleccion && errors.seleccion && (
-                <span className="error-message">{errors.seleccion}</span>
+                <span className="mensajeError">{errors.seleccion}</span>
               )}
             </div>
 
-            <div className="form-group">
+            <div className="grupoFormulario">
               <label htmlFor="descripcion">
-                <i className="bi bi-file-earmark"></i> Descripción <span className="required">*</span>
+                <i className="bi bi-file-earmark"></i> Descripción <span className="campoRequerido">*</span>
               </label>
               <textarea
                 id="descripcion"
@@ -308,22 +300,19 @@ const PaginaContacto = () => {
                 className={getInputClass("descripcion")}
               ></textarea>
               {touched.descripcion && errors.descripcion && (
-                <span className="error-message">{errors.descripcion}</span>
+                <span className="mensajeError">{errors.descripcion}</span>
               )}
             </div>
 
-            <div className="form-buttons">
-              <button type="submit" className="submit-button">
+            <div className="botonesFormulario">
+              <button type="submit" className="botonEnviar">
                 <i className="bi bi-send"></i> Enviar consulta
               </button>
             </div>
           </form>
         </div>
       </div>
-
     </div>
-
-
   );
 };
 

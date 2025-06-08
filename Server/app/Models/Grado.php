@@ -29,4 +29,3 @@ class Grado extends Model
         )->withPivot('estadoCategoriaGrado');
     }
 }
-

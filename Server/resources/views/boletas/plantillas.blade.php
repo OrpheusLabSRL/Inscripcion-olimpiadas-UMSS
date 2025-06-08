@@ -15,7 +15,7 @@
             text-align: center;
         }
 
-        .header {
+        .cabeza {
             text-align: center;
             margin-bottom: 10px;
             font-weight: bold;
@@ -86,7 +86,7 @@
             margin-top: 10px;
         }
 
-        /* Marca de agua */
+        /* marca de agua */
         .watermark {
             position: fixed;
             top: 35%;
@@ -103,13 +103,13 @@
 </head>
 
 <body>
-    <div class="header">
+    <div class="cabeza">
         UNIVERSIDAD MAYOR DE SAN SIMÓN <br>
         FACULTAD DE CIENCIAS Y TECNOLOGÍA <br>
         SECRETARÍA ADMINISTRATIVA
     </div>
 
-    <!-- Marca de agua -->
+    <!-- marca de agua -->
     <div class="watermark">
         <img src="{{ public_path('images/marca_agua.png') }}" alt="Marca de Agua">
     </div>

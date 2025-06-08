@@ -50,7 +50,8 @@ public function getOlimpistasByTutor($idTutorResponsable)
             'tutorArea.persona',
             'tutorLegal.persona',
             'olimpiadaAreaCategoria.area',
-            'olimpiadaAreaCategoria.categoria'
+            'olimpiadaAreaCategoria.categoria',
+            'olimpiadaAreaCategoria.olimpiada'
         ])
         ->where('idTutorResponsable', $idTutorResponsable)
         ->get();
@@ -87,6 +88,9 @@ public function getOlimpistasByTutor($idTutorResponsable)
                         'correo' => $inscripcion->tutorArea->persona->correoElectronico ?? null,
                         'registrandose' => $inscripcion->registrandose ?? null,
                         'codigoInscripcion' => $inscripcion->codigoInscripcion ?? null,
+                        'nombreOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->nombreOlimpiada ?? null,
+                        'versionOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->version ?? null,
+                        'idOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->idOlimpiada ?? null,
 
                         'tutor_legal' => [
                             'nombre' => $inscripcion->tutorLegal->persona->nombre ?? null,

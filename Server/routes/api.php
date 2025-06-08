@@ -29,14 +29,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Persona
-Route::get('/persona/{carnet}/data', [PersonaController::class, 'getPersonData']);
+Route::post('/persona/data', [PersonaController::class, 'getPersonData']);
 
 // Olimpistas
 Route::post('/register', [OlimpistaController::class, 'store']);
 Route::get('/olimpista/{id}/areas', [InscripcionController::class, 'getAreaByOlimpista']);
 Route::get('/olimpista/{carnet_identidad}/areasByCi', [OlimpistaController::class, 'getAreaOlimpistaByCi']);
 Route::get('/olimpistas', [OlimpistaController::class, 'getAllOlimpistas']);
-Route::get('/olimpista/{carnet_identidad}/habilitado', [InscripcionController::class, 'enableForIncription']);
+Route::get('/olimpista/{carnet_identidad}/habilitado/{idOlimpiada}', [InscripcionController::class, 'enableForIncription']);
 Route::get('/olimpista/{id}/tutores', [TutorController::class, 'getTutoresByOlimpista']);
 Route::get('/tutores/all', [TutorController::class, 'getAllTutors']);
 
@@ -68,7 +68,7 @@ Route::get('/permisos', [PermisoController::class, 'index']);
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);
 Route::post('/registrarAreas', [AreaController::class, 'store']);
-Route::get('/catalogoCompleto', [AreaController::class, 'getProgramaCompleto']);
+Route::get('/catalogoCompleto/{id}', [AreaController::class, 'getProgramaCompleto']);
 Route::put('/areas/{id}', [AreaController::class, 'update']);
 Route::patch('/areas/{id}/estado', [AreaController::class, 'actualizarEstado']);
 Route::delete('/areas/{id}', [AreaController::class, 'destroy']);
@@ -86,6 +86,9 @@ Route::post('/newInscription', [InscripcionController::class, 'store']);
 Route::get('/obtenerInscripciones/olimpiadas', [InscripcionController::class, 'getInscripcionesConOlimpiadas']);
 Route::post('/consultar-inscripcion-olimpista', [InscripcionController::class, 'consultarInscripcion']);
 Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class, 'consultar']); 
+Route::post('/verificar-uso-area', [InscripcionController::class, 'verificarUsoArea']);
+Route::post('/verificar-uso-categoria', [InscripcionController::class, 'verificarUsoCategoria']);
+Route::post('/verificar-uso-categorias', [InscripcionController::class, 'verificarUsoCategoriasMasivo']);
 
 // Categoría - Grado
 Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
@@ -108,7 +111,7 @@ Route::get('/boletas/reimprimir/{codigoBoleta}', [BoletaPagoController::class, '
 Route::post('/boletaPago/check', [BoletaPagoController::class, 'generarPago']);
 Route::post('/boletaPago/confirmarPago', [BoletaPagoController::class, 'confirmarPago']);
 
-Route::get('/boletaPago/boletasByTutor/{tutorId}', [BoletaPagoController::class, 'getBoletasByTutor']);
+Route::get('/boletaPago/boletasByTutor/{tutorId}', [BoletaPagoController::class, 'getBoletasPorTutor']);
 
 // Excel
 Route::post('/register-from-excel', [ExcelController::class, 'registerFromExcel']);

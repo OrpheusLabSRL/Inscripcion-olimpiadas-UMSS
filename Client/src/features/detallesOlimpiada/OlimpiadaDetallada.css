@@ -60,7 +60,6 @@
 .olympiad-hero-overlay {
   padding: 20px;
   background-color: rgb(255, 255, 255, 0.5);
-  /* opcional para más contraste */
   border-radius: 12px;
   max-width: 800px;
 }
@@ -148,5 +147,38 @@
   border-left: 2px solid var(--gris-claro);
   color: #f0f0f0;
 }
+/* Modal base */
+.container-modal {
+  position: relative;
+  background: white;
+  padding: 20px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  margin: 5% auto !important;
+  width: 90% !important;      
+}
 
-.inscripcion{}
+.container-content-modal {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .container-modal {
+    width: 95% !important;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-modal {
+    width: 100% !important;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+}

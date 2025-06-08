@@ -15,6 +15,25 @@
   text-align: center;
   gap: 15px;
 }
+.list-inscription-header h2 {
+  color: var(--texto-azul);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 28px;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+}
+
+.list-inscription-header h2::after {
+  content: '';
+  width: 100px;
+  height: 3px;
+  background-color: var(--azul-claro, #007bff);
+  display: block;
+  margin: 8px auto 0;
+  border-radius: 2px;
+} 
 
 .list-inscription-header {
   display: flex;

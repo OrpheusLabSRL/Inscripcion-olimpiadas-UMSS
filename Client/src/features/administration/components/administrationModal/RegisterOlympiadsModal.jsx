@@ -142,7 +142,7 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
       cancelButtonText: "Cancelar",
       reverseButtons: true,
       customClass: {
-        container: "swal2-container",
+        container: "swal2Container",
       },
     });
 
@@ -165,14 +165,13 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
         timer: 2000,
         showConfirmButton: false,
         customClass: {
-          container: "swal2-container",
+          container: "swal2Container",
         },
       });
 
       resetForm();
       onClose();
       onSave && onSave();
-      // Evitar recarga total para mejor UX
       window.location.reload();
     } catch (error) {
       console.error("Error al crear la olimpiada:", error);
@@ -184,7 +183,7 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
           title: "Error",
           text: "Error inesperado al guardar la olimpiada.",
           customClass: {
-            container: "swal2-container",
+            container: "swal2Container",
           },
         });
       }
@@ -194,108 +193,106 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="admin-modal-overlay">
-      <div className="admin-modal-content">
+    <div className="adminModalOverlay">
+      <div className="adminModalContent">
         <button
           type="button"
-          className="admin-modal-close-btn"
+          className="adminModalCloseBtn"
           onClick={handleClose}
         >
           ✖
         </button>
 
-        <form onSubmit={handleSubmit} className="admin-modal-form">
-          <h2 className="admin-modal-title">Nueva Olimpiada</h2>
+        <form onSubmit={handleSubmit} className="adminModalForm">
+          <h2 className="adminModalTitle">Nueva Olimpiada</h2>
 
-          <div className="admin-form-group">
-            <label className="admin-form-label">
+          <div className="adminFormGroup">
+            <label className="adminFormLabel">
               Nombre de la Olimpiada{" "}
-              <span className="admin-required-field">*</span>
+              <span className="adminRequiredField">*</span>
             </label>
             <input
               type="text"
               name="nombreOlimpiada"
               value={formData.nombreOlimpiada}
               onChange={handleChange}
-              className={`admin-form-input ${
-                errors.nombreOlimpiada ? "admin-input-error" : ""
+              className={`adminFormInput ${
+                errors.nombreOlimpiada ? "adminInputError" : ""
               }`}
             />
             {errors.nombreOlimpiada && (
-              <p className="admin-error-message">{errors.nombreOlimpiada}</p>
+              <p className="adminErrorMessage">{errors.nombreOlimpiada}</p>
             )}
           </div>
 
-          <div className="admin-form-group">
-            <label className="admin-form-label">
-              Versión <span className="admin-required-field">*</span>
+          <div className="adminFormGroup">
+            <label className="adminFormLabel">
+              Versión <span className="adminRequiredField">*</span>
             </label>
             <input
               type="number"
               name="version"
               value={formData.version}
               onChange={handleChange}
-              className={`admin-form-input ${
-                errors.version ? "admin-input-error" : ""
+              className={`adminFormInput ${
+                errors.version ? "adminInputError" : ""
               }`}
             />
             {errors.version && (
-              <p className="admin-error-message">{errors.version}</p>
+              <p className="adminErrorMessage">{errors.version}</p>
             )}
           </div>
 
-          <div className="admin-form-row">
-            <div className="admin-form-group">
-              <label className="admin-form-label">
-                Fecha de Inicio <span className="admin-required-field">*</span>
+          <div className="adminFormRow">
+            <div className="adminFormGroup">
+              <label className="adminFormLabel">
+                Fecha de Inicio <span className="adminRequiredField">*</span>
               </label>
               <input
                 type="date"
                 name="fechaInicioOlimpiada"
                 value={formData.fechaInicioOlimpiada}
                 onChange={handleChange}
-                className={`admin-form-input ${
-                  errors.fechaInicioOlimpiada ? "admin-input-error" : ""
+                className={`adminFormInput ${
+                  errors.fechaInicioOlimpiada ? "adminInputError" : ""
                 }`}
               />
               {errors.fechaInicioOlimpiada && (
-                <p className="admin-error-message">
+                <p className="adminErrorMessage">
                   {errors.fechaInicioOlimpiada}
                 </p>
               )}
             </div>
 
-            <div className="admin-form-group">
-              <label className="admin-form-label">
+            <div className="adminFormGroup">
+              <label className="adminFormLabel">
                 Fecha de Finalización{" "}
-                <span className="admin-required-field">*</span>
+                <span className="adminRequiredField">*</span>
               </label>
               <input
                 type="date"
                 name="fechaFinOlimpiada"
                 value={formData.fechaFinOlimpiada}
                 onChange={handleChange}
-                className={`admin-form-input ${
-                  errors.fechaFinOlimpiada ? "admin-input-error" : ""
+                className={`adminFormInput ${
+                  errors.fechaFinOlimpiada ? "adminInputError" : ""
                 }`}
               />
               {errors.fechaFinOlimpiada && (
-                <p className="admin-error-message">
-                  {errors.fechaFinOlimpiada}
-                </p>
+                <p className="adminErrorMessage">{errors.fechaFinOlimpiada}</p>
               )}
             </div>
           </div>
 
-          <div className="admin-modal-actions">
+          <div className="adminModalActions">
             <button
               type="button"
               onClick={handleClose}
-              className="admin-modal-btn-cancel"
+              className="adminModalBtnCancel"
             >
               Cancelar
             </button>
-            <button type="submit" className="admin-modal-btn-save">
+            <button type="submit" className="adminModalBtnSave">
               Registrar Olimpiada
             </button>
           </div>

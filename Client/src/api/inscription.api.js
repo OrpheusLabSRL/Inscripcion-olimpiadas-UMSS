@@ -31,11 +31,11 @@ export const getAreasOlimpistaByCi = (ci) =>
 export const getTutoresOlimpista = (id) =>
   inscriptionApi.get(`/olimpista/${id}/tutores`);
 
-export const getOlimpistaEnable = (carnet) =>
-  inscriptionApi.get(`/olimpista/${carnet}/habilitado`);
+export const getOlimpistaEnable = (carnet, idOlimpiada) =>
+  inscriptionApi.get(`/olimpista/${carnet}/habilitado/${idOlimpiada}`);
 
-export const getPersonData = (carnet) =>
-  inscriptionApi.get(`/persona/${carnet}/data`);
+export const getPersonData = (data) =>
+  inscriptionApi.post(`/persona/data`, data);
 
 export const setNewInscription = (data) =>
   inscriptionApi.post("/newInscription", data);
@@ -62,8 +62,8 @@ export const setContacto = (data) => inscriptionApi.post("/contacto", data);
 export const createArea = async (data) =>
   (await inscriptionApi.post("/registerAreas", data)).data;
 
-export const getCatalogoCompleto = async () =>
-  (await inscriptionApi.get("/catalogoCompleto")).data;
+export const getCatalogoCompleto = async (id) =>
+  (await inscriptionApi.get(`/catalogoCompleto/${id}`)).data;
 
 // ============================
 // Olimpiadas
