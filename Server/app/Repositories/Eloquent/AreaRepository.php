@@ -14,20 +14,24 @@ class AreaRepository implements AreaRepositoryInterface
         $this->model = $model;
     }
 
-    public function getAll(array $filters = [])
+    public function getAll($filters = [])
     {
         $query = $this->model->newQuery();
-        
+
         if (isset($filters['estado'])) {
-            $query->porEstado($filters['estado']);
+            if ($filters['estado'] === 'true' || $filters['estado'] === '1') {
+                $query->where('estadoArea', true);
+            } elseif ($filters['estado'] === 'false' || $filters['estado'] === '0') {
+                $query->where('estadoArea', false);
+            }
         } else {
-            $query->activas();
+            $query->where('estadoArea', true);
         }
-        
+
         return $query->get();
     }
 
-    public function getById(int $id)
+    public function getById($id)
     {
         return $this->model->findOrFail($id);
     }
@@ -37,43 +41,31 @@ class AreaRepository implements AreaRepositoryInterface
         return $this->model->create($data);
     }
 
-    public function update(int $id, array $data)
+    public function update($id, array $data)
     {
         $area = $this->getById($id);
         $area->update($data);
         return $area;
     }
 
-    public function delete(int $id)
+    public function delete($id)
     {
         $area = $this->getById($id);
         return $area->delete();
     }
 
-    public function changeStatus(int $id, bool $status)
+    public function getActiveWithRelations($relations)
+    {
+        return $this->model->where('estadoArea', true)
+            ->with($relations)
+            ->get();
+    }
+
+    public function changeStatus($id, $status)
     {
         $area = $this->getById($id);
         $area->estadoArea = $status;
         $area->save();
         return $area;
-    }
-
-    public function getProgramaCompleto(int $olimpiadaId)
-    {
-        return $this->model->where('estadoArea', true)
-            ->whereHas('categorias', function ($query) use ($olimpiadaId) {
-                $query->where('estadoCategoria', true)
-                    ->where('olimpiadas_areas_categorias.idOlimpiada', $olimpiadaId)
-                    ->where('olimpiadas_areas_categorias.estado', true);
-            })
-            ->with(['categorias' => function ($query) use ($olimpiadaId) {
-                $query->where('estadoCategoria', true)
-                    ->where('olimpiadas_areas_categorias.idOlimpiada', $olimpiadaId)
-                    ->where('olimpiadas_areas_categorias.estado', true)
-                    ->with(['grados' => function ($q) {
-                        $q->where('estadoGrado', true);
-                    }]);
-            }])
-            ->get();
     }
 }

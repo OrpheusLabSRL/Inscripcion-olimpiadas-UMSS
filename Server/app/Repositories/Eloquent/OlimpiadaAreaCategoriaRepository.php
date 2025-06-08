@@ -14,7 +14,7 @@ class OlimpiadaAreaCategoriaRepository implements OlimpiadaAreaCategoriaReposito
         $this->model = $model;
     }
 
-    public function allWithRelations()
+    public function getAllWithRelations()
     {
         return $this->model->with(['olimpiada', 'area', 'categoria'])->get();
     }
@@ -34,33 +34,29 @@ class OlimpiadaAreaCategoriaRepository implements OlimpiadaAreaCategoriaReposito
         );
     }
 
-    public function delete(int $id)
+    public function delete($id)
     {
         $item = $this->model->findOrFail($id);
         return $item->delete();
     }
 
-    public function getByOlimpiada(int $idOlimpiada)
+    public function getByOlimpiada($idOlimpiada)
     {
-        return $this->model->porOlimpiada($idOlimpiada)
+        return $this->model->where('idOlimpiada', $idOlimpiada)
             ->with(['area', 'categoria.grados'])
             ->get()
             ->groupBy('idArea');
     }
 
-    public function deleteByOlimpiadaAndArea(int $idOlimpiada, int $idArea)
+    public function deleteByOlimpiadaAndArea($idOlimpiada, $idArea)
     {
-        return $this->model->porOlimpiada($idOlimpiada)
-            ->porArea($idArea)
+        return $this->model->where('idOlimpiada', $idOlimpiada)
+            ->where('idArea', $idArea)
             ->delete();
     }
 
-    public function exists(int $idOlimpiada, int $idArea, int $idCategoria)
+    public function find($id)
     {
-        return $this->model->where([
-            'idOlimpiada' => $idOlimpiada,
-            'idArea' => $idArea,
-            'idCategoria' => $idCategoria
-        ])->exists();
+        return $this->model->findOrFail($id);
     }
 }

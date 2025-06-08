@@ -11,6 +11,8 @@ class OlimpiadaAreaCategoria extends Model
 
     protected $table = 'olimpiadas_areas_categorias';
     protected $primaryKey = 'idOlimpAreaCategoria';
+    public $incrementing = true;
+    protected $keyType = 'int';
     public $timestamps = false;
 
     protected $fillable = [
@@ -21,23 +23,6 @@ class OlimpiadaAreaCategoria extends Model
         'costo',
     ];
 
-    // Scopes
-    public function scopeActivas($query)
-    {
-        return $query->where('estado', true);
-    }
-
-    public function scopePorOlimpiada($query, $idOlimpiada)
-    {
-        return $query->where('idOlimpiada', $idOlimpiada);
-    }
-
-    public function scopePorArea($query, $idArea)
-    {
-        return $query->where('idArea', $idArea);
-    }
-
-    // Relaciones
     public function olimpiada()
     {
         return $this->belongsTo(Olimpiada::class, 'idOlimpiada');

@@ -15,12 +15,12 @@ class CategoriaGradoRepository implements CategoriaGradoRepositoryInterface
         $this->model = $model;
     }
 
-    public function allWithRelations()
+    public function getAllWithRelations()
     {
         return $this->model->with(['categoria', 'grado'])->get();
     }
 
-    public function find(int $id)
+    public function findOrFail($id)
     {
         return $this->model->findOrFail($id);
     }
@@ -30,55 +30,35 @@ class CategoriaGradoRepository implements CategoriaGradoRepositoryInterface
         return $this->model->create($data);
     }
 
-    public function update(int $id, array $data)
+    public function update($id, array $data)
     {
-        $relacion = $this->find($id);
+        $relacion = $this->findOrFail($id);
         $relacion->update($data);
         return $relacion;
     }
 
-    public function delete(int $id)
+    public function delete($id)
     {
-        $relacion = $this->find($id);
+        $relacion = $this->findOrFail($id);
         return $relacion->delete();
     }
 
-    public function changeStatus(int $id, bool $status)
+    public function updateStatus($id, $status)
     {
-        $relacion = $this->find($id);
-        $relacion->estadoCategoriaGrado = $status;
-        $relacion->save();
+        $relacion = $this->findOrFail($id);
+        $relacion->update(['estadoCategoriaGrado' => $status]);
         return $relacion;
     }
 
-    public function syncCategoriaGrados(int $idCategoria, array $grados, bool $estado)
+    public function syncGrados($categoriaId, array $grados, $estado)
     {
         $syncData = [];
         foreach ($grados as $gradoId) {
             $syncData[$gradoId] = ['estadoCategoriaGrado' => $estado];
         }
 
-        return DB::transaction(function () use ($idCategoria, $syncData) {
-            return $this->model->where('idCategoria', $idCategoria)
-                ->whereNotIn('idGrado', array_keys($syncData))
-                ->delete();
-
-            foreach ($syncData as $gradoId => $data) {
-                $this->model->updateOrCreate(
-                    ['idCategoria' => $idCategoria, 'idGrado' => $gradoId],
-                    $data
-                );
-            }
-
-            return true;
+        return DB::transaction(function () use ($categoriaId, $syncData) {
+            return Categoria::findOrFail($categoriaId)->grados()->sync($syncData);
         });
-    }
-
-    public function exists(int $idCategoria, int $idGrado)
-    {
-        return $this->model->where([
-            'idCategoria' => $idCategoria,
-            'idGrado' => $idGrado
-        ])->exists();
     }
 }

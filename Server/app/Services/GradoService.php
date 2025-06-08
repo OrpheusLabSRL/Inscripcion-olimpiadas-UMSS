@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\Contracts\GradoRepositoryInterface;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 
 class GradoService
@@ -15,61 +14,48 @@ class GradoService
         $this->repository = $repository;
     }
 
-    public function getAllGrados(array $filters = [])
+    public function getAllGrados()
     {
-        return $this->repository->all($filters);
+        return $this->repository->getAll();
     }
 
-    public function getGradoById(int $id)
+    public function getGrado($id)
     {
-        return $this->repository->find($id);
+        return $this->repository->getById($id);
     }
 
     public function createGrado(array $data)
     {
-        $this->validateGradoData($data);
+        $validator = Validator::make($data, [
+            'numeroGrado' => 'required|integer',
+            'nivel' => 'required|string|max:10',
+            'estadoGrado' => 'required|boolean'
+        ]);
 
-        if ($this->repository->exists($data['numeroGrado'], $data['nivel'])) {
-            throw new \InvalidArgumentException('Ya existe un grado con ese número y nivel');
+        if ($validator->fails()) {
+            throw new \Exception($validator->errors()->first(), 400);
         }
 
-        return $this->repository->create([
-            'numeroGrado' => $data['numeroGrado'],
-            'nivel' => $data['nivel'],
-            'estadoGrado' => $data['estadoGrado'] ?? true
-        ]);
+        return $this->repository->create($data);
     }
 
-    public function updateGrado(int $id, array $data)
+    public function updateGrado($id, array $data)
     {
-        $this->validateGradoData($data);
+        $validator = Validator::make($data, [
+            'numeroGrado' => 'required|integer',
+            'nivel' => 'required|string|max:10',
+            'estadoGrado' => 'required|boolean'
+        ]);
 
-        $existing = $this->repository->exists($data['numeroGrado'], $data['nivel']);
-        if ($existing) {
-            $grado = $this->repository->find($id);
-            if ($grado->numeroGrado != $data['numeroGrado'] || $grado->nivel != $data['nivel']) {
-                throw new \InvalidArgumentException('Ya existe un grado con ese número y nivel');
-            }
+        if ($validator->fails()) {
+            throw new \Exception($validator->errors()->first(), 400);
         }
 
         return $this->repository->update($id, $data);
     }
 
-    public function deleteGrado(int $id)
+    public function deleteGrado($id)
     {
         return $this->repository->delete($id);
-    }
-
-    protected function validateGradoData(array $data)
-    {
-        $validator = Validator::make($data, [
-            'numeroGrado' => 'required|integer',
-            'nivel' => 'required|string|max:10',
-            'estadoGrado' => 'sometimes|boolean'
-        ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
     }
 }

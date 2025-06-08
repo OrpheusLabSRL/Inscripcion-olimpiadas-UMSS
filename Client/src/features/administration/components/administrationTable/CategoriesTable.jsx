@@ -3,7 +3,7 @@ import {
   getCategoriaGrado,
   changeEstadoCategoriaGrado,
   deleteCategoriaGrado,
-  verificarUsoCategoria,
+  verificarUsoCategoriasMasivo, // nuevo endpoint importado
 } from "../../../../api/Administration.api";
 import { FaSpinner, FaInfoCircle, FaEdit, FaTrash } from "react-icons/fa";
 import "../../Styles/Tables.css";
@@ -29,7 +29,6 @@ const CategoriesTable = () => {
       const response = await getCategoriaGrado();
       const data = response || [];
       const agrupado = {};
-      const uso = {};
 
       for (const cat of data) {
         const nombreCategoria =
@@ -60,18 +59,18 @@ const CategoriesTable = () => {
         }
       }
 
-      // Verificar uso de categorías
-      const ids = Object.values(agrupado).map((cat) => cat.idCategoria);
-      await Promise.all(
-        ids.map(async (idCategoria) => {
-          try {
-            const result = await verificarUsoCategoria(idCategoria);
-            uso[idCategoria] = result.enUso;
-          } catch {
-            uso[idCategoria] = false;
-          }
-        })
-      );
+      // Verificar uso de categorías (optimizado)
+      const ids = Object.values(agrupado)
+        .map((cat) => cat.idCategoria)
+        .filter((id) => id); // evitar null/undefined
+
+      let uso = {};
+      try {
+        uso = await verificarUsoCategoriasMasivo(ids); // llamada masiva
+      } catch (e) {
+        console.error("Error al verificar uso de categorías:", e);
+        uso = {};
+      }
 
       setCategoriasAgrupadas(agrupado);
       setCategoriasEnUso(uso);
@@ -191,7 +190,7 @@ const CategoriesTable = () => {
   };
 
   const handleEditSuccess = () => {
-    fetchCategorias(); // Refrescar los datos después de editar
+    fetchCategorias();
     setEditModalOpen(false);
   };
 

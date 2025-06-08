@@ -19,21 +19,6 @@ class Area extends Model
         'estadoArea',
     ];
 
-    public function scopeActivas($query)
-    {
-        return $query->where('estadoArea', true);
-    }
-
-    public function scopePorEstado($query, $estado)
-    {
-        if ($estado === 'true' || $estado === '1') {
-            return $query->where('estadoArea', true);
-        } elseif ($estado === 'false' || $estado === '0') {
-            return $query->where('estadoArea', false);
-        }
-        return $query;
-    }
-
     public function combinaciones()
     {
         return $this->hasMany(OlimpiadaAreaCategoria::class, 'idArea');
@@ -44,10 +29,10 @@ class Area extends Model
         return $this->belongsToMany(
             Categoria::class,
             'olimpiadas_areas_categorias',
-            'idArea',
-            'idCategoria',
-            'idArea',
-            'idCategoria'
-        )->withPivot('estado', 'costo', 'idOlimpiada');
+            'idArea',      
+            'idCategoria',  
+            'idArea',      
+            'idCategoria'   
+        )->withPivot('estado', 'costo');
     }
 }

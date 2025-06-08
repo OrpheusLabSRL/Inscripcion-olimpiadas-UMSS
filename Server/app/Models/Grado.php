@@ -19,18 +19,6 @@ class Grado extends Model
         'estadoGrado'
     ];
 
-    // Scopes
-    public function scopeActivos($query)
-    {
-        return $query->where('estadoGrado', true);
-    }
-
-    public function scopePorNivel($query, $nivel)
-    {
-        return $query->where('nivel', $nivel);
-    }
-
-    // Relaciones
     public function categorias()
     {
         return $this->belongsToMany(
