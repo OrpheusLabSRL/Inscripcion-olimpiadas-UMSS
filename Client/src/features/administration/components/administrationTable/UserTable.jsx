@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getUsuarios } from "../../../../api/Administration.api";
+import {
+  getUsuarios,
+  updateUserStatus,
+} from "../../../../api/Administration.api";
 import { FaEye, FaEdit, FaTrash, FaSpinner } from "react-icons/fa";
 import PermisosModal from "../administrationModal/PermisosModal";
 import Swal from "sweetalert2";
@@ -55,7 +58,7 @@ const UsersTable = () => {
       });
 
       if (result.isConfirmed) {
-        await getUsuarios(usuario.idUsuario, !usuario.estado);
+        await updateUserStatus(usuario.idUsuario, !usuario.estado);
         setUsuarios((prev) =>
           prev.map((u) =>
             u.idUsuario === usuario.idUsuario ? { ...u, estado: !u.estado } : u
@@ -126,8 +129,8 @@ const UsersTable = () => {
             <th>Nombre</th>
             <th>Email</th>
             <th>Rol</th>
-            <th>Estado</th>
-            <th>Acciones</th>
+            <th className="tableUtilTextCenter">Estado</th>
+            <th className="tableUtilTextCenter">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -141,11 +144,11 @@ const UsersTable = () => {
           ) : usuarios.length > 0 ? (
             usuarios.map((usuario) => (
               <tr key={usuario.idUsuario} className="adminTableRow">
-                <td>{usuario.nombreUsuario}</td>
+                <td className="tableUtilTextLeft">{usuario.nombreUsuario}</td>
                 <td>{usuario.nombre}</td>
                 <td>{usuario.email}</td>
                 <td>{usuario.rol?.nombreRol || "Sin rol"}</td>
-                <td>
+                <td className="tableUtilTextCenter">
                   <span
                     className={`tableUtilStatusBadge ${
                       usuario.estado
@@ -158,29 +161,23 @@ const UsersTable = () => {
                     {usuario.estado ? "Activo" : "Inactivo"}
                   </span>
                 </td>
-                <td>
-                  <div className="userActions">
-                    <button
-                      className="userActionBtn view"
-                      onClick={() => verPermisos(usuario)}
-                      title="Ver permisos"
-                    >
-                      <FaEye />
-                    </button>
-                    <button
-                      className="userActionBtn edit"
-                      title="Editar usuario"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="userActionBtn delete"
-                      onClick={() => handleDelete(usuario)}
-                      title="Eliminar usuario"
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
+                <td className="tableActions">
+                  <button
+                    className="actionIcon viewIcon"
+                    onClick={() => verPermisos(usuario)}
+                    title="Ver permisos"
+                  >
+                    <FaEye />
+                  </button>
+                  <FaEdit
+                    className="actionIcon editIcon"
+                    title="Editar usuario"
+                  />
+                  <FaTrash
+                    className="actionIcon deleteIcon"
+                    onClick={() => handleDelete(usuario)}
+                    title="Eliminar usuario"
+                  />
                 </td>
               </tr>
             ))

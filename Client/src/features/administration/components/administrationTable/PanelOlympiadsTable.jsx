@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { FiEdit2, FiPlus, FiLayers } from "react-icons/fi";
 import { FaTrash } from "react-icons/fa";
-import RegisterCategoriaModal from "../administrationModal/RegisterNewCategoriaModal";
+import RegisterCategoriaModal from "../administrationModal/RegisterCategoriaModal";
+import RegisterNewCategoriaModal from "../administrationModal/RegisterNewCategoriaModal";
 import RegisterAreaModal from "../administrationModal/RegisterAreaModal";
 import RegisterNewAreaModal from "../administrationModal/RegisterNewAreaModal";
+
 import "../../Styles/Tables.css";
 
 export default function PanelOlympiadsTable({
@@ -13,7 +15,9 @@ export default function PanelOlympiadsTable({
   onRefresh,
 }) {
   const [modalKey, setModalKey] = useState(0);
-  const [isCategoriaModalOpen, setIsCategoriaModalOpen] = useState(false);
+  const [isNewCategoriaModalOpen, setIsNewCategoriaModalOpen] = useState(false);
+  const [isEditCategoriaModalOpen, setIsEditCategoriaModalOpen] =
+    useState(false);
   const [isAreaModalOpen, setIsAreaModalOpen] = useState(false);
   const [isNewAreaModalOpen, setIsNewAreaModalOpen] = useState(false);
   const [selectedAreaId, setSelectedAreaId] = useState(null);
@@ -24,16 +28,16 @@ export default function PanelOlympiadsTable({
     setIsAreaModalOpen(true);
   };
 
-  const handleEditModal = (areaId) => {
+  const handleOpenEditCategoriaModal = (areaId) => {
     setModalKey((prev) => prev + 1);
     setSelectedAreaId(areaId);
-    setIsCategoriaModalOpen(true);
+    setIsEditCategoriaModalOpen(true);
   };
 
-  const handleOpenCategoriaModal = () => {
+  const handleOpenNewCategoriaModal = () => {
     setModalKey((prev) => prev + 1);
-    setSelectedAreaId(null); // No hay área seleccionada al registrar nueva
-    setIsCategoriaModalOpen(true);
+    setSelectedAreaId(null); // No hay área seleccionada al registrar nueva categoría
+    setIsNewCategoriaModalOpen(true);
   };
 
   const handleNewAreaSuccess = () => {
@@ -142,7 +146,9 @@ export default function PanelOlympiadsTable({
                             {!hasStarted && (
                               <button
                                 className="panelOlympiadBtn small success"
-                                onClick={() => handleEditModal(area.idArea)}
+                                onClick={() =>
+                                  handleOpenEditCategoriaModal(area.idArea)
+                                }
                               >
                                 <FiPlus className="buttonIcon" />
                                 Agregar Categoría
@@ -170,7 +176,9 @@ export default function PanelOlympiadsTable({
                       <td className="panelOlympiadActionsCol">
                         <div className="tooltipWrapper">
                           <button
-                            onClick={() => handleEditModal(area.idArea)}
+                            onClick={() =>
+                              handleOpenEditCategoriaModal(area.idArea)
+                            }
                             className={`panelOlympiadEditBtn ${
                               !hasCategories || hasStarted ? "disabledBtn" : ""
                             }`}
@@ -261,7 +269,7 @@ export default function PanelOlympiadsTable({
                 className={`panelOlympiadBtn success ${
                   hasStarted ? "disabledBtn" : ""
                 }`}
-                onClick={handleOpenCategoriaModal}
+                onClick={handleOpenNewCategoriaModal}
                 disabled={hasStarted}
                 aria-describedby="tooltip-register-cat"
               >
@@ -293,12 +301,20 @@ export default function PanelOlympiadsTable({
         onSuccess={onRefresh}
       />
 
-      <RegisterCategoriaModal
-        key={`cat-${modalKey}`}
-        isOpen={isCategoriaModalOpen}
-        onClose={() => setIsCategoriaModalOpen(false)}
+      <RegisterNewCategoriaModal
+        key={`new-cat-${modalKey}`}
+        isOpen={isNewCategoriaModalOpen}
+        onClose={() => setIsNewCategoriaModalOpen(false)}
         selectedVersion={parseInt(selectedVersion)}
-        selectedAreaId={selectedAreaId} // null si se viene de la pestaña "nuevaCategoria"
+        onSuccess={onRefresh}
+      />
+
+      <RegisterCategoriaModal
+        key={`edit-cat-${modalKey}`}
+        isOpen={isEditCategoriaModalOpen}
+        onClose={() => setIsEditCategoriaModalOpen(false)}
+        selectedVersion={parseInt(selectedVersion)}
+        selectedAreaId={selectedAreaId}
         onSuccess={onRefresh}
       />
     </div>
