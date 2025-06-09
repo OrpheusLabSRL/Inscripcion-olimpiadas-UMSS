@@ -8,19 +8,14 @@ import RegisterCategoriaModal from "../components/administrationModal/RegisterNe
 const CategoryList = () => {
   const navigate = useNavigate();
 
-  // Estado para controlar la apertura del modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Estado para forzar actualización de la tabla (puede ser un contador simple)
   const [refreshKey, setRefreshKey] = useState(0);
 
-  // Función para abrir el modal
   const openModal = () => setIsModalOpen(true);
 
-  // Función para cerrar el modal
   const closeModal = () => setIsModalOpen(false);
 
-  // Cuando el modal registre exitosamente una categoría, incrementamos refreshKey para recargar tabla
   const handleSuccess = () => {
     setRefreshKey((prev) => prev + 1);
   };
@@ -56,22 +51,7 @@ const CategoryList = () => {
           </div>
 
           {/* Botón para abrir el modal de nueva categoría */}
-          <button
-            className="btnAddCategory"
-            onClick={openModal}
-            style={{
-              backgroundColor: "#28a745",
-              color: "white",
-              border: "none",
-              padding: "0.5rem 1rem",
-              borderRadius: "4px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              fontWeight: "bold",
-            }}
-          >
+          <button className="btnAddCategoryArea" onClick={openModal}>
             <FaPlus /> Nueva Categoría
           </button>
         </div>
