@@ -20,6 +20,7 @@ export const OCRValidation = () => {
   const [uploadEnabled, setUploadEnabled] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const [codigoBoleta, setCodigoBoleta] = useState(null);
 
   useEffect(() => {
     // Collapse sidebar on mobile devices
@@ -74,9 +75,13 @@ export const OCRValidation = () => {
       });
       const text = data.text;
       setOcrResult(text);
+      console.log("Texto extraído por OCR:", text);
 
       const control = extractControlBoleta(text);
       setControlBoleta(control);
+      if (!control) {
+        console.log("No se encontró el número de control en el texto extraído.");
+      }
 
       if (control) {
         const data = await checkControlBoleta(control);
@@ -86,6 +91,7 @@ export const OCRValidation = () => {
     } catch (error) {
       setOcrResult("Error al procesar la imagen: " + error.message);
       setBoletaExists(false);
+      console.log("Error al procesar la imagen:", error);
     } finally {
       setProcessing(false);
     }
@@ -100,10 +106,12 @@ export const OCRValidation = () => {
   const handleConfirmarPago = async (control) => {
     if (!control) {
       alert("Código de control no detectado. Por favor, procese una imagen válida.");
+      console.log("Intento de confirmar pago sin código de control detectado.");
       return;
     }
     if (boletaPaid) {
       alert("La boleta ya fue pagada.");
+      console.log("La boleta ya fue pagada.");
       return;
     }
     try {
@@ -111,6 +119,7 @@ export const OCRValidation = () => {
       alert(data.message);
       if (data.message === "Pago confirmado exitosamente.") {
         setBoletaPaid(true);
+        console.log("Pago confirmado exitosamente para el control:", control);
       }
     } catch (error) {
       alert(error.message);
@@ -182,6 +191,14 @@ export const OCRValidation = () => {
           </div>
         )}
 
+      {codigoBoleta && (
+        <div className="aclaracion">
+          Aclaracion: OF {codigoBoleta}
+        </div>
+      )}
+    </div>
+  </div>
+);
         <button
           className="back-button back-button-custom"
           onClick={handleBack}

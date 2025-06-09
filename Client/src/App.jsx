@@ -21,7 +21,6 @@ import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlym
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
 import Reports from "./features/administration/pages/Reports";
 import ManageUsers from "./features/administration/pages/ManageUsers";
-
 import PaginaContacto from "./features/contacto/pages/PaginaContacto";
 import ConsultarInscripcion from "./features/consultar_inscripcion/pages/ConsultarInscripcion";
 import ResultadoConsulta from "./features/consultar_inscripcion/pages/ResultadoConsulta";
@@ -31,6 +30,7 @@ import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
 import { OCRValidation } from "./features/registrarion/pages/OCRValidation";
 import { GenerateOrder } from "./features/registrarion/pages/GenerateOrder";
 import OlimpiadaDetallada from "./features/detallesOlimpiada/OlimpiadaDetallada";
+import { BoletaPDF } from "./features/cajero/pages/BoletaPDF";
 
 import { useEffect } from "react";
 
@@ -64,10 +64,11 @@ function App() {
     "/consultar-inscripcion",
     "/consultar-inscripcion/resultado",
     "/consultar-inscripcion/resultado-tutor",
-    "/olimpiada/:id"
+    "/olimpiada/:id",
+    "/cajero/:token/boleta/:id"
   ];
 
-  const hideSidebar = hideSidebarRoutes.some((ruta) => location.pathname === ruta) || location.pathname.startsWith("/olimpiada/");
+  const hideSidebar = hideSidebarRoutes.some((ruta) => location.pathname === ruta) || location.pathname.startsWith("/olimpiada/") || location.pathname.startsWith("/cajero/");
 
   const showSidebar = !hideSidebar;
   return (
@@ -135,6 +136,7 @@ function App() {
               path="/consultar-inscripcion/resultado-tutor"
               element={<ResultadoConsulta_Tutor />}
             />
+            <Route path="/cajero/:token/boleta/:id" element={<BoletaPDF />} />
 
             {/* Admin Layout con rutas anidadas */}
             <Route path="/admin" element={<AdminLayout />}>
