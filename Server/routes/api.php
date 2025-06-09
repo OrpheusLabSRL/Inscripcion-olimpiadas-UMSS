@@ -64,6 +64,7 @@ Route::get('/roles', [RolController::class, 'index']);
 Route::post('/roles', [RolController::class, 'store']);
 Route::post('/usuarios', [UsuarioController::class, 'store']);
 Route::get('/permisos', [PermisoController::class, 'index']);
+Route::get('/viewUsuarios', [UsuarioController::class, 'index']);
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);
@@ -118,3 +119,13 @@ Route::get('/boletaPago/boletasByTutor/{tutorId}', [BoletaPagoController::class,
 Route::post('/register-from-excel', [ExcelController::class, 'registerFromExcel']);
 Route::post('/validate-excel-data', [ExcelController::class, 'validateExcelData']);
 Route::get('/available-combinations', [ExcelController::class, 'getAvailableCombinations']);
+
+
+//Usuarios
+Route::prefix('usuarios')->group(function () {
+    Route::get('/', [UsuarioController::class, 'index']); // Obtener todos
+    Route::get('/roles', [UsuarioController::class, 'getRoles']); // Obtener roles
+    Route::put('/{id}/estado', [UsuarioController::class, 'actualizarEstado']); // Cambiar estado
+    Route::put('/{id}', [UsuarioController::class, 'update']); // Actualizar usuario
+    Route::delete('/{id}', [UsuarioController::class, 'destroy']); // Eliminar usuario
+});

@@ -231,6 +231,15 @@ export const setUser = async (data) => {
   return response.data;
 };
 
+export const getUsuarios = () => inscriptionApi.get("/usuarios");
+export const getRolesUser = () => inscriptionApi.get("/usuarios/roles");
+export const createUsuario = (data) => inscriptionApi.post("/usuarios", data);
+export const updateUsuario = (id, data) =>
+  inscriptionApi.put(`/usuarios/${id}`, data);
+export const updateUsuarioEstado = (id, estado) =>
+  inscriptionApi.put(`/usuarios/${id}/estado`, { estadoUsuario: estado });
+export const deleteUsuario = (id) => inscriptionApi.delete(`/usuarios/${id}`);
+
 export const verificarUsoAreasMasivo = async (ids) => {
   const response = await inscriptionApi.post("/verificar-uso-areas", {
     ids,

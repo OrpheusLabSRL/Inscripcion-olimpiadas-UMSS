@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import UsersTable from "../components/administrationTable/UsersTable";
+import UsersTable from "../components/administrationTable/UserTable";
 import BackButton from "../../../components/Buttons/BackButton";
 import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";

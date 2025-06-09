@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
   getUsuarios,
-  updateUserStatus,
+  updateUsuarioEstado,
+  deleteUsuario,
 } from "../../../../api/Administration.api";
 import { FaEye, FaEdit, FaTrash, FaSpinner } from "react-icons/fa";
 import PermisosModal from "../administrationModal/PermisosModal";
@@ -18,7 +19,7 @@ const UsersTable = () => {
     const fetchUsuarios = async () => {
       try {
         setLoading(true);
-        const data = await getUsuarios();
+        const { data } = await getUsuarios();
         setUsuarios(data);
       } catch (error) {
         console.error("Error al cargar usuarios:", error);
@@ -45,30 +46,31 @@ const UsersTable = () => {
       const result = await Swal.fire({
         title: "¿Estás seguro?",
         html: `Vas a ${
-          usuario.estado ? "desactivar" : "activar"
+          usuario.estadoUsuario === 1 ? "desactivar" : "activar"
         } al usuario <strong>${usuario.nombreUsuario}</strong>`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Sí, continuar",
         cancelButtonText: "Cancelar",
-        customClass: {
-          container: "swal2-container",
-          popup: "swal2-popup-custom",
-        },
       });
 
       if (result.isConfirmed) {
-        await updateUserStatus(usuario.idUsuario, !usuario.estado);
+        const nuevoEstado = usuario.estadoUsuario === 1 ? 0 : 1;
+        await updateUsuarioEstado(usuario.idUsuario, nuevoEstado);
+
         setUsuarios((prev) =>
           prev.map((u) =>
-            u.idUsuario === usuario.idUsuario ? { ...u, estado: !u.estado } : u
+            u.idUsuario === usuario.idUsuario
+              ? { ...u, estadoUsuario: nuevoEstado }
+              : u
           )
         );
+
         Swal.fire({
           icon: "success",
           title: "Estado actualizado",
           text: `El usuario ha sido ${
-            !usuario.estado ? "activado" : "desactivado"
+            nuevoEstado === 1 ? "activado" : "desactivado"
           }`,
           timer: 2000,
           showConfirmButton: false,
@@ -79,7 +81,9 @@ const UsersTable = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "No se pudo cambiar el estado del usuario",
+        text:
+          error.response?.data?.message ||
+          "No se pudo cambiar el estado del usuario",
       });
     }
   };
@@ -98,8 +102,7 @@ const UsersTable = () => {
 
     if (result.isConfirmed) {
       try {
-        // Aquí iría la llamada a la API para eliminar
-        // await deleteUser(usuario.idUsuario);
+        await deleteUsuario(usuario.idUsuario);
         setUsuarios((prev) =>
           prev.filter((u) => u.idUsuario !== usuario.idUsuario)
         );
@@ -114,7 +117,8 @@ const UsersTable = () => {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "No se pudo eliminar el usuario",
+          text:
+            error.response?.data?.message || "No se pudo eliminar el usuario",
         });
       }
     }
@@ -151,14 +155,14 @@ const UsersTable = () => {
                 <td className="tableUtilTextCenter">
                   <span
                     className={`tableUtilStatusBadge ${
-                      usuario.estado
+                      usuario.estadoUsuario === 1
                         ? "tableUtilBadgeSuccess"
                         : "tableUtilBadgeDanger"
                     }`}
                     onClick={() => toggleEstado(usuario)}
                     style={{ cursor: "pointer" }}
                   >
-                    {usuario.estado ? "Activo" : "Inactivo"}
+                    {usuario.estadoUsuario === 1 ? "Activo" : "Inactivo"}
                   </span>
                 </td>
                 <td className="tableActions">

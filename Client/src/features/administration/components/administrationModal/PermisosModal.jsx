@@ -47,7 +47,7 @@ const PermisosModal = ({
                 <div key={permiso.idPermiso} className="permissionCard">
                   <div className="permissionCardHeader">
                     <h4 className="permissionName">{permiso.nombrePermiso}</h4>
-                    {permiso.estado && (
+                    {permiso.estadoPermiso === 1 && (
                       <span className="tableUtilStatusBadge tableUtilBadgeSuccess">
                         Activo
                       </span>
