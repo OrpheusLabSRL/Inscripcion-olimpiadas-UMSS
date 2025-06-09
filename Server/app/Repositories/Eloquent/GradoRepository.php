@@ -14,49 +14,44 @@ class GradoRepository implements GradoRepositoryInterface
         $this->model = $model;
     }
 
-    public function all(array $filters = [])
+    public function getAll()
     {
-        $query = $this->model->newQuery();
-
-        if (!empty($filters['activos'])) {
-            $query->activos();
-        }
-
-        if (!empty($filters['nivel'])) {
-            $query->porNivel($filters['nivel']);
-        }
-
-        return $query->get();
+        return $this->model->all();
     }
 
-    public function find(int $id)
+    public function getById($id)
     {
-        return $this->model->findOrFail($id);
+        return $this->model->find($id);
     }
 
     public function create(array $data)
     {
-        return $this->model->create($data);
+        return $this->model->create([
+            'numeroGrado' => $data['numeroGrado'],
+            'nivel' => $data['nivel'],
+            'estadoGrado' => $data['estadoGrado']
+        ]);
     }
 
-    public function update(int $id, array $data)
+    public function update($id, array $data)
     {
-        $grado = $this->find($id);
-        $grado->update($data);
+        $grado = $this->getById($id);
+        if ($grado) {
+            $grado->update([
+                'numeroGrado' => $data['numeroGrado'],
+                'nivel' => $data['nivel'],
+                'estadoGrado' => $data['estadoGrado']
+            ]);
+        }
         return $grado;
     }
 
-    public function delete(int $id)
+    public function delete($id)
     {
-        $grado = $this->find($id);
-        return $grado->delete();
-    }
-
-    public function exists(int $numeroGrado, string $nivel)
-    {
-        return $this->model->where([
-            'numeroGrado' => $numeroGrado,
-            'nivel' => $nivel
-        ])->exists();
+        $grado = $this->getById($id);
+        if ($grado) {
+            return $grado->delete();
+        }
+        return false;
     }
 }

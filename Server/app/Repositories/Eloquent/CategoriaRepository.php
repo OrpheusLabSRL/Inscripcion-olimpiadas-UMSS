@@ -14,24 +14,14 @@ class CategoriaRepository implements CategoriaRepositoryInterface
         $this->model = $model;
     }
 
-    public function all(array $filters = [])
+    public function getAll()
     {
-        $query = $this->model->newQuery();
-
-        if (!empty($filters['activas'])) {
-            $query->activas();
-        }
-
-        if (!empty($filters['nombre'])) {
-            $query->porNombre($filters['nombre']);
-        }
-
-        return $query->get();
+        return $this->model->all();
     }
 
-    public function find(int $id)
+    public function getById($id)
     {
-        return $this->model->findOrFail($id);
+        return $this->model->find($id);
     }
 
     public function create(array $data)
@@ -39,21 +29,30 @@ class CategoriaRepository implements CategoriaRepositoryInterface
         return $this->model->create($data);
     }
 
-    public function update(int $id, array $data)
+    public function update($id, array $data)
     {
-        $categoria = $this->find($id);
-        $categoria->update($data);
+        $categoria = $this->getById($id);
+        if ($categoria) {
+            $categoria->update($data);
+        }
         return $categoria;
     }
 
-    public function delete(int $id)
+    public function delete($id)
     {
-        $categoria = $this->find($id);
-        return $categoria->delete();
+        $categoria = $this->getById($id);
+        if ($categoria) {
+            return $categoria->delete();
+        }
+        return false;
     }
 
-    public function findByName(string $name)
+    public function checkNameExists($name, $excludeId = null)
     {
-        return $this->model->where('nombreCategoria', $name)->first();
+        $query = $this->model->where('nombreCategoria', $name);
+        if ($excludeId) {
+            $query->where('idCategoria', '!=', $excludeId);
+        }
+        return $query->exists();
     }
 }

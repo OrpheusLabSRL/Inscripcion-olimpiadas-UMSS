@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OlimpiadaAreaCategoria;
 
 class Categoria extends Model
 {
@@ -15,26 +16,10 @@ class Categoria extends Model
         'estadoCategoria',
     ];
 
-    // Scopes para reutilizar consultas
-    public function scopeActivas($query)
-    {
-        return $query->where('estadoCategoria', true);
-    }
-
-    public function scopePorNombre($query, $nombre)
-    {
-        return $query->where('nombreCategoria', 'like', "%$nombre%");
-    }
-
-    // Relaciones
     public function grados()
     {
-        return $this->belongsToMany(
-            Grado::class, 
-            'categorias_grados', 
-            'categoria_id', 
-            'grado_id'
-        )->withPivot('estadoCategoriaGrado');
+        return $this->belongsToMany(Grado::class, 'categorias_grados', 'categoria_id', 'grado_id')
+            ->withPivot('estadoCategoriaGrado');
     }
 
     public function combinaciones()

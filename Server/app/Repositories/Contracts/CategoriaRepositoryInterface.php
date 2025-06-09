@@ -4,10 +4,10 @@ namespace App\Repositories\Contracts;
 
 interface CategoriaRepositoryInterface
 {
-    public function all(array $filters = []);
-    public function find(int $id);
+    public function getAll();
+    public function getById($id);
     public function create(array $data);
-    public function update(int $id, array $data);
-    public function delete(int $id);
-    public function findByName(string $name);
+    public function update($id, array $data);
+    public function delete($id);
+    public function checkNameExists($name, $excludeId = null);
 }

@@ -264,13 +264,45 @@
 }
 
 .estado-pendiente {
-    color: #ef4444;
-    font-weight: 500;
+    color: #ff0000 !important; /* Rojo */
+    font-weight: bold;
 }
 
 .estado-realizado {
-    color: #10b981;
-    font-weight: 500;
+    color: #00aa00 !important; /* Verde */
+    font-weight: bold;
+}
+
+.estadoPendiente {
+    color: #ff0000 !important; /* Rojo */
+    font-weight: bold;
+}
+
+.estadoRealizado {
+    color: #00aa00 !important; /* Verde */
+    font-weight: bold;
+}
+
+/* Estilos para los estados en la tabla modal */
+.modal-table .estado-pendiente {
+    color: #ff0000 !important; /* Rojo */
+    font-weight: bold;
+}
+
+.modal-table .estado-realizado {
+    color: #00aa00 !important; /* Verde */
+    font-weight: bold;
+}
+
+/* Estilos para los estados en el resumen de Excel */
+.excel-resumen .estado-pendiente {
+    color: #ff0000 !important; /* Rojo */
+    font-weight: bold;
+}
+
+.excel-resumen .estado-realizado {
+    color: #00aa00 !important; /* Verde */
+    font-weight: bold;
 }
 
 .btn-consulta {

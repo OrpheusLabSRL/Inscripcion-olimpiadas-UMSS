@@ -16,31 +16,39 @@ class OlimpiadaAreaCategoriaController extends Controller
 
     public function index()
     {
-        $combinaciones = $this->service->getAllCombinations();
-        return response()->json($combinaciones);
+        return $this->service->getAllCombinations();
     }
 
     public function store(Request $request)
     {
-        try {
-            $results = $this->service->createOrUpdateCombinations($request->all());
-            return response()->json([
-                'message' => 'Combinaciones registradas con éxito',
-                'data' => $results
-            ], 201);
-        } catch (\InvalidArgumentException $e) {
-            $errors = json_decode($e->getMessage(), true);
-            return response()->json([
-                'message' => 'Error en algunas combinaciones',
-                'errors' => $errors
-            ], 422);
+        $data = $request->all();
+        $results = [];
+
+        foreach ($data as $item) {
+            try {
+                $this->service->createCombinations($item);
+                $results[] = ['success' => true, 'data' => $item];
+            } catch (\Exception $e) {
+                $results[] = [
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'data' => $item
+                ];
+            }
         }
+
+        $hasErrors = collect($results)->contains('success', false);
+
+        return response()->json([
+            'message' => $hasErrors ? 'Algunas combinaciones no se pudieron registrar' : 'Todas las combinaciones registradas con éxito',
+            'results' => $results
+        ], $hasErrors ? 207 : 201);
     }
 
     public function destroy($id)
     {
         $this->service->deleteCombination($id);
-        return response()->json(['message' => 'Combinación eliminada']);
+        return response()->json(['mensaje' => 'Combinación eliminada']);
     }
 
     public function porOlimpiada($idOlimpiada)
@@ -52,8 +60,6 @@ class OlimpiadaAreaCategoriaController extends Controller
     public function eliminarPorOlimpiadaYArea($idOlimpiada, $idArea)
     {
         $this->service->deleteByOlimpiadaAndArea($idOlimpiada, $idArea);
-        return response()->json([
-            'message' => 'Combinaciones del área eliminadas correctamente'
-        ]);
+        return response()->json(['message' => 'Combinaciones del área eliminadas correctamente.']);
     }
 }

@@ -13,14 +13,9 @@ class AreaService
         $this->repository = $repository;
     }
 
-    public function getAllAreas(array $filters = [])
+    public function getAllAreas($filters = [])
     {
         return $this->repository->getAll($filters);
-    }
-
-    public function getAreaById(int $id)
-    {
-        return $this->repository->getById($id);
     }
 
     public function createArea(array $data)
@@ -32,67 +27,70 @@ class AreaService
         return $this->repository->create(array_merge($data, $defaultData));
     }
 
-    public function updateArea(int $id, array $data)
+    public function updateArea($id, array $data)
     {
         return $this->repository->update($id, $data);
     }
 
-    public function deleteArea(int $id)
+    public function deleteArea($id)
     {
         return $this->repository->delete($id);
     }
 
-    public function changeAreaStatus(int $id, bool $status)
+    public function changeAreaStatus($id, $status)
     {
         return $this->repository->changeStatus($id, $status);
     }
 
-    public function getFormattedProgram(int $olimpiadaId)
+    public function getProgramaCompleto()
     {
-        $areas = $this->repository->getProgramaCompleto($olimpiadaId);
-        
-        return $areas->flatMap(function ($area) {
-            return $area->categorias->map(function ($categoria) use ($area) {
+        $areas = $this->repository->getActiveWithRelations([
+            'categorias' => function ($query) {
+                $query->where('estadoCategoria', true)
+                    ->with(['grados' => function ($q) {
+                        $q->where('estadoGrado', true);
+                    }]);
+            }
+        ]);
+
+        $programa = [];
+
+        foreach ($areas as $area) {
+            foreach ($area->categorias as $categoria) {
                 $grados = $categoria->grados;
-                
-                if ($grados->isEmpty()) return null;
-                
-                return $this->formatProgramItem($area, $categoria, $grados);
-            })->filter();
-        })->values()->toArray();
-    }
 
-    private function formatProgramItem($area, $categoria, $grados)
-    {
-        $gradosOrdenados = $grados->sortBy('numeroGrado')->values();
-        $primero = $gradosOrdenados->first();
-        $ultimo = $gradosOrdenados->last();
-        $mismoNivel = $gradosOrdenados->every(fn($g) => $g->nivel === $primero->nivel);
+                if ($grados->count() > 0) {
+                    $gradosOrdenados = $grados->sortBy('numeroGrado')->values();
+                    $primero = $gradosOrdenados->first();
+                    $ultimo = $gradosOrdenados->last();
+                    $mismoNivel = $gradosOrdenados->every(fn($g) => $g->nivel === $primero->nivel);
 
-        $gradoFormateado = $this->formatGrados($gradosOrdenados, $primero, $ultimo, $mismoNivel);
+                    if ($gradosOrdenados->count() === 1) {
+                        $gradoFormateado = $this->formatearGrado($primero->numeroGrado, $primero->nivel);
+                    } elseif ($mismoNivel) {
+                        $gradoFormateado = "{$primero->numeroGrado}° a {$ultimo->numeroGrado}° {$primero->nivel}";
+                    } else {
+                        $gradoFormateado = $gradosOrdenados->map(function ($g) {
+                            return $this->formatearGrado($g->numeroGrado, $g->nivel);
+                        })->implode(' / ');
+                    }
 
-        return [
-            'area' => $area->nombreArea,
-            'nivel' => $categoria->nombreCategoria,
-            'grados' => $gradoFormateado,
-            'area_id' => $area->idArea,
-            'categoria_id' => $categoria->idCategoria,
-            'costo' => $categoria->pivot->costo,
-        ];
-    }
-
-    private function formatGrados($grados, $primero, $ultimo, $mismoNivel)
-    {
-        if ($grados->count() === 1) {
-            return $this->formatSingleGrado($primero->numeroGrado, $primero->nivel);
+                    $programa[] = [
+                        'area' => $area->nombreArea,
+                        'nivel' => $categoria->nombreCategoria,
+                        'grados' => $gradoFormateado,
+                        'area_id' => $area->idArea,
+                        'categoria_id' => $categoria->idCategoria,
+                        'costo' => $categoria->pivot->costo,
+                    ];
+                }
+            }
         }
 
-        return $mismoNivel 
-            ? "{$primero->numeroGrado}° a {$ultimo->numeroGrado}° {$primero->nivel}"
-            : $grados->map(fn($g) => $this->formatSingleGrado($g->numeroGrado, $g->nivel))->implode(' / ');
+        return $programa;
     }
 
-    private function formatSingleGrado($numero, $nivel)
+    private function formatearGrado($numero, $nivel)
     {
         $simbolo = is_numeric($numero) ? "{$numero}°" : $numero;
         return "{$simbolo} {$nivel}";

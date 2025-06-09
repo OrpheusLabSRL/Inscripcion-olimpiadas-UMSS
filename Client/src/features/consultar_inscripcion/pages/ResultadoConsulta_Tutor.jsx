@@ -71,7 +71,7 @@ const ResultadoConsulta_Tutor = () => {
                   <th>Apellido</th>
                   <th>Carnet de Identidad</th>
                   <th>Tipo de Tutor</th>
-                  <th>Materia</th>
+                  <th>Área</th>
                   <th>Categoría</th>
                   <th>Estado de Pago</th>
                 </tr>
@@ -159,6 +159,7 @@ const ResultadoConsulta_Tutor = () => {
                           <tr>
                             <th>Nombre</th>
                             <th>Carnet de Identidad</th>
+                            <th>Tipo de Tutor</th>
                             <th>Área</th>
                             <th>Categoría</th>
                             <th>Estado de Pago</th>
@@ -169,7 +170,8 @@ const ResultadoConsulta_Tutor = () => {
                             <tr key={index}>
                               <td>{olimpista.nombre} {olimpista.apellido}</td>
                               <td>{olimpista.carnetIdentidad}</td>
-                              <td>{olimpista.area}</td>
+                              <td>{olimpista.tipoTutor}</td>
+                              <td>{olimpista.materia}</td>
                               <td>{olimpista.categoria}</td>
                               <td className={olimpista.estadoPago === "PAGO REALIZADO" ? "estadoRealizado" : "estadoPendiente"}>
                                 {olimpista.estadoPago}

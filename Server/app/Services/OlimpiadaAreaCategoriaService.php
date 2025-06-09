@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Repositories\Contracts\OlimpiadaAreaCategoriaRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class OlimpiadaAreaCategoriaService
 {
@@ -17,50 +16,39 @@ class OlimpiadaAreaCategoriaService
 
     public function getAllCombinations()
     {
-        return $this->repository->allWithRelations();
+        return $this->repository->getAllWithRelations();
     }
 
-    public function createOrUpdateCombinations(array $items)
+    public function createCombinations(array $data)
     {
-        $results = [];
-        $errors = [];
+        $validator = Validator::make($data, [
+            'idOlimpiada' => 'required|exists:olimpiadas,idOlimpiada',
+            'idArea' => 'required|exists:areas,idArea',
+            'idCategoria' => 'required|exists:categorias,idCategoria',
+            'costo' => 'required|numeric|min:0',
+        ]);
 
-        foreach ($items as $index => $item) {
-            try {
-                $this->validateCombination($item);
-                
-                if ($this->repository->exists($item['idOlimpiada'], $item['idArea'], $item['idCategoria'])) {
-                    throw new \InvalidArgumentException('La combinación ya existe');
-                }
-
-                $results[] = $this->repository->createOrUpdate($item);
-            } catch (ValidationException $e) {
-                $errors[$index] = $e->errors();
-            } catch (\Exception $e) {
-                $errors[$index] = $e->getMessage();
-            }
+        if ($validator->fails()) {
+            throw new \Exception($validator->errors()->first(), 422);
         }
 
-        if (!empty($errors)) {
-            throw new \InvalidArgumentException(json_encode($errors));
-        }
-
-        return $results;
+        return $this->repository->createOrUpdate($data);
     }
 
-    public function deleteCombination(int $id)
+    public function deleteCombination($id)
     {
         return $this->repository->delete($id);
     }
 
-    public function getByOlimpiadaGrouped(int $idOlimpiada)
+    public function getByOlimpiadaGrouped($idOlimpiada)
     {
-        $grouped = $this->repository->getByOlimpiada($idOlimpiada);
-        
-        return $grouped->map(function ($items, $idArea) {
-            $area = $items->first()->area;
-            
-            $categorias = $items->map(function ($combinacion) {
+        $combinaciones = $this->repository->getByOlimpiada($idOlimpiada);
+
+        $resultados = [];
+        foreach ($combinaciones as $idArea => $grupo) {
+            $area = $grupo->first()->area;
+
+            $categorias = $grupo->map(function ($combinacion) {
                 $cat = $combinacion->categoria;
                 return [
                     'idCategoria' => $cat->idCategoria,
@@ -76,31 +64,19 @@ class OlimpiadaAreaCategoriaService
                 ];
             });
 
-            return [
+            $resultados[] = [
                 'idArea' => $area->idArea,
                 'nombreArea' => $area->nombreArea,
                 'descripcionArea' => $area->descripcionArea,
                 'categorias' => $categorias,
             ];
-        })->values();
+        }
+
+        return $resultados;
     }
 
-    public function deleteByOlimpiadaAndArea(int $idOlimpiada, int $idArea)
+    public function deleteByOlimpiadaAndArea($idOlimpiada, $idArea)
     {
         return $this->repository->deleteByOlimpiadaAndArea($idOlimpiada, $idArea);
-    }
-
-    protected function validateCombination(array $data)
-    {
-        $validator = Validator::make($data, [
-            'idOlimpiada' => 'required|exists:olimpiadas,idOlimpiada',
-            'idArea' => 'required|exists:areas,idArea',
-            'idCategoria' => 'required|exists:categorias,idCategoria',
-            'costo' => 'required|numeric|min:0',
-        ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
     }
 }
