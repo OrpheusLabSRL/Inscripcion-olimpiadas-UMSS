@@ -108,7 +108,7 @@ const RegisterCategoriaModal = ({ isOpen, onClose, onSuccess }) => {
 
     try {
       await createCategoriaWithGrados({
-        nombreCategoria: formData.nombreCategoria.trim().toUpperCase(),
+        nombreCategoria: formData.nombreCategoria,
         grados: formData.grados,
         estadoCategoriaGrado: true,
       });
@@ -129,7 +129,7 @@ const RegisterCategoriaModal = ({ isOpen, onClose, onSuccess }) => {
       await MySwal.fire({
         icon: "error",
         title: "Error",
-        text: "No se pudo registrar la categoría.",
+        text: error.message || "No se pudo registrar la categoría.",
         customClass: { container: "swal2Container" },
       });
     } finally {

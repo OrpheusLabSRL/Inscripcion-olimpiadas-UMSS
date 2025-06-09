@@ -76,6 +76,7 @@ Route::delete('/areas/{id}', [AreaController::class, 'destroy']);
 // Categorías
 Route::get('/viewCategorias', [CategoriaController::class, 'index']);
 Route::get('/viewCategorias/{id}', [CategoriaController::class, 'show']);
+Route::post('/categorias/with-grados', [CategoriaController::class, 'storeWithGrados']);
 
 // Grados
 Route::get('/viewGrados', [GradoController::class, 'index']);
@@ -94,6 +95,7 @@ Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
 Route::patch('/changeEstadoCategoriaGrado/{id}', [CategoriaGradoController::class, 'cambiarEstado']);
 Route::put('/updateCategoriaWithGrados/{idCategoria}', [CategoriaGradoController::class, 'actualizarCategoriaYGrados']);
 Route::delete('/deleteCategoriaGrado/{id}', [CategoriaGradoController::class, 'destroy']);
+Route::post('/categorias/with-grados', [CategoriaGradoController::class, 'storeWithGrados']);
 
 // Categoría - Área - Olimpiada
 Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'index']);

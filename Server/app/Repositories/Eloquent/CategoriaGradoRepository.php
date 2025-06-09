@@ -50,7 +50,7 @@ class CategoriaGradoRepository implements CategoriaGradoRepositoryInterface
         return $relacion;
     }
 
-    public function syncGrados($categoriaId, array $grados, $estado)
+    public function syncGrados($categoriaId, array $grados, $estado = true)
     {
         $syncData = [];
         foreach ($grados as $gradoId) {
@@ -58,7 +58,20 @@ class CategoriaGradoRepository implements CategoriaGradoRepositoryInterface
         }
 
         return DB::transaction(function () use ($categoriaId, $syncData) {
-            return CategoriaGradoRepository::findOrFail($categoriaId)->grados()->sync($syncData);
+            // Primero eliminamos las relaciones existentes
+            $this->model->where('categoria_id', $categoriaId)->delete();
+            
+            // Luego creamos las nuevas relaciones
+            $insertData = [];
+            foreach ($syncData as $gradoId => $data) {
+                $insertData[] = [
+                    'categoria_id' => $categoriaId,
+                    'grado_id' => $gradoId,
+                    'estadoCategoriaGrado' => $data['estadoCategoriaGrado']
+                ];
+            }
+            
+            return $this->model->insert($insertData);
         });
     }
 }
