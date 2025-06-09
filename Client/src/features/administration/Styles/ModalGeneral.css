@@ -211,6 +211,7 @@ body,
 }
 
 .adminSectionSubtitle {
+  margin-top: -0.5rem;
   font-size: 1.4rem;
   color: #1e40af;
   margin-bottom: 1rem;

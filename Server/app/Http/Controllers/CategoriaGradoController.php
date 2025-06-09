@@ -81,4 +81,33 @@ class CategoriaGradoController extends Controller
             return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
     }
+
+    public function storeWithGrados(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'nombreCategoria' => 'required|string|max:255',
+                'grados' => 'required|array|min:1',
+                'grados.*' => 'exists:grados,idGrado',
+                'estadoCategoriaGrado' => 'sometimes|boolean'
+            ]);
+
+            $result = $this->service->createCategoriaWithGrados($data);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Categoría creada con grados asociados exitosamente',
+                'data' => $result
+            ], 201);
+        } catch (\Exception $e) {
+            // Asegurarse de que el código de estado sea un número entero
+            $statusCode = is_numeric($e->getCode()) && $e->getCode() >= 400 ? $e->getCode() : 500;
+            
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'error' => $statusCode === 400 ? $e->getMessage() : 'Error al procesar la solicitud'
+            ], $statusCode);
+        }
+    }
 }

@@ -208,7 +208,7 @@ export default function Home() {
             </div>
             <h3>Administrar Usuarios</h3>
             <p>Administrar los roles y usuarios con privilegios</p>
-            <button onClick={() => navigate("/admin/users")}>
+            <button onClick={() => navigate("/admin/manageUser")}>
               Administrar usuarios
             </button>
           </div>

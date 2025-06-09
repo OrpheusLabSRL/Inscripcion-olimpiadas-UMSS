@@ -14,21 +14,9 @@ class AreaRepository implements AreaRepositoryInterface
         $this->model = $model;
     }
 
-    public function getAll($filters = [])
+    public function getAll()
     {
-        $query = $this->model->newQuery();
-
-        if (isset($filters['estado'])) {
-            if ($filters['estado'] === 'true' || $filters['estado'] === '1') {
-                $query->where('estadoArea', true);
-            } elseif ($filters['estado'] === 'false' || $filters['estado'] === '0') {
-                $query->where('estadoArea', false);
-            }
-        } else {
-            $query->where('estadoArea', true);
-        }
-
-        return $query->get();
+        return $this->model->all();
     }
 
     public function getById($id)

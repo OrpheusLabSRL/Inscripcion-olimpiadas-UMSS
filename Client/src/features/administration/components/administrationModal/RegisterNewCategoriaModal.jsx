@@ -6,80 +6,53 @@ import "../../styles/ModalGeneral.css";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import {
-  updateCategoriaWithGrados,
   getGrados,
+  createCategoriaWithGrados,
 } from "../../../../api/Administration.api";
 
 const MySwal = withReactContent(Swal);
 
-const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
+const RegisterCategoriaModal = ({ isOpen, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     nombreCategoria: "",
     grados: [],
   });
+
   const [gradosDisponibles, setGradosDisponibles] = useState([]);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (isOpen && categoria) {
-      const fetchData = async () => {
-        try {
-          const gradosResponse = await getGrados();
-          console.log("Grados disponibles:", gradosResponse);
-          setGradosDisponibles(gradosResponse || []);
-          const gradosActuales = Array.isArray(categoria.grados)
-            ? categoria.grados
-            : [];
+    const fetchGrados = async () => {
+      try {
+        const response = await getGrados();
+        setGradosDisponibles(response || []);
+      } catch (error) {
+        console.error("Error al obtener grados:", error);
+      }
+    };
 
-          setFormData({
-            nombreCategoria: categoria.nombreCategoria || "",
-            grados: gradosActuales,
-          });
-          setErrors({});
-        } catch (error) {
-          console.error("Error al cargar datos:", error);
-        }
-      };
-
-      fetchData();
-    } else {
-      // Resetear el formulario cuando el modal se cierra
-      setFormData({
-        nombreCategoria: "",
-        grados: [],
-      });
+    if (isOpen) {
+      fetchGrados();
+      setFormData({ nombreCategoria: "", grados: [] });
       setErrors({});
     }
-  }, [isOpen, categoria]);
+  }, [isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: null,
-      }));
+      setErrors((prev) => ({ ...prev, [name]: null }));
     }
   };
 
   const handleGradosChange = (selectedGrados) => {
-    const gradosNumericos = selectedGrados.map(Number);
-
     setFormData((prev) => ({
       ...prev,
-      grados: gradosNumericos,
+      grados: selectedGrados.map(Number),
     }));
-
-    setErrors((prev) => ({
-      ...prev,
-      grados: "",
-    }));
+    setErrors((prev) => ({ ...prev, grados: null }));
   };
 
   const validateForm = () => {
@@ -101,17 +74,13 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
   };
 
   const handleClose = () => {
-    setFormData({
-      nombreCategoria: "",
-      grados: [],
-    });
+    setFormData({ nombreCategoria: "", grados: [] });
     setErrors({});
     onClose();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) {
       await MySwal.fire({
         icon: "warning",
@@ -122,32 +91,32 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
       return;
     }
 
-    const result = await MySwal.fire({
-      title: "¿Guardar cambios?",
-      text: "¿Deseas actualizar los datos de la categoría?",
+    const confirm = await MySwal.fire({
+      title: "¿Registrar categoría?",
+      text: "Se guardará la nueva categoría con los grados seleccionados.",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "Sí, guardar",
+      confirmButtonText: "Sí, registrar",
       cancelButtonText: "Cancelar",
       reverseButtons: true,
       customClass: { container: "swal2Container" },
     });
 
-    if (!result.isConfirmed) return;
+    if (!confirm.isConfirmed) return;
 
     setIsSubmitting(true);
 
     try {
-      await updateCategoriaWithGrados(categoria.idCategoria, {
-        nombreCategoria: formData.nombreCategoria.trim().toUpperCase(),
+      await createCategoriaWithGrados({
+        nombreCategoria: formData.nombreCategoria,
         grados: formData.grados,
         estadoCategoriaGrado: true,
       });
 
       await MySwal.fire({
         icon: "success",
-        title: "Actualizado",
-        text: "La categoría se actualizó correctamente.",
+        title: "Registrado",
+        text: "La categoría fue registrada exitosamente.",
         timer: 1800,
         showConfirmButton: false,
         customClass: { container: "swal2Container" },
@@ -156,11 +125,11 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
       onSuccess?.();
       handleClose();
     } catch (error) {
-      console.error("Error al actualizar categoría:", error);
+      console.error("Error al registrar categoría:", error);
       await MySwal.fire({
         icon: "error",
         title: "Error",
-        text: "No se pudo actualizar la categoría.",
+        text: error.message || "No se pudo registrar la categoría.",
         customClass: { container: "swal2Container" },
       });
     } finally {
@@ -185,7 +154,7 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
           ✖
         </button>
         <div className="adminModalHeader">
-          <h3 className="adminModalTitle">Editar Categoría</h3>
+          <h3 className="adminModalTitle">Registrar Categoría</h3>
         </div>
 
         <form onSubmit={handleSubmit} className="adminModalForm">
@@ -258,7 +227,7 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
               className="adminModalBtnSave"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+              {isSubmitting ? "Registrando..." : "Registrar"}
             </button>
           </div>
         </form>
@@ -267,4 +236,4 @@ const EditCategoriaModal = ({ isOpen, onClose, categoria, onSuccess }) => {
   );
 };
 
-export default EditCategoriaModal;
+export default RegisterCategoriaModal;

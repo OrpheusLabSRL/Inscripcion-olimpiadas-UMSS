@@ -53,14 +53,17 @@ const RegisterCategoriaModal = ({
         categoriaGradoData.forEach((entry) => {
           const cat = entry.categoria;
           const grado = entry.grado;
+          const estado = entry.estadoCategoriaGrado; // ← estado desde la tabla pivote
 
           if (!categoriaMap.has(cat.idCategoria)) {
             categoriaMap.set(cat.idCategoria, {
               idCategoria: cat.idCategoria,
               nombreCategoria: cat.nombreCategoria,
+              estado: estado,
               grados: [],
             });
           }
+
           if (grado) {
             categoriaMap.get(cat.idCategoria).grados.push(grado);
           }
@@ -274,16 +277,18 @@ const RegisterCategoriaModal = ({
           {selectedAreas.map((areaId) => {
             const area = areas.find((a) => a.idArea === areaId);
 
-            const categoriasOptions = categorias.map((c) => ({
-              value: c.idCategoria,
-              label: `${c.nombreCategoria}${
-                c.grados?.length > 0
-                  ? ` (${c.grados
-                      .map((g) => `${g.numeroGrado}° ${g.nivel}`)
-                      .join(", ")})`
-                  : ""
-              }`,
-            }));
+            const categoriasOptions = categorias
+              .filter((c) => c.estado === 1)
+              .map((c) => ({
+                value: c.idCategoria,
+                label: `${c.nombreCategoria}${
+                  c.grados?.length > 0
+                    ? ` (${c.grados
+                        .map((g) => `${g.numeroGrado}° ${g.nivel}`)
+                        .join(", ")})`
+                    : ""
+                }`,
+              }));
 
             const categoriasSeleccionadas = categorias.filter((c) =>
               selectedCategorias[areaId]?.includes(c.idCategoria)

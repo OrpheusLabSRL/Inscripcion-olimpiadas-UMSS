@@ -13,9 +13,9 @@ class AreaService
         $this->repository = $repository;
     }
 
-    public function getAllAreas($filters = [])
+    public function getAllAreas()
     {
-        return $this->repository->getAll($filters);
+        return $this->repository->getAll();
     }
 
     public function createArea(array $data)
