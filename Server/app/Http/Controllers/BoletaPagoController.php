@@ -79,10 +79,15 @@ class BoletaPagoController extends Controller
     public function reimprimirBoleta($codigoBoleta)
     {
         try {
+            \Log::info('Recibida solicitud de reimpresión para boleta: ' . $codigoBoleta);
+            
             $pdf = $this->reimprimirBoletaService->reimprimirBoleta($codigoBoleta);
-            return $pdf->download("boleta_pago_reimpresion_{$codigoBoleta}.pdf");
+            \Log::info('PDF generado correctamente para boleta: ' . $codigoBoleta);
+            
+            return $pdf->stream("boleta_pago_{$codigoBoleta}.pdf");
         } catch (\Exception $e) {
             \Log::error('Error al reimprimir la boleta: ' . $e->getMessage());
+            \Log::error('Stack trace: ' . $e->getTraceAsString());
             return response()->json(['message' => 'Error interno al reimprimir la boleta.'], 500);
         }
     }
