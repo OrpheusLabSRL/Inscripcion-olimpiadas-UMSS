@@ -1,5 +1,6 @@
 export const extractControlBoleta = (text) => {
-  const regex = /nro[^a-zA-Z0-9]*control[^a-zA-Z0-9]*[:\\s\\-+´\\{\\}.<>\\w]*?(\\d+)/i;
+  // Fix regex range order by escaping the dash or placing it at the start or end
+  const regex = /nro[^a-zA-Z0-9]*control[^a-zA-Z0-9]*[:\s\-+´{}.<>\w]*?(\d+)/i;
   const match = text.match(regex);
   return match ? match[1].trim() : null;
 };
