@@ -32,6 +32,7 @@ import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
 import { OCRValidation } from "./features/registrarion/pages/OCRValidation";
 import { GenerateOrder } from "./features/registrarion/pages/GenerateOrder";
 import OlimpiadaDetallada from "./features/detallesOlimpiada/OlimpiadaDetallada";
+import { BoletaPDF } from "./features/cajero/pages/BoletaPDF";
 
 import { useEffect } from "react";
 
@@ -66,11 +67,13 @@ function App() {
     "/consultar-inscripcion/resultado",
     "/consultar-inscripcion/resultado-tutor",
     "/olimpiada/:id",
+    "/cajero/:token/boleta/:id",
   ];
 
   const hideSidebar =
     hideSidebarRoutes.some((ruta) => location.pathname === ruta) ||
-    location.pathname.startsWith("/olimpiada/");
+    location.pathname.startsWith("/olimpiada/") ||
+    location.pathname.startsWith("/cajero/");
 
   const showSidebar = !hideSidebar;
   return (
@@ -141,6 +144,7 @@ function App() {
               path="/consultar-inscripcion/resultado-tutor"
               element={<ResultadoConsulta_Tutor />}
             />
+            <Route path="/cajero/:token/boleta/:id" element={<BoletaPDF />} />
 
             {/* Admin Layout con rutas anidadas */}
             <Route path="/admin" element={<AdminLayout />}>

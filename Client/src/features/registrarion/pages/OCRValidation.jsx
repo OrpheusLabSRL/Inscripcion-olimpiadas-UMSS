@@ -14,6 +14,7 @@ export const OCRValidation = () => {
   const [uploadEnabled, setUploadEnabled] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const [codigoBoleta, setCodigoBoleta] = useState(null);
 
   useEffect(() => {
     // Collapse sidebar on mobile devices
@@ -86,9 +87,14 @@ export const OCRValidation = () => {
       const data = await response.json();
       setBoletaExists(data.exists);
       setBoletaPaid(data.paid);
+      setCodigoBoleta(data.codigoBoleta || null);
+      if (!data.codigoBoleta) {
+        console.log("No se recibió codigoBoleta desde el backend para el numeroControl:", control);
+      }
     } catch (error) {
       setBoletaExists(false);
       setBoletaPaid(false);
+      setCodigoBoleta(null);
     }
   };
 
@@ -110,9 +116,13 @@ export const OCRValidation = () => {
       });
       const text = data.text;
       setOcrResult(text);
+      console.log("Texto extraído por OCR:", text);
 
       const control = extractControlBoleta(text);
       setControlBoleta(control);
+      if (!control) {
+        console.log("No se encontró el número de control en el texto extraído.");
+      }
 
       if (control) {
         await checkControlBoleta(control);
@@ -120,6 +130,7 @@ export const OCRValidation = () => {
     } catch (error) {
       setOcrResult("Error al procesar la imagen: " + error.message);
       setBoletaExists(false);
+      console.log("Error al procesar la imagen:", error);
     } finally {
       setProcessing(false);
     }
@@ -134,10 +145,12 @@ export const OCRValidation = () => {
   const confirmarPago = async (control) => {
     if (!control) {
       alert("Código de control no detectado. Por favor, procese una imagen válida.");
+      console.log("Intento de confirmar pago sin código de control detectado.");
       return;
     }
     if (boletaPaid) {
       alert("La boleta ya fue pagada.");
+      console.log("La boleta ya fue pagada.");
       return;
     }
     try {
@@ -156,11 +169,13 @@ export const OCRValidation = () => {
           "La boleta no existe en la base de datos. No se puede confirmar el pago."
         );
         setBoletaExists(false);
+        console.log("La boleta no existe en la base de datos para el control:", control);
         return;
       }
       if (checkData.paid) {
         alert("La boleta ya fue pagada.");
         setBoletaPaid(true);
+        console.log("La boleta ya fue pagada para el control:", control);
         return;
       }
       const response = await fetch("http://127.0.0.1:8000/api/boletaPago/confirmarPago", {
@@ -174,9 +189,11 @@ export const OCRValidation = () => {
       alert(data.message);
       if (data.message === "Pago confirmado exitosamente.") {
         setBoletaPaid(true);
+        console.log("Pago confirmado exitosamente para el control:", control);
       }
     } catch (error) {
       alert("Error al confirmar el pago: " + error.message);
+      console.log("Error al confirmar el pago:", error);
     }
   };
 
@@ -245,12 +262,11 @@ export const OCRValidation = () => {
         </div>
       )}
 
-      <button
-        className="back-button back-button-custom"
-        onClick={handleBack}
-      >
-        Volver
-      </button>
+      {codigoBoleta && (
+        <div className="aclaracion">
+          Aclaracion: OF {codigoBoleta}
+        </div>
+      )}
     </div>
   </div>
 );
