@@ -3,6 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import "../Styles/OCRValidation.css";
 import Tesseract from "tesseract.js";
+import {
+  extractControlBoleta,
+  checkControlBoleta,
+  confirmarPago,
+  fetchPendingBoletas,
+} from "../services/OCRValidationService";
 
 export const OCRValidation = () => {
   const [file, setFile] = useState(null);
@@ -34,22 +40,9 @@ export const OCRValidation = () => {
   useEffect(() => {
     const tutorId = sessionStorage.getItem("tutorInscripcionId");
     if (tutorId) {
-      fetch(`http://127.0.0.1:8000/api/boletaPago/boletasByTutor/${tutorId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.boletas && data.boletas.length > 0) {
-            // Filtrar boletas que no estén pagadas (estadoBoletaPago == 1)
-            const pendingBoletas = data.boletas.filter(
-              (boleta) => boleta.estadoBoletaPago === 1
-            );
-            setUploadEnabled(pendingBoletas.length > 0);
-          } else {
-            setUploadEnabled(false);
-          }
-        })
-        .catch(() => {
-          setUploadEnabled(false);
-        });
+      fetchPendingBoletas(tutorId).then((enabled) => {
+        setUploadEnabled(enabled);
+      });
     } else {
       setUploadEnabled(false);
     }
@@ -61,35 +54,6 @@ export const OCRValidation = () => {
     setControlBoleta(null);
     setBoletaExists(null);
     setMontoTotal(null);
-  };
-
-  const extractControlBoleta = (text) => {
-    // Extract numeroControl from noisy string, e.g. "43124asdfad514Nrodsads.Co4532ntrol     -{+´-: dfasfdsa<NroControl>+-´ñ5432-2."
-    // Strategy: find "nro" and "control" words ignoring non-alphanumeric chars, then extract following digits
-    const regex = /nro[^a-zA-Z0-9]*control[^a-zA-Z0-9]*[:\s\-+´\{\}\.<>\w]*?(\d+)/i;
-    const match = text.match(regex);
-    return match ? match[1].trim() : null;
-  };
-  
-     
-  const checkControlBoleta = async (control) => {
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/boletaPago/check", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          numeroControl: control
-        }),
-      });
-      const data = await response.json();
-      setBoletaExists(data.exists);
-      setBoletaPaid(data.paid);
-    } catch (error) {
-      setBoletaExists(false);
-      setBoletaPaid(false);
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -115,7 +79,9 @@ export const OCRValidation = () => {
       setControlBoleta(control);
 
       if (control) {
-        await checkControlBoleta(control);
+        const data = await checkControlBoleta(control);
+        setBoletaExists(data.exists);
+        setBoletaPaid(data.paid);
       }
     } catch (error) {
       setOcrResult("Error al procesar la imagen: " + error.message);
@@ -131,7 +97,7 @@ export const OCRValidation = () => {
 
   const [boletaPaid, setBoletaPaid] = useState(false);
 
-  const confirmarPago = async (control) => {
+  const handleConfirmarPago = async (control) => {
     if (!control) {
       alert("Código de control no detectado. Por favor, procese una imagen válida.");
       return;
@@ -141,117 +107,88 @@ export const OCRValidation = () => {
       return;
     }
     try {
-      const checkResponse = await fetch("http://127.0.0.1:8000/api/boletaPago/check", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          numeroControl: control
-        }),
-      });
-      const checkData = await checkResponse.json();
-      if (!checkData.exists) {
-        alert(
-          "La boleta no existe en la base de datos. No se puede confirmar el pago."
-        );
-        setBoletaExists(false);
-        return;
-      }
-      if (checkData.paid) {
-        alert("La boleta ya fue pagada.");
-        setBoletaPaid(true);
-        return;
-      }
-      const response = await fetch("http://127.0.0.1:8000/api/boletaPago/confirmarPago", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ numeroControl: control }),
-      });
-      const data = await response.json();
+      const data = await confirmarPago(control);
       alert(data.message);
       if (data.message === "Pago confirmado exitosamente.") {
         setBoletaPaid(true);
       }
     } catch (error) {
-      alert("Error al confirmar el pago: " + error.message);
+      alert(error.message);
     }
   };
 
   return (
-  <div className={`ocrvalidation-container ${sidebarOpen ? "sidebar-collapsed" : ""}`}>
-    <h1>Subir foto del comprobante de pago</h1>
-    <p>Sube una foto clara de tu comprobante de pago para validar tu inscripción automáticamente.</p>
-    <div className="reports__content">
-      <form
-        onSubmit={handleSubmit}
-        className="ocrvalidation-form"
-      >
-        {/* Contenedor del input de archivo personalizado */}
-        <div className={`file-input-wrapper ${uploadEnabled ? "" : "disabled"}`}>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            disabled={!uploadEnabled}
-            className={`file-ocr-input ${uploadEnabled ? "" : "disabled"}`}
-          />
-          <div className="file-input-label">
-            Seleccionar imagen
+    <div className={`ocrvalidation-container ${sidebarOpen ? "sidebar-collapsed" : ""}`}>
+      <h1>Subir foto del comprobante de pago</h1>
+      <p>Sube una foto clara de tu comprobante de pago para validar tu inscripción automáticamente.</p>
+      <div className="reports__content">
+        <form
+          onSubmit={handleSubmit}
+          className="ocrvalidation-form"
+        >
+          {/* Contenedor del input de archivo personalizado */}
+          <div className={`file-input-wrapper ${uploadEnabled ? "" : "disabled"}`}>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              disabled={!uploadEnabled}
+              className={`file-ocr-input ${uploadEnabled ? "" : "disabled"}`}
+            />
+            <div className="file-input-label">
+              Seleccionar imagen
+            </div>
           </div>
-        </div>
-        {file && (
-          <div
-            className="selected-file"
-            title={file.name}
+          {file && (
+            <div
+              className="selected-file"
+              title={file.name}
+            >
+              Archivo seleccionado: {file.name}
+            </div>
+          )}
+
+            <PrimaryButton
+              type="submit"
+              value={processing ? "Procesando..." : "Procesar Imagen"}
+              disabled={processing || !uploadEnabled || !file || file === undefined}
+              className="primary-button-custom"
+            />
+        </form>
+        
+        {controlBoleta && (
+          <button
+            onClick={() => handleConfirmarPago(controlBoleta)}
+            disabled={!boletaExists || boletaPaid}
+            className={`confirmar-pago-button ${(!boletaExists || boletaPaid) ? "disabled" : ""}`}
           >
-            Archivo seleccionado: {file.name}
+            Confirmar Pago
+          </button>
+        )}
+
+        {uploadEnabled === false && (
+          <div className="status-message error">
+            No tiene boletas de pago pendientes. No puede subir comprobantes hasta que tenga al menos una boleta pendiente.
           </div>
         )}
 
-          <PrimaryButton
-            type="submit"
-            value={processing ? "Procesando..." : "Procesar Imagen"}
-            disabled={processing || !uploadEnabled || !file || file === undefined}
-            className="primary-button-custom"
-          />
-      </form>
-      
-      {controlBoleta && (
+        {boletaExists !== null && (
+          <div className={`status-message ${boletaExists ? "success" : "error"}`}>
+            {boletaExists
+              ? boletaPaid
+                ? "La boleta ya fue pagada."
+                : "La boleta existe en la base de datos."
+              : "La boleta NO existe en la base de datos."}
+          </div>
+        )}
+
         <button
-          onClick={() => confirmarPago(controlBoleta)}
-          disabled={!boletaExists || boletaPaid}
-          className={`confirmar-pago-button ${(!boletaExists || boletaPaid) ? "disabled" : ""}`}
+          className="back-button back-button-custom"
+          onClick={handleBack}
         >
-          Confirmar Pago
+          Volver
         </button>
-      )}
-
-      {uploadEnabled === false && (
-        <div className="status-message error">
-          No tiene boletas de pago pendientes. No puede subir comprobantes hasta que tenga al menos una boleta pendiente.
-        </div>
-      )}
-
-      {boletaExists !== null && (
-        <div className={`status-message ${boletaExists ? "success" : "error"}`}>
-          {boletaExists
-            ? boletaPaid
-              ? "La boleta ya fue pagada."
-              : "La boleta existe en la base de datos."
-            : "La boleta NO existe en la base de datos."}
-        </div>
-      )}
-
-      <button
-        className="back-button back-button-custom"
-        onClick={handleBack}
-      >
-        Volver
-      </button>
+      </div>
     </div>
-  </div>
-);
+  );
 };
