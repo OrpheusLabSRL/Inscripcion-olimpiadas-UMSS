@@ -239,8 +239,33 @@ class BoletaPagoController extends Controller
         ]);
     }
 
-    // Resto de métodos mantenidos...
-    public function generarPago(Request $request) { /* ... */ }
-    public function confirmarPago(Request $request) { /* ... */ }
-    public function getBoletasPorTutor($tutorId) { /* ... */ }
+    public function generarPago(Request $request)
+    {
+        $numeroControlRaw = $request->input('numeroControl');
+        $result = $this->verificarPagoService->verificarPago($numeroControlRaw);
+        return response()->json($result);
+    }
+
+    public function confirmarPago(Request $request)
+    {
+        $numeroControlRaw = $request->input('numeroControl');
+        try {
+            $message = $this->confirmarPagoService->confirmarPago($numeroControlRaw, $this->mailController);
+            return response()->json(['message' => $message]);
+        } catch (\Exception $e) {
+            \Log::error('Error al confirmar el pago: ' . $e->getMessage());
+            return response()->json(['message' => 'Error interno al confirmar el pago.'], 500);
+        }
+    }
+
+    public function getBoletasPorTutor($tutorId)
+    {
+        try {
+            $boletas = $this->obtenerBoletasPorTutorService->obtenerBoletasPorTutor($tutorId);
+            return response()->json(['boletas' => $boletas]);
+        } catch (\Exception $e) {
+            \Log::error('Error al obtener boletas por tutor: ' . $e->getMessage());
+            return response()->json(['message' => 'Error interno al obtener boletas.'], 500);
+        }
+    }
 }
