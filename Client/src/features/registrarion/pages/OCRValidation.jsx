@@ -196,16 +196,14 @@ export const OCRValidation = () => {
           Aclaracion: OF {codigoBoleta}
         </div>
       )}
-    </div>
-  </div>
-);
         <button
           className="back-button back-button-custom"
           onClick={handleBack}
         >
           Volver
         </button>
-      </div>
+
     </div>
-  );
+  </div>
+); 
 };
