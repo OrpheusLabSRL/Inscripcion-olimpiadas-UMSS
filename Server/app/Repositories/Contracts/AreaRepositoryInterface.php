@@ -4,7 +4,7 @@ namespace App\Repositories\Contracts;
 
 interface AreaRepositoryInterface
 {
-    public function getAll($filters = []);
+    public function getAll();
     public function getById($id);
     public function create(array $data);
     public function update($id, array $data);

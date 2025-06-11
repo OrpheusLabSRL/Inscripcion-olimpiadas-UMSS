@@ -21,6 +21,8 @@ import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlym
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
 import Reports from "./features/administration/pages/Reports";
 import ManageUsers from "./features/administration/pages/ManageUsers";
+import ManageViewUser from "./features/administration/pages/ManageViewUser";
+
 import PaginaContacto from "./features/contacto/pages/PaginaContacto";
 import ConsultarInscripcion from "./features/consultar_inscripcion/pages/ConsultarInscripcion";
 import ResultadoConsulta from "./features/consultar_inscripcion/pages/ResultadoConsulta";
@@ -65,21 +67,20 @@ function App() {
     "/consultar-inscripcion/resultado",
     "/consultar-inscripcion/resultado-tutor",
     "/olimpiada/:id",
-    "/cajero/:token/boleta/:id"
+    "/cajero/:token/boleta/:id",
   ];
 
-  const hideSidebar = hideSidebarRoutes.some((ruta) => location.pathname === ruta) || location.pathname.startsWith("/olimpiada/") || location.pathname.startsWith("/cajero/");
+  const hideSidebar =
+    hideSidebarRoutes.some((ruta) => location.pathname === ruta) ||
+    location.pathname.startsWith("/olimpiada/") ||
+    location.pathname.startsWith("/cajero/");
 
   const showSidebar = !hideSidebar;
   return (
     <div className="app-container">
       <div
         className={
-          hideSidebar
-            ? "page-no-sidebar"
-            : isOpen
-              ? "main active"
-              : "main"
+          hideSidebar ? "page-no-sidebar" : isOpen ? "main active" : "main"
         }
       >
         {showSidebar && (
@@ -90,7 +91,14 @@ function App() {
           />
         )}
 
-        <div className={`content-area ${(hideSidebarRoutes.includes(location.pathname) || location.pathname.startsWith("/olimpiada/")) ? "no-margin" : ""}`}>
+        <div
+          className={`content-area ${
+            hideSidebarRoutes.includes(location.pathname) ||
+            location.pathname.startsWith("/olimpiada/")
+              ? "no-margin"
+              : ""
+          }`}
+        >
           <Routes>
             <Route path="/" element={<MainHome />} />
             <Route path="/olimpiada/:id" element={<OlimpiadaDetallada />} />
@@ -156,6 +164,15 @@ function App() {
                 element={
                   <PrivateRoute
                     element={<ManageUsers />}
+                    allowedPermiso={"crear_usuarios"}
+                  />
+                }
+              />
+              <Route
+                path="manageUser"
+                element={
+                  <PrivateRoute
+                    element={<ManageViewUser />}
                     allowedPermiso={"crear_usuarios"}
                   />
                 }

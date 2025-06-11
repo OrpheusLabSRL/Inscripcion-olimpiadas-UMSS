@@ -36,12 +36,38 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
       [name]: value,
     }));
 
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: null,
-      }));
+    const trimmedValue = value.trim();
+    const newErrors = { ...errors };
+
+    if (name === "nombreArea") {
+      if (!trimmedValue) {
+        newErrors.nombreArea = "El nombre del área es obligatorio";
+      } else if (trimmedValue.length > 50) {
+        newErrors.nombreArea = "El nombre no debe exceder los 50 caracteres";
+      } else if (
+        existingAreas.some(
+          (a) =>
+            a.nombreArea.trim().toLowerCase() === trimmedValue.toLowerCase()
+        )
+      ) {
+        newErrors.nombreArea = "Ya existe un área con ese nombre";
+      } else {
+        delete newErrors.nombreArea;
+      }
     }
+
+    if (name === "descripcionArea") {
+      if (!trimmedValue) {
+        newErrors.descripcionArea = "La descripción del área es obligatoria";
+      } else if (trimmedValue.length > 200) {
+        newErrors.descripcionArea =
+          "La descripción solo debe tener 200 caracteres";
+      } else {
+        delete newErrors.descripcionArea;
+      }
+    }
+
+    setErrors(newErrors);
   };
 
   const handleReset = () => {

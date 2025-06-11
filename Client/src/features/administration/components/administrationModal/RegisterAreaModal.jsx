@@ -65,16 +65,21 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
         if (!isMounted) return;
 
         const categoriaMap = new Map();
-        categoriaGradoData.forEach(({ categoria, grado }) => {
-          if (!categoriaMap.has(categoria.idCategoria)) {
-            categoriaMap.set(categoria.idCategoria, {
-              idCategoria: categoria.idCategoria,
-              nombreCategoria: categoria.nombreCategoria,
-              grados: [],
-            });
+        categoriaGradoData.forEach(
+          ({ categoria, grado, estadoCategoriaGrado }) => {
+            if (!categoriaMap.has(categoria.idCategoria)) {
+              categoriaMap.set(categoria.idCategoria, {
+                idCategoria: categoria.idCategoria,
+                nombreCategoria: categoria.nombreCategoria,
+                estado: estadoCategoriaGrado,
+                grados: [],
+              });
+            }
+            if (grado) {
+              categoriaMap.get(categoria.idCategoria).grados.push(grado);
+            }
           }
-          if (grado) categoriaMap.get(categoria.idCategoria).grados.push(grado);
-        });
+        );
 
         setOlimpiadas(olimpiadasResponse.data || []);
         setAreas(areasData || []);
@@ -251,6 +256,7 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
   const areasNoAsignadas = areas.filter(
     (area) => !initialState.areas.includes(area.idArea)
   );
+
   const areaSeleccionada = areas.find((a) => a.idArea == selectedArea);
 
   if (!isOpen) return null;
@@ -311,11 +317,13 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                   disabled={areasNoAsignadas.length === 0 || isSubmitting}
                 >
                   <option value="">-- Seleccione un área --</option>
-                  {areasNoAsignadas.map((a) => (
-                    <option key={a.idArea} value={a.idArea}>
-                      {a.nombreArea}
-                    </option>
-                  ))}
+                  {areasNoAsignadas
+                    .filter((a) => a.estadoArea !== 0)
+                    .map((a) => (
+                      <option key={a.idArea} value={a.idArea}>
+                        {a.nombreArea}
+                      </option>
+                    ))}
                 </select>
 
                 {areasNoAsignadas.length === 0 && !isSubmitting && (
@@ -390,16 +398,18 @@ const RegisterAreaModal = ({ isOpen, onClose, selectedVersion, onSuccess }) => {
                   <MultiSelectDropdown
                     name="categorias"
                     placeholder="Seleccione las categorías..."
-                    options={categorias.map((c) => ({
-                      value: c.idCategoria,
-                      label: `${c.nombreCategoria}${
-                        c.grados?.length
-                          ? ` (${c.grados
-                              .map((g) => `${g.numeroGrado}° ${g.nivel}`)
-                              .join(", ")})`
-                          : ""
-                      }`,
-                    }))}
+                    options={categorias
+                      .filter((c) => c.estado === 1)
+                      .map((c) => ({
+                        value: c.idCategoria,
+                        label: `${c.nombreCategoria}${
+                          c.grados?.length
+                            ? ` (${c.grados
+                                .map((g) => `${g.numeroGrado}° ${g.nivel}`)
+                                .join(", ")})`
+                            : ""
+                        }`,
+                      }))}
                     selectedValues={selectedCategorias}
                     onChange={(values) => {
                       setSelectedCategorias(values);

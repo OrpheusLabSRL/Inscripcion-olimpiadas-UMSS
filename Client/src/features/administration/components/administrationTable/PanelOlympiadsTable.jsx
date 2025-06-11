@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { FiEdit2, FiPlus, FiLayers } from "react-icons/fi";
+import { FaTrash } from "react-icons/fa";
 import RegisterCategoriaModal from "../administrationModal/RegisterCategoriaModal";
+import RegisterNewCategoriaModal from "../administrationModal/RegisterNewCategoriaModal";
 import RegisterAreaModal from "../administrationModal/RegisterAreaModal";
 import RegisterNewAreaModal from "../administrationModal/RegisterNewAreaModal";
+
 import "../../Styles/Tables.css";
 
 export default function PanelOlympiadsTable({
@@ -12,7 +15,9 @@ export default function PanelOlympiadsTable({
   onRefresh,
 }) {
   const [modalKey, setModalKey] = useState(0);
-  const [isCategoriaModalOpen, setIsCategoriaModalOpen] = useState(false);
+  const [isNewCategoriaModalOpen, setIsNewCategoriaModalOpen] = useState(false);
+  const [isEditCategoriaModalOpen, setIsEditCategoriaModalOpen] =
+    useState(false);
   const [isAreaModalOpen, setIsAreaModalOpen] = useState(false);
   const [isNewAreaModalOpen, setIsNewAreaModalOpen] = useState(false);
   const [selectedAreaId, setSelectedAreaId] = useState(null);
@@ -23,10 +28,16 @@ export default function PanelOlympiadsTable({
     setIsAreaModalOpen(true);
   };
 
-  const handleEditModal = (areaId) => {
+  const handleOpenEditCategoriaModal = (areaId) => {
     setModalKey((prev) => prev + 1);
     setSelectedAreaId(areaId);
-    setIsCategoriaModalOpen(true);
+    setIsEditCategoriaModalOpen(true);
+  };
+
+  const handleOpenNewCategoriaModal = () => {
+    setModalKey((prev) => prev + 1);
+    setSelectedAreaId(null); // No hay área seleccionada al registrar nueva categoría
+    setIsNewCategoriaModalOpen(true);
   };
 
   const handleNewAreaSuccess = () => {
@@ -34,7 +45,6 @@ export default function PanelOlympiadsTable({
     if (onRefresh) onRefresh();
   };
 
-  // Validar fecha de inicio
   const fechaInicio = new Date(fechaInicioOlimpiada);
   const hasStarted = !isNaN(fechaInicio.getTime()) && fechaInicio <= new Date();
 
@@ -55,7 +65,7 @@ export default function PanelOlympiadsTable({
           </button>
           {hasStarted && (
             <div id="tooltip-assign" role="tooltip" className="tooltipText">
-              No se puede asignar áreas porque la olimpiada ya comenzó o no esta
+              No se puede asignar áreas porque la olimpiada ya comenzó o no está
               activa
               <div className="tooltipArrow"></div>
             </div>
@@ -79,10 +89,16 @@ export default function PanelOlympiadsTable({
           >
             Nueva Área
           </button>
+          <button
+            className={`panelOlympiadTab ${
+              activeTab === "nuevaCategoria" ? "active" : ""
+            }`}
+            onClick={() => setActiveTab("nuevaCategoria")}
+          >
+            Nueva Categoría
+          </button>
         </div>
       </div>
-
-      <div className="panelOlympiadActions"></div>
 
       {activeTab === "asignadas" && (
         <div className="panelOlympiadTableWrapper">
@@ -125,9 +141,20 @@ export default function PanelOlympiadsTable({
                             </div>
                           ))
                         ) : (
-                          <span className="panelOlympiadNoCategories">
-                            Sin categorías asignadas
-                          </span>
+                          <div className="panelOlympiadNoCategories">
+                            <span>Sin categorías asignadas</span>
+                            {!hasStarted && (
+                              <button
+                                className="panelOlympiadBtn small success"
+                                onClick={() =>
+                                  handleOpenEditCategoriaModal(area.idArea)
+                                }
+                              >
+                                <FiPlus className="buttonIcon" />
+                                Agregar Categoría
+                              </button>
+                            )}
+                          </div>
                         )}
                       </td>
                       <td className="textRight panelOlympiadCost">
@@ -149,7 +176,9 @@ export default function PanelOlympiadsTable({
                       <td className="panelOlympiadActionsCol">
                         <div className="tooltipWrapper">
                           <button
-                            onClick={() => handleEditModal(area.idArea)}
+                            onClick={() =>
+                              handleOpenEditCategoriaModal(area.idArea)
+                            }
                             className={`panelOlympiadEditBtn ${
                               !hasCategories || hasStarted ? "disabledBtn" : ""
                             }`}
@@ -170,6 +199,7 @@ export default function PanelOlympiadsTable({
                               <div className="tooltipArrow"></div>
                             </div>
                           )}
+                          <FaTrash className="actionIcon deleteIcon" />
                         </div>
                       </td>
                     </tr>
@@ -216,7 +246,7 @@ export default function PanelOlympiadsTable({
                   role="tooltip"
                   className="tooltipText"
                 >
-                  No se puede registrar porque la olimpiada ya comenzó o no esta
+                  No se puede registrar porque la olimpiada ya comenzó o no está
                   activa
                   <div className="tooltipArrow"></div>
                 </div>
@@ -226,6 +256,43 @@ export default function PanelOlympiadsTable({
         </div>
       )}
 
+      {activeTab === "nuevaCategoria" && (
+        <div className="panelOlympiadNewArea">
+          <div className="panelOlympiadInfoCard">
+            <h4>Registrar nueva categoría</h4>
+            <p>
+              Para registrar una nueva categoría desde cero, haz clic en el
+              botón "Registrar Nueva Categoría".
+            </p>
+            <div className="tooltipWrapper">
+              <button
+                className={`panelOlympiadBtn success ${
+                  hasStarted ? "disabledBtn" : ""
+                }`}
+                onClick={handleOpenNewCategoriaModal}
+                disabled={hasStarted}
+                aria-describedby="tooltip-register-cat"
+              >
+                <FiPlus className="buttonIcon" />
+                Registrar Nueva Categoría
+              </button>
+              {hasStarted && (
+                <div
+                  id="tooltip-register-cat"
+                  role="tooltip"
+                  className="tooltipText"
+                >
+                  No se puede registrar porque la olimpiada ya comenzó o no está
+                  activa
+                  <div className="tooltipArrow"></div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modales */}
       <RegisterAreaModal
         key={`area-${modalKey}`}
         isOpen={isAreaModalOpen}
@@ -234,10 +301,18 @@ export default function PanelOlympiadsTable({
         onSuccess={onRefresh}
       />
 
+      <RegisterNewCategoriaModal
+        key={`new-cat-${modalKey}`}
+        isOpen={isNewCategoriaModalOpen}
+        onClose={() => setIsNewCategoriaModalOpen(false)}
+        selectedVersion={parseInt(selectedVersion)}
+        onSuccess={onRefresh}
+      />
+
       <RegisterCategoriaModal
-        key={`cat-${modalKey}`}
-        isOpen={isCategoriaModalOpen}
-        onClose={() => setIsCategoriaModalOpen(false)}
+        key={`edit-cat-${modalKey}`}
+        isOpen={isEditCategoriaModalOpen}
+        onClose={() => setIsEditCategoriaModalOpen(false)}
         selectedVersion={parseInt(selectedVersion)}
         selectedAreaId={selectedAreaId}
         onSuccess={onRefresh}
