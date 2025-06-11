@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import '../Styles/BoletaPDF.css';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import "../Styles/BoletaPDF.css";
 
 export const BoletaPDF = () => {
   const { token, id } = useParams();
@@ -27,10 +27,10 @@ export const BoletaPDF = () => {
   return (
     <div className="pdf-container">
       <iframe
-        src={`http://localhost:8000/generate_receipt.php?codigo=${id}`}
+        src={`http://orpheus.tis.cs.umss.edu.bo/generate_receipt.php?codigo=${id}`}
         className="pdf-viewer"
         title="PDF Boleta"
       />
     </div>
   );
-}; 
+};

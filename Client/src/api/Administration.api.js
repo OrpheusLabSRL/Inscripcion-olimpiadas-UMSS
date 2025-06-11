@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://127.0.0.1:8000/api";
+const baseURL = "http://orpheus.tis.cs.umss.edu.bo/api";
 
 const inscriptionApi = axios.create({
   baseURL,

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import HeaderProp from "../../home_usuario/components/HeaderProp";
 import "../Styles/estadoInscripcion.css";
-import imagen from "../../../assets/images/estadoInscripcion.png"
+import imagen from "../../../assets/images/estadoInscripcion.png";
 
 const ConsultarInscripcion = () => {
   const navigate = useNavigate();
@@ -57,8 +57,8 @@ const ConsultarInscripcion = () => {
     try {
       const endpoint =
         rol === "tutor"
-          ? "http://localhost:8000/api/consultar-inscripcion-tutor"
-          : "http://localhost:8000/api/consultar-inscripcion-olimpista";
+          ? "http://orpheus.tis.cs.umss.edu.bo/api/consultar-inscripcion-tutor"
+          : "http://orpheus.tis.cs.umss.edu.bo/api/consultar-inscripcion-olimpista";
 
       const response = await axios.post(endpoint, {
         carnetIdentidad: ci,
@@ -113,93 +113,92 @@ const ConsultarInscripcion = () => {
   };
 
   return (
-  <div>
-    <HeaderProp />
+    <div>
+      <HeaderProp />
 
-    <div className="consultaWrapper">
-      <div className="imagenLado">
-        <img src={imagen} alt="Ilustración educativa" />
-      </div>
+      <div className="consultaWrapper">
+        <div className="imagenLado">
+          <img src={imagen} alt="Ilustración educativa" />
+        </div>
 
-      {/* Lado del formulario */}
-      <div className="formularioLado">
-        <form onSubmit={handleSubmit} noValidate>
-          <h2>Consultar Estado de Inscripción</h2>
+        {/* Lado del formulario */}
+        <div className="formularioLado">
+          <form onSubmit={handleSubmit} noValidate>
+            <h2>Consultar Estado de Inscripción</h2>
 
-          <div className="grupoFormulario">
-            <label htmlFor="ci">
-              <i className="bi bi-person-vcard"></i> Carnet de Identidad <span className="campoRequerido">*</span>
-            </label>
-            <input
-              type="text"
-              id="ci"
-              value={ci}
-              onChange={(e) => setCi(e.target.value)}
-              className={errors.ci ? "entradaInvalida" : ""}
-              required
-              placeholder="Ingrese su carnet de identidad"
-              aria-required="true"
-            />
-            {errors.ci && <div className="mensajeError">{errors.ci}</div>}
-          </div>
-
-          <div className="grupoFormulario">
-            <label htmlFor="correo">
-              <i className="bi bi-envelope"></i> Correo Electrónico <span className="campoRequerido">*</span>
-            </label>
-            <input
-              type="email"
-              id="correo"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-              className={errors.correo ? "entradaInvalida" : ""}
-              required
-              placeholder="Ingrese su correo electrónico"
-              aria-required="true"
-            />
-            {errors.correo && (
-              <div className="mensajeError">{errors.correo}</div>
-            )}
-          </div>
-
-          <div className="grupoFormulario">
-            <label htmlFor="rol">
-              <i className="bi bi-person-badge"></i> Rol <span className="campoRequerido">*</span>
-            </label>
-            <select
-              id="rol"
-              value={rol}
-              onChange={(e) => setRol(e.target.value)}
-              className={errors.rol ? "entradaInvalida" : ""}
-              required
-              aria-required="true"
-            >
-              <option value="">Seleccione su rol</option>
-              <option value="olimpista">Olimpista</option>
-              <option value="tutor">Tutor/Responsable Inscripción</option>
-            </select>
-            {errors.rol && <div className="mensajeError">{errors.rol}</div>}
-            <div className="mensajeAyuda">
-              En caso de ser tutor legal, tutor de área o responsable de inscripción seleccione Tutor/Responsable Inscripción
+            <div className="grupoFormulario">
+              <label htmlFor="ci">
+                <i className="bi bi-person-vcard"></i> Carnet de Identidad{" "}
+                <span className="campoRequerido">*</span>
+              </label>
+              <input
+                type="text"
+                id="ci"
+                value={ci}
+                onChange={(e) => setCi(e.target.value)}
+                className={errors.ci ? "entradaInvalida" : ""}
+                required
+                placeholder="Ingrese su carnet de identidad"
+                aria-required="true"
+              />
+              {errors.ci && <div className="mensajeError">{errors.ci}</div>}
             </div>
-          </div>
 
-          <button
-            type="submit"
-            className="botonEnviar"
-            disabled={loading}
-          >
-            <i className="bi bi-search"></i>
-            {loading ? "Consultando..." : "Consultar"}
-          </button>
+            <div className="grupoFormulario">
+              <label htmlFor="correo">
+                <i className="bi bi-envelope"></i> Correo Electrónico{" "}
+                <span className="campoRequerido">*</span>
+              </label>
+              <input
+                type="email"
+                id="correo"
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
+                className={errors.correo ? "entradaInvalida" : ""}
+                required
+                placeholder="Ingrese su correo electrónico"
+                aria-required="true"
+              />
+              {errors.correo && (
+                <div className="mensajeError">{errors.correo}</div>
+              )}
+            </div>
 
-          {error && <div className="mensajeError">{error}</div>}
-        </form>
+            <div className="grupoFormulario">
+              <label htmlFor="rol">
+                <i className="bi bi-person-badge"></i> Rol{" "}
+                <span className="campoRequerido">*</span>
+              </label>
+              <select
+                id="rol"
+                value={rol}
+                onChange={(e) => setRol(e.target.value)}
+                className={errors.rol ? "entradaInvalida" : ""}
+                required
+                aria-required="true"
+              >
+                <option value="">Seleccione su rol</option>
+                <option value="olimpista">Olimpista</option>
+                <option value="tutor">Tutor/Responsable Inscripción</option>
+              </select>
+              {errors.rol && <div className="mensajeError">{errors.rol}</div>}
+              <div className="mensajeAyuda">
+                En caso de ser tutor legal, tutor de área o responsable de
+                inscripción seleccione Tutor/Responsable Inscripción
+              </div>
+            </div>
+
+            <button type="submit" className="botonEnviar" disabled={loading}>
+              <i className="bi bi-search"></i>
+              {loading ? "Consultando..." : "Consultar"}
+            </button>
+
+            {error && <div className="mensajeError">{error}</div>}
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-);
-
+  );
 };
 
 export default ConsultarInscripcion;

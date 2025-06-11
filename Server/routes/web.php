@@ -31,7 +31,9 @@ Route::get('/boletas/generar/{idTutor}/{codigoInscripcion}', [BoletaPagoControll
 
 
 
-
+Route::get('/{any}', function () {
+    return view('index');
+})->where('any', '.*');
 
 
 

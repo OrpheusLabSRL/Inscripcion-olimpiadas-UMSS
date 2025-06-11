@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const tutorApi = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: "http://orpheus.tis.cs.umss.edu.bo/api",
   responseType: "json",
   timeout: 10000,
   headers: {

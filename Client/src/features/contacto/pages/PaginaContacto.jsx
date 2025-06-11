@@ -92,24 +92,41 @@ const PaginaContacto = () => {
       }
     }
 
-    setErrors(prevErrors => ({ ...prevErrors, [name]: error }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
     return error === "";
   };
 
   const validateForm = () => {
     const newErrors = {};
-    const fieldsToValidate = ["nombreCompleto", "correo", "celular", "seleccion", "descripcion"];
+    const fieldsToValidate = [
+      "nombreCompleto",
+      "correo",
+      "celular",
+      "seleccion",
+      "descripcion",
+    ];
     let isValid = true;
 
     fieldsToValidate.forEach((field) => {
       let value = "";
       switch (field) {
-        case "nombreCompleto": value = nombreCompleto; break;
-        case "correo": value = correo; break;
-        case "celular": value = celular; break;
-        case "seleccion": value = seleccion; break;
-        case "descripcion": value = descripcion; break;
-        default: break;
+        case "nombreCompleto":
+          value = nombreCompleto;
+          break;
+        case "correo":
+          value = correo;
+          break;
+        case "celular":
+          value = celular;
+          break;
+        case "seleccion":
+          value = seleccion;
+          break;
+        case "descripcion":
+          value = descripcion;
+          break;
+        default:
+          break;
       }
 
       const fieldIsValid = validateField(field, value);
@@ -127,20 +144,25 @@ const PaginaContacto = () => {
     setSubmitSuccess("");
 
     const allTouched = {};
-    ["nombreCompleto", "correo", "celular", "seleccion", "descripcion"].forEach(field => {
-      allTouched[field] = true;
-    });
+    ["nombreCompleto", "correo", "celular", "seleccion", "descripcion"].forEach(
+      (field) => {
+        allTouched[field] = true;
+      }
+    );
     setTouched(allTouched);
 
     if (validateForm()) {
       try {
-        const response = await axios.post("http://localhost:8000/api/enviar-contacto", {
-          nombre: nombreCompleto,
-          correo,
-          numero: celular,
-          motivo: seleccion,
-          descripcion,
-        });
+        const response = await axios.post(
+          "http://orpheus.tis.cs.umss.edu.bo/api/enviar-contacto",
+          {
+            nombre: nombreCompleto,
+            correo,
+            numero: celular,
+            motivo: seleccion,
+            descripcion,
+          }
+        );
 
         if (response.status === 200) {
           setSubmitSuccess("Mensaje enviado con éxito");
@@ -156,7 +178,9 @@ const PaginaContacto = () => {
         }
       } catch (error) {
         console.error("Error al enviar el formulario:", error);
-        setSubmitError("Hubo un error al procesar el formulario. Verifica tu conexión o inténtalo más tarde.");
+        setSubmitError(
+          "Hubo un error al procesar el formulario. Verifica tu conexión o inténtalo más tarde."
+        );
       }
     } else {
       setSubmitError("Por favor, corrija los errores en el formulario");
@@ -176,23 +200,33 @@ const PaginaContacto = () => {
           <div className="contactoInfo">
             <div className="infoItem">
               <div className="infoContenido">
-                <h3> <i className="bi bi-envelope-fill"></i> Escríbenos</h3>
+                <h3>
+                  {" "}
+                  <i className="bi bi-envelope-fill"></i> Escríbenos
+                </h3>
                 <p>ohsansi@umss.edu</p>
               </div>
             </div>
 
             <div className="infoItem">
               <div className="infoContenido">
-                <h3> <i className="bi bi-geo-alt-fill"></i> Ubicación</h3>
+                <h3>
+                  {" "}
+                  <i className="bi bi-geo-alt-fill"></i> Ubicación
+                </h3>
                 <p>
-                  El Departamento de Sistemas e Informática de la Universidad Mayor de San Simón (UMSS) - Calle Sucre y parque La Torre
+                  El Departamento de Sistemas e Informática de la Universidad
+                  Mayor de San Simón (UMSS) - Calle Sucre y parque La Torre
                 </p>
               </div>
             </div>
 
             <div className="infoItem">
               <div className="infoContenido">
-                <h3> <i className="bi bi-clock-fill"></i> Hora de atención</h3>
+                <h3>
+                  {" "}
+                  <i className="bi bi-clock-fill"></i> Hora de atención
+                </h3>
                 <p>Lunes a Viernes de 8:00 a 16:00</p>
               </div>
             </div>
@@ -204,10 +238,15 @@ const PaginaContacto = () => {
           {submitSuccess && <div className="mensajeExito">{submitSuccess}</div>}
 
           <h2 name="titulo-contacto">Contáctanos</h2>
-          <form onSubmit={handleSubmit} className="formularioContacto" noValidate>
+          <form
+            onSubmit={handleSubmit}
+            className="formularioContacto"
+            noValidate
+          >
             <div className="grupoFormulario">
               <label htmlFor="nombreCompleto">
-                <i className="bi bi-person-circle"></i> Nombre Completo <span className="campoRequerido">*</span>
+                <i className="bi bi-person-circle"></i> Nombre Completo{" "}
+                <span className="campoRequerido">*</span>
               </label>
               <input
                 type="text"
@@ -226,7 +265,8 @@ const PaginaContacto = () => {
 
             <div className="grupoFormulario">
               <label htmlFor="correo">
-                <i className="bi bi-envelope"></i> Correo Electrónico <span className="campoRequerido">*</span>
+                <i className="bi bi-envelope"></i> Correo Electrónico{" "}
+                <span className="campoRequerido">*</span>
               </label>
               <input
                 type="email"
@@ -245,7 +285,8 @@ const PaginaContacto = () => {
 
             <div className="grupoFormulario">
               <label htmlFor="celular">
-                <i className="bi bi-telephone"></i> Número de Celular <span className="campoRequerido">*</span>
+                <i className="bi bi-telephone"></i> Número de Celular{" "}
+                <span className="campoRequerido">*</span>
               </label>
               <input
                 type="tel"
@@ -265,7 +306,8 @@ const PaginaContacto = () => {
 
             <div className="grupoFormulario">
               <label htmlFor="seleccion">
-                <i className="bi bi-question-circle"></i> Motivo de la Consulta <span className="campoRequerido">*</span>
+                <i className="bi bi-question-circle"></i> Motivo de la Consulta{" "}
+                <span className="campoRequerido">*</span>
               </label>
               <select
                 id="seleccion"
@@ -275,7 +317,9 @@ const PaginaContacto = () => {
                 onBlur={handleBlur}
                 className={getInputClass("seleccion")}
               >
-                <option value="" disabled>Seleccione el Motivo de la Consulta</option>
+                <option value="" disabled>
+                  Seleccione el Motivo de la Consulta
+                </option>
                 <option value="consulta">Consulta General</option>
                 <option value="servicio">Solicitud de Servicio</option>
                 <option value="reclamo">Reclamo</option>
@@ -288,7 +332,8 @@ const PaginaContacto = () => {
 
             <div className="grupoFormulario">
               <label htmlFor="descripcion">
-                <i className="bi bi-file-earmark"></i> Descripción <span className="campoRequerido">*</span>
+                <i className="bi bi-file-earmark"></i> Descripción{" "}
+                <span className="campoRequerido">*</span>
               </label>
               <textarea
                 id="descripcion"
