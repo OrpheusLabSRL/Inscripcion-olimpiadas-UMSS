@@ -19,6 +19,21 @@ class OlimpiadaRepository implements OlimpiadaRepositoryInterface
         return $this->model->all();
     }
 
+    public function getAllWithAreasCategorias()
+    {
+        return $this->model
+            ->select(
+                'olimpiadas.*',
+                'areas.nombreArea',
+                'categorias.nombreCategoria'
+            )
+            ->join('olimpiadas_areas_categorias', 'olimpiadas.idOlimpiada', '=', 'olimpiadas_areas_categorias.idOlimpiada')
+            ->join('areas', 'olimpiadas_areas_categorias.idArea', '=', 'areas.idArea')
+            ->join('categorias', 'olimpiadas_areas_categorias.idCategoria', '=', 'categorias.idCategoria')
+            ->where('olimpiadas_areas_categorias.estado', 1)
+            ->get();
+    }
+
     public function getById($id)
     {
         return $this->model->findOrFail($id);
