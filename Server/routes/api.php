@@ -103,6 +103,7 @@ Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'inde
 Route::post('/newAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'store']);
 Route::get('/viewAreaCategoria/olimpiada/{id}', [OlimpiadaAreaCategoriaController::class, 'porOlimpiada']);
 Route::delete('/eliminarOlimpiadas/{idOlimpiada}/area/{idArea}', [OlimpiadaAreaCategoriaController::class, 'eliminarPorOlimpiadaYArea']);
+Route::get('/inscripcion/{codigoInscripcion}/boleta/{idTutor}', [BoletaPagoController::class, 'obtenerDatosBoleta']);
 
  
 
