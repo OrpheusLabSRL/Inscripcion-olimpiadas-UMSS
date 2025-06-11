@@ -3,6 +3,7 @@ import {
   getCategoriaGrado,
   changeEstadoCategoriaGrado,
   deleteCategoriaGrado,
+  verificarUsoCategoriasMasivo,
 } from "../../../../api/Administration.api";
 import { FaSpinner, FaInfoCircle, FaEdit, FaTrash } from "react-icons/fa";
 import "../../Styles/Tables.css";
@@ -11,6 +12,7 @@ import EditCategoriaModal from "../administrationModal/EditCategoriaModal";
 
 const CategoriesTable = () => {
   const [categoriasAgrupadas, setCategoriasAgrupadas] = useState({});
+  const [categoriasEnUso, setCategoriasEnUso] = useState({});
   const [loading, setLoading] = useState(true);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [updating, setUpdating] = useState(false);
@@ -26,42 +28,57 @@ const CategoriesTable = () => {
       setLoading(true);
       const response = await getCategoriaGrado();
       const data = response || [];
-      processCategorias(data);
+      const agrupado = {};
+
+      for (const cat of data) {
+        const nombreCategoria =
+          cat.categoria?.nombreCategoria || "Sin categoría";
+        const idCategoria = cat.categoria?.idCategoria;
+
+        if (!agrupado[nombreCategoria]) {
+          agrupado[nombreCategoria] = {
+            id: cat.id_CategoriaGrado,
+            idCategoria,
+            nombreCategoria,
+            grados: [],
+            estadoCategoriaGrado: cat.estadoCategoriaGrado,
+            rawData: [cat],
+            gradosData: cat.grado ? [cat.grado] : [],
+          };
+        } else {
+          agrupado[nombreCategoria].rawData.push(cat);
+          if (cat.grado) {
+            agrupado[nombreCategoria].gradosData.push(cat.grado);
+          }
+        }
+
+        if (cat.grado) {
+          agrupado[nombreCategoria].grados.push(
+            `${cat.grado.numeroGrado}° ${cat.grado.nivel}`
+          );
+        }
+      }
+
+      const ids = Object.values(agrupado)
+        .map((cat) => cat.idCategoria)
+        .filter((id) => id);
+
+      let uso = {};
+      try {
+        uso = await verificarUsoCategoriasMasivo(ids);
+      } catch (e) {
+        console.error("Error al verificar uso de categorías:", e);
+        uso = {};
+      }
+
+      setCategoriasAgrupadas(agrupado);
+      setCategoriasEnUso(uso);
     } catch (error) {
       console.error("Error al obtener categorías:", error);
       setCategoriasAgrupadas({});
     } finally {
       setLoading(false);
     }
-  };
-
-  const processCategorias = (data) => {
-    const agrupado = {};
-    data.forEach((cat) => {
-      const nombreCategoria = cat.categoria?.nombreCategoria || "Sin categoría";
-      if (!agrupado[nombreCategoria]) {
-        agrupado[nombreCategoria] = {
-          id: cat.id_CategoriaGrado,
-          idCategoria: cat.categoria?.idCategoria,
-          nombreCategoria: nombreCategoria,
-          grados: [],
-          estadoCategoriaGrado: cat.estadoCategoriaGrado,
-          rawData: [cat],
-          gradosData: cat.grado ? [cat.grado] : [],
-        };
-      } else {
-        agrupado[nombreCategoria].rawData.push(cat);
-        if (cat.grado) {
-          agrupado[nombreCategoria].gradosData.push(cat.grado);
-        }
-      }
-      if (cat.grado) {
-        agrupado[nombreCategoria].grados.push(
-          `${cat.grado.numeroGrado}° ${cat.grado.nivel}`
-        );
-      }
-    });
-    setCategoriasAgrupadas(agrupado);
   };
 
   const toggleExpand = (nombreCategoria) => {
@@ -72,9 +89,38 @@ const CategoriesTable = () => {
 
   const handleChangeStatus = async (nombreCategoria) => {
     try {
-      setUpdating(true);
       const categoria = categoriasAgrupadas[nombreCategoria];
       const nuevoEstado = !categoria.estadoCategoriaGrado;
+
+      // Mostrar advertencia solo cuando se va a desactivar
+      if (nuevoEstado === false) {
+        const result = await Swal.fire({
+          title: "¿Estás seguro?",
+          html: `
+            <p>Al desactivar esta categoría:</p>
+            <ul style="text-align: left; margin-left: 20px;">
+              <li>No estará disponible para nuevas olimpiadas</li>
+              <li>Las olimpiadas existentes que ya la incluyen <strong>NO</strong> se verán afectadas</li>
+              <li>Los grados asociados mantendrán su estado actual</li>
+            </ul>
+            <p>¿Deseas continuar?</p>
+          `,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Sí, desactivar",
+          cancelButtonText: "Cancelar",
+          customClass: {
+            container: "swal2-container",
+            popup: "swal2-popup-custom",
+          },
+        });
+
+        if (!result.isConfirmed) {
+          return;
+        }
+      }
+
+      setUpdating(true);
 
       await Promise.all(
         categoria.rawData.map((item) =>
@@ -134,7 +180,7 @@ const CategoriesTable = () => {
 
         await Promise.all(
           categoria.rawData.map((item) =>
-            deleteCategoriaGrado(item.id_CategoriaGrado)
+            deleteCategoriaGrado(item.idCategoriaGrado)
           )
         );
 
@@ -172,121 +218,137 @@ const CategoriesTable = () => {
   };
 
   const handleEditSuccess = () => {
-    fetchCategorias(); // Refrescar los datos después de editar
+    fetchCategorias();
     setEditModalOpen(false);
   };
 
   return (
-    <div className="category-table-wrapper">
-      <table className="category-table">
+    <div className="categoryTableWrapper">
+      <table className="categoryTable">
         <thead>
           <tr>
             <th>Categoría</th>
-            <th className="table-util-text-center">Grados Incluidos</th>
-            <th className="table-util-text-center">Estado</th>
-            <th className="table-util-text-center">Acciones</th>
+            <th className="tableUtilTextCenter">Grados Incluidos</th>
+            <th className="tableUtilTextCenter">Estado</th>
+            <th className="tableUtilTextCenter">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="4" className="table-util-loading">
-                <FaSpinner className="table-util-spinner" />
+              <td colSpan="4" className="tableUtilLoading">
+                <FaSpinner className="tableUtilSpinner" />
                 Cargando categorías...
               </td>
             </tr>
           ) : Object.keys(categoriasAgrupadas).length > 0 ? (
             Object.entries(categoriasAgrupadas).map(
-              ([nombreCategoria, data], index) => (
-                <React.Fragment key={index}>
-                  <tr
-                    className={`category-table-row ${
-                      expandedCategory === nombreCategoria ? "expanded" : ""
-                    }`}
-                  >
-                    <td
-                      className="category-table-name"
-                      onClick={() => toggleExpand(nombreCategoria)}
+              ([nombreCategoria, data], index) => {
+                const estaEnUso = categoriasEnUso[data.idCategoria];
+
+                return (
+                  <React.Fragment key={index}>
+                    <tr
+                      className={`categoryTableRow ${
+                        expandedCategory === nombreCategoria ? "expanded" : ""
+                      }`}
                     >
-                      {nombreCategoria} <FaInfoCircle className="info-icon" />
-                    </td>
-                    <td
-                      className="table-util-text-center"
-                      onClick={() => toggleExpand(nombreCategoria)}
-                    >
-                      {data.grados.slice(0, 3).join(", ")}
-                      {data.grados.length > 3 && (
-                        <span className="category-table-more-count">
-                          +{data.grados.length - 3}
-                        </span>
-                      )}
-                    </td>
-                    <td className="table-util-text-center">
-                      <span
-                        className={`table-util-status-badge ${
-                          data.estadoCategoriaGrado
-                            ? "table-util-badge-success"
-                            : "table-util-badge-danger"
-                        } ${updating ? "table-util-disabled" : ""}`}
-                        onClick={() =>
-                          !updating && handleChangeStatus(nombreCategoria)
-                        }
-                        style={{ cursor: updating ? "not-allowed" : "pointer" }}
+                      <td
+                        className="categoryTableName"
+                        onClick={() => toggleExpand(nombreCategoria)}
                       >
-                        {updating ? (
-                          <FaSpinner className="table-util-spinner" />
-                        ) : data.estadoCategoriaGrado ? (
-                          "Activo"
-                        ) : (
-                          "Inactivo"
+                        {nombreCategoria} <FaInfoCircle className="infoIcon" />
+                      </td>
+                      <td
+                        className="tableUtilTextCenter"
+                        onClick={() => toggleExpand(nombreCategoria)}
+                      >
+                        {data.grados.slice(0, 3).join(", ")}
+                        {data.grados.length > 3 && (
+                          <span className="categoryTableMoreCount">
+                            +{data.grados.length - 3}
+                          </span>
                         )}
-                      </span>
-                    </td>
-                    <td className="table-actions">
-                      <FaEdit
-                        className="action-icon edit-icon"
-                        title="Editar categoría"
-                        onClick={() => handleEdit(data)}
-                        style={
-                          updating
-                            ? { opacity: 0.5, pointerEvents: "none" }
-                            : null
-                        }
-                      />
-                      <FaTrash
-                        className="action-icon delete-icon"
-                        title="Eliminar categoría"
-                        onClick={() =>
-                          !updating && handleDelete(nombreCategoria)
-                        }
-                        style={
-                          updating
-                            ? { opacity: 0.5, pointerEvents: "none" }
-                            : null
-                        }
-                      />
-                    </td>
-                  </tr>
-                  {expandedCategory === nombreCategoria && (
-                    <tr className="category-table-details">
-                      <td colSpan="4">
-                        <h4>Grados completos:</h4>
-                        <div className="grades-list">
-                          {data.grados.map((grado, i) => (
-                            <span key={i} className="category-table-tag">
-                              {grado}
-                            </span>
-                          ))}
-                        </div>
+                      </td>
+                      <td className="tableUtilTextCenter">
+                        <span
+                          className={`tableUtilStatusBadge ${
+                            data.estadoCategoriaGrado
+                              ? "tableUtilBadgeSuccess"
+                              : "tableUtilBadgeDanger"
+                          } ${updating ? "tableUtilDisabled" : ""}`}
+                          onClick={() =>
+                            !updating && handleChangeStatus(nombreCategoria)
+                          }
+                          style={{
+                            cursor: updating ? "not-allowed" : "pointer",
+                          }}
+                        >
+                          {updating ? (
+                            <FaSpinner className="tableUtilSpinner" />
+                          ) : data.estadoCategoriaGrado ? (
+                            "Activo"
+                          ) : (
+                            "Inactivo"
+                          )}
+                        </span>
+                      </td>
+                      <td className="tableActions">
+                        <FaEdit
+                          className="actionIcon editIcon"
+                          title={
+                            estaEnUso
+                              ? "No se puede editar (en uso)"
+                              : "Editar categoría"
+                          }
+                          onClick={() => !estaEnUso && handleEdit(data)}
+                          style={
+                            updating || estaEnUso
+                              ? { opacity: 0.5, pointerEvents: "none" }
+                              : null
+                          }
+                        />
+                        <FaTrash
+                          className="actionIcon deleteIcon"
+                          title={
+                            estaEnUso
+                              ? "No se puede eliminar (en uso)"
+                              : "Eliminar categoría"
+                          }
+                          onClick={() =>
+                            !updating &&
+                            !estaEnUso &&
+                            handleDelete(nombreCategoria)
+                          }
+                          style={
+                            updating || estaEnUso
+                              ? { opacity: 0.5, pointerEvents: "none" }
+                              : null
+                          }
+                        />
                       </td>
                     </tr>
-                  )}
-                </React.Fragment>
-              )
+                    {expandedCategory === nombreCategoria && (
+                      <tr className="categoryTableDetails">
+                        <td colSpan="4">
+                          <h4>Grados completos:</h4>
+                          <div className="gradesList">
+                            {data.grados.map((grado, i) => (
+                              <span key={i} className="categoryTableTag">
+                                {grado}
+                              </span>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              }
             )
           ) : (
             <tr>
-              <td colSpan="4" className="table-util-empty">
+              <td colSpan="4" className="tableUtilEmpty">
                 No hay categorías registradas.
               </td>
             </tr>

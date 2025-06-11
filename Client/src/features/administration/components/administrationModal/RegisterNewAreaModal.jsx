@@ -36,12 +36,38 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
       [name]: value,
     }));
 
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: null,
-      }));
+    const trimmedValue = value.trim();
+    const newErrors = { ...errors };
+
+    if (name === "nombreArea") {
+      if (!trimmedValue) {
+        newErrors.nombreArea = "El nombre del área es obligatorio";
+      } else if (trimmedValue.length > 50) {
+        newErrors.nombreArea = "El nombre no debe exceder los 50 caracteres";
+      } else if (
+        existingAreas.some(
+          (a) =>
+            a.nombreArea.trim().toLowerCase() === trimmedValue.toLowerCase()
+        )
+      ) {
+        newErrors.nombreArea = "Ya existe un área con ese nombre";
+      } else {
+        delete newErrors.nombreArea;
+      }
     }
+
+    if (name === "descripcionArea") {
+      if (!trimmedValue) {
+        newErrors.descripcionArea = "La descripción del área es obligatoria";
+      } else if (trimmedValue.length > 200) {
+        newErrors.descripcionArea =
+          "La descripción solo debe tener 200 caracteres";
+      } else {
+        delete newErrors.descripcionArea;
+      }
+    }
+
+    setErrors(newErrors);
   };
 
   const handleReset = () => {
@@ -147,27 +173,27 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="admin-modal-overlay" onClick={handleReset}>
+    <div className="adminModalOverlay" onClick={handleReset}>
       <div
-        className="admin-modal-content"
+        className="adminModalContent"
         style={{ maxWidth: "700px" }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="admin-modal-close-btn"
+          className="adminModalCloseBtn"
           onClick={handleReset}
           aria-label="Cerrar modal"
         >
           ✖
         </button>
-        <div className="admin-modal-header">
-          <h3 className="admin-modal-title">Registrar Nueva Área</h3>
+        <div className="adminModalHeader">
+          <h3 className="adminModalTitle">Registrar Nueva Área</h3>
         </div>
 
-        <form onSubmit={handleSubmit} className="admin-modal-form">
-          <div className="admin-form-group">
-            <label htmlFor="nombreArea" className="admin-form-label">
-              Nombre del Área <span className="admin-required-field">*</span>
+        <form onSubmit={handleSubmit} className="adminModalForm">
+          <div className="adminFormGroup">
+            <label htmlFor="nombreArea" className="adminFormLabel">
+              Nombre del Área <span className="adminRequiredField">*</span>
             </label>
             <input
               id="nombreArea"
@@ -175,52 +201,51 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
               type="text"
               value={formData.nombreArea}
               onChange={handleChange}
-              className={`admin-form-input ${
-                errors.nombreArea ? "admin-input-error" : ""
+              className={`adminFormInput ${
+                errors.nombreArea ? "adminInputError" : ""
               }`}
               placeholder="Ej: Matemáticas, Química, etc."
               maxLength="50"
               disabled={isSubmitting}
             />
             {errors.nombreArea && (
-              <p className="admin-error-message">
+              <p className="adminErrorMessage">
                 <FiAlertCircle /> {errors.nombreArea}
               </p>
             )}
           </div>
 
-          <div className="admin-form-group">
-            <label htmlFor="descripcionArea" className="admin-form-label">
-              Descripción del Área{" "}
-              <span className="admin-required-field">*</span>
+          <div className="adminFormGroup">
+            <label htmlFor="descripcionArea" className="adminFormLabel">
+              Descripción del Área <span className="adminRequiredField">*</span>
             </label>
             <textarea
               id="descripcionArea"
               name="descripcionArea"
               value={formData.descripcionArea}
               onChange={handleChange}
-              className={`admin-form-input ${
-                errors.descripcionArea ? "admin-input-error" : ""
+              className={`adminFormInput ${
+                errors.descripcionArea ? "adminInputError" : ""
               }`}
               placeholder="Breve descripción del área"
               maxLength="200"
               rows="3"
               disabled={isSubmitting}
             />
-            <div className="admin-char-counter">
+            <div className="adminCharCounter">
               {formData.descripcionArea.length}/200 caracteres
             </div>
             {errors.descripcionArea && (
-              <p className="admin-error-message">
+              <p className="adminErrorMessage">
                 <FiAlertCircle /> {errors.descripcionArea}
               </p>
             )}
           </div>
 
-          <div className="admin-modal-actions">
+          <div className="adminModalActions">
             <button
               type="button"
-              className="admin-modal-btn-cancel"
+              className="adminModalBtnCancel"
               onClick={handleReset}
               disabled={isSubmitting}
             >
@@ -228,7 +253,7 @@ const RegisterNewAreaModal = ({ isOpen, onClose, onSuccess }) => {
             </button>
             <button
               type="submit"
-              className="admin-modal-btn-save"
+              className="adminModalBtnSave"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Guardando..." : "Guardar"}

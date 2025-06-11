@@ -192,83 +192,80 @@ const ResultadoConsulta = () => {
     return (
       <>
         <HeaderProp />
-        <div className="resultado-container">
-          <div className="resultado-content">
-            <h2 className="titulo-resultado">Resultado de la Consulta</h2>
+        <div className="resultadoContenedor">
+          <div className="resultadoContenido">
+            <h2>Resultado de la Consulta</h2>
 
             {/* Información del Olimpista */}
-            {renderPersonaInfo(olimpista, "Olimpista")}
+            <div className="tutorInfo">
+              <h3>Información Personal</h3>
+              <p>
+                <strong><i className="bi bi-person-vcard"></i> Nombre:</strong> {olimpista.nombre} {olimpista.apellido}
+              </p>
+              <p>
+                <strong><i className="bi bi-credit-card-2-front"></i> Carnet de Identidad:</strong> {olimpista.carnetIdentidad}
+              </p>
+              <p>
+                <strong><i className="bi bi-envelope-at"></i> Correo Electrónico:</strong> {olimpista.correoElectronico}
+              </p>
+            </div>
 
             {/* Tabla de Inscripciones */}
-            <div className="inscripciones-info">
-              <h3 className="titulo-resultado">Mis Inscripciones</h3>
-              <div className="table-container">
-                <table className="inscripciones-table">
-                  <thead>
-                    <tr>
-                      <th>Área</th>
-                      <th>Categoría</th>
-                      <th>Tutor Responsable</th>
-                      <th>Estado de Pago</th>
-                      {inscripciones?.some(ins => ins.formaInscripcion === 'Excel') && <th>Acciones</th>}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Array.isArray(inscripciones) && inscripciones.length > 0 ? (
-                      inscripciones.map((inscripcion, index) => (
-                        <tr key={index}>
-                          <td>
-                            {inscripcion.olimpiadaAreaCategoria?.area?.nombreArea || "No disponible"}
-                          </td>
-                          <td>
-                            {inscripcion.olimpiadaAreaCategoria?.categoria?.nombreCategoria || "No disponible"}
-                          </td>
-                          <td>
-                            {inscripcion.tutorResponsable ? 
-                              `${inscripcion.tutorResponsable.nombre} ${inscripcion.tutorResponsable.apellido}` : 
-                              "No disponible"
-                            }
-                          </td>
-                          <td
-                            className={
-                              inscripcion.estadoInscripcion === 0
-                                ? "estado-pendiente"
-                                : "estado-realizado"
-                            }
-                          >
-                            {inscripcion.estadoInscripcion === 0
-                              ? "PAGO PENDIENTE"
-                              : "PAGO REALIZADO"}
-                          </td>
-                          {inscripcion.formaInscripcion === 'Excel' && (
-                            <td>
-                              <button 
-                                className="ver-detalles-btn"
-                                onClick={() => handleVerDetalles(inscripcion)}
-                              >
-                                Ver Detalles
-                              </button>
-                            </td>
-                          )}
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="5" className="no-inscripciones">
-                          No hay inscripciones registradas.
+            <div className="olimpistasTabla">
+              <h3>Mis Inscripciones</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Área</th>
+                    <th>Categoría</th>
+                    <th>Tutor Responsable</th>
+                    <th>Estado de Pago</th>
+                    {inscripciones?.some(ins => ins.formaInscripcion === 'Excel') && <th>Acciones</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.isArray(inscripciones) && inscripciones.length > 0 ? (
+                    inscripciones.map((inscripcion, index) => (
+                      <tr key={index}>
+                        <td>
+                          {inscripcion.olimpiadaAreaCategoria?.area?.nombreArea || "No disponible"}
                         </td>
+                        <td>
+                          {inscripcion.olimpiadaAreaCategoria?.categoria?.nombreCategoria || "No disponible"}
+                        </td>
+                        <td>
+                          {inscripcion.tutorResponsable ? 
+                            `${inscripcion.tutorResponsable.nombre} ${inscripcion.tutorResponsable.apellido}` : 
+                            "No disponible"
+                          }
+                        </td>
+                        <td className={inscripcion.estadoInscripcion === 0 ? "estadoPendiente" : "estadoRealizado"}>
+                          {inscripcion.estadoInscripcion === 0 ? "PAGO PENDIENTE" : "PAGO REALIZADO"}
+                        </td>
+                        {inscripcion.formaInscripcion === 'Excel' && (
+                          <td>
+                            <button 
+                              className="botonVerDetalles"
+                              onClick={() => handleVerDetalles(inscripcion)}
+                            >
+                              Ver Detalles
+                            </button>
+                          </td>
+                        )}
                       </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" style={{ textAlign: "center" }}>No hay inscripciones registradas</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
-            <div className="boton-volver-container">
-              <button
-                className="btn-consulta back-button"
-                onClick={handleVolver}
-              >
-                Volver a consultar
+
+            <div className="botonVolverContenedor">
+              <button className="botonVolver" onClick={handleVolver}>
+                <i className="bi bi-arrow-left"></i> Volver
               </button>
             </div>
           </div>

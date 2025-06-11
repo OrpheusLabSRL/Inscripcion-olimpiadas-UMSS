@@ -76,6 +76,22 @@ const OlympiansReportTable = () => {
     return false;
   });
 
+  // Determine if Nombre Área or Nombre Categoría columns are visible
+  const areaCategoriaVisible = visibleColumns.nombreArea || visibleColumns.nombreCategoria;
+
+  // Group olympians by unique fields if Nombre Área and Nombre Categoría columns are hidden
+  const groupedOlympians = !areaCategoriaVisible
+    ? Object.values(
+        filteredOlympians.reduce((acc, olympian) => {
+          const key = `${olympian.carnetDeIdentidad}-${olympian.nombre}-${olympian.apellido}-${olympian.fechaNacimiento}-${olympian.departamento}-${olympian.curso}-${olympian.colegio}`;
+          if (!acc[key]) {
+            acc[key] = { ...olympian };
+          }
+          return acc;
+        }, {})
+      )
+    : filteredOlympians;
+
   // Toggle column visibility handler
   const toggleColumn = (column) => {
     setVisibleColumns((prev) => ({
@@ -116,10 +132,7 @@ const OlympiansReportTable = () => {
         <div>
           <span style={{ color: "#000000" }}>Columnas a mostrar:</span>
           {columnOptions.map((col) => (
-            <label
-              key={col.value}
-              style={{ marginLeft: "1rem", display: "inline-flex", alignItems: "center", color: "#000000" }}
-            >
+            <label key={col.value} style={{ marginLeft: "1rem", display: "inline-flex", alignItems: "center", color: "#000000" }}>
               <input
                 type="checkbox"
                 checked={visibleColumns[col.value]}
@@ -147,7 +160,7 @@ const OlympiansReportTable = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredOlympians.map((olympian, index) => (
+            {groupedOlympians.map((olympian, index) => (
               <tr key={olympian.id_olimpista ?? index}>
                 {visibleColumns.carnetDeIdentidad && <td>{olympian.carnetDeIdentidad}</td>}
                 {visibleColumns.nombre && <td>{olympian.nombre}</td>}

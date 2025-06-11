@@ -10,13 +10,26 @@ class ContactoMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $datos;
+    /**
+     * Los datos del formulario de contacto
+     * @var array
+     */
+    protected $datos;
 
-    public function __construct($datos)
+    /**
+     * Create a new message instance.
+     * @param array $datos
+     * @return void
+     */
+    public function __construct(array $datos)
     {
         $this->datos = $datos;
     }
 
+    /**
+     * Build the message.
+     * @return $this
+     */
     public function build()
     {
         return $this->subject($this->datos['motivo'])

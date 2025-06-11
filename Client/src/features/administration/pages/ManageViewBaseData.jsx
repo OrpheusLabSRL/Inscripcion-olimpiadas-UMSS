@@ -28,28 +28,28 @@ const ManageBaseData = () => {
   };
 
   return (
-    <div className="base-config-container">
-      <div className="base-config-back">
-        <BackButton onClick={goBackHome} className="base-config-back-button">
+    <div className="baseConfigContainer">
+      <div className="baseConfigBack">
+        <BackButton onClick={goBackHome} className="baseConfigBackButton">
           Volver al inicio
         </BackButton>
       </div>
 
-      <div className="base-config-header">
-        <h1 className="base-config-title">Datos Base</h1>
-        <p className="base-config-subtitle">
+      <div className="baseConfigHeader">
+        <h1 className="baseConfigTitle">Datos Base</h1>
+        <p className="baseConfigSubtitle">
           Configura las áreas, categorías y el formulario de inscripción
         </p>
       </div>
 
-      <div className="base-config-grid">
+      <div className="baseConfigGrid">
         {items.map((item, idx) => (
-          <div key={idx} className="base-config-card">
-            <div className="base-config-icon">{item.icon}</div>
+          <div key={idx} className="baseConfigCard">
+            <div className="baseConfigIcon">{item.icon}</div>
             <h3>{item.title}</h3>
             <p>{item.description}</p>
             <button
-              className="base-config-button"
+              className="baseConfigButton"
               onClick={() => navigate(item.route)}
             >
               Gestionar {item.title.toLowerCase()}

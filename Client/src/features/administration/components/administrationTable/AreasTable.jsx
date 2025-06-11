@@ -3,6 +3,7 @@ import {
   getAreas,
   updateAreaStatus,
   deleteArea,
+  verificarUsoAreasMasivo,
 } from "../../../../api/Administration.api";
 import {
   FaSpinner,
@@ -13,18 +14,32 @@ import {
 } from "react-icons/fa";
 import EditAreaModal from "../administrationModal/EditAreaModal";
 import "../../Styles/Tables.css";
+import Swal from "sweetalert2";
 
 const AreasTable = () => {
   const [areas, setAreas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
-  const [editingArea, setEditingArea] = useState(null); // NUEVO estado
+  const [editingArea, setEditingArea] = useState(null);
+  const [areasEnUso, setAreasEnUso] = useState(new Set());
 
   useEffect(() => {
     const fetchAreas = async () => {
       try {
         const data = await getAreas();
-        setAreas(Array.isArray(data) ? data : []);
+        const validAreas = Array.isArray(data) ? data : [];
+        setAreas(validAreas);
+
+        const ids = validAreas.map((area) => area.idArea);
+        const resultados = await verificarUsoAreasMasivo(ids);
+
+        const usadas = new Set(
+          Object.entries(resultados)
+            .filter(([_, info]) => info.enUso)
+            .map(([id]) => parseInt(id))
+        );
+
+        setAreasEnUso(usadas);
       } catch (error) {
         console.error("Error al obtener áreas:", error);
         setAreas([]);
@@ -52,6 +67,33 @@ const AreasTable = () => {
 
   const toggleEstado = async (id, currentEstado) => {
     try {
+      // Mostrar advertencia solo cuando se va a desactivar
+      if (currentEstado) {
+        const result = await Swal.fire({
+          title: "¿Estás seguro?",
+          html: `
+            <p>Al desactivar esta área:</p>
+            <ul style="text-align: left; margin-left: 20px;">
+              <li>No estará disponible para nuevas olimpiadas</li>
+              <li>Las olimpiadas existentes que ya la incluyen <strong>NO</strong> se verán afectadas</li>
+            </ul>
+            <p>¿Deseas continuar?</p>
+          `,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Sí, desactivar",
+          cancelButtonText: "Cancelar",
+          customClass: {
+            container: "swal2-container",
+            popup: "swal2-popup-custom",
+          },
+        });
+
+        if (!result.isConfirmed) {
+          return;
+        }
+      }
+
       const nuevoEstado = !currentEstado;
       await updateAreaStatus(id, nuevoEstado);
       setAreas((prev) =>
@@ -59,9 +101,21 @@ const AreasTable = () => {
           area.idArea === id ? { ...area, estadoArea: nuevoEstado } : area
         )
       );
+
+      Swal.fire({
+        icon: "success",
+        title: "Estado actualizado",
+        text: `El area ha sido ${nuevoEstado ? "activada" : "desactivada"}`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error("Error al cambiar estado:", error);
-      alert("No se pudo actualizar el estado del área.");
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo actualizar el estado del área",
+        icon: "error",
+      });
     }
   };
 
@@ -70,23 +124,43 @@ const AreasTable = () => {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "¿Estás seguro de que deseas eliminar esta área?"
-    );
-    if (!confirmDelete) return;
+    const confirmDelete = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¿Deseas eliminar permanentemente esta área?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      customClass: {
+        container: "swal2-container",
+      },
+    });
+
+    if (!confirmDelete.isConfirmed) return;
 
     try {
       await deleteArea(id);
       setAreas((prev) => prev.filter((area) => area.idArea !== id));
+      Swal.fire({
+        title: "Eliminada",
+        text: "El área ha sido eliminada correctamente",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error("Error al eliminar área:", error);
-      alert("No se pudo eliminar el área.");
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo eliminar el área",
+        icon: "error",
+      });
     }
   };
 
   return (
     <>
-      <table className="area-table">
+      <table className="areaTable">
         <thead>
           <tr>
             <th>Nombre</th>
@@ -98,8 +172,8 @@ const AreasTable = () => {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="4" className="table-util-loading">
-                <FaSpinner className="table-util-spinner" />
+              <td colSpan="4" className="tableUtilLoading">
+                <FaSpinner className="tableUtilSpinner" />
                 Cargando áreas...
               </td>
             </tr>
@@ -107,23 +181,24 @@ const AreasTable = () => {
             areas.map((area) => {
               const shouldShowMore = needsExpand(area.descripcionArea);
               const isExpanded = expandedDescriptions[area.idArea];
+              const estaEnUso = areasEnUso.has(area.idArea);
 
               return (
                 <tr key={area.idArea}>
-                  <td className="table-util-text-left">{area.nombreArea}</td>
+                  <td className="tableUtilTextLeft">{area.nombreArea}</td>
                   <td>
                     <div
-                      className={`area-table-description-container ${
-                        shouldShowMore && !isExpanded ? "has-more" : ""
+                      className={`areaTableDescriptionContainer ${
+                        shouldShowMore && !isExpanded ? "hasMore" : ""
                       } ${isExpanded ? "expanded" : ""}`}
                     >
-                      <span className="area-table-description-content">
+                      <span className="areaTableDescriptionContent">
                         {area.descripcionArea || "—"}
                       </span>
                     </div>
                     {shouldShowMore && (
                       <span
-                        className="area-table-see-more"
+                        className="areaTableSeeMore"
                         onClick={() => toggleDescription(area.idArea)}
                       >
                         {isExpanded ? (
@@ -138,12 +213,12 @@ const AreasTable = () => {
                       </span>
                     )}
                   </td>
-                  <td className="table-util-text-center">
+                  <td className="tableUtilTextCenter">
                     <span
-                      className={`table-util-status-badge ${
+                      className={`tableUtilStatusBadge ${
                         area.estadoArea
-                          ? "table-util-badge-success"
-                          : "table-util-badge-danger"
+                          ? "tableUtilBadgeSuccess"
+                          : "tableUtilBadgeDanger"
                       }`}
                       onClick={() => toggleEstado(area.idArea, area.estadoArea)}
                       style={{ cursor: "pointer" }}
@@ -151,16 +226,32 @@ const AreasTable = () => {
                       {area.estadoArea ? "Activo" : "Inactivo"}
                     </span>
                   </td>
-                  <td className="table-actions">
+                  <td className="tableActions">
                     <FaEdit
-                      className="action-icon edit-icon"
-                      title="Editar área"
-                      onClick={() => handleEdit(area)}
+                      className="actionIcon editIcon"
+                      title={
+                        estaEnUso
+                          ? "No se puede editar un área en uso"
+                          : "Editar área"
+                      }
+                      onClick={() => !estaEnUso && handleEdit(area)}
+                      style={{
+                        cursor: estaEnUso ? "not-allowed" : "pointer",
+                        opacity: estaEnUso ? 0.5 : 1,
+                      }}
                     />
                     <FaTrash
-                      className="action-icon delete-icon"
-                      title="Eliminar área"
-                      onClick={() => handleDelete(area.idArea)}
+                      className="actionIcon deleteIcon"
+                      title={
+                        estaEnUso
+                          ? "No se puede eliminar un área en uso"
+                          : "Eliminar área"
+                      }
+                      onClick={() => !estaEnUso && handleDelete(area.idArea)}
+                      style={{
+                        cursor: estaEnUso ? "not-allowed" : "pointer",
+                        opacity: estaEnUso ? 0.5 : 1,
+                      }}
                     />
                   </td>
                 </tr>
@@ -168,7 +259,7 @@ const AreasTable = () => {
             })
           ) : (
             <tr>
-              <td colSpan="4" className="table-util-empty">
+              <td colSpan="4" className="tableUtilEmpty">
                 No hay áreas registradas.
               </td>
             </tr>
@@ -180,13 +271,12 @@ const AreasTable = () => {
         isOpen={!!editingArea}
         area={editingArea}
         onClose={() => setEditingArea(null)}
-        onSuccess={() => {
+        onSuccess={async () => {
           setEditingArea(null);
           setLoading(true);
-          getAreas().then((data) => {
-            setAreas(Array.isArray(data) ? data : []);
-            setLoading(false);
-          });
+          const data = await getAreas();
+          setAreas(Array.isArray(data) ? data : []);
+          setLoading(false);
         }}
       />
     </>

@@ -53,14 +53,17 @@ const RegisterCategoriaModal = ({
         categoriaGradoData.forEach((entry) => {
           const cat = entry.categoria;
           const grado = entry.grado;
+          const estado = entry.estadoCategoriaGrado; // ← estado desde la tabla pivote
 
           if (!categoriaMap.has(cat.idCategoria)) {
             categoriaMap.set(cat.idCategoria, {
               idCategoria: cat.idCategoria,
               nombreCategoria: cat.nombreCategoria,
+              estado: estado,
               grados: [],
             });
           }
+
           if (grado) {
             categoriaMap.get(cat.idCategoria).grados.push(grado);
           }
@@ -183,7 +186,7 @@ const RegisterCategoriaModal = ({
         icon: "error",
         title: "Errores en el formulario",
         text: "Por favor corrige los errores antes de guardar.",
-        customClass: { container: "swal2-container" },
+        customClass: { container: "swal2Container" },
       });
       return;
     }
@@ -196,7 +199,7 @@ const RegisterCategoriaModal = ({
       confirmButtonText: "Sí, guardar",
       cancelButtonText: "Cancelar",
       reverseButtons: true,
-      customClass: { container: "swal2-container" },
+      customClass: { container: "swal2Container" },
     });
 
     if (!confirmacion.isConfirmed) {
@@ -232,7 +235,7 @@ const RegisterCategoriaModal = ({
         text: "La categoría se registró exitosamente.",
         timer: 2000,
         showConfirmButton: false,
-        customClass: { container: "swal2-container" },
+        customClass: { container: "swal2Container" },
       });
 
       handleReset();
@@ -244,7 +247,7 @@ const RegisterCategoriaModal = ({
         icon: "error",
         title: "Error",
         text: "Ocurrió un error al guardar los datos.",
-        customClass: { container: "swal2-container" },
+        customClass: { container: "swal2Container" },
       });
     } finally {
       setIsSubmitting(false);
@@ -254,36 +257,38 @@ const RegisterCategoriaModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="admin-modal-overlay">
+    <div className="adminModalOverlay">
       <div
-        className="admin-modal-content"
+        className="adminModalContent"
         style={{ maxWidth: "850px", maxHeight: "90vh", overflowY: "auto" }}
       >
         <button
           type="button"
-          className="admin-modal-close-btn"
+          className="adminModalCloseBtn"
           onClick={handleReset}
           disabled={isSubmitting}
         >
           ✖
         </button>
 
-        <form onSubmit={handleSubmit} className="admin-modal-form">
-          <h3 className="admin-modal-title">Categorías de la Olimpiada</h3>
+        <form onSubmit={handleSubmit} className="adminModalForm">
+          <h3 className="adminModalTitle">Categorías de la Olimpiada</h3>
 
           {selectedAreas.map((areaId) => {
             const area = areas.find((a) => a.idArea === areaId);
 
-            const categoriasOptions = categorias.map((c) => ({
-              value: c.idCategoria,
-              label: `${c.nombreCategoria}${
-                c.grados?.length > 0
-                  ? ` (${c.grados
-                      .map((g) => `${g.numeroGrado}° ${g.nivel}`)
-                      .join(", ")})`
-                  : ""
-              }`,
-            }));
+            const categoriasOptions = categorias
+              .filter((c) => c.estado === 1)
+              .map((c) => ({
+                value: c.idCategoria,
+                label: `${c.nombreCategoria}${
+                  c.grados?.length > 0
+                    ? ` (${c.grados
+                        .map((g) => `${g.numeroGrado}° ${g.nivel}`)
+                        .join(", ")})`
+                    : ""
+                }`,
+              }));
 
             const categoriasSeleccionadas = categorias.filter((c) =>
               selectedCategorias[areaId]?.includes(c.idCategoria)
@@ -292,14 +297,14 @@ const RegisterCategoriaModal = ({
             return (
               <div
                 key={areaId}
-                className="admin-form-group"
+                className="adminFormGroup"
                 style={{ marginBottom: "1.5rem" }}
               >
-                <label className="admin-form-label">
+                <label className="adminFormLabel">
                   Área: <strong> {area?.nombreArea} </strong>
                 </label>
 
-                <label className="admin-form-label">
+                <label className="adminFormLabel">
                   Costo por categoría (Bs):
                   <input
                     type="number"
@@ -312,8 +317,8 @@ const RegisterCategoriaModal = ({
                         [areaId]: e.target.value,
                       }))
                     }
-                    className={`admin-form-input ${
-                      errors[`costo-${areaId}`] ? "admin-input-error" : ""
+                    className={`adminFormInput ${
+                      errors[`costo-${areaId}`] ? "adminInputError" : ""
                     }`}
                     style={{
                       marginLeft: "1rem",
@@ -324,14 +329,14 @@ const RegisterCategoriaModal = ({
                   />
                 </label>
                 {errors[`costo-${areaId}`] && (
-                  <p className="admin-error-message">
+                  <p className="adminErrorMessage">
                     <FiAlertCircle /> {errors[`costo-${areaId}`]}
                   </p>
                 )}
 
                 <div
-                  className={`admin-dropdown-wrapper large ${
-                    errors[`categorias-${areaId}`] ? "admin-input-error" : ""
+                  className={`adminDropdownWrapper large ${
+                    errors[`categorias-${areaId}`] ? "adminInputError" : ""
                   }`}
                   style={{ marginTop: "1rem" }}
                 >
@@ -349,19 +354,19 @@ const RegisterCategoriaModal = ({
                 </div>
 
                 {categoriasSeleccionadas.length > 0 && (
-                  <div className="selected-categories-container">
-                    <p className="selected-categories-title">
+                  <div className="selectedCategoriesContainer">
+                    <p className="selectedCategoriesTitle">
                       Categorías seleccionadas:
                     </p>
-                    <ul className="selected-categories-list">
+                    <ul className="selectedCategoriesList">
                       {categoriasSeleccionadas.map((cat) => (
                         <li
                           key={cat.idCategoria}
-                          className="selected-category-item"
+                          className="selectedCategoryItem"
                         >
                           <strong>{cat.nombreCategoria}</strong>
                           {cat.grados?.length > 0 && (
-                            <div className="grade-list">
+                            <div className="gradeList">
                               {cat.grados
                                 .map((g) => `${g.numeroGrado}° ${g.nivel}`)
                                 .join(", ")}
@@ -376,10 +381,10 @@ const RegisterCategoriaModal = ({
             );
           })}
 
-          <div className="admin-modal-actions">
+          <div className="adminModalActions">
             <button
               type="button"
-              className="admin-modal-btn-cancel"
+              className="adminModalBtnCancel"
               onClick={handleReset}
               disabled={isSubmitting}
             >
@@ -387,7 +392,7 @@ const RegisterCategoriaModal = ({
             </button>
             <button
               type="submit"
-              className="admin-modal-btn-save"
+              className="adminModalBtnSave"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Guardando..." : "Guardar"}

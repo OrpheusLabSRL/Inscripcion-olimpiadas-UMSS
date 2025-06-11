@@ -1,34 +1,31 @@
-/* Fuente base para todo el dropdown y elementos relacionados */
-.dropdown-container,
-.dropdown-wrapper,
-.dropdown-selected,
-.dropdown-display,
-.dropdown-option,
-.multi-dropdown-item,
-.multi-label,
-.category-option,
-.category-name,
-.category-grades,
-.selected-categories-container,
-.selected-categories-title,
-.selected-categories-list,
-.selected-category-item,
-.grade-list,
-.error-message {
+.dropdownContainer,
+.dropdownWrapper,
+.dropdownSelected,
+.dropdownDisplay,
+.dropdownOption,
+.multiDropdownItem,
+.multiLabel,
+.categoryOption,
+.categoryName,
+.categoryGrades,
+.selectedCategoriesContainer,
+.selectedCategoriesTitle,
+.selectedCategoriesList,
+.selectedCategoryItem,
+.gradeList,
+.errorMessage {
   font-family: "Inter", sans-serif;
 }
 
-/* Etiquetas y títulos destacados con Poppins */
-.dropdown-label,
-.dropdown-label.large,
-.selected-categories-title,
-.category-name {
+.dropdownLabel,
+.dropdownLabel.large,
+.selectedCategoriesTitle,
+.categoryName {
   font-family: "Poppins", sans-serif;
   font-weight: 600;
 }
 
-/* Contenedor principal */
-.dropdown-container {
+.dropdownContainer {
   position: relative;
   width: 100%;
   max-width: 500px;
@@ -36,8 +33,7 @@
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* Etiqueta */
-.dropdown-label {
+.dropdownLabel {
   display: block;
   margin-bottom: 0.75rem;
   color: #1f2937;
@@ -45,13 +41,12 @@
   line-height: 1.4;
 }
 
-.dropdown-label.large {
+.dropdownLabel.large {
   font-size: 1.1rem;
   margin-bottom: 0.85rem;
 }
 
-/* Wrapper / encabezado */
-.dropdown-wrapper {
+.dropdownWrapper {
   position: relative;
   display: flex;
   align-items: center;
@@ -67,35 +62,34 @@
   font-family: "Inter", sans-serif;
 }
 
-.dropdown-wrapper:hover {
+.dropdownWrapper:hover {
   border-color: #9ca3af;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-wrapper.disabled {
+.dropdownWrapper.disabled {
   background-color: #f9fafb;
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-.dropdown-wrapper.small {
+.dropdownWrapper.small {
   padding: 0.625rem 1rem;
   font-size: 0.875rem;
 }
 
-.dropdown-wrapper.medium {
+.dropdownWrapper.medium {
   padding: 0.875rem 1.25rem;
   font-size: 1rem;
 }
 
-.dropdown-wrapper.large {
+.dropdownWrapper.large {
   padding: 1rem 1.5rem;
   font-size: 1.125rem;
 }
 
-/* Selected value display */
-.dropdown-selected,
-.dropdown-display {
+.dropdownSelected,
+.dropdownDisplay {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -103,17 +97,15 @@
   color: #1f2937;
 }
 
-/* Dropdown arrow */
-.dropdown-arrow {
+.dropdownArrow {
   margin-left: 0.75rem;
   color: #6b7280;
   font-size: 0.8rem;
   transition: transform 0.2s ease;
 }
 
-/* Opciones desplegables */
-.dropdown-list,
-.multi-dropdown-options {
+.dropdownList,
+.multiDropdownOptions {
   background-color: #fff;
   position: absolute;
   width: 100%;
@@ -129,20 +121,19 @@
   padding: 0.75rem 0;
 }
 
-.dropdown-list {
+.dropdownList {
   padding: 0.5rem 0;
 }
 
-.dropdown-list.active,
-.multi-dropdown-options.active {
+.dropdownList.active,
+.multiDropdownOptions.active {
   opacity: 1;
   transform: translateY(0);
   visibility: visible;
 }
 
-/* Opciones individuales */
-.dropdown-option,
-.multi-dropdown-item {
+.dropdownOption,
+.multiDropdownItem {
   padding: 0.75rem 1.25rem;
   cursor: pointer;
   transition: background-color 0.15s ease;
@@ -150,31 +141,30 @@
   align-items: center;
 }
 
-.dropdown-option:hover,
-.multi-dropdown-item:hover {
+.dropdownOption:hover,
+.multiDropdownItem:hover {
   background-color: #f3f4f6;
 }
 
-.multi-dropdown-item {
+.multiDropdownItem {
   padding: 0.625rem 1.25rem;
 }
 
-/* Multi-select checkboxes */
-.checkbox-container {
+.checkboxContainer {
   position: relative;
   display: flex;
   align-items: center;
   margin-right: 0.75rem;
 }
 
-.hidden-checkbox {
+.hiddenCheckbox {
   position: absolute;
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.custom-checkbox {
+.customCheckbox {
   display: inline-block;
   width: 1.125rem;
   height: 1.125rem;
@@ -185,12 +175,12 @@
   position: relative;
 }
 
-.hidden-checkbox:checked ~ .custom-checkbox {
+.hiddenCheckbox:checked ~ .customCheckbox {
   background-color: #3b82f6;
   border-color: #3b82f6;
 }
 
-.hidden-checkbox:checked ~ .custom-checkbox::after {
+.hiddenCheckbox:checked ~ .customCheckbox::after {
   content: "";
   position: absolute;
   left: 5px;
@@ -202,20 +192,19 @@
   transform: rotate(45deg);
 }
 
-.multi-label {
+.multiLabel {
   flex: 1;
   color: #1f2937;
   font-size: 0.9375rem;
 }
 
-/* Estados de error */
-.error-border,
-.input-error {
+.errorBorder,
+.inputError {
   border-color: #ef4444 !important;
   background-color: #fef2f2 !important;
 }
 
-.error-message {
+.errorMessage {
   display: flex;
   align-items: center;
   margin-top: 0.5rem;
@@ -228,16 +217,15 @@
   animation: fadeIn 0.2s ease-out;
 }
 
-.error-message svg {
+.errorMessage svg {
   margin-right: 0.5rem;
   flex-shrink: 0;
 }
 
-.has-error .dropdown-wrapper {
+.hasError .dropdownWrapper {
   border-color: #ef4444;
 }
 
-/* Animaciones */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -249,14 +237,13 @@
   }
 }
 
-/* Opciones de categoría */
-.category-option {
+.categoryOption {
   display: flex;
   flex-direction: column;
   padding: 0.75rem 1.25rem;
 }
 
-.category-name {
+.categoryName {
   font-weight: 500;
   color: #1f2937;
   margin-bottom: 0.25rem;
@@ -264,13 +251,12 @@
   font-weight: 600;
 }
 
-.category-grades {
+.categoryGrades {
   font-size: 0.8125rem;
   color: #6b7280;
 }
 
-/* Contenedor y lista de categorías seleccionadas */
-.selected-categories-container {
+.selectedCategoriesContainer {
   margin-top: 1rem;
   padding: 1rem;
   background-color: #f9fafb;
@@ -278,7 +264,7 @@
   border: 1px dashed #e5e7eb;
 }
 
-.selected-categories-title {
+.selectedCategoriesTitle {
   font-size: 0.8125rem;
   color: #6b7280;
   margin-bottom: 0.5rem;
@@ -286,13 +272,13 @@
   font-family: "Poppins", sans-serif;
 }
 
-.selected-categories-list {
+.selectedCategoriesList {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.selected-category-item {
+.selectedCategoryItem {
   padding: 0.5rem 0;
   border-bottom: 1px solid #e5e7eb;
   font-size: 0.875rem;
@@ -300,29 +286,27 @@
   justify-content: space-between;
 }
 
-.selected-category-item:last-child {
+.selectedCategoryItem:last-child {
   border-bottom: none;
 }
 
-/* Lista de grados */
-.grade-list {
+.gradeList {
   font-size: 0.75rem;
   color: #6b7280;
   margin-top: 0.25rem;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
-  .dropdown-wrapper {
+  .dropdownWrapper {
     padding: 0.75rem 1rem;
   }
 
-  .dropdown-wrapper.large {
+  .dropdownWrapper.large {
     padding: 0.875rem 1.25rem;
   }
 
-  .dropdown-list,
-  .multi-dropdown-options {
+  .dropdownList,
+  .multiDropdownOptions {
     max-height: 250px;
   }
 }

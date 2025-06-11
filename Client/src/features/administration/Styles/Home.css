@@ -1,4 +1,4 @@
-.admin-dashboard-container {
+.adminDashboardContainer {
   max-width: 90%;
   margin: 0 auto;
   padding: 20px;
@@ -6,29 +6,29 @@
   font-family: "Inter", sans-serif;
 }
 
-.admin-dashboard-container h1,
-.admin-dashboard-container h2,
-.admin-dashboard-container h3 {
+.adminDashboardContainer h1,
+.adminDashboardContainer h2,
+.adminDashboardContainer h3 {
   font-family: "Poppins", sans-serif;
 }
 
-.admin-dashboard-header {
+.adminDashboardHeader {
   margin-bottom: 30px;
   text-align: center;
 }
 
-.admin-dashboard-header h1 {
+.adminDashboardHeader h1 {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   color: #2c3e50;
   margin-bottom: 10px;
 }
 
-.admin-dashboard-header p {
+.adminDashboardHeader p {
   font-size: clamp(1rem, 2vw, 1.1rem);
   color: #7f8c8d;
 }
 
-.admin-user-card {
+.adminUserCard {
   display: flex;
   align-items: center;
   background: #fff;
@@ -39,11 +39,11 @@
   transition: transform 0.2s ease;
 }
 
-.admin-user-card:hover {
+.adminUserCard:hover {
   transform: translateY(-2px);
 }
 
-.admin-user-avatar {
+.adminUserAvatar {
   width: 60px;
   height: 60px;
   min-width: 60px;
@@ -57,26 +57,26 @@
   color: white;
 }
 
-.admin-user-info h2 {
+.adminUserInfo h2 {
   margin: 0;
   color: #2c3e50;
   font-size: clamp(1.2rem, 3vw, 1.5rem);
 }
 
-.admin-user-info p {
+.adminUserInfo p {
   margin: 5px 0 0;
   color: #7f8c8d;
   font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
-.admin-summary-section {
+.adminSummarySection {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-bottom: 30px;
 }
 
-.admin-summary-card {
+.adminSummaryCard {
   background: #fff;
   border-radius: 10px;
   padding: 20px;
@@ -85,18 +85,18 @@
   transition: all 0.3s ease;
 }
 
-.admin-summary-card:hover {
+.adminSummaryCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.admin-summary-card h3 {
+.adminSummaryCard h3 {
   color: #2c3e50;
   margin: 0 0 10px 0;
   font-size: clamp(1rem, 2vw, 1.2rem);
 }
 
-.admin-big-text {
+.adminBigText {
   font-size: clamp(1.8rem, 5vw, 2.5rem);
   font-weight: bold;
   color: #3498db;
@@ -104,25 +104,25 @@
   line-height: 1;
 }
 
-.admin-summary-card p:not(.admin-big-text) {
+.adminSummaryCard p:not(.adminBigText) {
   font-size: clamp(0.85rem, 2vw, 1rem);
   color: #7f8c8d;
   margin: 5px 0 0 0;
 }
 
-.admin-section-title {
+.adminSectionTitle {
   color: #2c3e50;
   margin-bottom: 20px;
   font-size: clamp(1.4rem, 3vw, 1.8rem);
 }
 
-.admin-actions-section {
+.adminActionsSection {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
 }
 
-.admin-action-card {
+.adminActionCard {
   background: #fff;
   border-radius: 10px;
   padding: 25px;
@@ -132,12 +132,12 @@
   transition: all 0.3s ease;
 }
 
-.admin-action-card:hover {
+.adminActionCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
-.admin-action-icon {
+.adminActionIcon {
   margin-bottom: 15px;
   display: inline-flex;
   align-items: center;
@@ -148,20 +148,20 @@
   border-radius: 50%;
 }
 
-.admin-action-card h3 {
+.adminActionCard h3 {
   color: #2c3e50;
   margin: 0 0 10px 0;
   font-size: clamp(1.1rem, 2.5vw, 1.3rem);
 }
 
-.admin-action-card p {
+.adminActionCard p {
   color: #7f8c8d;
   margin: 0 0 20px 0;
   font-size: clamp(0.9rem, 2vw, 1rem);
   flex-grow: 1;
 }
 
-.admin-action-card button {
+.adminActionCard button {
   background: #3498db;
   color: white;
   border: none;
@@ -174,19 +174,19 @@
   align-self: flex-start;
 }
 
-.admin-action-card button:hover {
+.adminActionCard button:hover {
   background: #2980b9;
   transform: translateY(-2px);
 }
 
-.admin-olimpiada-slider {
+.adminOlimpiadaSlider {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 15px;
 }
 
-.admin-olimpiada-slider button {
+.adminOlimpiadaSlider button {
   background: none;
   border: none;
   cursor: pointer;
@@ -197,20 +197,20 @@
   border-radius: 50%;
 }
 
-.admin-olimpiada-slider button:hover {
+.adminOlimpiadaSlider button:hover {
   color: #2980b9;
   background-color: rgba(52, 152, 219, 0.1);
   transform: scale(1.1);
 }
 
-.admin-olimpiada-slider p {
+.adminOlimpiadaSlider p {
   margin: 0;
   font-size: clamp(1.1rem, 3vw, 1.3rem);
   font-weight: bold;
   color: #2c3e50;
 }
 
-.admin-loading-container {
+.adminLoadingContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -219,7 +219,7 @@
   background: #f8f9fa;
 }
 
-.admin-spinner {
+.adminSpinner {
   border: 5px solid #f3f3f3;
   border-top: 5px solid #3498db;
   border-radius: 50%;
@@ -241,43 +241,43 @@
 /* ===== MEDIA QUERIES ===== */
 
 @media (max-width: 1024px) {
-  .admin-dashboard-container {
+  .adminDashboardContainer {
     max-width: 100%;
-    padding: 15px;
+    padding: 15px;/
   }
 
-  .admin-summary-section {
+  .adminSummarySection {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .admin-user-card {
+  .adminUserCard {
     flex-direction: column;
     text-align: center;
     padding: 15px;
   }
 
-  .admin-user-avatar {
+  .adminUserAvatar {
     margin-right: 0;
     margin-bottom: 15px;
   }
 
-  .admin-actions-section {
+  .adminActionsSection {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
-  .admin-summary-section {
+  .adminSummarySection {
     grid-template-columns: 1fr;
   }
 
-  .admin-summary-card {
+  .adminSummaryCard {
     padding: 15px;
   }
 
-  .admin-action-card {
+  .adminActionCard {
     padding: 20px;
   }
 }

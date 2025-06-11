@@ -21,6 +21,7 @@ import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlym
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
 import Reports from "./features/administration/pages/Reports";
 import ManageUsers from "./features/administration/pages/ManageUsers";
+import ManageViewUser from "./features/administration/pages/ManageViewUser";
 
 import PaginaContacto from "./features/contacto/pages/PaginaContacto";
 import ConsultarInscripcion from "./features/consultar_inscripcion/pages/ConsultarInscripcion";
@@ -30,7 +31,8 @@ import RegisterExcel from "./features/registrarion/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registrarion/pages/RegisterChoose";
 import { OCRValidation } from "./features/registrarion/pages/OCRValidation";
 import { GenerateOrder } from "./features/registrarion/pages/GenerateOrder";
-import OlympiadDetail from "./features/detallesOlimpiada/OlympiadDetail";
+import OlimpiadaDetallada from "./features/detallesOlimpiada/OlimpiadaDetallada";
+import { BoletaPDF } from "./features/cajero/pages/BoletaPDF";
 
 import { useEffect } from "react";
 
@@ -64,21 +66,21 @@ function App() {
     "/consultar-inscripcion",
     "/consultar-inscripcion/resultado",
     "/consultar-inscripcion/resultado-tutor",
-    "/olimpiada/:id"
+    "/olimpiada/:id",
+    "/cajero/:token/boleta/:id",
   ];
 
-  const hideSidebar = hideSidebarRoutes.some((ruta) => location.pathname === ruta) || location.pathname.startsWith("/olimpiada/");
+  const hideSidebar =
+    hideSidebarRoutes.some((ruta) => location.pathname === ruta) ||
+    location.pathname.startsWith("/olimpiada/") ||
+    location.pathname.startsWith("/cajero/");
 
   const showSidebar = !hideSidebar;
   return (
     <div className="app-container">
       <div
         className={
-          hideSidebar
-            ? "page-no-sidebar"
-            : isOpen
-              ? "main active"
-              : "main"
+          hideSidebar ? "page-no-sidebar" : isOpen ? "main active" : "main"
         }
       >
         {showSidebar && (
@@ -89,10 +91,17 @@ function App() {
           />
         )}
 
-        <div className={`content-area ${(hideSidebarRoutes.includes(location.pathname) || location.pathname.startsWith("/olimpiada/")) ? "no-margin" : ""}`}>
+        <div
+          className={`content-area ${
+            hideSidebarRoutes.includes(location.pathname) ||
+            location.pathname.startsWith("/olimpiada/")
+              ? "no-margin"
+              : ""
+          }`}
+        >
           <Routes>
             <Route path="/" element={<MainHome />} />
-            <Route path="/olimpiada/:id" element={<OlympiadDetail />} />
+            <Route path="/olimpiada/:id" element={<OlimpiadaDetallada />} />
             <Route path="/register" element={<RegisterChoose />} />
             <Route path="/register/olympian" element={<RegisterOlympian />} />
             <Route path="/register/tutor-legal" element={<RegisterTutor />} />
@@ -135,6 +144,7 @@ function App() {
               path="/consultar-inscripcion/resultado-tutor"
               element={<ResultadoConsulta_Tutor />}
             />
+            <Route path="/cajero/:token/boleta/:id" element={<BoletaPDF />} />
 
             {/* Admin Layout con rutas anidadas */}
             <Route path="/admin" element={<AdminLayout />}>
@@ -154,6 +164,15 @@ function App() {
                 element={
                   <PrivateRoute
                     element={<ManageUsers />}
+                    allowedPermiso={"crear_usuarios"}
+                  />
+                }
+              />
+              <Route
+                path="manageUser"
+                element={
+                  <PrivateRoute
+                    element={<ManageViewUser />}
                     allowedPermiso={"crear_usuarios"}
                   />
                 }

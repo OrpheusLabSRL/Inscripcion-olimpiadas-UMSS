@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\OlimpiadaAreaCategoria;
-use App\Models\Usuario; // Asegúrate que este modelo exista
+use App\Models\Usuario;
 
 class Olimpiada extends Model
 {

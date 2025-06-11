@@ -2,121 +2,112 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CategoriaGrado;
-use App\Models\Categoria;
+use App\Services\CategoriaGradoService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CategoriaGradoController extends Controller
 {
-    // Obtener todas las relaciones
+    protected $service;
+
+    public function __construct(CategoriaGradoService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
-        return response()->json(CategoriaGrado::with(['categoria', 'grado'])->get());
+        $relaciones = $this->service->getAllRelations();
+        return response()->json($relaciones);
     }
 
-    // Crear una nueva relación
     public function store(Request $request)
     {
-        $request->validate([
-            'idCategoria' => 'required|exists:categoria,idCategoria',
-            'idGrado' => 'required|exists:grado,idGrado',
-            'estadoCategoriaGrado' => 'required|boolean'
-        ]);
-
-        $relacion = CategoriaGrado::create($request->only([
-            'idCategoria',
-            'idGrado',
-            'estadoCategoriaGrado'
-        ]));
-
-        return response()->json([
-            'message' => 'Relación creada correctamente',
-            'data' => $relacion
-        ], 201);
+        try {
+            $relacion = $this->service->createRelation($request->all());
+            return response()->json([
+                'message' => 'Relación creada correctamente',
+                'data' => $relacion
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
 
-    // Actualizar una relación existente
     public function update(Request $request, $id)
     {
-        $relacion = CategoriaGrado::findOrFail($id);
-
-        $request->validate([
-            'idCategoria' => 'required|exists:categoria,idCategoria',
-            'idGrado' => 'required|exists:grado,idGrado',
-            'estadoCategoriaGrado' => 'required|boolean'
-        ]);
-
-        $relacion->update($request->only([
-            'idCategoria',
-            'idGrado',
-            'estadoCategoriaGrado'
-        ]));
-
-        return response()->json([
-            'message' => 'Relación actualizada',
-            'data' => $relacion
-        ]);
+        try {
+            $relacion = $this->service->updateRelation($id, $request->all());
+            return response()->json([
+                'message' => 'Relación actualizada',
+                'data' => $relacion
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
 
-
-
-    // Eliminar una relación
     public function destroy($id)
     {
-        $relacion = CategoriaGrado::findOrFail($id);
-        $relacion->delete();
-
-        return response()->json(['message' => 'Relación eliminada']);
+        try {
+            $this->service->deleteRelation($id);
+            return response()->json(['message' => 'Relación eliminada']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
     }
 
-        public function cambiarEstado(Request $request, $id)
+    public function cambiarEstado(Request $request, $id)
     {
-        $request->validate([
-            'estadoCategoriaGrado' => 'required|boolean'
-        ]);
-
-        $relacion = CategoriaGrado::findOrFail($id);
-        $relacion->update([
-            'estadoCategoriaGrado' => $request->estadoCategoriaGrado
-        ]);
-
-        return response()->json([
-            'message' => 'Estado de la relación actualizado',
-            'data' => $relacion
-        ]);
+        try {
+            $relacion = $this->service->updateRelationStatus($id, $request->estadoCategoriaGrado);
+            return response()->json([
+                'message' => 'Estado de la relación actualizado',
+                'data' => $relacion
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
-    
-        public function actualizarCategoriaYGrados(Request $request, $idCategoria)
-    {
-        $request->validate([
-            'nombreCategoria' => 'required|string|max:255',
-            'grados' => 'required|array',
-            'grados.*' => 'exists:grados,idGrado',
-            'estadoCategoriaGrado' => 'sometimes|boolean'
-        ]);
 
-        DB::transaction(function () use ($request, $idCategoria) {
-            // Actualizar el nombre de la categoría
-            $categoria = Categoria::findOrFail($idCategoria);
-            $categoria->update([
-                'nombreCategoria' => $request->nombreCategoria
+    public function actualizarCategoriaYGrados(Request $request, $idCategoria)
+    {
+        try {
+            $result = $this->service->updateCategoriaAndGrados($idCategoria, $request->all());
+            return response()->json([
+                'message' => 'Categoría y grados asociados actualizados correctamente',
+                'data' => $result
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
+    }
+
+    public function storeWithGrados(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'nombreCategoria' => 'required|string|max:255',
+                'grados' => 'required|array|min:1',
+                'grados.*' => 'exists:grados,idGrado',
+                'estadoCategoriaGrado' => 'sometimes|boolean'
             ]);
 
-            // Sincronizar los grados asociados
-            $estado = $request->has('estadoCategoriaGrado') ? $request->estadoCategoriaGrado : true;
+            $result = $this->service->createCategoriaWithGrados($data);
             
-            $syncData = [];
-            foreach ($request->grados as $gradoId) {
-                $syncData[$gradoId] = ['estadoCategoriaGrado' => $estado];
-            }
-
-            $categoria->grados()->sync($syncData);
-        });
-
-        return response()->json([
-            'message' => 'Categoría y grados asociados actualizados correctamente',
-            'data' => Categoria::with('grados')->find($idCategoria)
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Categoría creada con grados asociados exitosamente',
+                'data' => $result
+            ], 201);
+        } catch (\Exception $e) {
+            // Asegurarse de que el código de estado sea un número entero
+            $statusCode = is_numeric($e->getCode()) && $e->getCode() >= 400 ? $e->getCode() : 500;
+            
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'error' => $statusCode === 400 ? $e->getMessage() : 'Error al procesar la solicitud'
+            ], $statusCode);
+        }
     }
 }

@@ -2,19 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Olimpiada;
+use App\Services\OlimpiadaService;
 use Illuminate\Http\Request;
 
 class OlimpiadaController extends Controller
 {
-    // API - Listar todas las olimpiadas
+    protected $service;
+
+    public function __construct(OlimpiadaService $service)
+    {
+        $this->service = $service;
+    }
+
     public function mostrarOlimpiada()
     {
-        $olimpiadas = Olimpiada::all();
+        $olimpiadas = $this->service->getAllOlimpiadas();
         return response()->json(['data' => $olimpiadas]);
     }
 
-    // API - Crear nueva olimpiada
+    public function mostrarOlimpiadasConAreasCategorias()
+    {
+        $olimpiadas = $this->service->getAllOlimpiadasConAreasCategorias();
+        return response()->json(['data' => $olimpiadas]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -24,9 +35,7 @@ class OlimpiadaController extends Controller
             'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
         ]);
 
-        $validated['estadoOlimpiada'] = false;
-        $validated['idUsuario'] = 1;
-        $olimpiada = Olimpiada::create($validated);
+        $olimpiada = $this->service->createOlimpiada($validated);
 
         return response()->json([
             'message' => 'Olimpiada creada exitosamente',
@@ -34,11 +43,8 @@ class OlimpiadaController extends Controller
         ], 201);
     }
 
-    // API - Actualizar olimpiada
     public function update(Request $request, $id)
     {
-        $olimpiada = Olimpiada::findOrFail($id);
-
         $request->validate([
             'nombreOlimpiada' => 'required|string|max:100,' . $id . ',idOlimpiada',
             'version' => 'required|integer|min:1',
@@ -47,7 +53,7 @@ class OlimpiadaController extends Controller
             'estadoOlimpiada' => 'required|boolean',
         ]);
 
-        $olimpiada->update($request->all());
+        $olimpiada = $this->service->updateOlimpiada($id, $request->all());
 
         return response()->json([
             'message' => 'Olimpiada actualizada correctamente',
@@ -55,17 +61,13 @@ class OlimpiadaController extends Controller
         ]);
     }
 
-    // API - Cambiar estado de una olimpiada
     public function cambiarEstado(Request $request, $id)
     {
-        $olimpiada = Olimpiada::findOrFail($id);
-
         $request->validate([
             'estadoOlimpiada' => 'required|boolean',
         ]);
 
-        $olimpiada->estadoOlimpiada = $request->estadoOlimpiada;
-        $olimpiada->save();
+        $olimpiada = $this->service->changeOlimpiadaStatus($id, $request->estadoOlimpiada);
 
         return response()->json([
             'message' => 'Estado actualizado correctamente',
@@ -73,12 +75,9 @@ class OlimpiadaController extends Controller
         ]);
     }
 
-    // API - Eliminar olimpiada
     public function destroy($id)
     {
-        $olimpiada = Olimpiada::findOrFail($id);
-        $olimpiada->delete();
-
+        $this->service->deleteOlimpiada($id);
         return response()->json([
             'message' => 'Olimpiada eliminada correctamente'
         ]);

@@ -181,7 +181,7 @@ public function validateExcelData(Request $request)
 
             // Obtener el último código de inscripción y calcular el nuevo
             $ultimoCodigo = Inscripcion::max('codigoInscripcion');
-            $nuevoCodigo = $ultimoCodigo ? $ultimoCodigo + 1 : 1;
+            $nuevoCodigo = str_pad($ultimoCodigo + 1, 3, '0', STR_PAD_LEFT);
 
             // Registrar persona responsable
             $responsiblePerson = Persona::updateOrCreate(
@@ -212,11 +212,11 @@ public function validateExcelData(Request $request)
                     })
                     ->whereHas('categoria', function($q) use ($data) {
                         $q->where('nombreCategoria', $data[10]);
-                    })
+                    })->where('idOlimpiada', $request['idOlimpiada'])
                     ->first();
 
                 if (!$combination) {
-                    throw new \Exception("La categoría '{$data[10]}' no está disponible para el área '{$data[9]}'");
+                    throw new \Exception("El área '{$data[9]} o la categoría '{$data[10]}' no están disponibles'");
                 }
 
                 $existing = Inscripcion::where('idOlimpista', function($query) use ($data) {
@@ -254,7 +254,7 @@ public function validateExcelData(Request $request)
                     })
                     ->whereHas('categoria', function($q) use ($data) {
                         $q->where('nombreCategoria', $data[10]);
-                    })
+                    })->where('idOlimpiada', $request['idOlimpiada'])
                     ->first();
 
                 // Registrar persona olimpista

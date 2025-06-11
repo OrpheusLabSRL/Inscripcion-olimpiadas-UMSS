@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categoria;
+use App\Services\CategoriaService;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
-    // Obtener todas las categorías
-    public function index()
+    protected $service;
+
+    public function __construct(CategoriaService $service)
     {
-        return response()->json(Categoria::all());
+        $this->service = $service;
     }
 
-    // Obtener una categoría por su ID
+    public function index()
+    {
+        return response()->json($this->service->getAllCategorias());
+    }
+
     public function show($id)
     {
-        $categoria = Categoria::find($id);
+        $categoria = $this->service->getCategoria($id);
 
         if (!$categoria) {
             return response()->json(['message' => 'Categoría no encontrada'], 404);
@@ -25,55 +30,62 @@ class CategoriaController extends Controller
         return response()->json($categoria);
     }
 
-    // Crear una nueva categoría
     public function store(Request $request)
     {
         $request->validate([
-            'nombreCategoria' => 'required|string|unique:categoria,nombreCategoria',
+            'nombreCategoria' => 'required|string',
             'estadoCategoria' => 'required|boolean',
         ]);
 
-        $categoria = Categoria::create($request->only(['nombreCategoria', 'estadoCategoria']));
-
-        return response()->json([
-            'message' => 'Categoría creada con éxito',
-            'data' => $categoria
-        ], 201);
+        try {
+            $categoria = $this->service->createCategoria($request->only(['nombreCategoria', 'estadoCategoria']));
+            
+            return response()->json([
+                'message' => 'Categoría creada con éxito',
+                'data' => $categoria
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
     }
 
-    // Actualizar una categoría
     public function update(Request $request, $id)
     {
-        $categoria = Categoria::find($id);
+        $categoria = $this->service->getCategoria($id);
 
         if (!$categoria) {
             return response()->json(['message' => 'Categoría no encontrada'], 404);
         }
 
         $request->validate([
-            'nombreCategoria' => 'required|string|unique:categoria,nombreCategoria,' . $id . ',idCategoria',
+            'nombreCategoria' => 'required|string',
             'estadoCategoria' => 'required|boolean',
         ]);
 
-        $categoria->update($request->only(['nombreCategoria', 'estadoCategoria']));
-
-        return response()->json([
-            'message' => 'Categoría actualizada con éxito',
-            'data' => $categoria
-        ]);
+        try {
+            $categoria = $this->service->updateCategoria($id, $request->only(['nombreCategoria', 'estadoCategoria']));
+            
+            return response()->json([
+                'message' => 'Categoría actualizada con éxito',
+                'data' => $categoria
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
     }
 
-    // Eliminar una categoría
     public function destroy($id)
     {
-        $categoria = Categoria::find($id);
+        $categoria = $this->service->getCategoria($id);
 
         if (!$categoria) {
             return response()->json(['message' => 'Categoría no encontrada'], 404);
         }
 
-        $categoria->delete();
+        $this->service->deleteCategoria($id);
 
         return response()->json(['message' => 'Categoría eliminada']);
     }
+
+        
 }

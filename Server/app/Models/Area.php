@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\OlimpiadaAreaCategoria;
 
 class Area extends Model
 {
@@ -17,7 +16,7 @@ class Area extends Model
     protected $fillable = [
         'nombreArea',
         'descripcionArea',
-        'estadoArea',   // nuevo campo
+        'estadoArea',
     ];
 
     public function combinaciones()

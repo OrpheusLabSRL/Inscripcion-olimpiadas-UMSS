@@ -7,7 +7,7 @@ import { getOlimpiadas } from "../../../../api/inscription.api";
 import OlympiadsModal from "../administrationModal/OlympiadsModal";
 import BaseDataModal from "../administrationModal/BaseDataModal";
 import { CiCircleInfo } from "react-icons/ci";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaTrash } from "react-icons/fa";
 import "../../Styles/Tables.css";
 
 const OlympiadsTable = () => {
@@ -38,6 +38,17 @@ const OlympiadsTable = () => {
     setIsModalOpen(true);
   };
 
+  const handleDelete = (olympiad) => {
+    if (
+      window.confirm(
+        `¿Estás seguro que deseas eliminar la olimpiada "${olympiad.nombreOlimpiada}"?`
+      )
+    ) {
+      // Aquí iría tu lógica de eliminación (API, estado, etc.)
+      console.log("Eliminar olimpiada con ID:", olympiad.idOlimpiada);
+    }
+  };
+
   const toggleEstado = async (olympiad) => {
     const hoy = new Date();
     const fechaInicio = new Date(olympiad.fechaInicioOlimpiada);
@@ -49,7 +60,7 @@ const OlympiadsTable = () => {
       return;
     }
     if (fechaInicio <= hoy) {
-      alert("No puedes modificar una olimpiada que ya comenzo.");
+      alert("No puedes modificar una olimpiada que ya comenzó.");
       return;
     }
 
@@ -64,7 +75,6 @@ const OlympiadsTable = () => {
       return;
     }
 
-    // Si está inactiva y en fechas válidas → reactivar
     try {
       const response = await getAreasCategoriasPorOlimpiada(
         olympiad.idOlimpiada
@@ -74,10 +84,10 @@ const OlympiadsTable = () => {
       const tieneAsignaciones =
         data.length > 0 && data.some((a) => a.categorias.length > 0);
 
-      /*if (!tieneAsignaciones) {
-        alert("Debes asignar al menos un área y categoría para activarla.");
-        return;
-      }*/
+      // if (!tieneAsignaciones) {
+      //   alert("Debes asignar al menos un área y categoría para activarla.");
+      //   return;
+      // }
 
       await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
       await fetchOlimpiads();
@@ -104,15 +114,15 @@ const OlympiadsTable = () => {
     const fechaFin = new Date(olympiad.fechaFinOlimpiada);
     const isActive = olympiad.estadoOlimpiada === 1;
 
-    if (fechaFin < hoy) return "table-util-badge-neutral";
-    if (fechaInicio > hoy && isActive) return "table-util-badge-default";
-    if (isActive) return "table-util-badge-success";
-    return "table-util-badge-warning";
+    if (fechaFin < hoy) return "tableUtilBadgeNeutral";
+    if (fechaInicio > hoy && isActive) return "tableUtilBadgeDefault";
+    if (isActive) return "tableUtilBadgeSuccess";
+    return "tableUtilBadgeWarning";
   };
 
   return (
-    <div className="olympiad-table-wrapper">
-      <table className="olympiad-table">
+    <div className="olympiadTableWrapper">
+      <table className="olympiadTable">
         <thead>
           <tr>
             <th>Nombre</th>
@@ -126,14 +136,14 @@ const OlympiadsTable = () => {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="6" className="table-util-loading">
-                <FaSpinner className="table-util-spinner" />
+              <td colSpan="6" className="tableUtilLoading">
+                <FaSpinner className="tableUtilSpinner" />
                 Cargando olimpiadas...
               </td>
             </tr>
           ) : olympiads.length > 0 ? (
             olympiads.map((item) => (
-              <tr key={item.idOlimpiada} className="olympiad-table-row">
+              <tr key={item.idOlimpiada} className="olympiadTableRow">
                 <td>{item.nombreOlimpiada}</td>
                 <td>{item.version}</td>
                 <td>{item.fechaInicioOlimpiada}</td>
@@ -141,25 +151,26 @@ const OlympiadsTable = () => {
                 <td>
                   <button
                     onClick={() => toggleEstado(item)}
-                    className={`table-util-status-badge ${getBadgeClass(item)}`}
+                    className={`tableUtilStatusBadge ${getBadgeClass(item)}`}
                   >
                     {getEstadoLabel(item)}
                   </button>
                 </td>
-                <td className="olympiad-table-actions">
+                <td className="olympiadTableActions">
                   <button
-                    className="olympiad-table-view-btn"
+                    className="olympiadTableViewBtn"
                     onClick={() => handleView(item)}
                     title="Ver detalles"
                   >
                     <CiCircleInfo />
                   </button>
+                  <FaTrash className="actionIcon deleteIcon" />{" "}
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="table-util-empty">
+              <td colSpan="6" className="tableUtilEmpty">
                 No hay olimpiadas registradas.
               </td>
             </tr>
