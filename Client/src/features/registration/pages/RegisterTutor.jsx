@@ -136,7 +136,7 @@ export const RegisterTutor = () => {
           : {
               nombre: sessionStorage.getItem("NombreResponsible"),
               apellido: sessionStorage.getItem("ApellidoResponsible"),
-              tipo_tutor: sessionStorage.getItem("TipoTutorResponsible"),
+              tipo_tutor: "ResponsableIns",
               correo_electronico: sessionStorage.getItem("EmailResponsible"),
               telefono: sessionStorage.getItem("NumeroResponsible"),
               carnet_identidad: sessionStorage.getItem("CiResponsible"),
@@ -256,16 +256,10 @@ export const RegisterTutor = () => {
       const ciLegal = sessionStorage.getItem("CiLegal") || "";
 
       if (ciLegal == ciResponsible) {
-        setTipoTutor([
-          ...tipoTutor,
-          { value: "Profesor", label: "Profesor" },
-          { value: "Estudiante", label: "Estudiante" },
-        ]);
         setValue("Nombre", sessionStorage.getItem("NombreResponsible"));
         setValue("Apellido", sessionStorage.getItem("ApellidoResponsible"));
         setValue("Email", sessionStorage.getItem("EmailResponsible"));
         setValue("Numero_Celular", sessionStorage.getItem("NumeroResponsible"));
-        setValue("Tipo_Tutor", sessionStorage.getItem("TipoTutorResponsible"));
 
         setIsReadOnly((prev) => ({
           ...prev,
@@ -274,7 +268,6 @@ export const RegisterTutor = () => {
           Apellido: true,
           Email: true,
           Numero_Celular: true,
-          Tipo_Tutor: true,
         }));
         return;
       }
