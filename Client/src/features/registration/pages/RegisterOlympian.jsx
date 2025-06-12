@@ -9,19 +9,9 @@ import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
 import React, { useMemo } from "react";
-import { useForm } from "react-hook-form";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
-import { useNavigate, useLocation } from "react-router-dom";
-import swal from "sweetalert";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MdCleaningServices } from "react-icons/md";
-import Swal from "sweetalert2";
-
-//api
-import {
-  getOlimpistaEnable,
-  getPersonData,
-} from "../../../api/inscription.api";
 
 //utils
 import { Validator } from "../utils/ValidationRules";
@@ -32,10 +22,12 @@ import {
   colegioPorMunicipio,
 } from "../utils/DataOptions";
 
+//Hooks
+import { useRegisterOlympian } from "../hooks/useRegisterOlympian";
+import { useAutoFillOlympian } from "../hooks/useAutoFillOlympian";
+import { useSessionStorageOlympian } from "../hooks/useSessionStorageOlympian";
+
 export const RegisterOlympian = () => {
-  const [currentStep, sertCurrentStep] = useState(2);
-  const [totalSteps, setTotalStep] = useState(4);
-  const [isReadOnly, setIsReadOnly] = useState({});
   const [municipiosFiltradas, setMunicipiosFiltradas] = useState(() => {
     const stored = sessionStorage.getItem("municipiosFiltradas");
     return stored ? JSON.parse(stored) : null;
@@ -45,100 +37,32 @@ export const RegisterOlympian = () => {
     return stored ? JSON.parse(stored) : null;
   });
 
-  const navigation = useNavigate();
-  const location = useLocation();
-  const previousPath = sessionStorage.getItem("prevPage");
-
   const {
+    currentStep,
+    totalSteps,
+    isReadOnly,
+    setIsReadOnly,
+    location,
+    previousPath,
     register,
     handleSubmit,
-    formState: { errors },
-    watch,
+    errors,
     setValue,
-  } = useForm({
-    defaultValues: {
-      Nombre: sessionStorage.getItem("NombreOlympian") || "",
-      Apellido: sessionStorage.getItem("ApellidoOlympian") || "",
-      FechaNacimiento: sessionStorage.getItem("FechaNacimientoOlympian") || "",
-      CarnetIdentidad: sessionStorage.getItem("CarnetIdentidadOlympian") || "",
-      Colegio: sessionStorage.getItem("ColegioOlympian") || "",
-      Curso: sessionStorage.getItem("CursoOlympian") || "",
-      Departamento: sessionStorage.getItem("DepartamentoOlympian") || "",
-      Municipio: sessionStorage.getItem("MunicipioOlympian") || "",
-      Email: sessionStorage.getItem("EmailOlympian") || "",
-    },
-    mode: "onChange",
-  });
+    watchedFields,
+    cleanFlieds,
+    cancelInscription,
+    onSubmit,
+  } = useRegisterOlympian();
 
-  const watchedNombre = watch("Nombre");
-  const watchedApellido = watch("Apellido");
-  const watchedFechaNacimiento = watch("FechaNacimiento");
-  const watchedCarnetIdentidad = watch("CarnetIdentidad");
-  const watchedColegio = watch("Colegio");
-  const watchedCurso = watch("Curso");
-  const watchedDepartamento = watch("Departamento");
-  const watchedMunicipio = watch("Municipio");
-  const watchedEmail = watch("Email");
+  useAutoFillOlympian(
+    watchedFields.carnetIdentidad,
+    setValue,
+    setIsReadOnly,
+    setMunicipiosFiltradas,
+    setColegiosFiltradas
+  );
 
-  useEffect(() => {
-    sessionStorage.setItem("NombreOlympian", watchedNombre);
-  }, [watchedNombre]);
-
-  useEffect(() => {
-    sessionStorage.setItem("ApellidoOlympian", watchedApellido);
-  }, [watchedApellido]);
-
-  useEffect(() => {
-    sessionStorage.setItem("FechaNacimientoOlympian", watchedFechaNacimiento);
-  }, [watchedFechaNacimiento]);
-
-  useEffect(() => {
-    sessionStorage.setItem("CarnetIdentidadOlympian", watchedCarnetIdentidad);
-    if (watchedCarnetIdentidad.length >= 7) {
-      autofill();
-    }
-  }, [watchedCarnetIdentidad]);
-
-  useEffect(() => {
-    sessionStorage.setItem("ColegioOlympian", watchedColegio);
-  }, [watchedColegio]);
-
-  useEffect(() => {
-    sessionStorage.setItem("CursoOlympian", watchedCurso);
-  }, [watchedCurso]);
-
-  useEffect(() => {
-    sessionStorage.setItem("DepartamentoOlympian", watchedDepartamento);
-  }, [watchedDepartamento]);
-
-  useEffect(() => {
-    sessionStorage.setItem("MunicipioOlympian", watchedMunicipio);
-  }, [watchedMunicipio]);
-
-  useEffect(() => {
-    sessionStorage.setItem("EmailOlympian", watchedEmail);
-  }, [watchedEmail]);
-
-  useEffect(() => {
-    const handleUnload = () => {
-      sessionStorage.removeItem("NombreOlympian");
-      sessionStorage.removeItem("ApellidoOlympian");
-      sessionStorage.removeItem("FechaNacimientoOlympian");
-      sessionStorage.removeItem("CarnetIdentidadOlympian");
-      sessionStorage.removeItem("ColegioOlympian");
-      sessionStorage.removeItem("CursoOlympian");
-      sessionStorage.removeItem("DepartamentoOlympian");
-      sessionStorage.removeItem("MunicipioOlympian");
-      sessionStorage.removeItem("EmailOlympian");
-      sessionStorage.removeItem("municipiosFiltradas");
-      sessionStorage.removeItem("colegiosFiltradas");
-    };
-    window.addEventListener("beforeunload", handleUnload);
-    sessionStorage.setItem("pantallaActualRegistro", location.pathname);
-    return () => {
-      window.removeEventListener("beforeunload", handleUnload);
-    };
-  }, []);
+  useSessionStorageOlympian(watchedFields, location);
 
   const onSelectDepartamento = (e) => {
     const select = e.target;
@@ -159,125 +83,6 @@ export const RegisterOlympian = () => {
     const colegios = colegioPorMunicipio[label] || [];
     setColegiosFiltradas(colegios);
     sessionStorage.setItem("colegiosFiltradas", JSON.stringify(colegios));
-  };
-
-  const autofill = async () => {
-    try {
-      const idOlimpiada = JSON.parse(
-        sessionStorage.getItem("OlympicData")
-      ).idOlimpiada;
-      const personData = await getPersonData({
-        carnet_identidad: sessionStorage.getItem("CarnetIdentidadOlympian"),
-        id_olimpiada: idOlimpiada,
-      });
-
-      if (personData.data.data.nombre) {
-        setValue("Nombre", personData.data.data.nombre);
-        setValue("Apellido", personData.data.data.apellido);
-        setValue("Email", personData.data.data.correoElectronico);
-        setIsReadOnly((prev) => ({
-          ...prev,
-          CarnetIdentidad: true,
-          Nombre: true,
-          Apellido: true,
-          Email: true,
-        }));
-      }
-
-      if (personData.data.data.fechaNacimiento) {
-        setValue("FechaNacimiento", personData.data.data.fechaNacimiento);
-        setValue("Departamento", personData.data.data.departamento);
-        const provincias =
-          municipioPorDepartamento[personData.data.data.departamento] || [];
-        setMunicipiosFiltradas(provincias);
-        setValue("Municipio", personData.data.data.municipio);
-        const colegios =
-          colegioPorMunicipio[personData.data.data.municipio] || [];
-        setColegiosFiltradas(colegios);
-        setValue("Colegio", personData.data.data.colegio);
-        setValue("Curso", personData.data.data.curso);
-        setIsReadOnly((prev) => ({
-          ...prev,
-          CarnetIdentidad: true,
-          FechaNacimiento: true,
-          Departamento: true,
-          Municipio: true,
-          Colegio: true,
-          Curso: true,
-        }));
-      }
-    } catch (error) {
-      const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
-      const ciOlympian =
-        sessionStorage.getItem("CarnetIdentidadOlympian") || "";
-
-      if (ciResponsible == ciOlympian) {
-        setValue("Nombre", sessionStorage.getItem("NombreResponsible"));
-        setValue("Apellido", sessionStorage.getItem("ApellidoResponsible"));
-        setValue("Email", sessionStorage.getItem("EmailResponsible"));
-        setIsReadOnly((prev) => ({
-          ...prev,
-          CarnetIdentidad: true,
-          Nombre: true,
-          Apellido: true,
-          Email: true,
-        }));
-        console.log(isReadOnly);
-      }
-    }
-  };
-
-  const cleanFlieds = () => {
-    setValue("Nombre", "");
-    setValue("Apellido", "");
-    setValue("Email", "");
-    setValue("CarnetIdentidad", "");
-    setValue("FechaNacimiento", "");
-    setValue("Departamento", "");
-    setValue("Municipio", "");
-    setValue("Colegio", "");
-    setValue("Curso", "");
-
-    setIsReadOnly({});
-  };
-
-  const cancelInscription = async () => {
-    const confirmacion = await Swal.fire({
-      title: "¿Estás seguro que quieres salir?",
-      text: "Se perderan los datos ingresados.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, aceptar",
-      cancelButtonText: "Cancelar",
-    });
-
-    if (confirmacion.isConfirmed) {
-      limpiarCamposLocalStorage();
-      navigation(
-        sessionStorage.getItem("tutorInscripcionId")
-          ? "/register/listRegistered"
-          : "/register"
-      );
-    }
-  };
-
-  const limpiarCamposLocalStorage = () => {
-    const campoAConservar = sessionStorage.getItem("tutorInscripcionId");
-    sessionStorage.clear();
-    if (campoAConservar !== null)
-      sessionStorage.setItem("tutorInscripcionId", campoAConservar);
-  };
-
-  const onSubmit = async (data) => {
-    try {
-      await getOlimpistaEnable(
-        sessionStorage.getItem("CarnetIdentidadOlympian"),
-        JSON.parse(sessionStorage.getItem("OlympicData")).idOlimpiada
-      );
-      navigation("/register/olympian-area", data);
-    } catch (error) {
-      swal("Error", error.response.data.message, "error");
-    }
   };
 
   const titleOlimpian = useMemo(() => {
@@ -316,7 +121,7 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="CarnetIdentidad"
             isReadOnly={isReadOnly}
-            value={watchedCarnetIdentidad}
+            value={watchedFields.carnetIdentidad}
             onChange={(e) => setValue("CarnetIdentidad", e.target.value)}
             register={register}
             validationRules={Validator.ci}
@@ -331,7 +136,7 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="Nombre"
             isReadOnly={isReadOnly}
-            value={watchedNombre}
+            value={watchedFields.nombre}
             onChange={(e) => setValue("Nombre", e.target.value)}
             register={register}
             validationRules={Validator.nombre}
@@ -346,7 +151,7 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="Apellido"
             isReadOnly={isReadOnly}
-            value={watchedApellido}
+            value={watchedFields.apellido}
             onChange={(e) => setValue("Apellido", e.target.value)}
             register={register}
             validationRules={Validator.apellido}
@@ -362,7 +167,7 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="FechaNacimiento"
             isReadOnly={isReadOnly}
-            value={watchedFechaNacimiento}
+            value={watchedFields.fechaNacimiento}
             onChange={(e) => setValue("FechaNacimiento", e.target.value)}
             register={register}
             validationRules={Validator.fechaNacimiento}
@@ -377,7 +182,7 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="Departamento"
             isReadOnly={isReadOnly}
-            value={watchedDepartamento}
+            value={watchedFields.departamento}
             onChange={onSelectDepartamento}
             options={departamentosBolivia}
             register={register}
@@ -392,7 +197,7 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="Municipio"
             isReadOnly={isReadOnly}
-            value={watchedMunicipio}
+            value={watchedFields.municipio}
             onChange={onSelectMunicipio}
             options={municipiosFiltradas}
             register={register}
@@ -408,7 +213,7 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="Colegio"
             isReadOnly={isReadOnly}
-            value={watchedColegio}
+            value={watchedFields.colegio}
             onChange={(e) => setValue("Colegio", e.target.value)}
             options={colegiosFiltradas}
             register={register}
@@ -424,7 +229,7 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="Curso"
             isReadOnly={isReadOnly}
-            value={watchedCurso}
+            value={watchedFields.curso}
             onChange={(e) => setValue("Curso", e.target.value)}
             options={cursosBolivia}
             register={register}
@@ -439,7 +244,7 @@ export const RegisterOlympian = () => {
             mandatory="true"
             name="Email"
             isReadOnly={isReadOnly}
-            value={watchedEmail}
+            value={watchedFields.email}
             onChange={(e) => setValue("Email", e.target.value)}
             register={register}
             validationRules={Validator.email}
