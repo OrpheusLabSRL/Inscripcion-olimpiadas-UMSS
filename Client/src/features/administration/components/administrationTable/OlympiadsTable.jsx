@@ -7,7 +7,7 @@ import { getOlimpiadas } from "../../../../api/inscription.api";
 import OlympiadsModal from "../administrationModal/OlympiadsModal";
 import BaseDataModal from "../administrationModal/BaseDataModal";
 import { CiCircleInfo } from "react-icons/ci";
-import { FaSpinner, FaTrash } from "react-icons/fa";
+import { FaSpinner, FaTrash, FaToggleOn, FaToggleOff } from "react-icons/fa";
 import "../../Styles/Tables.css";
 
 const OlympiadsTable = () => {
@@ -44,7 +44,6 @@ const OlympiadsTable = () => {
         `¿Estás seguro que deseas eliminar la olimpiada "${olympiad.nombreOlimpiada}"?`
       )
     ) {
-      // Aquí iría tu lógica de eliminación (API, estado, etc.)
       console.log("Eliminar olimpiada con ID:", olympiad.idOlimpiada);
     }
   };
@@ -84,11 +83,6 @@ const OlympiadsTable = () => {
       const tieneAsignaciones =
         data.length > 0 && data.some((a) => a.categorias.length > 0);
 
-      // if (!tieneAsignaciones) {
-      //   alert("Debes asignar al menos un área y categoría para activarla.");
-      //   return;
-      // }
-
       await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
       await fetchOlimpiads();
     } catch (error) {
@@ -108,16 +102,16 @@ const OlympiadsTable = () => {
     return "Inactivo";
   };
 
-  const getBadgeClass = (olympiad) => {
+  const getEstadoClass = (olympiad) => {
     const hoy = new Date();
     const fechaInicio = new Date(olympiad.fechaInicioOlimpiada);
     const fechaFin = new Date(olympiad.fechaFinOlimpiada);
     const isActive = olympiad.estadoOlimpiada === 1;
 
-    if (fechaFin < hoy) return "tableUtilBadgeNeutral";
-    if (fechaInicio > hoy && isActive) return "tableUtilBadgeDefault";
-    if (isActive) return "tableUtilBadgeSuccess";
-    return "tableUtilBadgeWarning";
+    if (fechaFin < hoy) return "neutral";
+    if (fechaInicio > hoy && isActive) return "default";
+    if (isActive) return "active";
+    return "inactive";
   };
 
   return (
@@ -148,23 +142,54 @@ const OlympiadsTable = () => {
                 <td>{item.version}</td>
                 <td>{item.fechaInicioOlimpiada}</td>
                 <td>{item.fechaFinOlimpiada}</td>
-                <td>
+                <td className="tableUtilTextCenter">
                   <button
+                    className={`tableUtilStatusToggle ${getEstadoClass(item)}`}
                     onClick={() => toggleEstado(item)}
-                    className={`tableUtilStatusBadge ${getBadgeClass(item)}`}
+                    title={
+                      getEstadoLabel(item) === "Finalizado" ||
+                      getEstadoLabel(item) === "En proceso"
+                        ? "No se puede modificar"
+                        : getEstadoLabel(item) === "Pendiente"
+                        ? "Desactivar"
+                        : "Activar"
+                    }
+                    disabled={
+                      getEstadoLabel(item) === "Finalizado" ||
+                      getEstadoLabel(item) === "En proceso"
+                    }
                   >
-                    {getEstadoLabel(item)}
+                    {getEstadoLabel(item) === "Finalizado" ||
+                    getEstadoLabel(item) === "En proceso" ? (
+                      <span>{getEstadoLabel(item)}</span>
+                    ) : item.estadoOlimpiada === 1 ? (
+                      <FaToggleOn className="toggleIcon active" />
+                    ) : (
+                      <FaToggleOff className="toggleIcon inactive" />
+                    )}
+                    {getEstadoLabel(item) === "Pendiente" ||
+                    getEstadoLabel(item) === "Inactivo" ? (
+                      <span>{getEstadoLabel(item)}</span>
+                    ) : null}
                   </button>
                 </td>
-                <td className="olympiadTableActions">
-                  <button
-                    className="olympiadTableViewBtn"
-                    onClick={() => handleView(item)}
-                    title="Ver detalles"
-                  >
-                    <CiCircleInfo />
-                  </button>
-                  <FaTrash className="actionIcon deleteIcon" />{" "}
+                <td className="tableActions">
+                  <div className="actionButtons">
+                    <button
+                      className="actionButton viewButton"
+                      onClick={() => handleView(item)}
+                      title="Ver detalles"
+                    >
+                      <CiCircleInfo />
+                    </button>
+                    <button
+                      className="actionButton deleteButton"
+                      onClick={() => handleDelete(item)}
+                      title="Eliminar olimpiada"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))

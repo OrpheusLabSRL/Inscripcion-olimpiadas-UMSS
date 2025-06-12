@@ -20,7 +20,7 @@ import { RegisterResponsible } from "./features/registrarion/pages/RegisterRespo
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
 import Reports from "./features/administration/pages/Reports";
-import ManageUsers from "./features/administration/pages/ManageUsers";
+
 import ManageViewUser from "./features/administration/pages/ManageViewUser";
 
 import PaginaContacto from "./features/contacto/pages/PaginaContacto";
@@ -159,15 +159,7 @@ function App() {
                   />
                 }
               />
-              <Route
-                path="users"
-                element={
-                  <PrivateRoute
-                    element={<ManageUsers />}
-                    allowedPermiso={"crear_usuarios"}
-                  />
-                }
-              />
+
               <Route
                 path="manageUser"
                 element={

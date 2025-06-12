@@ -5,7 +5,6 @@ import RegisterCategoriaModal from "../administrationModal/RegisterCategoriaModa
 import RegisterNewCategoriaModal from "../administrationModal/RegisterNewCategoriaModal";
 import RegisterAreaModal from "../administrationModal/RegisterAreaModal";
 import RegisterNewAreaModal from "../administrationModal/RegisterNewAreaModal";
-
 import "../../Styles/Tables.css";
 
 export default function PanelOlympiadsTable({
@@ -36,7 +35,7 @@ export default function PanelOlympiadsTable({
 
   const handleOpenNewCategoriaModal = () => {
     setModalKey((prev) => prev + 1);
-    setSelectedAreaId(null); // No hay área seleccionada al registrar nueva categoría
+    setSelectedAreaId(null);
     setIsNewCategoriaModalOpen(true);
   };
 
@@ -174,32 +173,28 @@ export default function PanelOlympiadsTable({
                         </span>
                       </td>
                       <td className="panelOlympiadActionsCol">
-                        <div className="tooltipWrapper">
+                        <div className="actionButtons">
                           <button
                             onClick={() =>
                               handleOpenEditCategoriaModal(area.idArea)
                             }
-                            className={`panelOlympiadEditBtn ${
-                              !hasCategories || hasStarted ? "disabledBtn" : ""
+                            className={`actionButton editButton ${
+                              !hasCategories || hasStarted ? "disabled" : ""
                             }`}
                             disabled={!hasCategories || hasStarted}
-                            aria-describedby={`tooltip-edit-${area.idArea}`}
+                            title="Editar categoría"
                           >
                             <FiEdit2 />
                           </button>
-                          {(!hasCategories || hasStarted) && (
-                            <div
-                              id={`tooltip-edit-${area.idArea}`}
-                              role="tooltip"
-                              className="tooltipText"
-                            >
-                              {!hasCategories
-                                ? "No se puede editar: No hay categorías asignadas"
-                                : "No se puede editar: La olimpiada ya comenzó"}
-                              <div className="tooltipArrow"></div>
-                            </div>
-                          )}
-                          <FaTrash className="actionIcon deleteIcon" />
+                          <button
+                            className={`actionButton deleteButton ${
+                              !hasCategories || hasStarted ? "disabled" : ""
+                            }`}
+                            disabled={!hasCategories || hasStarted}
+                            title="Eliminar categoría"
+                          >
+                            <FaTrash />
+                          </button>
                         </div>
                       </td>
                     </tr>
