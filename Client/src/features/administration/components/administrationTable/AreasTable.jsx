@@ -9,11 +9,11 @@ import {
   FaSpinner,
   FaChevronDown,
   FaChevronUp,
-  FaEdit,
   FaTrash,
   FaToggleOn,
   FaToggleOff,
 } from "react-icons/fa";
+import { FiEdit2 } from "react-icons/fi";
 import EditAreaModal from "../administrationModal/EditAreaModal";
 import "../../Styles/Tables.css";
 import Swal from "sweetalert2";
@@ -244,7 +244,7 @@ const AreasTable = () => {
                             : "Editar área"
                         }
                       >
-                        <FaEdit />
+                        <FiEdit2 />
                       </button>
                       <button
                         className={`actionButton deleteButton ${

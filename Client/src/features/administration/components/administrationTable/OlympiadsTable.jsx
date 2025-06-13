@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   updateOlimpiadaEstado,
   getAreasCategoriasPorOlimpiada,
+  getOlimpiadas,
+  deleteOlympiad,
 } from "../../../../api/Administration.api";
-import { getOlimpiadas } from "../../../../api/inscription.api";
+
 import OlympiadsModal from "../administrationModal/OlympiadsModal";
 import BaseDataModal from "../administrationModal/BaseDataModal";
 import { CiCircleInfo } from "react-icons/ci";
@@ -38,13 +40,20 @@ const OlympiadsTable = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (olympiad) => {
+  const handleDelete = async (olympiad) => {
     if (
       window.confirm(
         `¿Estás seguro que deseas eliminar la olimpiada "${olympiad.nombreOlimpiada}"?`
       )
     ) {
-      console.log("Eliminar olimpiada con ID:", olympiad.idOlimpiada);
+      try {
+        await deleteOlympiad(olympiad.idOlimpiada);
+        alert("Olimpiada eliminada correctamente.");
+        await fetchOlimpiads(); // Refresca la tabla
+      } catch (error) {
+        console.error("Error al eliminar olimpiada:", error);
+        alert("Hubo un error al eliminar la olimpiada.");
+      }
     }
   };
 
@@ -63,31 +72,25 @@ const OlympiadsTable = () => {
       return;
     }
 
-    if (isActive) {
-      try {
-        await updateOlimpiadaEstado(olympiad.idOlimpiada, 0);
-        await fetchOlimpiads();
-      } catch (err) {
-        console.error("Error al desactivar:", err);
-        alert("No se pudo desactivar la olimpiada.");
-      }
-      return;
-    }
-
     try {
-      const response = await getAreasCategoriasPorOlimpiada(
-        olympiad.idOlimpiada
-      );
-      const data = Array.isArray(response) ? response : response.data || [];
+      if (isActive) {
+        await updateOlimpiadaEstado(olympiad.idOlimpiada, 0);
+      } else {
+        const response = await getAreasCategoriasPorOlimpiada(
+          olympiad.idOlimpiada
+        );
+        const data = Array.isArray(response) ? response : response.data || [];
 
-      const tieneAsignaciones =
-        data.length > 0 && data.some((a) => a.categorias.length > 0);
+        const tieneAsignaciones =
+          data.length > 0 && data.some((a) => a.categorias.length > 0);
 
-      await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
+        await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
+      }
+
       await fetchOlimpiads();
     } catch (error) {
-      console.error("Error al activar:", error);
-      alert("No se pudo activar la olimpiada.");
+      console.error("Error al cambiar el estado de la olimpiada:", error);
+      alert("No se pudo cambiar el estado de la olimpiada.");
     }
   };
 
@@ -183,9 +186,30 @@ const OlympiadsTable = () => {
                       <CiCircleInfo />
                     </button>
                     <button
-                      className="actionButton deleteButton"
-                      onClick={() => handleDelete(item)}
-                      title="Eliminar olimpiada"
+                      className={`actionButton deleteButton ${
+                        getEstadoLabel(item) === "En proceso" ||
+                        getEstadoLabel(item) === "Finalizado"
+                          ? "disabled"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        if (
+                          getEstadoLabel(item) !== "En proceso" &&
+                          getEstadoLabel(item) !== "Finalizado"
+                        ) {
+                          handleDelete(item);
+                        }
+                      }}
+                      title={
+                        getEstadoLabel(item) === "En proceso" ||
+                        getEstadoLabel(item) === "Finalizado"
+                          ? "No se puede eliminar una olimpiada en proceso o finalizada"
+                          : "Eliminar olimpiada"
+                      }
+                      disabled={
+                        getEstadoLabel(item) === "En proceso" ||
+                        getEstadoLabel(item) === "Finalizado"
+                      }
                     >
                       <FaTrash />
                     </button>

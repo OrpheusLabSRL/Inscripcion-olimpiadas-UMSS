@@ -8,11 +8,11 @@ import {
 import {
   FaSpinner,
   FaInfoCircle,
-  FaEdit,
   FaTrash,
   FaToggleOn,
   FaToggleOff,
 } from "react-icons/fa";
+import { FiEdit2 } from "react-icons/fi";
 import "../../Styles/Tables.css";
 import Swal from "sweetalert2";
 import EditCategoriaModal from "../administrationModal/EditCategoriaModal";
@@ -317,7 +317,7 @@ const CategoriesTable = () => {
                                 : "Editar categoría"
                             }
                           >
-                            <FaEdit />
+                            <FiEdit2 />
                           </button>
                           <button
                             className={`actionButton deleteButton ${

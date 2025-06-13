@@ -5,6 +5,7 @@ import RegisterCategoriaModal from "../administrationModal/RegisterCategoriaModa
 import RegisterNewCategoriaModal from "../administrationModal/RegisterNewCategoriaModal";
 import RegisterAreaModal from "../administrationModal/RegisterAreaModal";
 import RegisterNewAreaModal from "../administrationModal/RegisterNewAreaModal";
+import { deleteAreaCategoriaByOlimpiadaAndArea } from "../../../../api/Administration.api";
 import "../../Styles/Tables.css";
 
 export default function PanelOlympiadsTable({
@@ -42,6 +43,22 @@ export default function PanelOlympiadsTable({
   const handleNewAreaSuccess = () => {
     setIsNewAreaModalOpen(false);
     if (onRefresh) onRefresh();
+  };
+
+  const handleDeleteAreaCategoria = async (idOlimpiada, idArea) => {
+    const confirm = window.confirm(
+      "¿Estás seguro de que deseas eliminar esta área y sus categorías?"
+    );
+    if (!confirm) return;
+
+    try {
+      await deleteAreaCategoriaByOlimpiadaAndArea(idOlimpiada, idArea);
+      alert("Área y categorías eliminadas correctamente.");
+      if (onRefresh) onRefresh();
+    } catch (error) {
+      console.error("Error al eliminar el área y sus categorías:", error);
+      alert("Hubo un error al eliminar el área.");
+    }
   };
 
   const fechaInicio = new Date(fechaInicioOlimpiada);
@@ -165,7 +182,7 @@ export default function PanelOlympiadsTable({
                       </td>
                       <td>
                         <span
-                          className={`panelOlympiadStatus ${
+                          className={`tableUtilStatusToggle ${
                             hasCategories ? "active" : "inactive"
                           }`}
                         >
@@ -192,6 +209,12 @@ export default function PanelOlympiadsTable({
                             }`}
                             disabled={!hasCategories || hasStarted}
                             title="Eliminar categoría"
+                            onClick={() =>
+                              handleDeleteAreaCategoria(
+                                selectedVersion,
+                                area.idArea
+                              )
+                            }
                           >
                             <FaTrash />
                           </button>
