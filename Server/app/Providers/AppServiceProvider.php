@@ -13,7 +13,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            \App\Repositories\Contracts\TutorRepositoryInterface::class,
+            \App\Repositories\Eloquent\TutorRepository::class
+        );
+
+        $this->app->bind(
+            \App\Repositories\Contracts\OlimpistaRepositoryInterface::class,
+            \App\Repositories\Eloquent\OlimpistaRepository::class
+        );
     }
 
     /**
