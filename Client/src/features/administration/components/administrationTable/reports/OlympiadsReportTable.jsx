@@ -108,7 +108,6 @@ const OlympiadsReportTable = () => {
   return (
     <div className="olympiads-report">
       <div className="olympiads-report__header">
-        <h2 className="olympiads-report__title">Reporte de Olimpiadas</h2>
 
         <div className="olympiads-report__controls">
           <div className="filter-controls-wrapper">
