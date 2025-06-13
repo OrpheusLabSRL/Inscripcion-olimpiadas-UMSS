@@ -20,8 +20,8 @@ export const getOlimpiadas = async () => {
   return response.data;
 };
 
-export const getOlimpiadasConAreasCategorias = async () => {
-  const response = await inscriptionApi.get("/viewOlimpiadasConAreasCategorias");
+export const getOlimpiadasWithAreasCategorias = async () => {
+  const response = await inscriptionApi.get("/viewOlimpiadasWithAreasCategorias");
   return response.data;
 };
 
