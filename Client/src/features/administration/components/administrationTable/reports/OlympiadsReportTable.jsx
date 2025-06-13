@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getOlimpiadasConAreasCategorias } from "../../../../../api/Administration.api";
+import { getOlimpiadasWithAreasCategorias } from "../../../../../api/Administration.api";
 import "../../../Styles/Reports.css";
 
 const OlympiadsReportTable = () => {
@@ -36,7 +36,7 @@ const OlympiadsReportTable = () => {
   useEffect(() => {
     const fetchOlympiads = async () => {
       try {
-        const response = await getOlimpiadasConAreasCategorias();
+        const response = await getOlimpiadasWithAreasCategorias();
         // Map backend keys to frontend keys
         const mappedData = response.data.map(item => ({
           olympiadName: item.nombreOlimpiada,
