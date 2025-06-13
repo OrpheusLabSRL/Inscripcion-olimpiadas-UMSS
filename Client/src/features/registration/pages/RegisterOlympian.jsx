@@ -8,35 +8,21 @@ import { NextPage } from "../../../components/Buttons/NextPage";
 import ProgressBar from "../components/ProgressBar/ProgressBar";
 
 //react
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
-import { useState } from "react";
 import { MdCleaningServices } from "react-icons/md";
 
 //utils
 import { Validator } from "../utils/ValidationRules";
-import {
-  cursosBolivia,
-  departamentosBolivia,
-  municipioPorDepartamento,
-  colegioPorMunicipio,
-} from "../utils/DataOptions";
+import { cursosBolivia, departamentosBolivia } from "../utils/DataOptions";
 
 //Hooks
 import { useRegisterOlympian } from "../hooks/useRegisterOlympian";
 import { useAutoFillOlympian } from "../hooks/useAutoFillOlympian";
 import { useSessionStorageOlympian } from "../hooks/useSessionStorageOlympian";
+import { useSelectPlace } from "../hooks/useSelectPlace";
 
 export const RegisterOlympian = () => {
-  const [municipiosFiltradas, setMunicipiosFiltradas] = useState(() => {
-    const stored = sessionStorage.getItem("municipiosFiltradas");
-    return stored ? JSON.parse(stored) : null;
-  });
-  const [colegiosFiltradas, setColegiosFiltradas] = useState(() => {
-    const stored = sessionStorage.getItem("colegiosFiltradas");
-    return stored ? JSON.parse(stored) : null;
-  });
-
   const {
     currentStep,
     totalSteps,
@@ -54,6 +40,15 @@ export const RegisterOlympian = () => {
     onSubmit,
   } = useRegisterOlympian();
 
+  const {
+    municipiosFiltradas,
+    colegiosFiltradas,
+    setMunicipiosFiltradas,
+    setColegiosFiltradas,
+    onSelectDepartamento,
+    onSelectMunicipio,
+  } = useSelectPlace();
+
   useAutoFillOlympian(
     watchedFields.carnetIdentidad,
     setValue,
@@ -63,27 +58,6 @@ export const RegisterOlympian = () => {
   );
 
   useSessionStorageOlympian(watchedFields, location);
-
-  const onSelectDepartamento = (e) => {
-    const select = e.target;
-    const selectedOption = select.options[select.selectedIndex];
-    const label = selectedOption.text;
-
-    setValue("Departamento", e.target.value);
-    const municipios = municipioPorDepartamento[label] || [];
-    setMunicipiosFiltradas(municipios);
-    sessionStorage.setItem("municipiosFiltradas", JSON.stringify(municipios));
-  };
-
-  const onSelectMunicipio = (e) => {
-    const select = e.target;
-    const selectedOption = select.options[select.selectedIndex];
-    const label = selectedOption.text;
-    setValue("Municipio", e.target.value);
-    const colegios = colegioPorMunicipio[label] || [];
-    setColegiosFiltradas(colegios);
-    sessionStorage.setItem("colegiosFiltradas", JSON.stringify(colegios));
-  };
 
   const titleOlimpian = useMemo(() => {
     const dataOlimpian = JSON.parse(sessionStorage.getItem("OlympicData"));
@@ -183,7 +157,7 @@ export const RegisterOlympian = () => {
             name="Departamento"
             isReadOnly={isReadOnly}
             value={watchedFields.departamento}
-            onChange={onSelectDepartamento}
+            onChange={(e) => onSelectDepartamento(e, setValue)}
             options={departamentosBolivia}
             register={register}
             errors={errors}
@@ -198,7 +172,7 @@ export const RegisterOlympian = () => {
             name="Municipio"
             isReadOnly={isReadOnly}
             value={watchedFields.municipio}
-            onChange={onSelectMunicipio}
+            onChange={(e) => onSelectMunicipio(e, setValue)}
             options={municipiosFiltradas}
             register={register}
             validationRules={Validator.municipio}
