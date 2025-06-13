@@ -246,13 +246,6 @@ export const ListElement = ({ data }) => {
                   {data.responsableInscripcion.apellido}
                 </span>
               </div>
-
-              <div className="data-item">
-                <span className="data-label">Tipo de tutor:</span>
-                <span className="data-value">
-                  {data.responsableInscripcion.tipo_tutor}
-                </span>
-              </div>
               <div className="data-item">
                 <span className="data-label">Carnet de Identidad:</span>
                 <span className="data-value">

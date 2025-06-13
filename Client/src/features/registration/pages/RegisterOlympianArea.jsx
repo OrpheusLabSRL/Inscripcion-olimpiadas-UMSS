@@ -12,7 +12,7 @@ import ProgressBar from "../components/ProgressBar/ProgressBar";
 import { useEffect, useState, useMemo } from "react";
 import swal from "sweetalert";
 import { useForm } from "react-hook-form";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MdCleaningServices } from "react-icons/md";
 import Swal from "sweetalert2";
 

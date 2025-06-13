@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../../assets/images/ohsansi.jpg";
+import Logo from "../../../assets/images/ohsansi.png";
 import "../Styles/HeaderProp.css";
-import { NextPage } from "../../../components/Buttons/NextPage";
 
 function HeaderProp() {
   const navigate = useNavigate();
@@ -15,7 +14,11 @@ function HeaderProp() {
     <header className="contenedorEncabezado">
       <div className="contenidoEncabezado">
         <div className="encabezadoIzquierdo" onClick={() => navigate("/")}>
-          <img src={Logo} alt="Logotipo Universidad" className="logoEncabezado" />
+          <img
+            src={Logo}
+            alt="Logotipo Universidad"
+            className="logoEncabezado"
+          />
           <h2>O!Sansi</h2>
         </div>
 
@@ -29,13 +32,28 @@ function HeaderProp() {
 
         <nav className={`navegacionEncabezado ${menuAbierto ? "abierto" : ""}`}>
           <ul>
-            <li onClick={() => { navigate("/"); cerrarMenu(); }}>
+            <li
+              onClick={() => {
+                navigate("/");
+                cerrarMenu();
+              }}
+            >
               <i className="bi bi-house"></i> Inicio
             </li>
-            <li onClick={() => { navigate("/consultar-inscripcion"); cerrarMenu(); }}>
+            <li
+              onClick={() => {
+                navigate("/consultar-inscripcion");
+                cerrarMenu();
+              }}
+            >
               <i className="bi bi-clipboard-check"></i> Estado de inscripción
             </li>
-            <li onClick={() => { navigate("/contacto"); cerrarMenu(); }}>
+            <li
+              onClick={() => {
+                navigate("/contacto");
+                cerrarMenu();
+              }}
+            >
               <i className="bi bi-telephone"></i> Contacto
             </li>
           </ul>
