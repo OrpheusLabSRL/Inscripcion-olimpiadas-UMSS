@@ -6,10 +6,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "../Styles/TutorForm.css";
 
 //Componentes
-import HeaderProp from "../../home_usuario/components/HeaderProp";
 import { registerTutor, checkExistingTutor } from "../../../api/TutorForm.api";
 import { GenericCard } from "../../../components/cards/GenericCard";
-import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 
 //Assets
 import Logo from "../../../assets/images/O-Sansi.jpeg";
@@ -163,8 +161,8 @@ export const TutorForm = () => {
           formData.carnet.length < 6
             ? "Mínimo 6 caracteres requeridos"
             : formData.carnet.length > 12
-              ? "Máximo 12 caracteres permitidos"
-              : errors.carnet,
+            ? "Máximo 12 caracteres permitidos"
+            : errors.carnet,
       });
       return;
     }
@@ -331,98 +329,95 @@ export const TutorForm = () => {
 
   return (
     <div>
-      
-        <div className="tutor-form-container">
-          <div className="form-options-container">
-            <button
-              type="button"
-              className={`form-option ${formType === "new" ? "active" : ""}`}
-              onClick={() => setFormType("new")}
-            >
-              Nueva inscripción
-            </button>
-            <button
-              type="button"
-              className={`form-option ${formType === "continue" ? "active" : ""
-                }`}
-              onClick={() => setFormType("continue")}
-            >
-              Continuar inscripción
-            </button>
-          </div>
-
-          {submitError && <div className="error-message">{submitError}</div>}
-          {submitSuccess && (
-            <div className="success-message">{submitSuccess}</div>
-          )}
-
-          {formType === "new" ? (
-            <form
-              onSubmit={handleSubmit}
-              className="form-section"
-              style={{ display: "flex", justifyContent: "center" }}
-            >
-              <GenericCard
-                image={Logo}
-                title="Olimpiadas O! SanSi 2025"
-                description="Inicia una nueva inscripcion y registra uno o mas estudiantes a las Olimpiadas O SanSi 2025"
-                value="Nueva Inscripción"
-                to="/register"
-              />
-            </form>
-          ) : (
-            <form onSubmit={handleContinue} className="form-section">
-              <div className="form-group">
-                <label htmlFor="continue-email">
-                  Correo Electrónico <span className="required">*</span>
-                </label>
-                <input
-                  type="email"
-                  id="continue-email"
-                  name="email"
-                  placeholder="Ingrese su correo electrónico"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
-                  className={getInputClass("email")}
-                />
-                {touched.email && errors.email && (
-                  <span className="error-message">{errors.email}</span>
-                )}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="continue-carnet">
-                  Carnet de identidad <span className="required">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="continue-carnet"
-                  name="carnet"
-                  placeholder="Ingrese su carnet "
-                  value={formData.carnet}
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
-                  className={getInputClass("carnet")}
-                />
-                {touched.carnet && errors.carnet && (
-                  <span className="error-message">{errors.carnet}</span>
-                )}
-              </div>
-
-              <div className="form-buttons">
-                <button
-                  type="submit"
-                  className="submit-button"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Verificando..." : "Continuar"}
-                </button>
-              </div>
-            </form>
-          )}
+      <div className="tutor-form-container">
+        <div className="form-options-container">
+          <button
+            type="button"
+            className={`form-option ${formType === "new" ? "active" : ""}`}
+            onClick={() => setFormType("new")}
+          >
+            Nueva inscripción
+          </button>
+          <button
+            type="button"
+            className={`form-option ${formType === "continue" ? "active" : ""}`}
+            onClick={() => setFormType("continue")}
+          >
+            Continuar inscripción
+          </button>
         </div>
-   
+
+        {submitError && <div className="error-message">{submitError}</div>}
+        {submitSuccess && (
+          <div className="success-message">{submitSuccess}</div>
+        )}
+
+        {formType === "new" ? (
+          <form
+            onSubmit={handleSubmit}
+            className="form-section"
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+            <GenericCard
+              image={Logo}
+              title="Olimpiadas O! SanSi 2025"
+              description="Inicia una nueva inscripcion y registra uno o mas estudiantes a las Olimpiadas O SanSi 2025"
+              value="Nueva Inscripción"
+              to="/register"
+            />
+          </form>
+        ) : (
+          <form onSubmit={handleContinue} className="form-section">
+            <div className="form-group">
+              <label htmlFor="continue-email">
+                Correo Electrónico <span className="required">*</span>
+              </label>
+              <input
+                type="email"
+                id="continue-email"
+                name="email"
+                placeholder="Ingrese su correo electrónico"
+                value={formData.email}
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                className={getInputClass("email")}
+              />
+              {touched.email && errors.email && (
+                <span className="error-message">{errors.email}</span>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="continue-carnet">
+                Carnet de identidad <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="continue-carnet"
+                name="carnet"
+                placeholder="Ingrese su carnet "
+                value={formData.carnet}
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                className={getInputClass("carnet")}
+              />
+              {touched.carnet && errors.carnet && (
+                <span className="error-message">{errors.carnet}</span>
+              )}
+            </div>
+
+            <div className="form-buttons">
+              <button
+                type="submit"
+                className="submit-button"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Verificando..." : "Continuar"}
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
     </div>
   );
 };
