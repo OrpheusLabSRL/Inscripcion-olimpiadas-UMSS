@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getOlimpiadas, getOlimpiadasConAreasCategorias } from "../../../../../api/Administration.api";
+import { getOlimpiadasConAreasCategorias } from "../../../../../api/Administration.api";
 import "../../../Styles/Reports.css";
 
 const OlympiadsReportTable = () => {
@@ -16,11 +16,6 @@ const OlympiadsReportTable = () => {
     fechaFinOlimpiada: true,
     area: true,
     categoria: true,
-    // Removed columns as per user request
-    // fechaReserva: true,
-    // horaInicio: true,
-    // horaFin: true,
-    // nombreAula: true,
   });
 
   // Dropdown options for columns
@@ -32,11 +27,6 @@ const OlympiadsReportTable = () => {
     { label: "Fecha Fin", value: "fechaFinOlimpiada" },
     { label: "Área", value: "area" },
     { label: "Categoría", value: "categoria" },
-    // Removed columns as per user request
-    // { label: "Fecha Reserva", value: "fechaReserva" },
-    // { label: "Hora Inicio", value: "horaInicio" },
-    // { label: "Hora Fin", value: "horaFin" },
-    // { label: "Nombre Aula", value: "nombreAula" },
   ];
 
   // Row filter state and selected filter column
@@ -46,7 +36,7 @@ const OlympiadsReportTable = () => {
   useEffect(() => {
     const fetchOlympiads = async () => {
       try {
-        const response = await getOlimpiadas();
+        const response = await getOlimpiadasConAreasCategorias();
         setOlympiads(response.data);
         setError(null);
       } catch (err) {
@@ -205,8 +195,8 @@ const OlympiadsReportTable = () => {
                 {visibleColumns.fechaFinOlimpiada && (
                   <td>{item.fechaFinOlimpiada}</td>
                 )}
-                {visibleColumns.area && <td>{item.area || ""}</td>}
-                {visibleColumns.categoria && <td>{item.categoria || ""}</td>}
+                {visibleColumns.area && <td>{item.nombreArea || ""}</td>}
+                {visibleColumns.categoria && <td>{item.nombreCategoria || ""}</td>}
               </tr>
             ))}
           </tbody>

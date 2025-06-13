@@ -54,6 +54,7 @@ Route::post('/enviar-contacto', [ContactoController::class, 'enviarContacto']);
 
 // Olimpiadas
 Route::get('/viewOlimpiadas', [OlimpiadaController::class, 'mostrarOlimpiada']);
+Route::get('/viewOlimpiadasConAreasCategorias', [OlimpiadaController::class, 'mostrarOlimpiadasConAreasCategorias']);
 Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
 
