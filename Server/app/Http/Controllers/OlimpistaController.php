@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Services\OlimpistaService;
 use App\Models\Inscripcion;
 use App\Models\Persona;
 use Illuminate\Http\Request;
@@ -150,34 +150,17 @@ public function getOlimpistasByTutor($idTutorResponsable)
     }
 }
 
+    protected $service;
+
+    public function __construct(OlimpistaService $service)
+    {
+        $this->service = $service;
+    }
+
     public function getAllOlimpistas()
     {
         try {
-            // Join with personas, inscripciones, olimpiadas_areas_categorias, areas, categorias, aulas, grados
-            $olimpistas = \DB::table('olimpistas')
-                ->leftJoin('personas', 'olimpistas.idPersona', '=', 'personas.idPersona')
-                ->leftJoin('inscripciones', 'olimpistas.idPersona', '=', 'inscripciones.idOlimpista')
-                ->leftJoin('olimpiadas_areas_categorias', 'inscripciones.idOlimpAreaCategoria', '=', 'olimpiadas_areas_categorias.idOlimpAreaCategoria')
-                ->leftJoin('areas', 'olimpiadas_areas_categorias.idArea', '=', 'areas.idArea')
-                ->leftJoin('categorias', 'olimpiadas_areas_categorias.idCategoria', '=', 'categorias.idCategoria')
-                // Removed join with aulas due to missing column inscripciones.idAula
-                // ->leftJoin('aulas', 'inscripciones.idAula', '=', 'aulas.id')
-                // Removed join with grados as per instruction
-                ->select(
-                    'personas.carnetIdentidad as carnetDeIdentidad',
-                    'personas.nombre',
-                    'personas.apellido',
-                    'olimpistas.fechaNacimiento',
-                    'olimpistas.departamento',
-                    'olimpistas.curso',
-                    'olimpistas.colegio',
-                    'areas.nombreArea',
-                    'categorias.nombreCategoria as nombreCategoria',
-                    //'grados.nombreGrado as grado', // removed
-                    //'aulas.nombreAula' // removed due to missing join
-                )
-                ->distinct()
-                ->get();
+            $olimpistas = $this->service->getAllOlimpistasWithDetails();
 
             return response()->json([
                 'success' => true,
