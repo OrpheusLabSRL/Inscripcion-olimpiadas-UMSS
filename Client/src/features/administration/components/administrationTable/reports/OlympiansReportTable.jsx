@@ -101,43 +101,42 @@ const OlympiansReportTable = () => {
   };
 
   return (
-    <div style={{ color: "#000000" }}>
-      <div className="filter-controls" style={{ marginBottom: "1rem" }}>
-        <div className="filter-controls-wrapper" style={{ marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "1rem" }}>
-          <label style={{ color: "#000000" }}>
+    <div className="olympians-report">
+      <div className="filter-controls">
+        <div className="filter-controls-wrapper">
+          <label className="filter-label">
             Filtrar por columna:
             <select
               value={filterColumn}
               onChange={(e) => setFilterColumn(e.target.value)}
-              style={{ marginLeft: "0.5rem", color: "#000000" }}
+              className="filter-select"
             >
               {columnOptions.map((col) => (
-                <option key={col.value} value={col.value} style={{ color: "#000000" }}>
+                <option key={col.value} value={col.value} className="filter-option">
                   {col.label}
                 </option>
               ))}
             </select>
           </label>
-          <label style={{ color: "#000000" }}>
+          <label className="filter-label">
             Valor filtro:
             <input
               type="text"
               value={safeRowFilter}
               onChange={(e) => setRowFilter(e.target.value)}
               placeholder={`Buscar en ${columnOptions.find(c => c.value === filterColumn)?.label || ''}...`}
-              style={{ marginLeft: "0.5rem", color: "#000000" }}
+              className="filter-input"
             />
           </label>
         </div>
         <div>
-          <span style={{ color: "#000000" }}>Columnas a mostrar:</span>
+          <span className="filter-label">Columnas a mostrar:</span>
           {columnOptions.map((col) => (
-            <label key={col.value} style={{ marginLeft: "1rem", display: "inline-flex", alignItems: "center", color: "#000000" }}>
+            <label key={col.value} className="columns-to-show">
               <input
                 type="checkbox"
                 checked={visibleColumns[col.value]}
                 onChange={() => toggleColumn(col.value)}
-                style={{ marginRight: "0.25rem" }}
               />
               {col.label}
             </label>
