@@ -66,6 +66,25 @@ const TutorsReportTable = () => {
     return false;
   });
 
+  // Determine if any olympian columns are visible
+  const olympianColumnsVisible =
+    visibleColumns.carnetOlimpista ||
+    visibleColumns.nombreOlimpista ||
+    visibleColumns.apellidoOlimpista;
+
+  // Group tutors by unique tutor fields if olympian columns are hidden
+  const groupedTutors = !olympianColumnsVisible
+    ? Object.values(
+        filteredTutors.reduce((acc, tutor) => {
+          const key = `${tutor.carnetIdentidad}-${tutor.nombre}-${tutor.apellido}-${tutor.correoElectronico}-${tutor.tipoTutor}-${tutor.telefono}`;
+          if (!acc[key]) {
+            acc[key] = { ...tutor };
+          }
+          return acc;
+        }, {})
+      )
+    : filteredTutors;
+
   // Toggle column visibility handler
   const toggleColumn = (column) => {
     setVisibleColumns((prev) => ({
@@ -76,7 +95,10 @@ const TutorsReportTable = () => {
 
   return (
     <div style={{ color: "#000000" }}>
-      <div className="filter-controls" style={{ marginBottom: "1rem" }}>
+      <div
+        className="filter-controls"
+        style={{ marginBottom: "1rem" }}
+      >
         <div
           className="filter-controls-wrapper"
           style={{
@@ -94,7 +116,11 @@ const TutorsReportTable = () => {
               style={{ marginLeft: "0.5rem", color: "#000000" }}
             >
               {columnOptions.map((col) => (
-                <option key={col.value} value={col.value} style={{ color: "#000000" }}>
+                <option
+                  key={col.value}
+                  value={col.value}
+                  style={{ color: "#000000" }}
+                >
                   {col.label}
                 </option>
               ))}
@@ -152,7 +178,7 @@ const TutorsReportTable = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredTutors.map((tutor, index) => (
+            {groupedTutors.map((tutor, index) => (
               <tr key={index}>
                 {visibleColumns.carnetIdentidad && <td>{tutor.carnetIdentidad}</td>}
                 {visibleColumns.nombre && <td>{tutor.nombre}</td>}

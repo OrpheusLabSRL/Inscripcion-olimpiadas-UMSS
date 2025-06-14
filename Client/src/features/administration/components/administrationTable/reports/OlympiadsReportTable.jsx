@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getOlimpiadas } from "../../../../../api/Administration.api";
+import { getOlimpiadas, getOlimpiadasConAreasCategorias } from "../../../../../api/Administration.api";
 import "../../../Styles/Reports.css";
 
 const OlympiadsReportTable = () => {
@@ -16,10 +16,11 @@ const OlympiadsReportTable = () => {
     fechaFinOlimpiada: true,
     area: true,
     categoria: true,
-    fechaReserva: true,
-    horaInicio: true,
-    horaFin: true,
-    nombreAula: true,
+    // Removed columns as per user request
+    // fechaReserva: true,
+    // horaInicio: true,
+    // horaFin: true,
+    // nombreAula: true,
   });
 
   // Dropdown options for columns
@@ -31,10 +32,11 @@ const OlympiadsReportTable = () => {
     { label: "Fecha Fin", value: "fechaFinOlimpiada" },
     { label: "Área", value: "area" },
     { label: "Categoría", value: "categoria" },
-    { label: "Fecha Reserva", value: "fechaReserva" },
-    { label: "Hora Inicio", value: "horaInicio" },
-    { label: "Hora Fin", value: "horaFin" },
-    { label: "Nombre Aula", value: "nombreAula" },
+    // Removed columns as per user request
+    // { label: "Fecha Reserva", value: "fechaReserva" },
+    // { label: "Hora Inicio", value: "horaInicio" },
+    // { label: "Hora Fin", value: "horaFin" },
+    // { label: "Nombre Aula", value: "nombreAula" },
   ];
 
   // Row filter state and selected filter column
@@ -78,6 +80,22 @@ const OlympiadsReportTable = () => {
     }
     return false;
   });
+
+  // Determine if Area or Categoria columns are visible
+  const areaCategoriaVisible = visibleColumns.area || visibleColumns.categoria;
+
+  // Group olympiads by unique fields if Area and Categoria columns are hidden
+  const groupedOlympiads = !areaCategoriaVisible
+    ? Object.values(
+        filteredOlympiads.reduce((acc, item) => {
+          const key = `${item.nombreOlimpiada}-${item.version}-${item.estadoOlimpiada}-${item.fechaInicioOlimpiada}-${item.fechaFinOlimpiada}`;
+          if (!acc[key]) {
+            acc[key] = { ...item };
+          }
+          return acc;
+        }, {})
+      )
+    : filteredOlympiads;
 
   // Toggle column visibility handler
   const toggleColumn = (column) => {
@@ -124,18 +142,26 @@ const OlympiadsReportTable = () => {
           </div>
         </div>
 
-        <div className="olympiads-report__columns-selector">
-          <span>Columnas a mostrar:</span>
+        <div>
+          <span style={{ color: "#000000" }}>Columnas a mostrar:</span>
           {columnOptions.map((col) => (
-            <div key={col.value} className="olympiads-report__column-checkbox">
+            <label
+              key={col.value}
+              style={{
+                marginLeft: "1rem",
+                color: "#000000",
+                display: "inline-flex",
+                alignItems: "center",
+              }}
+            >
               <input
                 type="checkbox"
-                id={`col-${col.value}`}
                 checked={visibleColumns[col.value]}
                 onChange={() => toggleColumn(col.value)}
+                style={{ marginRight: "0.25rem" }}
               />
-              <label htmlFor={`col-${col.value}`}>{col.label}</label>
-            </div>
+              {col.label}
+            </label>
           ))}
         </div>
       </div>
@@ -151,14 +177,10 @@ const OlympiadsReportTable = () => {
               {visibleColumns.fechaFinOlimpiada && <th>Fecha Fin</th>}
               {visibleColumns.area && <th>Área</th>}
               {visibleColumns.categoria && <th>Categoría</th>}
-              {visibleColumns.fechaReserva && <th>Fecha Reserva</th>}
-              {visibleColumns.horaInicio && <th>Hora Inicio</th>}
-              {visibleColumns.horaFin && <th>Hora Fin</th>}
-              {visibleColumns.nombreAula && <th>Nombre Aula</th>}
             </tr>
           </thead>
           <tbody>
-            {filteredOlympiads.map((item, index) => (
+            {groupedOlympiads.map((item, index) => (
               <tr key={index}>
                 {visibleColumns.nombreOlimpiada && (
                   <td>{item.nombreOlimpiada}</td>
@@ -185,12 +207,6 @@ const OlympiadsReportTable = () => {
                 )}
                 {visibleColumns.area && <td>{item.area || ""}</td>}
                 {visibleColumns.categoria && <td>{item.categoria || ""}</td>}
-                {visibleColumns.fechaReserva && (
-                  <td>{item.fechaReserva || ""}</td>
-                )}
-                {visibleColumns.horaInicio && <td>{item.horaInicio || ""}</td>}
-                {visibleColumns.horaFin && <td>{item.horaFin || ""}</td>}
-                {visibleColumns.nombreAula && <td>{item.nombreAula || ""}</td>}
               </tr>
             ))}
           </tbody>

@@ -7,7 +7,7 @@ import {
 import "../detallesOlimpiada/OlimpiadaDetallada.css";
 import HeaderProp from "../home_usuario/components/HeaderProp";
 import Footer from "../home_usuario/components/Footer";
-import { TutorForm } from "../registrarion/pages/TutorForm";
+import { TutorForm } from "../registration/pages/TutorForm";
 import { GenericModal } from "../../components/modals/GenericModal"; // Ajusta el path si es diferente
 
 const OlimpiadaDetallada = () => {

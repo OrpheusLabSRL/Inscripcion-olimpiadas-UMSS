@@ -20,6 +20,11 @@ export const getOlimpiadas = async () => {
   return response.data;
 };
 
+export const getOlimpiadasConAreasCategorias = async () => {
+  const response = await inscriptionApi.get("/viewOlimpiadasConAreasCategorias");
+  return response.data;
+};
+
 export const createOlympiad = async (data) =>
   await inscriptionApi.post("/registrarOlimpiadas", data);
 

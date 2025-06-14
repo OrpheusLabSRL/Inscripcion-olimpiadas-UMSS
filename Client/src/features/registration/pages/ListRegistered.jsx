@@ -20,7 +20,6 @@ export const ListRegistered = () => {
     const getStudents = async () => {
       try {
         const res = await getDataOlympian(storedTutorId);
-        console.log(res);
         setDataInscriptions(res.data.data);
       } catch (error) {
         console.error("Error en la petición:", error);

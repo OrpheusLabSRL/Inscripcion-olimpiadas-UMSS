@@ -10,7 +10,7 @@ import { GrDocumentUpdate } from "react-icons/gr";
 import { HiOutlineClipboardDocument } from "react-icons/hi2";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { GiAchievement } from "react-icons/gi";
-import Logo from "../../assets/images/ohsansi.jpg";
+import Logo from "../../assets/images/ohsansi.png";
 //css
 import "./Sidebar.css";
 
@@ -36,17 +36,16 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
 
   return (
     <>
-      {isOpen && <div className="sidebar-overlay" onClick={() => setIsOpen(false)}></div>}
+      {isOpen && (
+        <div className="sidebar-overlay" onClick={() => setIsOpen(false)}></div>
+      )}
       <div className={` sidebar ${isOpen ? "active" : ""}`}>
         <div
           className={`sidebar-header ${
             isOpen ? "" : "sidebar-header-contrain"
           }`}
         >
-          <img
-            src={Logo}
-            alt="LOGO O SANSI" className="logoEncabezado"
-          />
+          <img src={Logo} alt="LOGO O SANSI" className="logoEncabezado" />
           {isOpen && <h2 className="sidebar-title">O! SanSi</h2>}
         </div>
         <ul>
