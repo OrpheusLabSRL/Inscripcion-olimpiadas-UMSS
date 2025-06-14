@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import CategoriesTable from "../components/administrationTable/CategoriesTable";
+import CategoriesTable from "../components/administrationTable/CategoriesTable.jsx";
 import BackButton from "../../../components/Buttons/BackButton.jsx";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import "../Styles/General.css";
-import RegisterCategoriaModal from "../components/administrationModal/RegisterNewCategoriaModal.jsx";
+import RegisterCategoriaModal from "../components/administrationModal/RegisterNewCategoryModal.jsx";
 const CategoryList = () => {
   const navigate = useNavigate();
 

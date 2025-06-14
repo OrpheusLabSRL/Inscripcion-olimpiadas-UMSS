@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import {
   updateOlimpiadaEstado,
   getAreasCategoriasPorOlimpiada,
+  getOlimpiadas,
+  deleteOlympiad,
 } from "../../../../api/Administration.api";
-import { getOlimpiadas } from "../../../../api/inscription.api";
-import OlympiadsModal from "../administrationModal/OlympiadsModal";
-import BaseDataModal from "../administrationModal/BaseDataModal";
+
+import OlympiadsModal from "../administrationModal/ViewOlympiadsModal";
+
 import { CiCircleInfo } from "react-icons/ci";
-import { FaSpinner, FaTrash } from "react-icons/fa";
+import { FaSpinner, FaTrash, FaToggleOn, FaToggleOff } from "react-icons/fa";
 import "../../Styles/Tables.css";
 
 const OlympiadsTable = () => {
@@ -38,14 +40,20 @@ const OlympiadsTable = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (olympiad) => {
+  const handleDelete = async (olympiad) => {
     if (
       window.confirm(
         `¿Estás seguro que deseas eliminar la olimpiada "${olympiad.nombreOlimpiada}"?`
       )
     ) {
-      // Aquí iría tu lógica de eliminación (API, estado, etc.)
-      console.log("Eliminar olimpiada con ID:", olympiad.idOlimpiada);
+      try {
+        await deleteOlympiad(olympiad.idOlimpiada);
+        alert("Olimpiada eliminada correctamente.");
+        await fetchOlimpiads(); // Refresca la tabla
+      } catch (error) {
+        console.error("Error al eliminar olimpiada:", error);
+        alert("Hubo un error al eliminar la olimpiada.");
+      }
     }
   };
 
@@ -64,36 +72,25 @@ const OlympiadsTable = () => {
       return;
     }
 
-    if (isActive) {
-      try {
-        await updateOlimpiadaEstado(olympiad.idOlimpiada, 0);
-        await fetchOlimpiads();
-      } catch (err) {
-        console.error("Error al desactivar:", err);
-        alert("No se pudo desactivar la olimpiada.");
-      }
-      return;
-    }
-
     try {
-      const response = await getAreasCategoriasPorOlimpiada(
-        olympiad.idOlimpiada
-      );
-      const data = Array.isArray(response) ? response : response.data || [];
+      if (isActive) {
+        await updateOlimpiadaEstado(olympiad.idOlimpiada, 0);
+      } else {
+        const response = await getAreasCategoriasPorOlimpiada(
+          olympiad.idOlimpiada
+        );
+        const data = Array.isArray(response) ? response : response.data || [];
 
-      const tieneAsignaciones =
-        data.length > 0 && data.some((a) => a.categorias.length > 0);
+        const tieneAsignaciones =
+          data.length > 0 && data.some((a) => a.categorias.length > 0);
 
-      // if (!tieneAsignaciones) {
-      //   alert("Debes asignar al menos un área y categoría para activarla.");
-      //   return;
-      // }
+        await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
+      }
 
-      await updateOlimpiadaEstado(olympiad.idOlimpiada, 1);
       await fetchOlimpiads();
     } catch (error) {
-      console.error("Error al activar:", error);
-      alert("No se pudo activar la olimpiada.");
+      console.error("Error al cambiar el estado de la olimpiada:", error);
+      alert("No se pudo cambiar el estado de la olimpiada.");
     }
   };
 
@@ -108,16 +105,16 @@ const OlympiadsTable = () => {
     return "Inactivo";
   };
 
-  const getBadgeClass = (olympiad) => {
+  const getEstadoClass = (olympiad) => {
     const hoy = new Date();
     const fechaInicio = new Date(olympiad.fechaInicioOlimpiada);
     const fechaFin = new Date(olympiad.fechaFinOlimpiada);
     const isActive = olympiad.estadoOlimpiada === 1;
 
-    if (fechaFin < hoy) return "tableUtilBadgeNeutral";
-    if (fechaInicio > hoy && isActive) return "tableUtilBadgeDefault";
-    if (isActive) return "tableUtilBadgeSuccess";
-    return "tableUtilBadgeWarning";
+    if (fechaFin < hoy) return "neutral";
+    if (fechaInicio > hoy && isActive) return "default";
+    if (isActive) return "active";
+    return "inactive";
   };
 
   return (
@@ -148,23 +145,75 @@ const OlympiadsTable = () => {
                 <td>{item.version}</td>
                 <td>{item.fechaInicioOlimpiada}</td>
                 <td>{item.fechaFinOlimpiada}</td>
-                <td>
+                <td className="tableUtilTextCenter">
                   <button
+                    className={`tableUtilStatusToggle ${getEstadoClass(item)}`}
                     onClick={() => toggleEstado(item)}
-                    className={`tableUtilStatusBadge ${getBadgeClass(item)}`}
+                    title={
+                      getEstadoLabel(item) === "Finalizado" ||
+                      getEstadoLabel(item) === "En proceso"
+                        ? "No se puede modificar"
+                        : getEstadoLabel(item) === "Pendiente"
+                        ? "Desactivar"
+                        : "Activar"
+                    }
+                    disabled={
+                      getEstadoLabel(item) === "Finalizado" ||
+                      getEstadoLabel(item) === "En proceso"
+                    }
                   >
-                    {getEstadoLabel(item)}
+                    {getEstadoLabel(item) === "Finalizado" ||
+                    getEstadoLabel(item) === "En proceso" ? (
+                      <span>{getEstadoLabel(item)}</span>
+                    ) : item.estadoOlimpiada === 1 ? (
+                      <FaToggleOn className="toggleIcon active" />
+                    ) : (
+                      <FaToggleOff className="toggleIcon inactive" />
+                    )}
+                    {getEstadoLabel(item) === "Pendiente" ||
+                    getEstadoLabel(item) === "Inactivo" ? (
+                      <span>{getEstadoLabel(item)}</span>
+                    ) : null}
                   </button>
                 </td>
-                <td className="olympiadTableActions">
-                  <button
-                    className="olympiadTableViewBtn"
-                    onClick={() => handleView(item)}
-                    title="Ver detalles"
-                  >
-                    <CiCircleInfo />
-                  </button>
-                  <FaTrash className="actionIcon deleteIcon" />{" "}
+                <td className="tableActions">
+                  <div className="actionButtons">
+                    <button
+                      className="actionButton viewButton"
+                      onClick={() => handleView(item)}
+                      title="Ver detalles"
+                    >
+                      <CiCircleInfo />
+                    </button>
+                    <button
+                      className={`actionButton deleteButton ${
+                        getEstadoLabel(item) === "En proceso" ||
+                        getEstadoLabel(item) === "Finalizado"
+                          ? "disabled"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        if (
+                          getEstadoLabel(item) !== "En proceso" &&
+                          getEstadoLabel(item) !== "Finalizado"
+                        ) {
+                          handleDelete(item);
+                        }
+                      }}
+                      title={
+                        getEstadoLabel(item) === "En proceso" ||
+                        getEstadoLabel(item) === "Finalizado"
+                          ? "No se puede eliminar una olimpiada en proceso o finalizada"
+                          : "Eliminar olimpiada"
+                      }
+                      disabled={
+                        getEstadoLabel(item) === "En proceso" ||
+                        getEstadoLabel(item) === "Finalizado"
+                      }
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))
@@ -182,12 +231,6 @@ const OlympiadsTable = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         olimpiada={selectedOlympiad}
-      />
-
-      <BaseDataModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        selectedVersion={selectedOlympiad?.idOlimpiada}
       />
     </div>
   );

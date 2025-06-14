@@ -3,27 +3,33 @@ import UsersTable from "../components/administrationTable/UserTable";
 import BackButton from "../../../components/Buttons/BackButton";
 import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import CreateUserModal from "../components/administrationModal/CreateUserModal";
 import "../Styles/General.css";
 
 const UserManagement = () => {
   const navigate = useNavigate();
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [refreshTable, setRefreshTable] = useState(false);
+
+  const handleUserCreated = () => {
+    setRefreshTable((prev) => !prev);
+    setIsRegisterModalOpen(false);
+  };
 
   return (
     <div className="adminUsersContainer">
       <div className="adminContentWrapper">
-        <div className="usersHeaderSection">
+        <div className="olympiadsHeaderSection">
           <BackButton
-            onClick={() => navigate("/admin/view-base")}
+            onClick={() => navigate("/admin/home")}
             className="btnBack"
           >
             <FaArrowLeft className="btnBackIcon" />
             Volver a Datos Base
           </BackButton>
-
-          <div className="usersHeaderText">
-            <h1 className="usersTitle">Gestión de Usuarios</h1>
-            <p className="usersSubtitle">
+          <div className="olympiadsHeaderText">
+            <h1 className="olympiadsTitle">Gestión de Usuarios</h1>
+            <p className="olympiadsSubtitle">
               Administra las cuentas de los usuarios del sistema
             </p>
           </div>
@@ -37,16 +43,16 @@ const UserManagement = () => {
           </button>
         </div>
 
-        <div className="adminTableWrapper">
-          <UsersTable />
+        <div className="adminTableCard">
+          <UsersTable refresh={refreshTable} />
         </div>
       </div>
 
-      {/* Modal para registrar nuevo usuario */}
-      {/* <RegisterUserModal
+      <CreateUserModal
         isOpen={isRegisterModalOpen}
         onClose={() => setIsRegisterModalOpen(false)}
-      /> */}
+        onSuccess={handleUserCreated}
+      />
     </div>
   );
 };

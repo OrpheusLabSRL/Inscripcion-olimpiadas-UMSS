@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
-import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
+import MultiSelectDropdown from "../dropdown/MultiSelectDropdown.jsx";
 import "../../styles/Dropdown.css";
 import "../../styles/ModalGeneral.css";
 
@@ -11,7 +11,7 @@ import {
   getAreasCategoriasPorOlimpiada,
   asignarAreasYCategorias,
   deleteAreaCategoriaByOlimpiadaAndArea,
-} from "../../../../api/Administration.api";
+} from "../../../../api/Administration.api.js";
 
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";

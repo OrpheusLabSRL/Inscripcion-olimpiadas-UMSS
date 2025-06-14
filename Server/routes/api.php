@@ -56,7 +56,7 @@ Route::post('/enviar-contacto', [ContactoController::class, 'enviarContacto']);
 Route::get('/viewOlimpiadas', [OlimpiadaController::class, 'mostrarOlimpiada']);
 Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
-
+Route::delete('/deleteOlimpiada/{id}', [OlimpiadaController::class, 'destroy']);
 Route::put('/editarOlimpiadas/{id}/estado', [OlimpiadaController::class, 'cambiarEstado']);
 
 //Roles y Permisos

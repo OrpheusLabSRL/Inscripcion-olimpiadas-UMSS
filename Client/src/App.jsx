@@ -8,11 +8,11 @@ import { TutorForm } from "./features/registration/pages/TutorForm";
 import { MainHome } from "./features/home_usuario/pages/MainHome";
 import { ListRegistered } from "./features/registration/pages/ListRegistered";
 import ManageArea from "./features/administration/pages/ManageArea";
-import ManageCategoria from "./features/administration/pages/ManageCategoria";
+import ManageCategoria from "./features/administration/pages/ManageCategories";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageViewBase from "./features/administration/pages/ManageViewBaseData";
 import HomeAdministration from "./features/administration/pages/Home";
-import PanelOlympiad from "./features/administration/pages/PanelOlympiad";
+import PanelOlympiad from "./features/administration/pages/ManagePanelOlympiad";
 import Login from "./features/administration/pages/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
@@ -20,7 +20,8 @@ import { RegisterResponsible } from "./features/registration/pages/RegisterRespo
 import { RegisterOlympianArea } from "./features/registration/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registration/pages/RegisterTutorOptional";
 import Reports from "./features/administration/pages/Reports";
-import ManageUsers from "./features/administration/pages/ManageUsers";
+import Unauthorized from "./features/administration/pages/Unauthorized";
+
 import ManageViewUser from "./features/administration/pages/ManageViewUser";
 
 import PaginaContacto from "./features/contacto/pages/PaginaContacto";
@@ -140,6 +141,7 @@ function App() {
               path="/consultar-inscripcion/resultado"
               element={<ResultadoConsulta />}
             />
+            <Route path="/no-autorizado" element={<Unauthorized />} />
             <Route
               path="/consultar-inscripcion/resultado-tutor"
               element={<ResultadoConsulta_Tutor />}
@@ -159,15 +161,7 @@ function App() {
                   />
                 }
               />
-              <Route
-                path="users"
-                element={
-                  <PrivateRoute
-                    element={<ManageUsers />}
-                    allowedPermiso={"crear_usuarios"}
-                  />
-                }
-              />
+
               <Route
                 path="manageUser"
                 element={
@@ -177,6 +171,7 @@ function App() {
                   />
                 }
               />
+
               <Route
                 path="areas"
                 element={
