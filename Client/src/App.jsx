@@ -8,7 +8,7 @@ import { TutorForm } from "./features/registrarion/pages/TutorForm";
 import { MainHome } from "./features/home_usuario/pages/MainHome";
 import { ListRegistered } from "./features/registrarion/pages/ListRegistered";
 import ManageArea from "./features/administration/pages/ManageArea";
-import ManageCategoria from "./features/administration/pages/ManageCategoria";
+import ManageCategoria from "./features/administration/pages/ManageCategories";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageViewBase from "./features/administration/pages/ManageViewBaseData";
 import HomeAdministration from "./features/administration/pages/Home";
