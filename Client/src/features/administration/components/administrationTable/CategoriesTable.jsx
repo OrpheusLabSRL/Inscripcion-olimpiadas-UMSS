@@ -15,7 +15,7 @@ import {
 import { FiEdit2 } from "react-icons/fi";
 import "../../Styles/Tables.css";
 import Swal from "sweetalert2";
-import EditCategoriaModal from "../administrationModal/EditCategoriaModal";
+import EditCategoriaModal from "../administrationModal/EditCategoryModal";
 
 const CategoriesTable = () => {
   const [categoriasAgrupadas, setCategoriasAgrupadas] = useState({});

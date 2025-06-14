@@ -5,7 +5,7 @@ import {
 } from "../../../api/Administration.api";
 import { toast } from "react-toastify";
 import PanelOlympiadsTable from "../components/administrationTable/PanelOlympiadsTable";
-import RegisterAreaModal from "../components/administrationModal/RegisterAreaModal";
+import RegisterAreaModal from "../components/administrationModal/AssingAreaPanelModal";
 import { FiInfo } from "react-icons/fi";
 import "../Styles/ManageDocenteOlympiad.css";
 
@@ -74,6 +74,7 @@ export default function PanelOlympiad() {
   return (
     <div className="panelOlympContainer">
       <div className="panelOlympFormGroup">
+        <h1 className="olympiadsTitle">Panel de Olimpiadas</h1>
         <label htmlFor="olimpiada-select" className="panelOlympLabel">
           Selecciona una olimpiada
         </label>

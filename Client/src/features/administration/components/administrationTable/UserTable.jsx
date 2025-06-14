@@ -12,7 +12,7 @@ import {
   FaToggleOn,
   FaToggleOff,
 } from "react-icons/fa";
-import PermisosModal from "../administrationModal/PermisosModal";
+import PermisosModal from "../administrationModal/ViewPermitsModal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import "../../Styles/Tables.css";

@@ -506,7 +506,6 @@ body,
 
 /* ===== PANEL OLIMPIADAS ===== */
 .panelOlympiadContainer {
-  padding: 2rem;
   background-color: #f8fafc;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -518,7 +517,7 @@ body,
   align-items: center;
   flex-wrap: wrap;
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid #e2e8f0;
 }

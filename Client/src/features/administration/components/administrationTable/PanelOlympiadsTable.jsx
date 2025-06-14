@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { FiEdit2, FiPlus, FiLayers } from "react-icons/fi";
 import { FaTrash } from "react-icons/fa";
-import RegisterCategoriaModal from "../administrationModal/RegisterCategoriaModal";
-import RegisterNewCategoriaModal from "../administrationModal/RegisterNewCategoriaModal";
-import RegisterAreaModal from "../administrationModal/RegisterAreaModal";
+import RegisterCategoriaModal from "../administrationModal/EditAreaPanelModal";
+import RegisterNewCategoriaModal from "../administrationModal/RegisterNewCategoryModal";
+import RegisterAreaModal from "../administrationModal/AssingAreaPanelModal";
 import RegisterNewAreaModal from "../administrationModal/RegisterNewAreaModal";
 import { deleteAreaCategoriaByOlimpiadaAndArea } from "../../../../api/Administration.api";
 import "../../Styles/Tables.css";

@@ -12,7 +12,7 @@ import ManageCategoria from "./features/administration/pages/ManageCategoria";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageViewBase from "./features/administration/pages/ManageViewBaseData";
 import HomeAdministration from "./features/administration/pages/Home";
-import PanelOlympiad from "./features/administration/pages/PanelOlympiad";
+import PanelOlympiad from "./features/administration/pages/ManagePanelOlympiad";
 import Login from "./features/administration/pages/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
@@ -20,6 +20,7 @@ import { RegisterResponsible } from "./features/registrarion/pages/RegisterRespo
 import { RegisterOlympianArea } from "./features/registrarion/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registrarion/pages/RegisterTutorOptional";
 import Reports from "./features/administration/pages/Reports";
+import Unauthorized from "./features/administration/pages/Unauthorized";
 
 import ManageViewUser from "./features/administration/pages/ManageViewUser";
 
@@ -140,6 +141,7 @@ function App() {
               path="/consultar-inscripcion/resultado"
               element={<ResultadoConsulta />}
             />
+            <Route path="/no-autorizado" element={<Unauthorized />} />
             <Route
               path="/consultar-inscripcion/resultado-tutor"
               element={<ResultadoConsulta_Tutor />}
@@ -169,6 +171,7 @@ function App() {
                   />
                 }
               />
+
               <Route
                 path="areas"
                 element={

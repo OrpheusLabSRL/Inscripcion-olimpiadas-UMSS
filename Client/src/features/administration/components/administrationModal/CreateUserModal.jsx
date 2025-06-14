@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import "../../styles/ModalGeneral.css";
+import "../../styles/Dropdown.css";
 import {
   getRoles,
   getPermisos,
@@ -318,6 +319,7 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
                       className="adminPermissionItem"
                     >
                       <input
+                        className="customCheckbox"
                         type="checkbox"
                         id={`permiso-${permiso.idPermiso}`}
                         checked={permisosSeleccionados.includes(

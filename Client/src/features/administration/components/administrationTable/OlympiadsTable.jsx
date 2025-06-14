@@ -6,8 +6,8 @@ import {
   deleteOlympiad,
 } from "../../../../api/Administration.api";
 
-import OlympiadsModal from "../administrationModal/OlympiadsModal";
-import BaseDataModal from "../administrationModal/BaseDataModal";
+import OlympiadsModal from "../administrationModal/ViewOlympiadsModal";
+
 import { CiCircleInfo } from "react-icons/ci";
 import { FaSpinner, FaTrash, FaToggleOn, FaToggleOff } from "react-icons/fa";
 import "../../Styles/Tables.css";
@@ -231,12 +231,6 @@ const OlympiadsTable = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         olimpiada={selectedOlympiad}
-      />
-
-      <BaseDataModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        selectedVersion={selectedOlympiad?.idOlimpiada}
       />
     </div>
   );

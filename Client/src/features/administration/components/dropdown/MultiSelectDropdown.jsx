@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
-import "../Styles/Dropdown.css";
+import "../../Styles/Dropdown.css";
 
 const MultiSelectDropdown = ({
   label,
