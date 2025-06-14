@@ -7,8 +7,7 @@
   --gris-claro: #f5f5f5;
   --texto-azul: #213448;
 }
-
-.contenedorEncabezado {
+.headerContainer {
   background-color: var(--azul-oscuro);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 0.5rem;
@@ -17,13 +16,13 @@
   z-index: 999;
 }
 
-.contenidoEncabezado {
+.headerContent {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.encabezadoIzquierdo {
+.headerLeft {
   display: flex;
   align-items: center;
   color: white;
@@ -31,7 +30,7 @@
   cursor: pointer;
 }
 
-.logoEncabezado {
+.headerLogo {
   height: 50px;
   margin-right: 10px;
   cursor: pointer;
@@ -39,7 +38,7 @@
   background-color: white;
 }
 
-.encabezadoIzquierdo h2 {
+.headerLeft h2 {
   margin: 0;
   font-size: 20px;
   line-height: 1;
@@ -49,7 +48,7 @@
   color: var(--blanco);
 }
 
-.botonMenu {
+.menuButton {
   font-size: 1.5rem;
   background: none;
   border: none;
@@ -58,7 +57,7 @@
   color: white;
 }
 
-.navegacionEncabezado {
+.headerNav {
   display: flex;
   list-style: none;
   font-family: 'Poppins', sans-serif;
@@ -67,14 +66,14 @@
   gap: 20px;
 }
 
-.navegacionEncabezado ul {
+.headerNav ul {
   display: flex;
   gap: 20px;
   padding: 0;
   margin: 0;
 }
 
-.navegacionEncabezado li {
+.headerNav li {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -85,7 +84,7 @@
   transition: color 0.3s ease;
 }
 
-.navegacionEncabezado li::after {
+.headerNav li::after {
   content: "";
   position: absolute;
   left: 0;
@@ -96,15 +95,15 @@
   transition: width 0.3s ease;
 }
 
-.navegacionEncabezado li:hover::after {
+.headerNav li:hover::after {
   width: 100%;
 }
 
-.navegacionEncabezado li:hover {
+.headerNav li:hover {
   color: #aad3f2;
 }
 
-.navegacionEncabezado li:last-child .btn-next-page {
+.headerNav li:last-child .btn-next-page {
   background-color: #0EA5E9;
   color: white;
   border-radius: 8px;
@@ -121,16 +120,16 @@
   margin: 0;
 }
 
-.navegacionEncabezado li:last-child .btn-next-page:hover {
+.headerNav li:last-child .btn-next-page:hover {
   background-color: #3a5a6e;
 }
 
 @media (max-width: 768px) {
-  .botonMenu {
+  .menuButton {
     display: block;
   }
 
-  .navegacionEncabezado {
+  .headerNav {
     position: absolute;
     top: 100%;
     right: 0;
@@ -142,21 +141,21 @@
     transition: max-height 0.3s ease;
   }
 
-  .navegacionEncabezado.abierto {
+  .headerNav.open {
     max-height: 300px;
   }
 
-  .navegacionEncabezado ul {
+  .headerNav ul {
     flex-direction: column;
     padding: 1rem;
     gap: 1rem;
   }
 
-  .navegacionEncabezado li {
+  .headerNav li {
     justify-content: flex-start;
   }
 
-  .navegacionEncabezado li::after {
+  .headerNav li::after {
     bottom: 0;
   }
 }
