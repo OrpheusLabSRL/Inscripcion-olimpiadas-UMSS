@@ -1,6 +1,6 @@
 import React from "react";
 import { FiX } from "react-icons/fi";
-import "../../styles/ModalGeneral.css";
+import "../../Styles/ModalGeneral.css";
 
 const PermisosModal = ({
   isOpen,

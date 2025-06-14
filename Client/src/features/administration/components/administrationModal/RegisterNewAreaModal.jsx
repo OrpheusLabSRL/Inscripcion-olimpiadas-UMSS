@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
-import "../../styles/ModalGeneral.css";
+import "../../Styles/ModalGeneral.css";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 

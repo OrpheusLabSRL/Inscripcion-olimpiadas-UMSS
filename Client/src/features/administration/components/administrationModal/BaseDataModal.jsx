@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
-import "../../styles/Dropdown.css";
-import "../../styles/ModalGeneral.css";
+import "../../Styles/Dropdown.css";
+import "../../Styles/ModalGeneral.css";
 
 import {
   getOlimpiadas,

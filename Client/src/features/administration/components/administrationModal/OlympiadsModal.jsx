@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getAreasCategoriasPorOlimpiada } from "../../../../api/Administration.api";
-import "../../styles/ModalGeneral.css";
+import "../../Styles/ModalGeneral.css";
 
 const OlympiadsModal = ({ isOpen, onClose, olimpiada }) => {
   const [agrupado, setAgrupado] = useState({});
