@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import '../Styles/BoletaPDF.css';
+import '../Styles/Ticket.css';
 
-export const BoletaPDF = () => {
+export const Ticket = () => {
   const { token, id } = useParams();
   const [loading, setLoading] = useState(true);
 

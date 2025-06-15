@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import HeaderProp from "../../home_usuario/components/HeaderProp";
-import "../Styles/ResultadoConsulta_Tutor.css";
+import "../Styles/QueryResult_Tutor.css";
 
-const ResultadoConsulta_Tutor = () => {
+const QueryResult_Tutor = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const resultado = location.state?.resultado;
@@ -205,4 +205,4 @@ const ResultadoConsulta_Tutor = () => {
   );
 };
 
-export default ResultadoConsulta_Tutor;
+export default QueryResult_Tutor;

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import HeaderProp from "../../home_usuario/components/HeaderProp";
-import "../Styles/ResultadoConsulta.css";
+import "../Styles/QueryResult_Olimpian.css";
 
-const ResultadoConsulta = () => {
+const QueryResult_Olimpian = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const resultado = location.state?.resultado;
@@ -305,5 +305,5 @@ const ResultadoConsulta = () => {
   return null;
 };
 
-export default ResultadoConsulta;
+export default QueryResult_Olimpian;
 

@@ -1,6 +1,12 @@
 <?php
+// Evitar cualquier output antes del PDF
+ob_start();
+
 // Cargar el autoloader de Composer
 require __DIR__ . '/../vendor/autoload.php';
+
+// Importar FPDF
+require_once(__DIR__ . '/../vendor/setasign/fpdf/fpdf.php');
 
 // Cargar el archivo .env
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
@@ -8,6 +14,7 @@ $dotenv->load();
 
 // Verificar que se haya proporcionado el código de boleta
 if (!isset($_GET['codigo'])) {
+    ob_end_clean();
     die("Uso: http://tu_servidor/ruta/a/generate_receipt.php?codigo=[codigoBoleta]");
 }
 
@@ -124,8 +131,11 @@ try {
 
     // ** Generación del PDF con FPDF **
     
+    // Limpiar cualquier output anterior
+    ob_end_clean();
+    
     // Crear un nuevo documento PDF
-    $pdf = new FPDF(); // FPDF se carga via autoload de Composer
+    $pdf = new FPDF();
     $pdf->AddPage();
 
     // Configurar la fuente
