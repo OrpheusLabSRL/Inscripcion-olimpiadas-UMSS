@@ -9,33 +9,33 @@ const OlympiansReportTable = () => {
 
   // Column visibility state
   const [visibleColumns, setVisibleColumns] = useState({
-    carnetDeIdentidad: true,
-    nombre: true,
-    apellido: true,
-    fechaNacimiento: true,
-    departamento: true,
-    curso: true,
-    colegio: true,
-    nombreArea: true,
-    nombreCategoria: true,
+    idCard: true,
+    firstName: true,
+    lastName: true,
+    birthDate: true,
+    department: true,
+    grade: true,
+    school: true,
+    areaName: true,
+    categoryName: true,
   });
 
   // Dropdown options for columns
   const columnOptions = [
-    { label: "Carnet de Identidad", value: "carnetDeIdentidad" },
-    { label: "Nombre", value: "nombre" },
-    { label: "Apellido", value: "apellido" },
-    { label: "Fecha de Nacimiento", value: "fechaNacimiento" },
-    { label: "Departamento", value: "departamento" },
-    { label: "Curso", value: "curso" },
-    { label: "Colegio", value: "colegio" },
-    { label: "Nombre Área", value: "nombreArea" },
-    { label: "Nombre Categoría", value: "nombreCategoria" },
+    { label: "Carnet de Identidad", value: "idCard" },
+    { label: "Nombre", value: "firstName" },
+    { label: "Apellido", value: "lastName" },
+    { label: "Fecha de Nacimiento", value: "birthDate" },
+    { label: "Departamento", value: "department" },
+    { label: "Curso", value: "grade" },
+    { label: "Colegio", value: "school" },
+    { label: "Nombre Área", value: "areaName" },
+    { label: "Nombre Categoría", value: "categoryName" },
   ];
 
   // Row filter state and selected filter column
   const [rowFilter, setRowFilter] = useState("");
-  const [filterColumn, setFilterColumn] = useState("colegio");
+  const [filterColumn, setFilterColumn] = useState("school");
 
   // Fix uncontrolled to controlled input warning by ensuring rowFilter is always a string
   const safeRowFilter = rowFilter || "";
@@ -76,14 +76,14 @@ const OlympiansReportTable = () => {
     return false;
   });
 
-  // Determine if Nombre Área or Nombre Categoría columns are visible
-  const areaCategoriaVisible = visibleColumns.nombreArea || visibleColumns.nombreCategoria;
+  // Determine if areaName or categoryName columns are visible
+  const areaCategoryVisible = visibleColumns.areaName || visibleColumns.categoryName;
 
-  // Group olympians by unique fields if Nombre Área and Nombre Categoría columns are hidden
-  const groupedOlympians = !areaCategoriaVisible
+  // Group olympians by unique fields if areaName and categoryName columns are hidden
+  const groupedOlympians = !areaCategoryVisible
     ? Object.values(
         filteredOlympians.reduce((acc, olympian) => {
-          const key = `${olympian.carnetDeIdentidad}-${olympian.nombre}-${olympian.apellido}-${olympian.fechaNacimiento}-${olympian.departamento}-${olympian.curso}-${olympian.colegio}`;
+          const key = `${olympian.idCard}-${olympian.firstName}-${olympian.lastName}-${olympian.birthDate}-${olympian.department}-${olympian.grade}-${olympian.school}`;
           if (!acc[key]) {
             acc[key] = { ...olympian };
           }
@@ -147,29 +147,29 @@ const OlympiansReportTable = () => {
         <table className="olympiads-report__table">
           <thead>
             <tr>
-              {visibleColumns.carnetDeIdentidad && <th>Carnet de Identidad</th>}
-              {visibleColumns.nombre && <th>Nombre</th>}
-              {visibleColumns.apellido && <th>Apellido</th>}
-              {visibleColumns.fechaNacimiento && <th>Fecha de Nacimiento</th>}
-              {visibleColumns.departamento && <th>Departamento</th>}
-              {visibleColumns.curso && <th>Curso</th>}
-              {visibleColumns.colegio && <th>Colegio</th>}
-              {visibleColumns.nombreArea && <th>Nombre Área</th>}
-              {visibleColumns.nombreCategoria && <th>Nombre Categoría</th>}
+              {visibleColumns.idCard && <th>Carnet de Identidad</th>}
+              {visibleColumns.firstName && <th>Nombre</th>}
+              {visibleColumns.lastName && <th>Apellido</th>}
+              {visibleColumns.birthDate && <th>Fecha de Nacimiento</th>}
+              {visibleColumns.department && <th>Departamento</th>}
+              {visibleColumns.grade && <th>Curso</th>}
+              {visibleColumns.school && <th>Colegio</th>}
+              {visibleColumns.areaName && <th>Nombre Área</th>}
+              {visibleColumns.categoryName && <th>Nombre Categoría</th>}
             </tr>
           </thead>
           <tbody>
             {groupedOlympians.map((olympian, index) => (
               <tr key={olympian.id_olimpista ?? index}>
-                {visibleColumns.carnetDeIdentidad && <td>{olympian.carnetDeIdentidad}</td>}
-                {visibleColumns.nombre && <td>{olympian.nombre}</td>}
-                {visibleColumns.apellido && <td>{olympian.apellido}</td>}
-                {visibleColumns.fechaNacimiento && <td>{olympian.fechaNacimiento}</td>}
-                {visibleColumns.departamento && <td>{olympian.departamento}</td>}
-                {visibleColumns.curso && <td>{olympian.curso}</td>}
-                {visibleColumns.colegio && <td>{olympian.colegio}</td>}
-                {visibleColumns.nombreArea && <td>{olympian.nombreArea}</td>}
-                {visibleColumns.nombreCategoria && <td>{olympian.nombreCategoria}</td>}
+                {visibleColumns.idCard && <td>{olympian.idCard}</td>}
+                {visibleColumns.firstName && <td>{olympian.firstName}</td>}
+                {visibleColumns.lastName && <td>{olympian.lastName}</td>}
+                {visibleColumns.birthDate && <td>{olympian.birthDate}</td>}
+                {visibleColumns.department && <td>{olympian.department}</td>}
+                {visibleColumns.grade && <td>{olympian.grade}</td>}
+                {visibleColumns.school && <td>{olympian.school}</td>}
+                {visibleColumns.areaName && <td>{olympian.areaName}</td>}
+                {visibleColumns.categoryName && <td>{olympian.categoryName}</td>}
               </tr>
             ))}
           </tbody>
