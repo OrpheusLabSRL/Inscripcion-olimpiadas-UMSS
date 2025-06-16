@@ -8,11 +8,11 @@ import { TutorForm } from "./features/registration/pages/TutorForm";
 import { MainHome } from "./features/home_usuario/pages/MainHome";
 import { ListRegistered } from "./features/registration/pages/ListRegistered";
 import ManageArea from "./features/administration/pages/ManageArea";
-import ManageCategoria from "./features/administration/pages/ManageCategoria";
+import ManageCategoria from "./features/administration/pages/ManageCategories";
 import ManageOlympiads from "./features/administration/pages/ManageOlympiads";
 import ManageViewBase from "./features/administration/pages/ManageViewBaseData";
 import HomeAdministration from "./features/administration/pages/Home";
-import PanelOlympiad from "./features/administration/pages/PanelOlympiad";
+import PanelOlympiad from "./features/administration/pages/ManagePanelOlympiad";
 import Login from "./features/administration/pages/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import AdminLayout from "./layouts/AdminLayout";
@@ -20,19 +20,20 @@ import { RegisterResponsible } from "./features/registration/pages/RegisterRespo
 import { RegisterOlympianArea } from "./features/registration/pages/RegisterOlympianArea";
 import { RegisterTutorOptional } from "./features/registration/pages/RegisterTutorOptional";
 import Reports from "./features/administration/pages/Reports";
-import ManageUsers from "./features/administration/pages/ManageUsers";
+import Unauthorized from "./features/administration/pages/Unauthorized";
+
 import ManageViewUser from "./features/administration/pages/ManageViewUser";
 
-import PaginaContacto from "./features/contacto/pages/PaginaContacto";
-import ConsultarInscripcion from "./features/consultar_inscripcion/pages/ConsultarInscripcion";
-import ResultadoConsulta from "./features/consultar_inscripcion/pages/ResultadoConsulta";
-import ResultadoConsulta_Tutor from "./features/consultar_inscripcion/pages/ResultadoConsulta_Tutor";
+import ContactPage from "./features/contact/pages/ContactPage";
+import CheckRegistration from "./features/checkRegistration/pages/CheckRegistration";
+import ResultadoConsulta from "./features/checkRegistration/pages/QueryResult_Olimpian";
+import ResultadoConsulta_Tutor from "./features/checkRegistration/pages/QueryResult_Tutor";
 import RegisterExcel from "./features/registration/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registration/pages/RegisterChoose";
 import { OCRValidation } from "./features/registration/pages/OCRValidation";
 import { GenerateOrder } from "./features/registration/pages/GenerateOrder";
 import OlimpiadaDetallada from "./features/detallesOlimpiada/OlimpiadaDetallada";
-import { BoletaPDF } from "./features/cajero/pages/BoletaPDF";
+import { Ticket } from "./features/Cashier/pages/Ticket";
 
 import { useEffect } from "react";
 
@@ -131,20 +132,21 @@ function App() {
               path="/register/listRegistered"
               element={<ListRegistered />}
             />
-            <Route path="/contacto" element={<PaginaContacto />} />
+            <Route path="/contacto" element={<ContactPage />} />
             <Route
               path="/consultar-inscripcion"
-              element={<ConsultarInscripcion />}
+              element={<CheckRegistration />}
             />
             <Route
               path="/consultar-inscripcion/resultado"
               element={<ResultadoConsulta />}
             />
+            <Route path="/no-autorizado" element={<Unauthorized />} />
             <Route
               path="/consultar-inscripcion/resultado-tutor"
               element={<ResultadoConsulta_Tutor />}
             />
-            <Route path="/cajero/:token/boleta/:id" element={<BoletaPDF />} />
+            <Route path="/cajero/:token/boleta/:id" element={<Ticket />} />
 
             {/* Admin Layout con rutas anidadas */}
             <Route path="/admin" element={<AdminLayout />}>
@@ -159,15 +161,7 @@ function App() {
                   />
                 }
               />
-              <Route
-                path="users"
-                element={
-                  <PrivateRoute
-                    element={<ManageUsers />}
-                    allowedPermiso={"crear_usuarios"}
-                  />
-                }
-              />
+
               <Route
                 path="manageUser"
                 element={
@@ -177,6 +171,7 @@ function App() {
                   />
                 }
               />
+
               <Route
                 path="areas"
                 element={

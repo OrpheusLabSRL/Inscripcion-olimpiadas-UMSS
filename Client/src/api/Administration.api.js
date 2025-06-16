@@ -31,6 +31,9 @@ export const createOlympiad = async (data) =>
 export const asignarAreasYCategorias = async (data) =>
   await inscriptionApi.post("/newAreaCategoria", data);
 
+export const deleteOlympiad = async (idOlimpiada) =>
+  await inscriptionApi.delete(`/deleteOlimpiada/${idOlimpiada}`);
+
 export const getAreasCategoriasPorOlimpiada = async (idOlimpiada) => {
   return await inscriptionApi.get(
     `/viewAreaCategoria/olimpiada/${idOlimpiada}`

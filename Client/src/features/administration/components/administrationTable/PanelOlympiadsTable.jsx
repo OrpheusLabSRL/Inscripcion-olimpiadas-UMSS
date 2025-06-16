@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { FiEdit2, FiPlus, FiLayers } from "react-icons/fi";
 import { FaTrash } from "react-icons/fa";
-import RegisterCategoriaModal from "../administrationModal/RegisterCategoriaModal";
-import RegisterNewCategoriaModal from "../administrationModal/RegisterNewCategoriaModal";
-import RegisterAreaModal from "../administrationModal/RegisterAreaModal";
+import RegisterCategoriaModal from "../administrationModal/EditAreaPanelModal";
+import RegisterNewCategoriaModal from "../administrationModal/RegisterNewCategoryModal";
+import RegisterAreaModal from "../administrationModal/AssingAreaPanelModal";
 import RegisterNewAreaModal from "../administrationModal/RegisterNewAreaModal";
-
+import { deleteAreaCategoriaByOlimpiadaAndArea } from "../../../../api/Administration.api";
 import "../../Styles/Tables.css";
 
 export default function PanelOlympiadsTable({
@@ -36,13 +36,29 @@ export default function PanelOlympiadsTable({
 
   const handleOpenNewCategoriaModal = () => {
     setModalKey((prev) => prev + 1);
-    setSelectedAreaId(null); // No hay área seleccionada al registrar nueva categoría
+    setSelectedAreaId(null);
     setIsNewCategoriaModalOpen(true);
   };
 
   const handleNewAreaSuccess = () => {
     setIsNewAreaModalOpen(false);
     if (onRefresh) onRefresh();
+  };
+
+  const handleDeleteAreaCategoria = async (idOlimpiada, idArea) => {
+    const confirm = window.confirm(
+      "¿Estás seguro de que deseas eliminar esta área y sus categorías?"
+    );
+    if (!confirm) return;
+
+    try {
+      await deleteAreaCategoriaByOlimpiadaAndArea(idOlimpiada, idArea);
+      alert("Área y categorías eliminadas correctamente.");
+      if (onRefresh) onRefresh();
+    } catch (error) {
+      console.error("Error al eliminar el área y sus categorías:", error);
+      alert("Hubo un error al eliminar el área.");
+    }
   };
 
   const fechaInicio = new Date(fechaInicioOlimpiada);
@@ -166,7 +182,7 @@ export default function PanelOlympiadsTable({
                       </td>
                       <td>
                         <span
-                          className={`panelOlympiadStatus ${
+                          className={`tableUtilStatusToggle ${
                             hasCategories ? "active" : "inactive"
                           }`}
                         >
@@ -174,32 +190,34 @@ export default function PanelOlympiadsTable({
                         </span>
                       </td>
                       <td className="panelOlympiadActionsCol">
-                        <div className="tooltipWrapper">
+                        <div className="actionButtons">
                           <button
                             onClick={() =>
                               handleOpenEditCategoriaModal(area.idArea)
                             }
-                            className={`panelOlympiadEditBtn ${
-                              !hasCategories || hasStarted ? "disabledBtn" : ""
+                            className={`actionButton editButton ${
+                              !hasCategories || hasStarted ? "disabled" : ""
                             }`}
                             disabled={!hasCategories || hasStarted}
-                            aria-describedby={`tooltip-edit-${area.idArea}`}
+                            title="Editar categoría"
                           >
                             <FiEdit2 />
                           </button>
-                          {(!hasCategories || hasStarted) && (
-                            <div
-                              id={`tooltip-edit-${area.idArea}`}
-                              role="tooltip"
-                              className="tooltipText"
-                            >
-                              {!hasCategories
-                                ? "No se puede editar: No hay categorías asignadas"
-                                : "No se puede editar: La olimpiada ya comenzó"}
-                              <div className="tooltipArrow"></div>
-                            </div>
-                          )}
-                          <FaTrash className="actionIcon deleteIcon" />
+                          <button
+                            className={`actionButton deleteButton ${
+                              !hasCategories || hasStarted ? "disabled" : ""
+                            }`}
+                            disabled={!hasCategories || hasStarted}
+                            title="Eliminar categoría"
+                            onClick={() =>
+                              handleDeleteAreaCategoria(
+                                selectedVersion,
+                                area.idArea
+                              )
+                            }
+                          >
+                            <FaTrash />
+                          </button>
                         </div>
                       </td>
                     </tr>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { FiX, FiSave, FiDollarSign, FiAlertCircle } from "react-icons/fi";
-import MultiSelectDropdown from "../../components/MultiSelectDropdown.jsx";
+import MultiSelectDropdown from "../dropdown/MultiSelectDropdown.jsx";
 import "../../Styles/Dropdown.css";
 import "../../Styles/ModalGeneral.css";
 
@@ -10,7 +10,7 @@ import {
   getCategoriaGrado,
   getAreasCategoriasPorOlimpiada,
   asignarAreasYCategorias,
-} from "../../../../api/Administration.api";
+} from "../../../../api/Administration.api.js";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
