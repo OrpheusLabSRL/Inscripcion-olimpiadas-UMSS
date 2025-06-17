@@ -14,7 +14,7 @@ export const useSelectPlace = () => {
   });
   const [colegiosFiltradas, setColegiosFiltradas] = useState(() => {
     const stored = sessionStorage.getItem("colegiosFiltradas");
-    return stored ? JSON.parse(stored) : null;
+    return stored ? JSON.parse(stored) : [];
   });
 
   const onSelectDepartamento = (e, setValue) => {

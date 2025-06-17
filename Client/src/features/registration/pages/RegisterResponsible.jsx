@@ -36,22 +36,23 @@ export const RegisterResponsible = () => {
     onSubmit,
   } = useRegisterResponsible();
 
-  useAutoFillResponsible(
-    watchedFields.carnetIdentidad,
-    setValue,
-    setIsReadOnly,
-    setIsTutorResponsible
-  );
-
   useSessionStorageTutor(
     {
       nombre: "NombreResponsible",
       apellido: "ApellidoResponsible",
       email: "EmailResponsible",
       telefono: "NumeroResponsible",
+      ci: "CiResponsible",
     },
     watchedFields,
     location
+  );
+
+  useAutoFillResponsible(
+    watchedFields.carnetIdentidad,
+    setValue,
+    setIsReadOnly,
+    setIsTutorResponsible
   );
 
   const titleOlimpian = useMemo(() => {

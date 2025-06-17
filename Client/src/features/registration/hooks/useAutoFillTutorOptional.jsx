@@ -1,86 +1,79 @@
 //React
-import React, { useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 
 //Api
 import { getPersonData } from "../../../api/inscription.api";
 
-//utils
-import {
-  municipioPorDepartamento,
-  colegioPorMunicipio,
-} from "../utils/DataOptions";
-
-export const useAutoFillOlympian = (
+export const useAutoFillTutorOptional = (
   carnetIdentidad,
   setValue,
-  setIsReadOnly,
-  setColegiosFiltradas,
-  setMunicipiosFiltradas
+  namesSessionElements,
+  setIsReadOnly
 ) => {
   const autofill = useCallback(async () => {
     try {
       const idOlimpiada = JSON.parse(
         sessionStorage.getItem("OlympicData")
       ).idOlimpiada;
+      const ci = sessionStorage.getItem(namesSessionElements.ci);
       const personData = await getPersonData({
-        carnet_identidad: sessionStorage.getItem("CarnetIdentidadOlympian"),
+        carnet_identidad: ci,
         id_olimpiada: idOlimpiada,
       });
-
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
         setValue("Email", personData.data.data.correoElectronico);
         setIsReadOnly((prev) => ({
           ...prev,
-          CarnetIdentidad: true,
+          Ci: true,
           Nombre: true,
           Apellido: true,
           Email: true,
         }));
       }
 
-      if (personData.data.data.fechaNacimiento) {
-        setValue("FechaNacimiento", personData.data.data.fechaNacimiento);
-        setValue("Departamento", personData.data.data.departamento);
-        const municipio =
-          municipioPorDepartamento[personData.data.data.departamento] || [];
-        setMunicipiosFiltradas(municipio);
-        setValue("Municipio", personData.data.data.municipio);
-        const colegios =
-          colegioPorMunicipio[personData.data.data.municipio] || [];
-        setColegiosFiltradas(colegios);
-        setValue("Colegio", personData.data.data.colegio);
-        setValue("Curso", personData.data.data.curso);
+      if (personData.data.data.telefono) {
+        setValue("Numero_Celular", personData.data.data.telefono);
         setIsReadOnly((prev) => ({
           ...prev,
-          CarnetIdentidad: true,
-          FechaNacimiento: true,
-          Departamento: true,
-          Municipio: true,
-          Colegio: true,
-          Curso: true,
+          Numero_Celular: true,
         }));
       }
     } catch (error) {
       const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
       const ciOlympian =
         sessionStorage.getItem("CarnetIdentidadOlympian") || "";
+      const ciProfesor = sessionStorage.getItem(namesSessionElements.ci);
 
-      if (ciResponsible == ciOlympian) {
+      if (ciResponsible == ciProfesor) {
         setValue("Nombre", sessionStorage.getItem("NombreResponsible"));
         setValue("Apellido", sessionStorage.getItem("ApellidoResponsible"));
         setValue("Email", sessionStorage.getItem("EmailResponsible"));
+        setValue("Numero_Celular", sessionStorage.getItem("NumeroResponsible"));
+
         setIsReadOnly((prev) => ({
           ...prev,
-          CarnetIdentidad: true,
+          Ci: true,
+          Nombre: true,
+          Apellido: true,
+          Email: true,
+          Numero_Celular: true,
+        }));
+      } else if (ciProfesor == ciOlympian) {
+        setValue("Nombre", sessionStorage.getItem("NombreOlympian"));
+        setValue("Apellido", sessionStorage.getItem("ApellidoOlympian"));
+        setValue("Email", sessionStorage.getItem("EmailOlympian"));
+        setIsReadOnly((prev) => ({
+          ...prev,
+          Ci: true,
           Nombre: true,
           Apellido: true,
           Email: true,
         }));
       }
     }
-  }, [setIsReadOnly, setValue, setColegiosFiltradas, setMunicipiosFiltradas]);
+  }, [setIsReadOnly, setValue, namesSessionElements]);
 
   useEffect(() => {
     if (carnetIdentidad.length >= 7) {

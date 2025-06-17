@@ -16,6 +16,7 @@ export const useAutoFillResponsible = (
         carnet_identidad: sessionStorage.getItem("CiResponsible"),
         id_olimpiada: idOlimpiada,
       });
+
       setIsTutorResponsible(personData.data.data.esTutorResponsable);
       if (personData.data.data.nombre) {
         setValue("Nombre", personData.data.data.nombre);
@@ -43,14 +44,13 @@ export const useAutoFillResponsible = (
     } catch (error) {
       console.log(error);
     }
-  }, [setIsReadOnly, setValue, setIsTutorResponsible]);
+  }, [setValue, setIsTutorResponsible]);
 
   useEffect(() => {
-    sessionStorage.setItem("CiResponsible", carnetIdentidad);
     if (carnetIdentidad.length >= 7) {
       autofill();
     }
-  }, [carnetIdentidad, autofill]);
+  }, [carnetIdentidad]);
 
   return { autofill };
 };
