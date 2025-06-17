@@ -53,8 +53,8 @@ export const RegisterOlympian = () => {
     watchedFields.carnetIdentidad,
     setValue,
     setIsReadOnly,
-    setMunicipiosFiltradas,
-    setColegiosFiltradas
+    setColegiosFiltradas,
+    setMunicipiosFiltradas
   );
 
   useSessionStorageOlympian(watchedFields, location);

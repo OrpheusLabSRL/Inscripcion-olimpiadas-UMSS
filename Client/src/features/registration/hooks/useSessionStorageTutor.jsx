@@ -41,13 +41,20 @@ export const useSessionStorageTutor = (
   }, [watchedFields.telefono, namesSessionStorage.telefono]);
 
   useEffect(() => {
+    sessionStorage.setItem(
+      namesSessionStorage.ci,
+      watchedFields.carnetIdentidad
+    );
+  }, [watchedFields.carnetIdentidad, namesSessionStorage.ci]);
+
+  useEffect(() => {
     const handleUnload = () => {
       sessionStorage.removeItem(namesSessionStorage.nombre);
       sessionStorage.removeItem(namesSessionStorage.apellido);
       sessionStorage.removeItem(namesSessionStorage.tipoTutor);
       sessionStorage.removeItem(namesSessionStorage.telefono);
       sessionStorage.removeItem(namesSessionStorage.email);
-      sessionStorage.removeItem(namesSessionStorage.carnetIdentidad);
+      sessionStorage.removeItem(namesSessionStorage.ci);
     };
     window.addEventListener("beforeunload", handleUnload);
     return () => {
