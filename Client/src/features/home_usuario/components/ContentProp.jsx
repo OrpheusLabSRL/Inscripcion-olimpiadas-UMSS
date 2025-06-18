@@ -1,104 +1,227 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
 import "../Styles/ContentProp.css";
+import foto from "../../../assets/images/estudiantesConCertificado.jpg";
+import { getOlimpiadas } from "../../../api/Administration.api";
+import { useNavigate } from "react-router-dom";
+import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
+import { CiSearch } from "react-icons/ci";
 
-function ContentProp() {
+const ContentProp = () => {
+  const [current, setCurrent] = useState(0);
+  const [olympiads, setOlympiads] = useState([]);
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState('Matemáticas');
 
-  const categoryImages = {
-    'Matemáticas': 'https://www.lifeder.com/wp-content/uploads/2019/12/matematicas-concepto-lifeder-min-1024x682.jpg',
-    'Física': 'https://concepto.de/wp-content/uploads/2018/08/f%C3%ADsica-e1534938838719.jpg',
-    'Biología': 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5Xk3FtqL__EGIiI7E82AekqqDLimo4jzoEFshq4DkMU6dJ-1o6rVe9MIYFMBkBUydt7CQbcvfZMJpblJmbtpS-FOh74aisVI8jd3VyV-NOnw_v4vbiglUMpWeWKYjcPFOSCVLpB7n-Mw/s1600/Qui%25C3%25A9n+utilizo+por+primera+vez+la+palabra+Biolog%25C3%25ADa.jpg',
-    'Química': 'https://www.inspiracle.es/wp-content/uploads/2014/11/quimica.jpg',
-    'Informática': 'https://concepto.de/wp-content/uploads/2015/08/informatica-1-e1590711779992-800x400.jpg',
-    'Robótica': 'https://glocalideas.com/wp-content/uploads/2024/01/Robotica-cabecera-3-1200x675.png',
+  useEffect(() => {
+    const fetchOlimpiads = async () => {
+      try {
+        const { data } = await getOlimpiadas();
+        const activas = data.filter((o) => o.estadoOlimpiada === 1);
+        setOlympiads(activas);
+      } catch (error) {
+        console.error("Error al obtener olimpiadas:", error);
+        setOlympiads([]);
+      }
+    };
+
+    fetchOlimpiads();
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % olympiads.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [olympiads]);
+
+  const handleView = (id) => {
+    navigate(`/olimpiada/${id}`);
+  };
+
+  const isPendent = (olympiad) => {
+    const today = new Date();
+    const startDate = new Date(olympiad.fechaInicioOlimpiada);
+    const endDate = new Date(olympiad.fechaFinOlimpiada);
+    return today < startDate || today > endDate;
   };
 
   return (
-    <main className="content-container">
-      <section className="areas-competence">
-        <h2>Áreas de Competencia</h2>
-        <div className="competence-grid">
-          <div className="category-card">
-            <img src="https://www.lifeder.com/wp-content/uploads/2019/12/matematicas-concepto-lifeder-min-1024x682.jpg" alt="Matemáticas" />
-            <h3>Matemáticas</h3>
-            <p>Desarrolla tu pensamiento lógico y resolución de problemas a través de desafíos matemáticos.</p>
+    <div>
+      <div className="olympCarouselContainer">
+        {olympiads.map((olympiad, index) => (
+          <div
+            className={`olympCarouselSlide ${index === current ? "active" : ""}`}
+            key={olympiad.idOlimpiada}
+          >
+            <img
+              src={
+                olympiad.imagen ||
+                "https://www.lifeder.com/wp-content/uploads/2019/12/matematicas-concepto-lifeder-min-1024x682.jpg"
+              }
+              alt={olympiad.nombreOlimpiada}
+            />
+            <div className="olympCaption">
+              <h3>{olympiad.nombreOlimpiada}</h3>
+              <p>
+                <strong>Desde</strong>{" "}
+                {olympiad.fechaInicioOlimpiada
+                  ? new Date(olympiad.fechaInicioOlimpiada).toLocaleDateString(
+                      "es-ES",
+                      {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      }
+                    )
+                  : "fecha no disponible."}{" "}
+                <strong>hasta</strong>{" "}
+                {olympiad.fechaFinOlimpiada
+                  ? new Date(olympiad.fechaFinOlimpiada).toLocaleDateString(
+                      "es-ES",
+                      {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      }
+                    )
+                  : "fecha no disponible."}
+              </p>
+              {isPendent(olympiad) ? (
+                <PrimaryButton
+                  value="Proximamente"
+                  className="olympCaptionButton"
+                />
+              ) : (
+                <PrimaryButton
+                  value="Más información sobre la olimpiada"
+                  onClick={() => handleView(olympiad.idOlimpiada)}
+                  icon={<CiSearch />}
+                />
+              )}
+            </div>
           </div>
-          <div className="category-card">
-            <img src="https://concepto.de/wp-content/uploads/2018/08/f%C3%ADsica-e1534938838719.jpg" alt="Física" />
-            <h3>Física</h3>
-            <p>Explora las leyes fundamentales del universo y sus aplicaciones prácticas.</p>
-          </div>
-          <div className="category-card">
-            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5Xk3FtqL__EGIiI7E82AekqqDLimo4jzoEFshq4DkMU6dJ-1o6rVe9MIYFMBkBUydt7CQbcvfZMJpblJmbtpS-FOh74aisVI8jd3VyV-NOnw_v4vbiglUMpWeWKYjcPFOSCVLpB7n-Mw/s1600/Qui%25C3%25A9n+utilizo+por+primera+vez+la+palabra+Biolog%25C3%25ADa.jpg" alt="Biología" />
-            <h3>Biología</h3>
-            <p>Investiga los procesos de la vida y cómo interactúan los organismos en el entorno.</p>
-          </div>
-          <div className="category-card">
-            <img src="https://www.inspiracle.es/wp-content/uploads/2014/11/quimica.jpg" alt="Química" />
-            <h3>Química</h3>
-            <p>Descubre la composición de la materia y sus transformaciones en procesos químicos.</p>
-          </div>
-          <div className="category-card">
-            <img src="https://concepto.de/wp-content/uploads/2015/08/informatica-1-e1590711779992-800x400.jpg" alt="Informática" />
-            <h3>Informática</h3>
-            <p>Aprende sobre el procesamiento de datos, programación y nuevas tecnologías digitales.</p>
-          </div>
-          <div className="category-card">
-            <img src="https://glocalideas.com/wp-content/uploads/2024/01/Robotica-cabecera-3-1200x675.png" alt="Robótica" />
-            <h3>Robótica</h3>
-            <p>Construye y programa robots que solucionen problemas del mundo real.</p>
-          </div>
-        </div>
-      </section>
+        ))}
 
-      <section className="registration-process">
-        <h2>Proceso de Inscripción</h2>
-        <div className="process-steps-horizontal">
-          <div className="step-horizontal">
-            <div className="step-number">1</div>
-            <div className="step-content">
-              <h3>Registro</h3>
-              <p>Completa el formulario de inscripción con tus datos personales y académicos.</p>
-            </div>
-          </div>
-          <div className="step-horizontal">
-            <div className="step-number">2</div>
-            <div className="step-content">
-              <h3>Pago</h3>
-              <p>Realiza el pago de la inscripción mediante los métodos disponibles.</p>
-            </div>
-          </div>
-          <div className="step-horizontal">
-            <div className="step-number">3</div>
-            <div className="step-content">
-              <h3>Comprobante</h3>
-              <p>Sube tu comprobante de pago en el formato solicitado.</p>
-            </div>
-          </div>
-          <div className="step-horizontal">
-            <div className="step-number">4</div>
-            <div className="step-content">
-              <h3>¡Listo!</h3>
-              <p>Recibirás la confirmación de tu inscripción por correo electrónico.</p>
-            </div>
-          </div>
+        <div className="olympCarouselControls">
+          <button
+            onClick={() =>
+              setCurrent((current - 1 + olympiads.length) % olympiads.length)
+            }
+          >
+            ‹
+          </button>
+          <button onClick={() => setCurrent((current + 1) % olympiads.length)}>
+            ›
+          </button>
         </div>
-      </section>
+      </div>
 
-      <section className="how-to-register">
-        <h2>¿Cómo Inscribirse?</h2>
-        <div className="tutorial-section">
-          <h3>Tutorial Paso a Paso</h3>
-          <p>Sigue este vídeo tutorial para completar tu proceso de inscripción sin problemas.</p>
-          <div className="video-placeholder">
-            [Aquí iría el componente de video o iframe]
+      <div className="olympInfoSection">
+        <h2>Bienvenido a la Olimpiada Científica Nacional San Simón</h2>
+
+        <div className="olympInfoBox">
+          <h3>Presentación</h3>
+          <p>
+            El Comité de la Olimpiadas Científica Nacional San Simón{" "}
+            <strong>O! SANSI</strong>, a través de la Facultad de Ciencias y
+            Tecnología de la Universidad Mayor de San Simón, convoca a los
+            estudiantes del Sistema de Educación Regular a participar en las
+            Olimpiadas O! SANSI.
+          </p>
+          <div className="olympRequirementsContainer">
+            <div className="olympRequirementsText">
+              <h3>Requisitos</h3>
+              <ol>
+                <li>
+                  Ser estudiante de nivel primaria o secundaria en el sistema de
+                  Educación Regular del Estado Plurinacional de Bolivia.
+                </li>
+                <li>Registrar un tutor o profesor.</li>
+                <li>
+                  Registrarse en el formulario de inscripción para el(las)
+                  área(s) que se postula.
+                </li>
+                <li>
+                  Cumplir los requisitos específicos de la categoría de
+                  competencia en la que se inscribe.
+                </li>
+                <li>
+                  Tener su documento de identificación personal vigente (cédula
+                  de identidad) en el desarrollo de la competencia.
+                </li>
+                <li>Contar con correo electrónico personal o del tutor.</li>
+              </ol>
+            </div>
+
+            <div className="olympRequirementsImage">
+              <img src={foto} alt="Ilustración de requisitos" />
+            </div>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+
+      <div className="olympRegisterSteps">
+        <h2>Pasos para inscribirte</h2>
+
+        <div className="olympStepsGrid">
+          {[...Array(10)].map((_, i) => (
+            <div className="olympStepCard" key={i}>
+              <div className="olympStepNumber">{i + 1}</div>
+              <div className="olympStepContent">
+                <h3>
+                  <i
+                    className={`bi ${
+                      [
+                        "bi-trophy",
+                        "bi-ui-checks-grid",
+                        "bi-person-badge",
+                        "bi-person-lines-fill",
+                        "bi-list-check",
+                        "bi-person-vcard",
+                        "bi-check-circle",
+                        "bi-credit-card-2-front",
+                        "bi-upload",
+                        "bi-patch-check-fill",
+                      ][i]
+                    } me-2`}
+                  ></i>
+                  {
+                    [
+                      "Selecciona una olimpiada",
+                      "Elige el tipo de inscripción",
+                      "Registra al responsable de inscripción",
+                      "Ingresa los datos del olimpista",
+                      "Selecciona las áreas de competencia",
+                      "Registra al tutor legal",
+                      "Finaliza la inscripción",
+                      "Realiza el pago",
+                      "Sube el comprobante de pago",
+                      "Inscripción completada",
+                    ][i]
+                  }
+                </h3>
+                <p>
+                  {
+                    [
+                      "Elige la olimpiada en la que deseas participar. Este paso es obligatorio para todos los tipos de inscripción.",
+                      "Puedes continuar con un registro manual, llenando los datos paso a paso, o subir una planilla Excel con los datos de los participantes.",
+                      "Antes de continuar con el registro de participantes, se deben completar los datos del responsable que realiza la inscripción.",
+                      "Registra los datos personales del estudiante que participará en la olimpiada.",
+                      "Indica en qué áreas participará el olimpista. De forma opcional, puedes asignar a los tutores encargados de cada área.",
+                      "Completa los datos del padre, madre o tutor legal del estudiante participante.",
+                      "Una vez registrados todos los datos necesarios, genera la boleta de pago para continuar con el proceso.",
+                      "Acude a las cajas de la universidad con la boleta de pago para completar el pago correspondiente.",
+                      "Ingresa nuevamente a la plataforma y sube una foto clara del comprobante o factura entregado en caja.",
+                      "Una vez validado el pago, el estado de inscripción de tus olimpistas pasará de 'pendiente' a 'completada'.",
+                    ][i]
+                  }
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
-}
+};
 
 export default ContentProp;

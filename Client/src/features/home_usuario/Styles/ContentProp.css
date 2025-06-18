@@ -1,404 +1,269 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-
-.content-container {
-  background-color: #F0F9FF;
-  min-height: 100vh;
-  padding: 20px;
-  width: 100vw;
-  max-width: 100%;
-  margin: var(--high-button) 0 var(--broad-button) 0; /* Usando las variables para los márgenes */
-  flex: 1;
-  box-sizing: border-box;
+:root {
+  --azul-oscuro: #213448;
+  --azul-claro: #547792;
+  --blanco: #ffffff;
+  --gris-claro: #f5f5f5;
+  --texto-azul: #213448;
 }
 
-section {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: var(--high-button);
-  box-sizing: border-box;
-}
-
-.event-description {
-  height: 400px;
-  background-color: #F0F9FF;
-  padding: var(--high-button);
-  transition: all 0.5s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: black; /* Color negro por defecto */
-}
-
-.event-description.active {
-  background-color: #F0F9FF;
-}
-
-.event-description h2,
-.event-description p {
-  color: black; /* Color negro por defecto */
-}
-
-.event-description.active h2,
-.event-description.active p {
-  color: white; /* Cambia a blanco cuando .event-description es activa */
-}
-
-.start-adventure {
-  font-size: var(--h6-siz); /* Usando la variable de tamaño de fuente */
-  width: 337px;
-  height: 52px;
-  background-color: #F0F9FF;
-  color: #ffffff;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: var(--high-button);
-  border: none;
-  font-family: 'Inter',sans-serif;
-  
-}
-
-.start-adventure:hover {
-  background-color: #1d4ed8;
-  transform: scale(1.05);
-  font-family: 'Inter',sans-serif;
-
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: var(--high-button);
-  margin-top: 30px;
-  
-  width: 100%;
-  flex-wrap: wrap;
-}
-
-.action-button {
-  padding: var(--high-button) var(--broad-button);
-  border: none;
-  border-radius: 8px;
-  font-size: var(--h6-size); /* Usando la variable de tamaño de fuente */
-  font-weight: lighter;
-  font-family: 'Inter', sans-serif;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  min-width: 220px;
-}
-
-.start-button {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.start-button:hover {
-  background-color: #3e8e41;
-  transform: translateY(-2px);
-}
-
-.continue-button {
-  background-color: #2196F3;
-  color: white;
-}
-
-.continue-button:hover {
-  background-color: #0b7dda;
-  transform: translateY(-2px);
-}
-
-.areas-competence {
-  min-height: 980px;
-  background-color: #F0F9FF;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--high-button) var(--broad-button);
-}
-
-.areas-competence h2 {
-  font-size: var(--h2-size);
-  color: #333;
-  margin-bottom: var(--high-button);
-  margin-top: 60px; /* Añadido margen superior */
-}
-
-.competence-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-  gap: 2rem;
-  row-gap: 4rem;
-  width: 100%;
-  max-width: 1200px;
-  margin-bottom: 3rem;
-}
-
-.category-card {
-  background-color: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  height: 100%;
-  text-align: center;
-  font-family: 'Inter', sans-serif;
-}
-.category-card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-.category-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.category-card h3 {
-  color: var(--primary-color);
-  font-size: var(--h3-size);
-  margin-bottom: 0.5rem;
-
-}
-.category-card p {
-  font-size: var(--pM-size);
-  color: #666;
-  line-height: 1.5;
-  font-weight: 300;
-
-}
-.competence-rules {
-  width: 100%;
-  max-width: 800px;
-  background-color: white;
-  padding: var(--high-button);
-  border-radius: 12px;
-  margin-top: var(--high-button);
-}
-
-.competence-rules h3 {
-  color: var(--primary-color); /* Usando el color primario */
-  font-size: var(--h4-size); /* Usando la variable de tamaño de fuente */
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.rules-section {
-  margin-bottom: var(--high-button);
-  max-width: 800px;
-}
-
-.rules-section h4 {
-  color: #2c3e50;
-  font-size: var(--h5-size); /* Usando la variable de tamaño de fuente */
-  margin-bottom: 1rem;
-}
-
-.rules-list {
-  list-style-type: none;
-  padding-left: 1.5rem;
-}
-
-.rules-list li {
-  margin-bottom: 0.8rem;
+/* Carousel principal */
+.olympCarouselContainer {
   position: relative;
-  color: #555;
+  width: 100%;
+  height: 500px;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
-.rules-list li:before {
-  content: "•";
-  color: var(--primary-color); /* Usando el color primario */
-  font-weight: bold;
+.olympCarouselSlide {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
   position: absolute;
-  left: -1rem;
-}
-
-.registration-process {
-  min-height: 293px;
-  background-color: #F0F9FF;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--high-button) var(--broad-button);
-  font-family: 'Inter',sans-serif;
-}
-
-.registration-process h2 {
-  font-size: var(--h2-size); 
-  color: #333;
-  margin-bottom: var(--high-button);
-  text-align: center;
-  font-weight: 700;
-}
-.registration-process p{
-  font-weight: 300;
-}
-.process-steps-horizontal {
-  display: flex;
-  margin-bottom: 40px; 
-  justify-content: space-between;
-  gap: 1.5rem;
   width: 100%;
-  max-width: 1200px;
+  height: 100%;
 }
 
-.step-horizontal {
-  flex: 1;
-  background-color: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  min-height: 250px;
-}
-.step-horizontal {
-  transition: transform 0.2s, box-shadow 0.2s;
+.olympCarouselSlide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-.step-horizontal:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+.olympCarouselSlide.active {
+  opacity: 1;
+  position: relative;
 }
 
-.step-number {
-  background-color: var(--primary-color); /* Usando el color primario */
+.olympCaption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
   color: white;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 1.5rem;
-  margin-bottom: var(--high-button);
-}
-
-.step-content h3 {
-  color: var(--primary-color); /* Usando el color primario */
-  font-size: var(--h5-size); /* Usando la variable de tamaño de fuente */
-  margin-bottom: var(--high-button);
-}
-
-.step-content p {
-  color: #555;
-  font-size: var(--pM-size); /* Usando la variable de tamaño de fuente */
-  line-height: 1.5;
-}
-
-.how-to-register {
-  min-height: 771px;
-  background-color: #F0F9FF;
-
+  text-shadow: 0 0 5px black;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: var(--high-button) var(--broad-button);
-  font-family: 'Inter', sans-serif;
-}
-
-.how-to-register h2 {
-  font-size: var(--h2-size); /* Usando la variable de tamaño de fuente */
-  color: #333;
-  margin-bottom: var(--high-button);
   text-align: center;
-  font-weight: 700;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.3);
 }
 
-.tutorial-section {
-  background-color: white;
-  padding: var(--high-button);
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.olympCaption h3 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.olympCaption p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  max-width: 600px;
+}
+
+.olympCaptionButton {
+  background-color: var(--azul-claro);
+  color: var(--blanco);
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.olympCaptionButton:hover {
+  background-color: var(--blanco);
+  color: var(--azul-claro);
+}
+
+.olympCarouselControls {
+  position: absolute;
+  top: 50%;
   width: 100%;
-  max-width: 800px;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
 }
 
-.tutorial-section h3 {
-  color: var(--primary-color); /* Usando el color primario */
-  font-size: var(--h4-size); /* Usando la variable de tamaño de fuente */
-  margin-bottom: 1rem;
+.olympCarouselControls button {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 0 15px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-.tutorial-section p {
-  color: #555;
-  font-size: var(--pM-size); /* Usando la variable de tamaño de fuente */
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
-  font-weight: 300;
+.olympCarouselControls button:hover {
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
-.video-placeholder {
-  width: 100%;
-  height: 450px;
-  background-color: #e0e0e0;
+/* Información de olimpiadas */
+.olympInfoSection {
+  padding: 2rem 4rem;
+  background-color: var(--gris-claro);
+  color: var(--texto-azul);
+  font-family: 'Poppins', sans-serif;
+}
+
+.olympInfoSection h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 28px;
+  position: relative;
+}
+
+.olympInfoSection h2::after {
+  content: '';
+  width: 100px;
+  height: 3px;
+  background-color: var(--azul-claro);
+  display: block;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.olympInfoBox {
+  padding: 1rem 2rem;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.olympInfoBox h3 {
+  margin-top: 1.5rem;
+  font-size: 20px;
+  padding-bottom: 4px;
+}
+
+/* Requisitos */
+.olympRequirementsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.olympRequirementsText,
+.olympRequirementsImage {
+  flex: 1 1 100%;
+}
+
+.olympRequirementsText h3 {
+  margin-top: 1.5rem;
+  font-size: 20px;
+  padding-bottom: 4px;
+}
+
+.olympRequirementsText ol li {
+  margin: 4px 0;
+}
+
+.olympRequirementsImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.olympRequirementsImage img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+  border-radius: 10px;
+}
+
+/* Pasos de inscripción */
+.olympRegisterSteps {
+  background-color: var(--gris-claro);
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.olympRegisterSteps h2 {
+  color: var(--texto-azul);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 28px;
+  position: relative;
+}
+
+.olympRegisterSteps h2::after {
+  content: '';
+  width: 100px;
+  height: 3px;
+  background-color: var(--azul-claro);
+  display: block;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.olympStepsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.olympStepCard {
+  display: flex;
+  align-items: stretch;
+  background-color: var(--blanco);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(29, 33, 218, 0.2);
+  overflow: hidden;
+}
+
+.olympStepNumber {
+  background-color: rgb(107, 159, 207);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 0 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  color: #666;
-  font-size: var(--pM-size); /* Usando la variable de tamaño de fuente */
+  width: 3.5rem;
+  flex-shrink: 0;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .event-description h2 {
-    font-size: var(--h2-size); /* Usando la variable de tamaño de fuente */
-  }
-  
-  .event-description p {
-    font-size: var(--pM-size); /* Usando la variable de tamaño de fuente */
-  }
-  
-  .competence-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .process-steps-horizontal {
-    flex-direction: column;
-  }
-
-  .step-horizontal {
-    width: 100%;
-  }
-
-  .video-placeholder {
-    height: 250px;
-  }
+.olympStepContent {
+  padding: 10px;
+  text-align: left;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-@media (max-width: 480px) {
-  .action-buttons {
-    flex-direction: column;
-    gap: 15px;
+.olympStepContent h3 {
+  margin: 0 0 0.5rem;
+  font-size: 20px;
+  padding-bottom: 2px;
+  color: var(--texto-azul);
+}
+
+.olympStepContent p {
+  margin: 0;
+  font-size: 16px;
+  color: var(--texto-azul);
+}
+
+/* Responsivo */
+@media (min-width: 768px) {
+  .olympRequirementsText,
+  .olympRequirementsImage {
+    flex: 1 1 45%;
   }
 
-  .action-button {
-    width: 100%;
-  }
-
-  .event-description h2 {
-    font-size: var(--h3-size); 
-  }
-  
-  .event-description p {
-    font-size: var(--pS-size); 
+  .olympStepsGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

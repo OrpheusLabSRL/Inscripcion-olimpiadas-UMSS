@@ -5,55 +5,55 @@ import "../Styles/HeaderProp.css";
 
 function HeaderProp() {
   const navigate = useNavigate();
-  const [menuAbierto, setMenuAbierto] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  const alternarMenu = () => setMenuAbierto(!menuAbierto);
-  const cerrarMenu = () => setMenuAbierto(false);
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setDropdownVisible(false);
+  };
 
   return (
-    <header className="contenedorEncabezado">
-      <div className="contenidoEncabezado">
-        <div className="encabezadoIzquierdo" onClick={() => navigate("/")}>
-          <img
-            src={Logo}
-            alt="Logotipo Universidad"
-            className="logoEncabezado"
-          />
+    <header className="headerContainer">
+      <div className="headerContent">
+        <div className="headerLeft" onClick={() => navigate("/")}>
+          <img src={Logo} alt="University Logo" className="headerLogo" />
           <h2>O!Sansi</h2>
         </div>
 
         <button
-          className="botonMenu"
-          onClick={alternarMenu}
-          aria-label="Abrir o cerrar menú"
+          className="menuButton"
+          onClick={toggleMenu}
+          aria-label="Open or close menu"
         >
           ☰
         </button>
 
-        <nav className={`navegacionEncabezado ${menuAbierto ? "abierto" : ""}`}>
+        <nav className={`headerNav ${menuOpen ? "open" : ""}`}>
           <ul>
-            <li
-              onClick={() => {
-                navigate("/");
-                cerrarMenu();
-              }}
-            >
+            <li onClick={() => { navigate("/"); closeMenu(); }}>
               <i className="bi bi-house"></i> Inicio
             </li>
+
             <li
-              onClick={() => {
-                navigate("/consultar-inscripcion");
-                cerrarMenu();
-              }}
+              className="inscripciones-dropdown"
+              onClick={() => setDropdownVisible(!dropdownVisible)}
             >
-              <i className="bi bi-clipboard-check"></i> Estado de inscripción
+              <span>
+                <i className="bi bi-journal"></i> Mis Inscripciones ▾
+              </span>
+
+              {dropdownVisible && (
+                <ul className="inscripciones-submenu">
+                  <li onClick={() => { navigate("/consultar-inscripcion"); closeMenu(); }}>
+                    <i className="bi bi-clipboard-check"></i> Estado de Inscripción
+                  </li>
+                </ul>
+              )}
             </li>
-            <li
-              onClick={() => {
-                navigate("/contacto");
-                cerrarMenu();
-              }}
-            >
+
+            <li onClick={() => { navigate("/contacto"); closeMenu(); }}>
               <i className="bi bi-telephone"></i> Contacto
             </li>
           </ul>
