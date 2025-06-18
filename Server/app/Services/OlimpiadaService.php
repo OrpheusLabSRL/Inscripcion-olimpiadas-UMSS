@@ -18,6 +18,11 @@ class OlimpiadaService
         return $this->repository->getAll();
     }
 
+    public function getAllOlimpiadasWithAreasCategorias()
+    {
+        return $this->repository->getAllWithAreasCategorias();
+    }
+
     public function createOlimpiada(array $data)
     {
         // Manteniendo los mismos valores por defecto

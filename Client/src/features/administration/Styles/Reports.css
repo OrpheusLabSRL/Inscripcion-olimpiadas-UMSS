@@ -536,3 +536,87 @@
     display: none;
   } */
 }
+
+/* Olympians Report Styles */
+.olympians-report {
+  color: #000000;
+}
+
+.filter-controls {
+  margin-bottom: 1rem;
+}
+
+.filter-controls-wrapper {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-label {
+  color: #000000;
+  margin-left: 0.5rem;
+}
+
+.filter-select {
+  margin-left: 0.5rem;
+  color: #000000;
+}
+
+.filter-input {
+  margin-left: 0.5rem;
+  color: #000000;
+}
+
+.columns-to-show {
+  margin-left: 1rem;
+  display: inline-flex;
+  align-items: center;
+  color: #000000;
+}
+
+.columns-to-show input {
+  margin-right: 0.25rem;
+}
+
+/* Tutors Report Styles */
+.tutors-report {
+  color: #000000;
+}
+
+.tutors-filter-controls {
+  margin-bottom: 1rem;
+}
+
+.tutors-filter-controls-wrapper {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tutors-filter-label {
+  color: #000000;
+  margin-left: 0.5rem;
+}
+
+.tutors-filter-select {
+  margin-left: 0.5rem;
+  color: #000000;
+}
+
+.tutors-filter-input {
+  margin-left: 0.5rem;
+  color: #000000;
+}
+
+.tutors-columns-to-show {
+  margin-left: 1rem;
+  display: inline-flex;
+  align-items: center;
+  color: #000000;
+}
+
+.tutors-columns-to-show input {
+  margin-right: 0.25rem;
+}

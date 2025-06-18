@@ -41,7 +41,7 @@ class InscripcionController_Tutor extends Controller
                     return response()->json(['success' => false, 'message' => 'Olimpista no registrado.']);
                 }
 
-                $inscripciones = Inscripcion::with([
+                $inscripciones = InscripcionController_Tutor::with([
                         'olimpiadaAreaCategoria.area',
                         'olimpiadaAreaCategoria.categoria',
                         'tutorResponsable.persona'

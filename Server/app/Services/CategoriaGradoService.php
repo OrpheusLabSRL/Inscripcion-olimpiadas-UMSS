@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\Contracts\CategoriaGradoRepositoryInterface;
 use App\Repositories\Contracts\CategoriaRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class CategoriaGradoService
 {
@@ -90,5 +91,39 @@ class CategoriaGradoService
             $data['grados'],
             $estado
         );
+    }
+
+    public function createCategoriaWithGrados(array $data)
+    {
+        $validator = Validator::make($data, [
+            'nombreCategoria' => 'required|string|max:255',
+            'grados' => 'required|array|min:1',
+            'grados.*' => 'exists:grados,idGrado',
+            'estadoCategoriaGrado' => 'sometimes|boolean'
+        ]);
+
+        if ($validator->fails()) {
+            throw new \Exception($validator->errors()->first(), 400);
+        }
+
+        return DB::transaction(function () use ($data) {
+            // Crear la categoría
+            $categoria = $this->categoriaRepository->create([
+                'nombreCategoria' => $data['nombreCategoria'],
+                'estadoCategoria' => true
+            ]);
+
+            // Asignar estado con valor por defecto si no viene en los datos
+            $estado = $data['estadoCategoriaGrado'] ?? true;
+
+            // Asociar grados
+            $this->categoriaGradoRepository->syncGrados(
+                $categoria->idCategoria,
+                $data['grados'],
+                $estado
+            );
+
+            return $categoria->load('grados');
+        });
     }
 }

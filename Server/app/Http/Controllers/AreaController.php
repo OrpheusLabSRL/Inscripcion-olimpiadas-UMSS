@@ -16,10 +16,7 @@ class AreaController extends Controller
 
     public function index(Request $request)
     {
-        $areas = $this->service->getAllAreas([
-            'estado' => $request->query('estadoArea')
-        ]);
-
+        $areas = $this->service->getAllAreas();
         return response()->json($areas, 200);
     }
 

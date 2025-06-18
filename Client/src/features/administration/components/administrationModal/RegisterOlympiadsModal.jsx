@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/ModalGeneral.css";
+import "../../Styles/ModalGeneral.css";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -87,6 +87,16 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
     if (fechaInicio && fechaFin && fechaFin < fechaInicio) {
       nuevosErrores.fechaFinOlimpiada =
         "La fecha de fin no puede ser anterior a la de inicio";
+    }
+
+    if (fechaInicio && fechaFin) {
+      if (fechaFin < fechaInicio) {
+        nuevosErrores.fechaFinOlimpiada =
+          "La fecha de fin no puede ser anterior a la de inicio";
+      } else if (fechaFin === fechaInicio) {
+        nuevosErrores.fechaFinOlimpiada =
+          "La fecha de inicio y fin no pueden ser el mismo día";
+      }
     }
 
     setErrors(nuevosErrores);

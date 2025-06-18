@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import "../../styles/ModalGeneral.css";
+import "../../Styles/ModalGeneral.css";
 import { updateArea } from "../../../../api/Administration.api";
 
 const MySwal = withReactContent(Swal);

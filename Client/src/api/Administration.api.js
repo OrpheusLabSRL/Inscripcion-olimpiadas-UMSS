@@ -20,11 +20,19 @@ export const getOlimpiadas = async () => {
   return response.data;
 };
 
+export const getOlimpiadasWithAreasCategorias = async () => {
+  const response = await inscriptionApi.get("/viewOlimpiadasWithAreasCategorias");
+  return response.data;
+};
+
 export const createOlympiad = async (data) =>
   await inscriptionApi.post("/registrarOlimpiadas", data);
 
 export const asignarAreasYCategorias = async (data) =>
   await inscriptionApi.post("/newAreaCategoria", data);
+
+export const deleteOlympiad = async (idOlimpiada) =>
+  await inscriptionApi.delete(`/deleteOlimpiada/${idOlimpiada}`);
 
 export const getAreasCategoriasPorOlimpiada = async (idOlimpiada) => {
   return await inscriptionApi.get(
@@ -118,6 +126,46 @@ export const updateCategoriaWithGrados = async (
     })
   ).data;
 
+export const createCategoriaWithGrados = async (data) => {
+  try {
+    const response = await inscriptionApi.post(
+      "/categorias/with-grados",
+      {
+        nombreCategoria: data.nombreCategoria.trim().toUpperCase(),
+        grados: data.grados,
+        estadoCategoriaGrado: data.estadoCategoriaGrado ?? true,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    let errorMessage = "Error al registrar la categoría";
+
+    if (error.response) {
+      // Manejo de errores estructurados del backend
+      if (error.response.data && error.response.data.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response.statusText) {
+        errorMessage = error.response.statusText;
+      }
+
+      console.error("Error detallado del servidor:", error.response.data);
+    } else if (error.request) {
+      errorMessage = "No se recibió respuesta del servidor";
+      console.error("Request:", error.request);
+    } else {
+      errorMessage = `Error al configurar la solicitud: ${error.message}`;
+    }
+
+    throw new Error(errorMessage);
+  }
+};
+
 /* =======================
    COMBINACIONES (OlimpiadaAreaCategoria)
 ======================= */
@@ -191,14 +239,25 @@ export const setUser = async (data) => {
   return response.data;
 };
 
-export const verificarUsoArea = async (idArea) => {
-  const response = await inscriptionApi.post("/verificar-uso-area", { idArea });
+export const getUsuarios = () => inscriptionApi.get("/usuarios");
+export const getRolesUser = () => inscriptionApi.get("/usuarios/roles");
+export const createUsuario = (data) => inscriptionApi.post("/usuarios", data);
+export const updateUsuario = (id, data) =>
+  inscriptionApi.put(`/usuarios/${id}`, data);
+export const updateUsuarioEstado = (id, estado) =>
+  inscriptionApi.put(`/usuarios/${id}/estado`, { estadoUsuario: estado });
+export const deleteUsuario = (id) => inscriptionApi.delete(`/usuarios/${id}`);
+
+export const verificarUsoAreasMasivo = async (ids) => {
+  const response = await inscriptionApi.post("/verificar-uso-areas", {
+    ids,
+  });
   return response.data;
 };
 
 export const verificarUsoCategoriasMasivo = async (ids) => {
-  const response = await inscriptionApi.post("/api/verificar-uso-categorias", {
+  const response = await inscriptionApi.post("/verificar-uso-categorias", {
     ids,
   });
-  return response.data; // esto será un objeto tipo { 1: true, 2: false, ... }
+  return response.data;
 };

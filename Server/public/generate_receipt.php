@@ -1,24 +1,32 @@
 <?php
+// Evitar cualquier output antes del PDF
+ob_start();
+
 // Cargar el autoloader de Composer
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
+
+// Importar FPDF
+require_once(__DIR__ . '/../vendor/setasign/fpdf/fpdf.php');
+
+// Cargar el archivo .env
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
 
 // Verificar que se haya proporcionado el código de boleta
-if ($argc < 2 && !isset($_GET['codigo'])) {
-    die("Uso (CLI): php " . $argv[0] . " [codigoBoleta]\n" .
-        "Uso (Web): http://tu_servidor/ruta/a/generate_receipt.php?codigo=[codigoBoleta]\n");
+if (!isset($_GET['codigo'])) {
+    ob_end_clean();
+    die("Uso: http://tu_servidor/ruta/a/generate_receipt.php?codigo=[codigoBoleta]");
 }
 
-$codigoBoleta = $argv[1] ?? $_GET['codigo'];
+$codigoBoleta = $_GET['codigo'];
 
 // Configuración de la base de datos usando getenv() que debería leer del .env cargado por Laravel/servidor web
-
-
-$dbConnection = "mysql";
-$dbHost = "localhost";
-$dbPort = "3306";
-$dbDatabase = "laravel";
-$dbUsername = "postgres";
-$dbPassword = "123";
+$dbConnection = $_ENV['DB_CONNECTION'] ?? 'mysql';
+$dbHost = $_ENV['DB_HOST'] ?? '127.0.0.1';
+$dbPort = $_ENV['DB_PORT'] ?? '3306';
+$dbDatabase = $_ENV['DB_DATABASE'] ?? 'laravel';
+$dbUsername = $_ENV['DB_USERNAME'] ?? 'root';
+$dbPassword = $_ENV['DB_PASSWORD'] ?? '';
 
 // Ruta donde se guardará el PDF (usar storage_path si estamos en Laravel, si no, una ruta relativa)
 $pdfOutputPath = __DIR__ . '/../storage/app/public/boletas_pdf/'; // Intenta usar una ruta común de Laravel storage
@@ -51,6 +59,7 @@ try {
     $sql = "
         SELECT
             bp.codigoBoleta,
+            bp.numeroControl,
             bp.fechaEmision,
             bp.montoTotal,
             p.nombre,
@@ -122,8 +131,11 @@ try {
 
     // ** Generación del PDF con FPDF **
     
+    // Limpiar cualquier output anterior
+    ob_end_clean();
+    
     // Crear un nuevo documento PDF
-    $pdf = new FPDF(); // FPDF se carga via autoload de Composer
+    $pdf = new FPDF();
     $pdf->AddPage();
 
     // Configurar la fuente
@@ -137,7 +149,7 @@ try {
     $pdf->Ln(5);
 
     // Datos de la boleta alineados a la derecha
-    $pdf->Cell(0, 8, utf8_decode('Nro. ' . $boleta['codigoBoleta']), 0, 1, 'R');
+    $pdf->Cell(0, 8, utf8_decode('Nro. Control: ' . $boleta['numeroControl']), 0, 1, 'R');
     $pdf->Cell(0, 8, utf8_decode('Fecha: ' . $fechaEmision), 0, 1, 'R');
     $pdf->Cell(0, 8, utf8_decode('Usuario: HTORREZ'), 0, 1, 'R');
     $pdf->Ln(5);
@@ -155,7 +167,7 @@ try {
     $pdf->Ln(5);
 
     // Aclaraciones y códigos
-    $pdf->Cell(0, 8, utf8_decode('Aclaracion: OF 1020'), 0, 1, 'L'); // Valor estático
+    $pdf->Cell(0, 8, utf8_decode('Aclaracion: OF ' . $boleta['codigoBoleta']), 0, 1, 'L');
     $pdf->Ln(5);
     $pdf->Cell(0, 8, utf8_decode('Documento: 1023219029'), 0, 1, 'L'); // Valor estático
     $pdf->Cell(0, 8, utf8_decode('Codigo:'), 0, 1, 'L');

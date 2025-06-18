@@ -54,9 +54,10 @@ Route::post('/enviar-contacto', [ContactoController::class, 'enviarContacto']);
 
 // Olimpiadas
 Route::get('/viewOlimpiadas', [OlimpiadaController::class, 'mostrarOlimpiada']);
+Route::get('/viewOlimpiadasWithAreasCategorias', [OlimpiadaController::class, 'mostrarOlimpiadasWithAreasCategorias']);
 Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
-
+Route::delete('/deleteOlimpiada/{id}', [OlimpiadaController::class, 'destroy']);
 Route::put('/editarOlimpiadas/{id}/estado', [OlimpiadaController::class, 'cambiarEstado']);
 
 //Roles y Permisos
@@ -64,6 +65,7 @@ Route::get('/roles', [RolController::class, 'index']);
 Route::post('/roles', [RolController::class, 'store']);
 Route::post('/usuarios', [UsuarioController::class, 'store']);
 Route::get('/permisos', [PermisoController::class, 'index']);
+Route::get('/viewUsuarios', [UsuarioController::class, 'index']);
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);
@@ -76,6 +78,7 @@ Route::delete('/areas/{id}', [AreaController::class, 'destroy']);
 // Categorías
 Route::get('/viewCategorias', [CategoriaController::class, 'index']);
 Route::get('/viewCategorias/{id}', [CategoriaController::class, 'show']);
+Route::post('/categorias/with-grados', [CategoriaController::class, 'storeWithGrados']);
 
 // Grados
 Route::get('/viewGrados', [GradoController::class, 'index']);
@@ -86,8 +89,7 @@ Route::post('/newInscription', [InscripcionController::class, 'store']);
 Route::get('/obtenerInscripciones/olimpiadas', [InscripcionController::class, 'getInscripcionesConOlimpiadas']);
 Route::post('/consultar-inscripcion-olimpista', [InscripcionController::class, 'consultarInscripcion']);
 Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class, 'consultar']); 
-Route::post('/verificar-uso-area', [InscripcionController::class, 'verificarUsoArea']);
-Route::post('/verificar-uso-categoria', [InscripcionController::class, 'verificarUsoCategoria']);
+Route::post('/verificar-uso-areas', [InscripcionController::class, 'verificarUsoAreasMasivo']);
 Route::post('/verificar-uso-categorias', [InscripcionController::class, 'verificarUsoCategoriasMasivo']);
 
 // Categoría - Grado
@@ -95,6 +97,7 @@ Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
 Route::patch('/changeEstadoCategoriaGrado/{id}', [CategoriaGradoController::class, 'cambiarEstado']);
 Route::put('/updateCategoriaWithGrados/{idCategoria}', [CategoriaGradoController::class, 'actualizarCategoriaYGrados']);
 Route::delete('/deleteCategoriaGrado/{id}', [CategoriaGradoController::class, 'destroy']);
+Route::post('/categorias/with-grados', [CategoriaGradoController::class, 'storeWithGrados']);
 
 // Categoría - Área - Olimpiada
 Route::get('/viewAreaCategoria', [OlimpiadaAreaCategoriaController::class, 'index']);
@@ -117,3 +120,13 @@ Route::get('/boletaPago/boletasByTutor/{tutorId}', [BoletaPagoController::class,
 Route::post('/register-from-excel', [ExcelController::class, 'registerFromExcel']);
 Route::post('/validate-excel-data', [ExcelController::class, 'validateExcelData']);
 Route::get('/available-combinations', [ExcelController::class, 'getAvailableCombinations']);
+
+
+//Usuarios
+Route::prefix('usuarios')->group(function () {
+    Route::get('/', [UsuarioController::class, 'index']); // Obtener todos
+    Route::get('/roles', [UsuarioController::class, 'getRoles']); // Obtener roles
+    Route::put('/{id}/estado', [UsuarioController::class, 'actualizarEstado']); // Cambiar estado
+    Route::put('/{id}', [UsuarioController::class, 'update']); // Actualizar usuario
+    Route::delete('/{id}', [UsuarioController::class, 'destroy']); // Eliminar usuario
+});

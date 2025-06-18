@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../../assets/images/ohsansi.jpg";
+import Logo from "../../../assets/images/ohsansi.png";
 import "../Styles/HeaderProp.css";
 
 function HeaderProp() {

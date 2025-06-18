@@ -20,6 +20,12 @@ class OlimpiadaController extends Controller
         return response()->json(['data' => $olimpiadas]);
     }
 
+    public function mostrarOlimpiadasWithAreasCategorias()
+    {
+        $olimpiadas = $this->service->getAllOlimpiadasWithAreasCategorias();
+        return response()->json(['data' => $olimpiadas]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

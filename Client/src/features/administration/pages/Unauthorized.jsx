@@ -1,5 +1,5 @@
 import React from "react";
-import { Shield, Home, ArrowLeft, Lock } from "lucide-react";
+import { Shield, Home, ArrowLeft, Lock, Mail } from "lucide-react";
 import "../Styles/Unauthorized.css";
 
 const Unauthorized = () => {
@@ -8,67 +8,87 @@ const Unauthorized = () => {
   };
 
   const handleGoHome = () => {
-    // Aquí puedes usar tu router favorito para navegar al inicio
     window.location.href = "/";
   };
 
+  const handleContactSupport = () => {
+    window.location.href =
+      "mailto:soporte@sistema.com?subject=Problema de acceso 403";
+  };
+
   return (
-    <div className="accessDeniedContainer">
-      <div className="accessDeniedContent">
-        {/* Icono principal animado */}
-        <div className="accessDeniedIconWrapper">
-          <div className="accessDeniedShieldBg">
-            <Shield className="accessDeniedShieldIcon" size={80} />
-          </div>
-          <div className="accessDeniedLockOverlay">
-            <Lock className="accessDeniedLockIcon" size={32} />
+    <div className="access-denied-container">
+      <div className="access-denied-card">
+        {/* Icono principal con animación */}
+        <div className="access-denied-icon-container">
+          <div className="shield-animation">
+            <Shield
+              className="shield-icon"
+              size={80}
+              aria-hidden="true"
+              focusable="false"
+            />
+            <div className="lock-overlay">
+              <Lock
+                className="lock-icon"
+                size={32}
+                aria-hidden="true"
+                focusable="false"
+              />
+            </div>
           </div>
         </div>
 
-        {/* Contenido principal */}
-        <div className="accessDeniedTextSection">
-          <h1 className="accessDeniedTitle">Acceso Denegado</h1>
-          <p className="accessDeniedSubtitle">
-            No tienes los permisos necesarios para acceder a esta página
+        {/* Contenido textual */}
+        <div className="access-denied-content">
+          <h1 className="access-denied-title">Acceso no autorizado</h1>
+          <p className="access-denied-subtitle">
+            No tienes los permisos necesarios para acceder a este recurso
           </p>
-          <p className="accessDeniedDescription">
-            Si crees que esto es un error, por favor contacta al administrador
-            del sistema o verifica que tu cuenta tenga los permisos adecuados.
+          <p className="access-denied-description">
+            Por favor verifica tus credenciales o contacta al administrador del
+            sistema si crees que esto es un error.
           </p>
         </div>
 
         {/* Código de error */}
-        <div className="accessDeniedErrorCode">
-          <span className="accessDeniedCodeLabel">Código de Error:</span>
-          <span className="accessDeniedCodeNumber">403</span>
+        <div className="error-code">
+          <span className="error-code-label">Código de error:</span>
+          <span className="error-code-value" aria-label="Error 403">
+            403
+          </span>
         </div>
 
-        {/* Botones de acción */}
-        <div className="accessDeniedActions">
+        {/* Acciones principales */}
+        <div className="action-buttons">
           <button
             onClick={handleGoBack}
-            className="accessDeniedBtn accessDeniedBtnSecondary"
+            className="secondary-button"
+            aria-label="Volver a la página anterior"
           >
-            <ArrowLeft size={20} />
-            Volver Atrás
+            <ArrowLeft size={20} className="button-icon" />
+            <span>Volver atrás</span>
           </button>
           <button
             onClick={handleGoHome}
-            className="accessDeniedBtn accessDeniedBtnPrimary"
+            className="primary-button"
+            aria-label="Ir a la página de inicio"
           >
-            <Home size={20} />
-            Ir al Inicio
+            <Home size={20} className="button-icon" />
+            <span>Ir al inicio</span>
           </button>
         </div>
 
-        {/* Información adicional */}
-        <div className="accessDeniedHelp">
-          <p className="accessDeniedHelpText">
-            ¿Necesitas ayuda?
-            <a href="/contacto" className="accessDeniedHelpLink">
-              Contacta soporte técnico
-            </a>
-          </p>
+        {/* Soporte técnico */}
+        <div className="support-section">
+          <button
+            onClick={handleContactSupport}
+            className="support-link"
+            aria-label="Contactar a soporte técnico"
+          >
+            <Mail size={16} className="support-icon" />
+            <span>Contactar soporte técnico</span>
+          </button>
         </div>
       </div>
     </div>
