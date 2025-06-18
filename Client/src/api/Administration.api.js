@@ -21,7 +21,9 @@ export const getOlimpiadas = async () => {
 };
 
 export const getOlimpiadasWithAreasCategorias = async () => {
-  const response = await inscriptionApi.get("/viewOlimpiadasWithAreasCategorias");
+  const response = await inscriptionApi.get(
+    "/viewOlimpiadasWithAreasCategorias"
+  );
   return response.data;
 };
 
@@ -50,6 +52,13 @@ export const updateOlimpiadaEstado = async (idOlimpiada, nuevoEstado) => {
   return await inscriptionApi.put(`/editarOlimpiadas/${idOlimpiada}/estado`, {
     estadoOlimpiada: nuevoEstado,
   });
+};
+
+export const updateOlimpiada = async (idOlimpiada, datosActualizados) => {
+  return await inscriptionApi.put(
+    `/editarOlimpiadas/${idOlimpiada}`,
+    datosActualizados
+  );
 };
 
 /* =======================

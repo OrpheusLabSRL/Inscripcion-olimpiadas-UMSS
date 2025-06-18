@@ -33,6 +33,7 @@ const PermisosModal = ({
             <span className="highlight">{nombreUsuario || "usuario"}</span>
           </h3>
         </div>
+
         <p className="adminModalSubtitle">
           <FiShield
             size={16}
@@ -40,6 +41,7 @@ const PermisosModal = ({
           />
           Rol: <strong>{nombreRol}</strong>
         </p>
+
         <div className="adminModalBody">
           {permisos.length === 0 ? (
             <div className="adminEmptyState">
@@ -49,13 +51,23 @@ const PermisosModal = ({
             </div>
           ) : (
             <div className="permissionGrid">
-              {permisos.map((permiso) => (
-                <div key={permiso.idPermiso} className="permissionCard">
-                  <div className="permissionCardHeader">
-                    <h4 className="permissionName">{permiso.nombrePermiso}</h4>
+              {permisos.map((permiso) => {
+                const nombreFormateado = permiso.nombrePermiso
+                  .split("_")
+                  .map(
+                    (palabra) =>
+                      palabra.charAt(0).toUpperCase() + palabra.slice(1)
+                  )
+                  .join(" ");
+
+                return (
+                  <div key={permiso.idPermiso} className="permissionCard">
+                    <div className="permissionCardHeader">
+                      <h4 className="permissionName">{nombreFormateado}</h4>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
