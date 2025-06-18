@@ -4,6 +4,18 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+// Interfaces
+use App\Repositories\Contracts\InscripcionRepositoryInterface;
+use App\Repositories\Contracts\PersonaRepositoryInterface;
+use App\Repositories\Contracts\OlimpistaRepositoryInterface;
+use App\Repositories\Contracts\TutorRepositoryInterface;
+
+// Implementaciones
+use App\Repositories\Eloquent\InscripcionRepository;
+use App\Repositories\Eloquent\PersonaRepository;
+use App\Repositories\Eloquent\OlimpistaRepository;
+use App\Repositories\Eloquent\TutorRepository;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -13,15 +25,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(
-            \App\Repositories\Contracts\TutorRepositoryInterface::class,
-            \App\Repositories\Eloquent\TutorRepository::class
-        );
-
-        $this->app->bind(
-            \App\Repositories\Contracts\OlimpistaRepositoryInterface::class,
-            \App\Repositories\Eloquent\OlimpistaRepository::class
-        );
+        $this->app->bind(InscripcionRepositoryInterface::class, InscripcionRepository::class);
+        $this->app->bind(PersonaRepositoryInterface::class, PersonaRepository::class);
+        $this->app->bind(OlimpistaRepositoryInterface::class, OlimpistaRepository::class);
+        $this->app->bind(TutorRepositoryInterface::class, TutorRepository::class);
     }
 
     /**

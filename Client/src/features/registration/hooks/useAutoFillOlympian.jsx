@@ -22,6 +22,7 @@ export const useAutoFillOlympian = (
       const idOlimpiada = JSON.parse(
         sessionStorage.getItem("OlympicData")
       ).idOlimpiada;
+
       const personData = await getPersonData({
         carnet_identidad: sessionStorage.getItem("CarnetIdentidadOlympian"),
         id_olimpiada: idOlimpiada,
