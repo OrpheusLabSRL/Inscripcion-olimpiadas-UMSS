@@ -93,13 +93,32 @@ export const useRegisterOlympian = () => {
 
   const onSubmit = async (data) => {
     try {
-      await getOlimpistaEnable(
+      const response = await getOlimpistaEnable(
         sessionStorage.getItem("CarnetIdentidadOlympian"),
         JSON.parse(sessionStorage.getItem("OlympicData")).idOlimpiada
       );
+
+      if (!response.data.success) {
+        if (response.data.message === "Olimpista no encontrado") {
+          // Olimpista no encontrado - continuar al registro
+          navigation("/register/olympian-area", data);
+          return;
+        }
+
+        swal("Error", response.data.message, "error");
+        return;
+      }
       navigation("/register/olympian-area", data);
     } catch (error) {
-      swal("Error", error.response.data.message, "error");
+      if (error.response?.data?.message === "Olimpista no encontrado") {
+        navigation("/register/olympian-area", data);
+        return;
+      }
+      swal(
+        "Error",
+        error.response?.data?.message || "Error de conexión al servidor",
+        "error"
+      );
     }
   };
 

@@ -1,0 +1,269 @@
+:root {
+  --azul-oscuro: #213448;
+  --azul-claro: #547792;
+  --blanco: #ffffff;
+  --gris-claro: #f5f5f5;
+  --texto-azul: #213448;
+}
+
+/* Carousel principal */
+.olympCarouselContainer {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.olympCarouselSlide {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.olympCarouselSlide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.olympCarouselSlide.active {
+  opacity: 1;
+  position: relative;
+}
+
+.olympCaption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  color: white;
+  text-shadow: 0 0 5px black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.olympCaption h3 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.olympCaption p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  max-width: 600px;
+}
+
+.olympCaptionButton {
+  background-color: var(--azul-claro);
+  color: var(--blanco);
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.olympCaptionButton:hover {
+  background-color: var(--blanco);
+  color: var(--azul-claro);
+}
+
+.olympCarouselControls {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+}
+
+.olympCarouselControls button {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 0 15px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.olympCarouselControls button:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Información de olimpiadas */
+.olympInfoSection {
+  padding: 2rem 4rem;
+  background-color: var(--gris-claro);
+  color: var(--texto-azul);
+  font-family: 'Poppins', sans-serif;
+}
+
+.olympInfoSection h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 28px;
+  position: relative;
+}
+
+.olympInfoSection h2::after {
+  content: '';
+  width: 100px;
+  height: 3px;
+  background-color: var(--azul-claro);
+  display: block;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.olympInfoBox {
+  padding: 1rem 2rem;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.olympInfoBox h3 {
+  margin-top: 1.5rem;
+  font-size: 20px;
+  padding-bottom: 4px;
+}
+
+/* Requisitos */
+.olympRequirementsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.olympRequirementsText,
+.olympRequirementsImage {
+  flex: 1 1 100%;
+}
+
+.olympRequirementsText h3 {
+  margin-top: 1.5rem;
+  font-size: 20px;
+  padding-bottom: 4px;
+}
+
+.olympRequirementsText ol li {
+  margin: 4px 0;
+}
+
+.olympRequirementsImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.olympRequirementsImage img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+  border-radius: 10px;
+}
+
+/* Pasos de inscripción */
+.olympRegisterSteps {
+  background-color: var(--gris-claro);
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.olympRegisterSteps h2 {
+  color: var(--texto-azul);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 28px;
+  position: relative;
+}
+
+.olympRegisterSteps h2::after {
+  content: '';
+  width: 100px;
+  height: 3px;
+  background-color: var(--azul-claro);
+  display: block;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.olympStepsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.olympStepCard {
+  display: flex;
+  align-items: stretch;
+  background-color: var(--blanco);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(29, 33, 218, 0.2);
+  overflow: hidden;
+}
+
+.olympStepNumber {
+  background-color: rgb(107, 159, 207);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  flex-shrink: 0;
+}
+
+.olympStepContent {
+  padding: 10px;
+  text-align: left;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.olympStepContent h3 {
+  margin: 0 0 0.5rem;
+  font-size: 20px;
+  padding-bottom: 2px;
+  color: var(--texto-azul);
+}
+
+.olympStepContent p {
+  margin: 0;
+  font-size: 16px;
+  color: var(--texto-azul);
+}
+
+/* Responsivo */
+@media (min-width: 768px) {
+  .olympRequirementsText,
+  .olympRequirementsImage {
+    flex: 1 1 45%;
+  }
+
+  .olympStepsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

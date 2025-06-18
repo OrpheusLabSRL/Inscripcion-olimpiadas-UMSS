@@ -22,6 +22,7 @@ export const useAutoFillOlympian = (
       const idOlimpiada = JSON.parse(
         sessionStorage.getItem("OlympicData")
       ).idOlimpiada;
+
       const personData = await getPersonData({
         carnet_identidad: sessionStorage.getItem("CarnetIdentidadOlympian"),
         id_olimpiada: idOlimpiada,
@@ -43,9 +44,9 @@ export const useAutoFillOlympian = (
       if (personData.data.data.fechaNacimiento) {
         setValue("FechaNacimiento", personData.data.data.fechaNacimiento);
         setValue("Departamento", personData.data.data.departamento);
-        const provincias =
+        const municipio =
           municipioPorDepartamento[personData.data.data.departamento] || [];
-        setMunicipiosFiltradas(provincias);
+        setMunicipiosFiltradas(municipio);
         setValue("Municipio", personData.data.data.municipio);
         const colegios =
           colegioPorMunicipio[personData.data.data.municipio] || [];
@@ -86,6 +87,6 @@ export const useAutoFillOlympian = (
     if (carnetIdentidad.length >= 7) {
       autofill();
     }
-  }, [carnetIdentidad, autofill]);
+  }, [carnetIdentidad]);
   return { autofill };
 };

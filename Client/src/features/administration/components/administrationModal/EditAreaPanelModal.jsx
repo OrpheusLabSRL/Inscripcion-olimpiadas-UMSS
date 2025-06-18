@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import MultiSelectDropdown from "../dropdown/MultiSelectDropdown.jsx";
-import "../../styles/Dropdown.css";
-import "../../styles/ModalGeneral.css";
+import "../../Styles/Dropdown.css";
+import "../../Styles/ModalGeneral.css";
 
 import {
   getOlimpiadas,

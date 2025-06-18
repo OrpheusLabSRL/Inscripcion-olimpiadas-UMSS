@@ -40,6 +40,8 @@ export const RegisterOlympian = () => {
     onSubmit,
   } = useRegisterOlympian();
 
+  useSessionStorageOlympian(watchedFields, location);
+
   const {
     municipiosFiltradas,
     colegiosFiltradas,
@@ -53,11 +55,9 @@ export const RegisterOlympian = () => {
     watchedFields.carnetIdentidad,
     setValue,
     setIsReadOnly,
-    setMunicipiosFiltradas,
-    setColegiosFiltradas
+    setColegiosFiltradas,
+    setMunicipiosFiltradas
   );
-
-  useSessionStorageOlympian(watchedFields, location);
 
   const titleOlimpian = useMemo(() => {
     const dataOlimpian = JSON.parse(sessionStorage.getItem("OlympicData"));

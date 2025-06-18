@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getOlimpiadas, getOlimpiadasConAreasCategorias } from "../../../../../api/Administration.api";
+import { getOlimpiadasWithAreasCategorias } from "../../../../../api/Administration.api";
 import "../../../Styles/Reports.css";
 
 const OlympiadsReportTable = () => {
@@ -9,45 +9,45 @@ const OlympiadsReportTable = () => {
 
   // Column visibility state
   const [visibleColumns, setVisibleColumns] = useState({
-    nombreOlimpiada: true,
+    olympiadName: true,
     version: true,
-    estadoOlimpiada: true,
-    fechaInicioOlimpiada: true,
-    fechaFinOlimpiada: true,
+    status: true,
+    startDate: true,
+    endDate: true,
     area: true,
-    categoria: true,
-    // Removed columns as per user request
-    // fechaReserva: true,
-    // horaInicio: true,
-    // horaFin: true,
-    // nombreAula: true,
+    category: true,
   });
 
   // Dropdown options for columns
   const columnOptions = [
-    { label: "Nombre Olimpiada", value: "nombreOlimpiada" },
+    { label: "Nombre Olimpiada", value: "olympiadName" },
     { label: "Versión", value: "version" },
-    { label: "Estado", value: "estadoOlimpiada" },
-    { label: "Fecha Inicio", value: "fechaInicioOlimpiada" },
-    { label: "Fecha Fin", value: "fechaFinOlimpiada" },
+    { label: "Estado", value: "status" },
+    { label: "Fecha Inicio", value: "startDate" },
+    { label: "Fecha Fin", value: "endDate" },
     { label: "Área", value: "area" },
-    { label: "Categoría", value: "categoria" },
-    // Removed columns as per user request
-    // { label: "Fecha Reserva", value: "fechaReserva" },
-    // { label: "Hora Inicio", value: "horaInicio" },
-    // { label: "Hora Fin", value: "horaFin" },
-    // { label: "Nombre Aula", value: "nombreAula" },
+    { label: "Categoría", value: "category" },
   ];
 
   // Row filter state and selected filter column
   const [rowFilter, setRowFilter] = useState("");
-  const [filterColumn, setFilterColumn] = useState("nombreOlimpiada");
+  const [filterColumn, setFilterColumn] = useState("olympiadName");
 
   useEffect(() => {
     const fetchOlympiads = async () => {
       try {
-        const response = await getOlimpiadas();
-        setOlympiads(response.data);
+        const response = await getOlimpiadasWithAreasCategorias();
+        // Map backend keys to frontend keys
+        const mappedData = response.data.map(item => ({
+          olympiadName: item.nombreOlimpiada,
+          version: item.version,
+          status: item.estadoOlimpiada,
+          startDate: item.fechaInicioOlimpiada,
+          endDate: item.fechaFinOlimpiada,
+          area: item.nombreArea,
+          category: item.nombreCategoria,
+        }));
+        setOlympiads(mappedData);
         setError(null);
       } catch (err) {
         setError("Error al obtener las olimpiadas.");
@@ -71,7 +71,7 @@ const OlympiadsReportTable = () => {
   // Filter rows based on rowFilter and selected filterColumn (case insensitive substring match)
   const filteredOlympiads = olympiads.filter((item) => {
     let value = item[filterColumn];
-    if (filterColumn === "estadoOlimpiada") {
+    if (filterColumn === "status") {
       // Convert boolean to string for filtering
       value = value ? "Activo" : "Finalizado";
     }
@@ -81,14 +81,14 @@ const OlympiadsReportTable = () => {
     return false;
   });
 
-  // Determine if Area or Categoria columns are visible
-  const areaCategoriaVisible = visibleColumns.area || visibleColumns.categoria;
+  // Determine if Area or Category columns are visible
+  const areaCategoryVisible = visibleColumns.area || visibleColumns.category;
 
-  // Group olympiads by unique fields if Area and Categoria columns are hidden
-  const groupedOlympiads = !areaCategoriaVisible
+  // Group olympiads by unique fields if Area and Category columns are hidden
+  const groupedOlympiads = !areaCategoryVisible
     ? Object.values(
         filteredOlympiads.reduce((acc, item) => {
-          const key = `${item.nombreOlimpiada}-${item.version}-${item.estadoOlimpiada}-${item.fechaInicioOlimpiada}-${item.fechaFinOlimpiada}`;
+          const key = `${item.olympiadName}-${item.version}-${item.status}-${item.startDate}-${item.endDate}`;
           if (!acc[key]) {
             acc[key] = { ...item };
           }
@@ -108,7 +108,6 @@ const OlympiadsReportTable = () => {
   return (
     <div className="olympiads-report">
       <div className="olympiads-report__header">
-        <h2 className="olympiads-report__title">Reporte de Olimpiadas</h2>
 
         <div className="olympiads-report__controls">
           <div className="filter-controls-wrapper">
@@ -170,43 +169,43 @@ const OlympiadsReportTable = () => {
         <table className="olympiads-report__table">
           <thead>
             <tr>
-              {visibleColumns.nombreOlimpiada && <th>Nombre Olimpiada</th>}
+              {visibleColumns.olympiadName && <th>Nombre Olimpiada</th>}
               {visibleColumns.version && <th>Versión</th>}
-              {visibleColumns.estadoOlimpiada && <th>Estado</th>}
-              {visibleColumns.fechaInicioOlimpiada && <th>Fecha Inicio</th>}
-              {visibleColumns.fechaFinOlimpiada && <th>Fecha Fin</th>}
+              {visibleColumns.status && <th>Estado</th>}
+              {visibleColumns.startDate && <th>Fecha Inicio</th>}
+              {visibleColumns.endDate && <th>Fecha Fin</th>}
               {visibleColumns.area && <th>Área</th>}
-              {visibleColumns.categoria && <th>Categoría</th>}
+              {visibleColumns.category && <th>Categoría</th>}
             </tr>
           </thead>
           <tbody>
             {groupedOlympiads.map((item, index) => (
               <tr key={index}>
-                {visibleColumns.nombreOlimpiada && (
-                  <td>{item.nombreOlimpiada}</td>
+                {visibleColumns.olympiadName && (
+                  <td>{item.olympiadName}</td>
                 )}
                 {visibleColumns.version && <td>{item.version}</td>}
-                {visibleColumns.estadoOlimpiada && (
+                {visibleColumns.status && (
                   <td>
                     <span
                       className={`olympiads-report__badge ${
-                        item.estadoOlimpiada
+                        item.status
                           ? "olympiads-report__badge--success"
                           : "olympiads-report__badge--danger"
                       }`}
                     >
-                      {item.estadoOlimpiada ? "Activo" : "Finalizado"}
+                      {item.status ? "Activo" : "Finalizado"}
                     </span>
                   </td>
                 )}
-                {visibleColumns.fechaInicioOlimpiada && (
-                  <td>{item.fechaInicioOlimpiada}</td>
+                {visibleColumns.startDate && (
+                  <td>{item.startDate}</td>
                 )}
-                {visibleColumns.fechaFinOlimpiada && (
-                  <td>{item.fechaFinOlimpiada}</td>
+                {visibleColumns.endDate && (
+                  <td>{item.endDate}</td>
                 )}
                 {visibleColumns.area && <td>{item.area || ""}</td>}
-                {visibleColumns.categoria && <td>{item.categoria || ""}</td>}
+                {visibleColumns.category && <td>{item.category || ""}</td>}
               </tr>
             ))}
           </tbody>

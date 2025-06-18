@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\Olimpista;
 use Illuminate\Support\Facades\Log;
+use App\Services\TutorService;
 
 class TutorController extends Controller
 {
@@ -233,26 +234,17 @@ class TutorController extends Controller
             ], 500);
         }
     }
+    protected $service;
+
+    public function __construct(TutorService $service)
+    {
+        $this->service = $service;
+    }
+
     public function getAllTutors()
     {
         try {
-            $tutores = \DB::table('tutores')
-                ->leftJoin('personas', 'tutores.idPersona', '=', 'personas.idPersona')
-                ->leftJoin('inscripciones', 'tutores.idPersona', '=', 'inscripciones.idTutorLegal')
-                ->leftJoin('olimpistas', 'inscripciones.idOlimpista', '=', 'olimpistas.idPersona')
-                ->leftJoin('personas as olimpista_persona', 'olimpistas.idPersona', '=', 'olimpista_persona.idPersona')
-                ->select(
-                    'personas.carnetIdentidad',
-                    'personas.nombre',
-                    'personas.apellido',
-                    'personas.correoElectronico',
-                    'tutores.tipoTutor',
-                    'tutores.telefono',
-                    'olimpista_persona.carnetIdentidad as carnetOlimpista',
-                    'olimpista_persona.nombre as nombreOlimpista',
-                    'olimpista_persona.apellido as apellidoOlimpista'
-                )
-                ->get();
+            $tutores = $this->service->getAllTutorsWithDetails();
 
             return response()->json([
                 'success' => true,
