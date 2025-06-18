@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent;
 
 use App\Repositories\Contracts\OlimpistaRepositoryInterface;
+use App\Models\Olimpista;
 use Illuminate\Support\Facades\DB;
 
 class OlimpistaRepository implements OlimpistaRepositoryInterface
@@ -28,5 +29,30 @@ class OlimpistaRepository implements OlimpistaRepositoryInterface
             )
             ->distinct()
             ->get();
+    }
+
+    public function actualizarOCrear(array $criterios, array $datos): Olimpista
+    {
+        return Olimpista::updateOrCreate($criterios, $datos);
+    }
+
+    public function buscarPorId(int $id): ?Olimpista
+    {
+        return Olimpista::find($id);
+    }
+
+    public function buscarPorPersona(int $idPersona): ?Olimpista
+    {
+        return Olimpista::where('idPersona', $idPersona)->first();
+    }
+
+    public function crear(array $datos): Olimpista
+    {
+        return Olimpista::create($datos);
+    }
+
+    public function actualizar(int $id, array $datos): bool
+    {
+        return Olimpista::where('idOlimpista', $id)->update($datos);
     }
 }
