@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import HeaderProp from "../../home_usuario/components/HeaderProp";
+import HeaderProp from "../../homeUser/components/HeaderProp";
 import "../Styles/ContactPage.css";
 import axios from "axios";
 

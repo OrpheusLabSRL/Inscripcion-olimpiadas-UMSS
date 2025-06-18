@@ -5,9 +5,8 @@ import {
   getAreasCategoriasPorOlimpiada,
 } from "../../api/Administration.api";
 import "../detallesOlimpiada/OlimpiadaDetallada.css";
-import HeaderProp from "../home_usuario/components/HeaderProp";
-import Footer from "../home_usuario/components/Footer";
-import { TutorForm } from "../registration/pages/TutorForm";
+import HeaderProp from "../homeUser/components/HeaderProp";
+import Footer from "../homeUser/components/Footer";
 import { GenericModal } from "../../components/modals/GenericModal"; // Ajusta el path si es diferente
 
 const OlimpiadaDetallada = () => {
@@ -107,11 +106,6 @@ const OlimpiadaDetallada = () => {
             ))}
           </div>
         )}
-
-        <div className="inscripcion">
-          <h2>Proceso de Inscripción</h2>
-          <TutorForm />
-        </div>
       </div>
 
       <GenericModal modalIsOpen={modalIsOpen} closeModal={closeModal}>

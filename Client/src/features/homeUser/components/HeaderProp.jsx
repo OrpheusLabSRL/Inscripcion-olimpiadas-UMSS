@@ -49,6 +49,9 @@ function HeaderProp() {
                   <li onClick={() => { navigate("/consultar-inscripcion"); closeMenu(); }}>
                     <i className="bi bi-clipboard-check"></i> Estado de Inscripción
                   </li>
+                  <li onClick={() => { navigate("/register/tutor-form"); closeMenu(); }}>
+                    <i className="bi bi-clipboard-check"></i> Continuar Inscripción
+                  </li>
                 </ul>
               )}
             </li>

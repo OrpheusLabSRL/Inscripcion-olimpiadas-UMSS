@@ -5,7 +5,7 @@ import Sidebar from "./components/sidebar/Sidebar";
 import "./App.css";
 import { RegisterTutor } from "./features/registration/pages/RegisterTutor";
 import { TutorForm } from "./features/registration/pages/TutorForm";
-import { MainHome } from "./features/home_usuario/pages/MainHome";
+import { MainHome } from "./features/homeUser/pages/MainHome";
 import { ListRegistered } from "./features/registration/pages/ListRegistered";
 import ManageArea from "./features/administration/pages/ManageArea";
 import ManageCategoria from "./features/administration/pages/ManageCategories";
