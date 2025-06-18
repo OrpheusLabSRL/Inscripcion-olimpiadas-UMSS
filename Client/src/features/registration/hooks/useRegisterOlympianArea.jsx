@@ -70,9 +70,14 @@ export const useRegisterOlympianArea = () => {
         );
         return;
       }
+
+      console.log("Hola antes del res");
       const resEnable = await getOlimpistaEnable(
-        sessionStorage.getItem("CarnetIdentidadOlympian")
+        sessionStorage.getItem("CarnetIdentidadOlympian"),
+        JSON.parse(sessionStorage.getItem("OlympicData")).idOlimpiada
       );
+
+      console.log("res", resEnable);
       if (
         resEnable?.data?.data?.inscripciones_actuales == 1 &&
         data.AreaPrincipal &&
@@ -87,6 +92,10 @@ export const useRegisterOlympianArea = () => {
       }
       navigation("/register/tutor-legal", data);
     } catch (error) {
+      if (error.response?.data?.message === "Olimpista no encontrado") {
+        navigation("/register/tutor-legal", data);
+        return;
+      }
       console.log(error);
       swal("Error al registrar los datos");
     }
@@ -101,7 +110,7 @@ export const useRegisterOlympianArea = () => {
     setValue("AreaSecundaria", "");
     setValue("CategoriaSecundaria", "");
     setCategoriasInteres([]);
-    setCategoriasInteresSecundaria(null);
+    setCategoriasInteresSecundaria([]);
   };
 
   const cancelInscription = async () => {

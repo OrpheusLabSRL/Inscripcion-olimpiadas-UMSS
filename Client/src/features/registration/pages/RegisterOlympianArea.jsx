@@ -46,7 +46,7 @@ export const RegisterOlympianArea = () => {
     const dataOlimpian = JSON.parse(sessionStorage.getItem("OlympicData"));
     return `${dataOlimpian.nombreOlimpiada} versión ${dataOlimpian.version}`;
   }, []);
-
+  
   return (
     <div className="container-form">
       <h1 className="title-register">{titleOlimpian}</h1>

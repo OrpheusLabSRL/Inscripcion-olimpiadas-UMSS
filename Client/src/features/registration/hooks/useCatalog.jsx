@@ -93,7 +93,6 @@ export const useCatalog = (watchedFields) => {
     }
 
     setValue(e.target.name, e.target.value);
-    console.log(e.target.value);
   };
   return {
     onChooseArea,
