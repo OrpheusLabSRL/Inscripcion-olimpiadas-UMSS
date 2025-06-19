@@ -40,23 +40,32 @@ import { useEffect } from "react";
 function App() {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
+  const [userPermissions, setUserPermissions] = useState([]);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 768) {
-        setIsOpen(false); // Collapse sidebar on mobile
+        setIsOpen(false);
       } else {
-        setIsOpen(true); // Expand sidebar on desktop
+        setIsOpen(true);
       }
     };
+
+    // Obtener permisos del usuario
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      const permissions = user.rol?.permisos?.map((p) => p.nombrePermiso) || [];
+      setUserPermissions(permissions);
+    }
 
     window.addEventListener("resize", handleResize);
     handleResize();
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [location.pathname]);
 
-  // Rutas donde NO mostrar sidebar
+  // Rutas donde NO mostrar sidebar (se mantiene igual)
   const hideSidebarRoutes = [
     "/",
     "/register/tutor-form",
@@ -77,6 +86,7 @@ function App() {
     location.pathname.startsWith("/cajero/");
 
   const showSidebar = !hideSidebar;
+
   return (
     <div className="app-container">
       <div
@@ -89,6 +99,7 @@ function App() {
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             admin={location.pathname.startsWith("/admin")}
+            userPermissions={userPermissions} // Pasamos los permisos al Sidebar
           />
         )}
 

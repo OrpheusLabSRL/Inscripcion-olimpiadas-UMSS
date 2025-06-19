@@ -61,14 +61,14 @@ const Unauthorized = () => {
 
         {/* Acciones principales */}
         <div className="action-buttons">
-          <button
+          {/*  <button
             onClick={handleGoBack}
             className="secondary-button"
             aria-label="Volver a la página anterior"
           >
             <ArrowLeft size={20} className="button-icon" />
             <span>Volver atrás</span>
-          </button>
+          </button>*/}
           <button
             onClick={handleGoHome}
             className="primary-button"
@@ -81,14 +81,14 @@ const Unauthorized = () => {
 
         {/* Soporte técnico */}
         <div className="support-section">
-          <button
+          {/*<button
             onClick={handleContactSupport}
             className="support-link"
             aria-label="Contactar a soporte técnico"
           >
             <Mail size={16} className="support-icon" />
             <span>Contactar soporte técnico</span>
-          </button>
+          </button>*/}
         </div>
       </div>
     </div>
