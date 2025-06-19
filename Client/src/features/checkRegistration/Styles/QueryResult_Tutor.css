@@ -1,17 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 :root {
-    --azul-oscuro: #213448;
-    --azul-claro: #547792;
-    --blanco: #ffffff;
-    --gris-claro: #f5f5f5;
+    --darkBlue: #213448;
+    --lightBlue: #547792;
+    --white: #ffffff;
+    --lightGray: #f5f5f5;
     --texto-azul: #213448;
 }
 
 .resultado-container {
     padding: 2rem;
     min-height: 100vh;
-    background-color: var(--azul-claro);
+    background-color: var(--lightBlue);
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
 }
@@ -19,7 +19,7 @@
 .resultado-content {
     max-width: 70%;
     margin: 0 auto;
-    background-color: var(--gris-claro);
+    background-color: var(--lightGray);
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -41,7 +41,7 @@
   content: '';
   width: 100px;
   height: 3px;
-  background-color: var(--azul-claro, #007bff); /* Usa tu variable si tienes */
+  background-color: var(--lightBlue, #007bff); /* Usa tu variable si tienes */
   display: block;
   margin: 8px auto 0;
   border-radius: 2px;
