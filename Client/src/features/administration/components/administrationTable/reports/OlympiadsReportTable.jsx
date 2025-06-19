@@ -62,11 +62,11 @@ const OlympiadsReportTable = () => {
 
   if (loading)
     return (
-      <div className="olympiads-report__status">
+      <div className="report__status">
         Cargando reporte de olimpiadas...
       </div>
     );
-  if (error) return <div className="olympiads-report__status">{error}</div>;
+  if (error) return <div className="report__status">{error}</div>;
 
   // Filter rows based on rowFilter and selected filterColumn (case insensitive substring match)
   const filteredOlympiads = olympiads.filter((item) => {
@@ -107,57 +107,44 @@ const OlympiadsReportTable = () => {
 
   return (
     <div className="olympiads-report">
-      <div className="olympiads-report__header">
-
-        <div className="olympiads-report__controls">
+      <div className="filter-controls">
           <div className="filter-controls-wrapper">
-            <div className="olympiads-report__filter-group">
-              <label>Filtrar por columna:</label>
+              <label className ="filter-label">
+                Filtrar por columna:
               <select
-                className="olympiads-report__filter-select"
+                className="filter-select"
                 value={filterColumn}
                 onChange={(e) => setFilterColumn(e.target.value)}
               >
                 {columnOptions.map((col) => (
-                  <option key={col.value} value={col.value}>
+                  <option key={col.value} value={col.value} className="filter-option">
                     {col.label}
                   </option>
                 ))}
               </select>
-            </div>
+            </label>
 
-            <div className="olympiads-report__filter-group">
-              <label>Valor filtro:</label>
+            
+            <label className="filter-label">
+              Valor filtro:
               <input
                 type="text"
-                className="olympiads-report__filter-input"
+                className="filter-input"
                 value={rowFilter}
                 onChange={(e) => setRowFilter(e.target.value)}
-                placeholder={`Buscar en ${
-                  columnOptions.find((c) => c.value === filterColumn)?.label || ""
-                }...`}
+                placeholder={`Buscar en ${columnOptions.find((c) => c.value === filterColumn)?.label || ""}...`}
               />
-            </div>
+            </label>
           </div>
-        </div>
 
         <div>
-          <span style={{ color: "#000000" }}>Columnas a mostrar:</span>
+          <span className="filter-label">Columnas a mostrar:</span>
           {columnOptions.map((col) => (
-            <label
-              key={col.value}
-              style={{
-                marginLeft: "1rem",
-                color: "#000000",
-                display: "inline-flex",
-                alignItems: "center",
-              }}
-            >
+            <label key={col.value} className="columns-to-show">
               <input
                 type="checkbox"
                 checked={visibleColumns[col.value]}
                 onChange={() => toggleColumn(col.value)}
-                style={{ marginRight: "0.25rem" }}
               />
               {col.label}
             </label>
@@ -165,8 +152,8 @@ const OlympiadsReportTable = () => {
         </div>
       </div>
 
-      <div className="olympiads-report__table-container">
-        <table className="olympiads-report__table">
+      <div className="report__table-container">
+        <table className="report__table">
           <thead>
             <tr>
               {visibleColumns.olympiadName && <th>Nombre Olimpiada</th>}

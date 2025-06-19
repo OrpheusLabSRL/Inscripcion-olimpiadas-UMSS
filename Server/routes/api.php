@@ -21,6 +21,7 @@ use App\Http\Controllers\BoletaPagoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\RolPermisoController;
 
 
 // Ruta protegida para obtener el usuario autenticado
@@ -59,6 +60,7 @@ Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::delete('/deleteOlimpiada/{id}', [OlimpiadaController::class, 'destroy']);
 Route::put('/editarOlimpiadas/{id}/estado', [OlimpiadaController::class, 'cambiarEstado']);
+Route::put('/editarOlimpiadas/{id}', [OlimpiadaController::class, 'update']);
 
 //Roles y Permisos
 Route::get('/roles', [RolController::class, 'index']);
@@ -66,6 +68,8 @@ Route::post('/roles', [RolController::class, 'store']);
 Route::post('/usuarios', [UsuarioController::class, 'store']);
 Route::get('/permisos', [PermisoController::class, 'index']);
 Route::get('/viewUsuarios', [UsuarioController::class, 'index']);
+Route::get('/getRolesPermisos', [RolPermisoController::class, 'index']);
+Route::put('/usuarios/{id}', [UsuarioController::class, 'update']);
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);

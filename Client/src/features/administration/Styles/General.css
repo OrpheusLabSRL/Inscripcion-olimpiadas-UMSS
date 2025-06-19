@@ -164,6 +164,51 @@ body,
   font-size: 0.9rem;
 }
 
+/* Estilos para el grupo de botones */
+.adminButtonGroup {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* Estilos para botones secundarios */
+.btnSecondary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.btnSecondary:hover {
+  background-color: #5a6268;
+}
+
+.btnSecondary .btnIcon {
+  font-size: 0.9rem;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+  .adminButtonGroup {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .btnSecondary,
+  .btnPrimary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* === Botón de Volver === */
 .btnBack {
   display: inline-flex;

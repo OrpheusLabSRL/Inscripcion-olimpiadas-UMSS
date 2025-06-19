@@ -668,6 +668,107 @@ body,
   color: #0f172a;
 }
 
+/* Estilos para el modal de roles y permisos */
+.rolesPermissionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.roleCard {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.roleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.roleTitle {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.roleStatus {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.roleStatus.active {
+  background-color: #e6f7ee;
+  color: #28a745;
+}
+
+.roleStatus.inactive {
+  background-color: #f8f9fa;
+  color: #6c757d;
+}
+
+.roleDescription {
+  margin: 0.5rem 0 1rem;
+  color: #6c757d;
+  font-size: 0.95rem;
+}
+
+.permissionsSection {
+  margin-top: 1rem;
+}
+
+.permissionsTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.75rem 0;
+  color: #495057;
+  font-size: 1rem;
+}
+
+.permissionsIcon {
+  color: #6c757d;
+}
+
+.permissionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.permissionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.permissionName {
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.permissionStatus {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+}
+
+.noPermissions {
+  color: #6c757d;
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+}
+
 /* ====== Empty State ====== */
 .adminEmptyState {
   padding: 3rem 2rem;

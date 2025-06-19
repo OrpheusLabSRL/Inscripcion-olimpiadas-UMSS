@@ -3,22 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\MailController;
+use App\Services\ContactoService;
 
 class ContactoController extends Controller
 {
     /**
-     * @var MailController
+     * @var ContactoService
      */
-    protected $mailController;
+    protected $contactoService;
 
     /**
      * Constructor
-     * @param MailController $mailController
+     * @param ContactoService $contactoService
      */
-    public function __construct(MailController $mailController)
+    public function __construct(ContactoService $contactoService)
     {
-        $this->mailController = $mailController;
+        $this->contactoService = $contactoService;
     }
 
     /**
@@ -28,6 +28,27 @@ class ContactoController extends Controller
      */
     public function enviarContacto(Request $request)
     {
-        return $this->mailController->enviarCorreoContacto($request);
+        $request->validate([
+            'nombre' => 'required|string',
+            'correo' => 'required|email',
+            'numero' => 'required|string',
+            'motivo' => 'required|string',
+            'descripcion' => 'required|string'
+        ]);
+
+        $datos = $request->only(['nombre', 'correo', 'numero', 'motivo', 'descripcion']);
+        $exito = $this->contactoService->enviarMensaje($datos);
+
+        if ($exito) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Mensaje enviado correctamente'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al enviar el mensaje'
+            ], 500);
+        }
     }
 } 
