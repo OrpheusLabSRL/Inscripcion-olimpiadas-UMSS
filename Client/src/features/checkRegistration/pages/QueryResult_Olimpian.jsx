@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import HeaderProp from "../../home_usuario/components/HeaderProp";
+import HeaderProp from "../../homeUser/components/HeaderProp";
 import "../Styles/QueryResult_Olimpian.css";
 
 const QueryResult_Olimpian = () => {

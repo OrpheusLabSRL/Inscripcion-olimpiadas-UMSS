@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import HeaderProp from "../../home_usuario/components/HeaderProp";
+import HeaderProp from "../../homeUser/components/HeaderProp";
 import "../Styles/ContactPage.css";
 import axios from "axios";
 
@@ -305,6 +305,7 @@ const ContactPage = () => {
 
             <div className="formButtons">
               <button type="submit" className="submitButton">
+                <i className="bi bi-send me-2"></i>
                 Enviar Mensaje
               </button>
             </div>

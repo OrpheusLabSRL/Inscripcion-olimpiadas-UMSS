@@ -5,7 +5,7 @@ import Sidebar from "./components/sidebar/Sidebar";
 import "./App.css";
 import { RegisterTutor } from "./features/registration/pages/RegisterTutor";
 import { TutorForm } from "./features/registration/pages/TutorForm";
-import { MainHome } from "./features/home_usuario/pages/MainHome";
+import { MainHome } from "./features/homeUser/pages/MainHome";
 import { ListRegistered } from "./features/registration/pages/ListRegistered";
 import ManageArea from "./features/administration/pages/ManageArea";
 import ManageCategoria from "./features/administration/pages/ManageCategories";
@@ -32,7 +32,7 @@ import RegisterExcel from "./features/registration/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registration/pages/RegisterChoose";
 import { OCRValidation } from "./features/registration/pages/OCRValidation";
 import { GenerateOrder } from "./features/registration/pages/GenerateOrder";
-import OlimpiadaDetallada from "./features/detallesOlimpiada/OlimpiadaDetallada";
+import OlimpiadaDetallada from "./features/detallesOlimpiada/pages/olympicDetail";
 import { Ticket } from "./features/Cashier/pages/Ticket";
 
 import { useEffect } from "react";

@@ -168,6 +168,35 @@
   gap: 10px;
 }
 
+.inscriptionButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.inscriptionButton {
+  background-color: var(--azulClaro);
+  color: var(--blanco);
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 30%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.inscriptionButton:hover {
+  background-color: var(--blanco);
+  color: var(--azul-claro);
+  box-shadow: 0 4px 12px rgba(7, 91, 129, 0.4); 
+}
+
 @media (max-width: 768px) {
   .container-modal {
     width: 95% !important;

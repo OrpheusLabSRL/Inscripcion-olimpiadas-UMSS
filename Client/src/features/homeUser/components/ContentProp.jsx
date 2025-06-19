@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "../nuevo_inicio/home.css";
-import foto from "../../assets/images/estudiantesConCertificado.jpg";
-import { getOlimpiadas } from "../../api/Administration.api";
+import "../Styles/ContentProp.css";
+import foto from "../../../assets/images/estudiantesConCertificado.jpg";
+import { getOlimpiadas } from "../../../api/Administration.api";
 import { useNavigate } from "react-router-dom";
-import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
+import { PrimaryButton } from "../../../components/Buttons/PrimaryButton";
 import { CiSearch } from "react-icons/ci";
 
-const Home = () => {
+const ContentProp = () => {
   const [current, setCurrent] = useState(0);
   const [olympiads, setOlympiads] = useState([]);
   const navigate = useNavigate();
@@ -41,17 +41,15 @@ const Home = () => {
     const today = new Date();
     const startDate = new Date(olympiad.fechaInicioOlimpiada);
     const endDate = new Date(olympiad.fechaFinOlimpiada);
-
-    // Check if the current date is before the start date or after the end date
     return today < startDate || today > endDate;
   };
 
   return (
     <div>
-      <div className="carousel-container">
+      <div className="olympCarouselContainer">
         {olympiads.map((olympiad, index) => (
           <div
-            className={`carousel-slide ${index === current ? "active" : ""}`}
+            className={`olympCarouselSlide ${index === current ? "active" : ""}`}
             key={olympiad.idOlimpiada}
           >
             <img
@@ -61,7 +59,7 @@ const Home = () => {
               }
               alt={olympiad.nombreOlimpiada}
             />
-            <div className="caption">
+            <div className="olympCaption">
               <h3>{olympiad.nombreOlimpiada}</h3>
               <p>
                 <strong>Desde</strong>{" "}
@@ -90,7 +88,7 @@ const Home = () => {
               {isPendent(olympiad) ? (
                 <PrimaryButton
                   value="Proximamente"
-                  className="caption-button"
+                  className="olympCaptionButton"
                 />
               ) : (
                 <PrimaryButton
@@ -103,7 +101,7 @@ const Home = () => {
           </div>
         ))}
 
-        <div className="controls">
+        <div className="olympCarouselControls">
           <button
             onClick={() =>
               setCurrent((current - 1 + olympiads.length) % olympiads.length)
@@ -117,10 +115,10 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="info-section">
+      <div className="olympInfoSection">
         <h2>Bienvenido a la Olimpiada Científica Nacional San Simón</h2>
 
-        <div className="info-box">
+        <div className="olympInfoBox">
           <h3>Presentación</h3>
           <p>
             El Comité de la Olimpiadas Científica Nacional San Simón{" "}
@@ -129,8 +127,8 @@ const Home = () => {
             estudiantes del Sistema de Educación Regular a participar en las
             Olimpiadas O! SANSI.
           </p>
-          <div className="requisitos-container">
-            <div className="requisitos-texto">
+          <div className="olympRequirementsContainer">
+            <div className="olympRequirementsText">
               <h3>Requisitos</h3>
               <ol>
                 <li>
@@ -154,20 +152,21 @@ const Home = () => {
               </ol>
             </div>
 
-            <div className="requisitos-imagen">
+            <div className="olympRequirementsImage">
               <img src={foto} alt="Ilustración de requisitos" />
             </div>
           </div>
         </div>
       </div>
-      <div className="info-inscripcion">
+
+      <div className="olympRegisterSteps">
         <h2>Pasos para inscribirte</h2>
 
-        <div className="pasos-grid">
+        <div className="olympStepsGrid">
           {[...Array(10)].map((_, i) => (
-            <div className="pasos-inscripcion" key={i}>
-              <div className="numero">{i + 1}</div>
-              <div className="info-titulo">
+            <div className="olympStepCard" key={i}>
+              <div className="olympStepNumber">{i + 1}</div>
+              <div className="olympStepContent">
                 <h3>
                   <i
                     className={`bi ${
@@ -225,4 +224,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default ContentProp;

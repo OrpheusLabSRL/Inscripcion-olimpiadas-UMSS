@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Repositories\Eloquent;
-
 use App\Repositories\Contracts\TutorRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use App\Models\Tutor;
 
 class TutorRepository implements TutorRepositoryInterface
 {
@@ -32,4 +32,29 @@ public function getAllWithDetails()
         throw $e;
     }
 }
+
+public function actualizarOCrear(array $criterios, array $datos): Tutor
+    {
+        return Tutor::updateOrCreate($criterios, $datos);
+    }
+
+    public function buscarPorId(int $id): ?Tutor
+    {
+        return Tutor::find($id);
+    }
+
+    public function buscarPorPersona(int $idPersona): ?Tutor
+    {
+        return Tutor::where('idPersona', $idPersona)->first();
+    }
+
+    public function crear(array $datos): Tutor
+    {
+        return Tutor::create($datos);
+    }
+
+    public function actualizar(int $id, array $datos): bool
+    {
+        return Tutor::where('idTutor', $id)->update($datos);
+    }
 }

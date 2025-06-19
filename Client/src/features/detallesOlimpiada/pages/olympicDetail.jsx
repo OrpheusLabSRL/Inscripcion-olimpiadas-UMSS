@@ -1,14 +1,13 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   getOlimpiadas,
   getAreasCategoriasPorOlimpiada,
-} from "../../api/Administration.api";
-import "../detallesOlimpiada/OlimpiadaDetallada.css";
-import HeaderProp from "../home_usuario/components/HeaderProp";
-import Footer from "../home_usuario/components/Footer";
-import { TutorForm } from "../registration/pages/TutorForm";
-import { GenericModal } from "../../components/modals/GenericModal"; // Ajusta el path si es diferente
+} from "../../../api/Administration.api";
+import "../styles/olympicDetail.css";
+import HeaderProp from "../../homeUser/components/HeaderProp";
+import Footer from "../../homeUser/components/Footer";
+import { GenericModal } from "../../../components/modals/GenericModal"; // Ajusta el path si es diferente
 
 const OlimpiadaDetallada = () => {
   const { id } = useParams();
@@ -46,7 +45,11 @@ const OlimpiadaDetallada = () => {
     setAreaSeleccionada(area);
     setModalIsOpen(true);
   };
+  const navigate = useNavigate(); // 🔹 línea nueva
 
+  const handleInscriptionClick = () => {
+    navigate("/register");
+  };
   const closeModal = () => {
     setModalIsOpen(false);
     setAreaSeleccionada(null);
@@ -80,6 +83,13 @@ const OlimpiadaDetallada = () => {
           </div>
         </div>
 
+        <div className="inscriptionButtonContainer">
+          <button className="inscriptionButton" onClick={handleInscriptionClick}>
+            <i className="bi bi-pencil-square me-2"></i>
+            Inscribirse a esta olimpiada
+          </button>
+        </div>
+        
         <h2>Áreas</h2>
         {areasCategorias.length === 0 ? (
           <p>No hay áreas o categorías asociadas a esta olimpiada.</p>
@@ -107,11 +117,6 @@ const OlimpiadaDetallada = () => {
             ))}
           </div>
         )}
-
-        <div className="inscripcion">
-          <h2>Proceso de Inscripción</h2>
-          <TutorForm />
-        </div>
       </div>
 
       <GenericModal modalIsOpen={modalIsOpen} closeModal={closeModal}>

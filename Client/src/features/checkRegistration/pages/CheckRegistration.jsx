@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import HeaderProp from "../../home_usuario/components/HeaderProp";
+import HeaderProp from "../../homeUser/components/HeaderProp";
 import "../Styles/CheckRegistration.css";
 import imagen from "../../../assets/images/estadoInscripcion.png"
 

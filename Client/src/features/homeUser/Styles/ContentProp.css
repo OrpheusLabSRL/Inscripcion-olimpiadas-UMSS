@@ -6,17 +6,17 @@
   --texto-azul: #213448;
 }
 
-
-.carousel-container {
+/* Carousel principal */
+.olympCarouselContainer {
   position: relative;
   width: 100%;
   height: 500px;
-  margin: 0px auto 0;
+  margin: 0 auto;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
-.carousel-slide {
+.olympCarouselSlide {
   opacity: 0;
   transition: opacity 1s ease-in-out;
   position: absolute;
@@ -24,19 +24,19 @@
   height: 100%;
 }
 
-.carousel-slide img {
+.olympCarouselSlide img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ajusta la imagen sin deformarla */
+  object-fit: cover;
   display: block;
 }
 
-.carousel-slide.active {
+.olympCarouselSlide.active {
   opacity: 1;
   position: relative;
 }
 
-.caption {
+.olympCaption {
   position: absolute;
   top: 0;
   left: 0;
@@ -46,25 +46,25 @@
   text-shadow: 0 0 5px black;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* centrar vertical */
-  align-items: center;     /* centrar horizontal */
+  justify-content: center;
+  align-items: center;
   text-align: center;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.3); /* opcional: fondo oscuro translúcido */
+  background: rgba(0, 0, 0, 0.3);
 }
 
-.caption h3 {
+.olympCaption h3 {
   font-size: 2rem;
   margin-bottom: 10px;
 }
 
-.caption p {
+.olympCaption p {
   font-size: 1.2rem;
   margin-bottom: 20px;
   max-width: 600px;
 }
 
-.caption-button {
+.olympCaptionButton {
   background-color: var(--azul-claro);
   color: var(--blanco);
   border: none;
@@ -76,13 +76,12 @@
   transition: background-color 0.3s;
 }
 
-.caption-button:hover {
+.olympCaptionButton:hover {
   background-color: var(--blanco);
   color: var(--azul-claro);
 }
 
-
-.controls {
+.olympCarouselControls {
   position: absolute;
   top: 50%;
   width: 100%;
@@ -91,7 +90,7 @@
   transform: translateY(-50%);
 }
 
-.controls button {
+.olympCarouselControls button {
   background-color: rgba(0, 0, 0, 0.4);
   border: none;
   color: white;
@@ -101,134 +100,128 @@
   transition: background 0.3s;
 }
 
-.controls button:hover {
+.olympCarouselControls button:hover {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-/*Seccion de informacion*/
-
-.info-section {
-  padding: 2rem 4rem ;
+/* Información de olimpiadas */
+.olympInfoSection {
+  padding: 2rem 4rem;
   background-color: var(--gris-claro);
-  color: #213448;
+  color: var(--texto-azul);
   font-family: 'Poppins', sans-serif;
 }
 
-.info-section h2 {
-  color: var(--texto-azul);
+.olympInfoSection h2 {
   text-align: center;
   margin-bottom: 2rem;
   font-weight: 600;
   font-size: 28px;
   position: relative;
-  font-family: 'Poppins', sans-serif;
 }
 
-.info-section h2::after {
+.olympInfoSection h2::after {
   content: '';
   width: 100px;
   height: 3px;
-  background-color: var(--azul-claro, #007bff);
+  background-color: var(--azul-claro);
   display: block;
   margin: 8px auto 0;
   border-radius: 2px;
 }
 
-.info-box{
+.olympInfoBox {
   padding: 1rem 2rem;
-  color: var(--texto-azul);
-    font-size: 18px;
-    line-height: 1.6;
+  font-size: 18px;
+  line-height: 1.6;
 }
 
-.info-box h3 {
+.olympInfoBox h3 {
   margin-top: 1.5rem;
   font-size: 20px;
   padding-bottom: 4px;
 }
 
-.requisitos-container {
+/* Requisitos */
+.olympRequirementsContainer {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 20px;
 }
 
-.requisitos-texto,
-.requisitos-imagen {
+.olympRequirementsText,
+.olympRequirementsImage {
   flex: 1 1 100%;
 }
 
-.requisitos-texto h3 {
+.olympRequirementsText h3 {
   margin-top: 1.5rem;
   font-size: 20px;
   padding-bottom: 4px;
 }
-.requisitos-texto ol li{
-  margin: 4px 0px;
+
+.olympRequirementsText ol li {
+  margin: 4px 0;
 }
-.requisitos-imagen {
+
+.olympRequirementsImage {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.requisitos-imagen img {
+
+.olympRequirementsImage img {
   max-width: 100%;
   height: auto;
   display: block;
-  margin: auto auto;
+  margin: auto;
   border-radius: 10px;
 }
 
-/* Sección de inscripción */
-.info-inscripcion {
+/* Pasos de inscripción */
+.olympRegisterSteps {
   background-color: var(--gris-claro);
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.info-inscripcion h2 {
+.olympRegisterSteps h2 {
   color: var(--texto-azul);
   text-align: center;
   margin-bottom: 2rem;
   font-weight: 600;
   font-size: 28px;
   position: relative;
-  font-family: 'Poppins', sans-serif;
 }
 
-.info-inscripcion h2::after {
+.olympRegisterSteps h2::after {
   content: '';
   width: 100px;
   height: 3px;
-  background-color: var(--azul-claro, #007bff);
+  background-color: var(--azul-claro);
   display: block;
   margin: 8px auto 0;
   border-radius: 2px;
 }
 
-/* Grid responsivo para los pasos */
-.pasos-grid {
+.olympStepsGrid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
 }
 
-/* Tarjeta de paso individual */
-.pasos-inscripcion {
+.olympStepCard {
   display: flex;
   align-items: stretch;
-  width: 100%;
-  background-color: #ffffff;
+  background-color: var(--blanco);
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(29, 33, 218, 0.2);
   overflow: hidden;
 }
 
-/* Número del paso */
-.numero {
+.olympStepNumber {
   background-color: rgb(107, 159, 207);
   color: white;
   font-size: 1.1rem;
@@ -241,8 +234,7 @@
   flex-shrink: 0;
 }
 
-/* Información del paso */
-.info-titulo {
+.olympStepContent {
   padding: 10px;
   text-align: left;
   flex: 1;
@@ -251,28 +243,27 @@
   justify-content: center;
 }
 
-.info-titulo h3 {
+.olympStepContent h3 {
   margin: 0 0 0.5rem;
   font-size: 20px;
   padding-bottom: 2px;
-    color: var(--texto-azul);
+  color: var(--texto-azul);
 }
 
-.info-titulo p{
-  margin: 0px;
+.olympStepContent p {
+  margin: 0;
   font-size: 16px;
   color: var(--texto-azul);
-
 }
 
-/* Para pantallas medianas o grandes */
+/* Responsivo */
 @media (min-width: 768px) {
-  .requisitos-texto,
-  .requisitos-imagen {
+  .olympRequirementsText,
+  .olympRequirementsImage {
     flex: 1 1 45%;
   }
 
-  .pasos-grid {
+  .olympStepsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
