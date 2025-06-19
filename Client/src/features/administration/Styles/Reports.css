@@ -502,19 +502,19 @@
     gap: 0.5rem;
   }
 
-  .olympiads-report__controls {
+  .report__controls {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
   }
 
-  .olympiads-report__filter-group {
+  .report__filter-group {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .olympiads-report__filter-select,
-  .olympiads-report__filter-input {
+  .report__filter-select,
+  .report__filter-input {
     width: 100%;
   }
 
@@ -525,7 +525,7 @@
   }
 
   /* Stack filter controls and column selectors vertically */
-  .olympiads-report__columns-selector {
+  .report__columns-selector {
     flex-direction: column;
     align-items: flex-start;
   }
