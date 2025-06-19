@@ -26,6 +26,7 @@ export const RegisterTutorOptional = () => {
     area,
     setValue,
     backPage,
+    clearErrors,
   } = useRegisterTutorOptional();
 
   const namesSessionElements =
@@ -51,7 +52,8 @@ export const RegisterTutorOptional = () => {
     watchedFields.carnetIdentidad,
     setValue,
     namesSessionElements,
-    setIsReadOnly
+    setIsReadOnly,
+    clearErrors
   );
 
   return (

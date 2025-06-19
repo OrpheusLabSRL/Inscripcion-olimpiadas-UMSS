@@ -23,6 +23,7 @@ export const useRegisterOlympian = () => {
     formState: { errors },
     watch,
     setValue,
+    clearErrors,
   } = useForm({
     defaultValues: {
       Nombre: sessionStorage.getItem("NombreOlympian") || "",
@@ -60,8 +61,8 @@ export const useRegisterOlympian = () => {
     setValue("Municipio", "");
     setValue("Colegio", "");
     setValue("Curso", "");
-
     setIsReadOnly({});
+    clearErrors();
   };
 
   const cancelInscription = async () => {
@@ -137,5 +138,6 @@ export const useRegisterOlympian = () => {
     cleanFlieds,
     cancelInscription,
     onSubmit,
+    clearErrors,
   };
 };

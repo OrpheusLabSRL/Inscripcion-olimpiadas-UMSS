@@ -15,6 +15,7 @@ export const useRegisterTutorOptional = () => {
     formState: { errors },
     watch,
     setValue,
+    clearErrors,
   } = useForm({
     defaultValues: {
       Nombre:
@@ -65,6 +66,7 @@ export const useRegisterTutorOptional = () => {
     setValue("Ci", "");
 
     setIsReadOnly({});
+    clearErrors();
   };
 
   const backPage = () => {
@@ -100,5 +102,6 @@ export const useRegisterTutorOptional = () => {
     area,
     setValue,
     backPage,
+    clearErrors,
   };
 };

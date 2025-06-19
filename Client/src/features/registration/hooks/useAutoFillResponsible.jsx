@@ -5,7 +5,8 @@ export const useAutoFillResponsible = (
   carnetIdentidad,
   setValue,
   setIsReadOnly,
-  setIsTutorResponsible
+  setIsTutorResponsible,
+  clearErrors
 ) => {
   const autofill = useCallback(async () => {
     try {
@@ -29,6 +30,7 @@ export const useAutoFillResponsible = (
           Apellido: true,
           Email: true,
         }));
+        clearErrors(["Ci", "Nombre", "Apellido", "Email"]);
       }
 
       if (personData.data.data.tipoTutor) {
@@ -40,6 +42,7 @@ export const useAutoFillResponsible = (
           Tipo_Tutor: true,
           Numero_Celular: true,
         }));
+        clearErrors(["Ci", "Tipo_Tutor", "Numero_Celular"]);
       }
     } catch (error) {
       console.log(error);

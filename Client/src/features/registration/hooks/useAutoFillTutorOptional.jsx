@@ -8,7 +8,8 @@ export const useAutoFillTutorOptional = (
   carnetIdentidad,
   setValue,
   namesSessionElements,
-  setIsReadOnly
+  setIsReadOnly,
+  clearErrors
 ) => {
   const autofill = useCallback(async () => {
     try {
@@ -31,6 +32,7 @@ export const useAutoFillTutorOptional = (
           Apellido: true,
           Email: true,
         }));
+        clearErrors(["Ci", "Nombre", "Apellido", "Email"]);
       }
 
       if (personData.data.data.telefono) {
@@ -39,6 +41,7 @@ export const useAutoFillTutorOptional = (
           ...prev,
           Numero_Celular: true,
         }));
+        clearErrors(["Numero_Celular"]);
       }
     } catch (error) {
       const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
@@ -60,6 +63,7 @@ export const useAutoFillTutorOptional = (
           Email: true,
           Numero_Celular: true,
         }));
+        clearErrors(["Ci", "Nombre", "Apellido", "Email", "Numero_Celular"]);
       } else if (ciProfesor == ciOlympian) {
         setValue("Nombre", sessionStorage.getItem("NombreOlympian"));
         setValue("Apellido", sessionStorage.getItem("ApellidoOlympian"));
@@ -71,6 +75,7 @@ export const useAutoFillTutorOptional = (
           Apellido: true,
           Email: true,
         }));
+        clearErrors(["Ci", "Nombre", "Apellido", "Email"]);
       }
     }
   }, [setIsReadOnly, setValue, namesSessionElements]);
