@@ -107,27 +107,27 @@ const TutorsReportTable = () => {
 
   return (
     <div className="tutors-report">
-      <div className="tutors-filter-controls">
-        <div className="tutors-filter-controls-wrapper">
-          <label className="tutors-filter-label">
+      <div className="filter-controls">
+        <div className="filter-controls-wrapper">
+          <label className="filter-label">
             Filtrar por columna:
             <select
               value={filterColumn}
               onChange={(e) => setFilterColumn(e.target.value)}
-              className="tutors-filter-select"
+              className="filter-select"
             >
               {columnOptions.map((col) => (
                 <option
                   key={col.value}
                   value={col.value}
-                  className="tutors-filter-option"
+                  className="filter-option"
                 >
                   {col.label}
                 </option>
               ))}
             </select>
           </label>
-          <label className="tutors-filter-label">
+          <label className="filter-label">
             Valor filtro:
             <input
               type="text"
@@ -136,14 +136,14 @@ const TutorsReportTable = () => {
               placeholder={`Buscar en ${
                 columnOptions.find((c) => c.value === filterColumn)?.label || ""
               }...`}
-              className="tutors-filter-input"
+              className="filter-input"
             />
           </label>
         </div>
         <div>
-          <span className="tutors-filter-label">Columnas a mostrar:</span>
+          <span className="filter-label">Columnas a mostrar:</span>
           {columnOptions.map((col) => (
-            <label key={col.value} className="tutors-columns-to-show">
+            <label key={col.value} className="columns-to-show">
               <input
                 type="checkbox"
                 checked={visibleColumns[col.value]}
