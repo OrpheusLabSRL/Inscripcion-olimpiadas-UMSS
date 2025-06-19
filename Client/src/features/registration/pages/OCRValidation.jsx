@@ -50,27 +50,26 @@ export const OCRValidation = () => {
   }, []);
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
     setOcrResult("");
     setControlBoleta(null);
     setBoletaExists(null);
     setMontoTotal(null);
+
+    if (selectedFile) {
+      processImage(selectedFile);
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!file) {
-      alert("Por favor, seleccione un archivo para procesar.");
-      return;
-    }
-
+  const processImage = async (imageFile) => {
     setProcessing(true);
     setOcrResult("");
     setControlBoleta(null);
     setBoletaExists(null);
 
     try {
-      const { data } = await Tesseract.recognize(file, "spa", {
+      const { data } = await Tesseract.recognize(imageFile, "spa", {
         logger: (m) => {},
       });
       const text = data.text;
@@ -81,6 +80,7 @@ export const OCRValidation = () => {
       setControlBoleta(control);
       if (!control) {
         console.log("No se encontró el número de control en el texto extraído.");
+        setBoletaExists(false);
       }
 
       if (control) {
@@ -95,6 +95,15 @@ export const OCRValidation = () => {
     } finally {
       setProcessing(false);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!file) {
+      alert("Por favor, seleccione un archivo para procesar.");
+      return;
+    }
+    await processImage(file);
   };
 
   const handleBack = () => {
@@ -186,8 +195,8 @@ export const OCRValidation = () => {
             {boletaExists
               ? boletaPaid
                 ? "La boleta ya fue pagada."
-                : "La boleta existe en la base de datos."
-              : "La boleta NO existe en la base de datos."}
+                : "La boleta se verifico con exito y esta lista para que confirme el pago."
+              : "La boleta que usted trata de verificar no existe."}
           </div>
         )}
 
