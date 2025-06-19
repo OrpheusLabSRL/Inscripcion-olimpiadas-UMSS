@@ -65,7 +65,7 @@
 }
 
 .olympCaptionButton {
-background-color: var(--lightBlue);
+  background-color: var(--lightBlue);
   color: var(--white);
   padding: 6px 16px;
   border: none;
@@ -79,16 +79,15 @@ background-color: var(--lightBlue);
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s ease;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   text-align: center;
 }
 
 .olympCaptionButton:hover {
-    background-color: var(--white);
+  background-color: var(--white);
   color: var(--lightBlue);
   box-shadow: 0 4px 12px rgba(7, 91, 129, 0.4);
 }
-
 
 .olympCarouselControls {
   position: absolute;
@@ -118,7 +117,7 @@ background-color: var(--lightBlue);
   padding: 2rem 4rem;
   background-color: var(--lightGray);
   color: var(--texto-azul);
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .olympInfoSection h2 {
@@ -130,7 +129,7 @@ background-color: var(--lightBlue);
 }
 
 .olympInfoSection h2::after {
-  content: '';
+  content: "";
   width: 100px;
   height: 3px;
   background-color: var(--lightBlue);
@@ -206,7 +205,7 @@ background-color: var(--lightBlue);
 }
 
 .olympRegisterSteps h2::after {
-  content: '';
+  content: "";
   width: 100px;
   height: 3px;
   background-color: var(--lightBlue);
