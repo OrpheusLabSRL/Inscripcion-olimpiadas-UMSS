@@ -305,6 +305,7 @@ const ContactPage = () => {
 
             <div className="formButtons">
               <button type="submit" className="submitButton">
+                <i className="bi bi-send me-2"></i>
                 Enviar Mensaje
               </button>
             </div>

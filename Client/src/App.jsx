@@ -32,7 +32,7 @@ import RegisterExcel from "./features/registration/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registration/pages/RegisterChoose";
 import { OCRValidation } from "./features/registration/pages/OCRValidation";
 import { GenerateOrder } from "./features/registration/pages/GenerateOrder";
-import OlimpiadaDetallada from "./features/detallesOlimpiada/OlimpiadaDetallada";
+import OlimpiadaDetallada from "./features/detallesOlimpiada/pages/olympicDetail";
 import { Ticket } from "./features/Cashier/pages/Ticket";
 
 import { useEffect } from "react";
