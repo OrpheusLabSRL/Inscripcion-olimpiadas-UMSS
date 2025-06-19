@@ -2,10 +2,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
 :root {
-  --azulOscuro: #213448;
-  --azulClaro: #547792;
-  --blanco: #ffffff;
-  --grisClaro: #f5f5f5;
+  --darkBlue: #213448;
+  --lightBlue: #547792;
+  --white: #ffffff;
+  --lightGray: #f5f5f5;
   --textoAzul: #213448;
 }
 
@@ -13,14 +13,14 @@
   display: flex;
   flex-wrap: wrap;
   min-height: 100vh;
-  background-color: var(--blanco);
+  background-color: var(--white);
   font-family: "Poppins", sans-serif;
 }
 
 .continueInscriptionImageSide {
   flex: 1;
   min-width: 300px;
-  background-color: var(--azulOscuro);
+  background-color: var(--darkBlue);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,7 +38,7 @@
   align-items: center;
   justify-content: center; */
   padding: 2.5rem;
-  background-color: var(--grisClaro);
+  background-color: var(--lightGray);
 }
 
 .continueInscriptionTitle {
@@ -56,7 +56,7 @@
   content: "";
   width: 100px;
   height: 3px;
-  background-color: var(--azulClaro);
+  background-color: var(--lightBlue);
   display: block;
   margin: 8px auto 0;
   border-radius: 2px;
@@ -112,7 +112,7 @@ select:focus {
 }
 
 .continueInscriptionSubmitButton {
-  background-color: var(--azulClaro);
+  background-color: var(--lightBlue);
   color: white;
   padding: 10px;
   border: none;
@@ -129,7 +129,9 @@ select:focus {
 }
 
 .continueInscriptionSubmitButton:hover {
-  background-color: #0285c7;
+  background-color: var(--white);
+  color: var(--lightBlue);
+  box-shadow: 0 4px 12px rgba(7, 91, 129, 0.4);
 }
 
 @media (max-width: 768px) {
