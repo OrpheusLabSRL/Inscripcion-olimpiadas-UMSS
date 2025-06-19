@@ -1,5 +1,5 @@
 import React from "react";
-import { FiX, FiKey, FiShield } from "react-icons/fi";
+import { FiX, FiKey, FiShield, FiUser, FiMail, FiAtSign } from "react-icons/fi";
 import "../../Styles/ModalGeneral.css";
 
 const PermisosModal = ({
@@ -8,6 +8,8 @@ const PermisosModal = ({
   permisos,
   nombreRol,
   nombreUsuario,
+  nombreCompleto,
+  correo,
 }) => {
   if (!isOpen) return null;
 
@@ -28,21 +30,29 @@ const PermisosModal = ({
         </button>
 
         <div className="adminModalHeader">
-          <h3 className="adminModalTitle">
-            Permisos de{" "}
-            <span className="highlight">{nombreUsuario || "usuario"}</span>
-          </h3>
+          <h3 className="adminModalTitle">Permisos de usuario</h3>
         </div>
 
-        <p className="adminModalSubtitle">
-          <FiShield
-            size={16}
-            style={{ marginRight: "6px", verticalAlign: "middle" }}
-          />
-          Rol: <strong>{nombreRol}</strong>
-        </p>
-
         <div className="adminModalBody">
+          <div className="adminUserDetails">
+            <p className="adminModalSubtitle">
+              <FiAtSign size={16} style={{ marginRight: "6px" }} />
+              Usuario: <strong>{nombreUsuario || "—"}</strong>
+            </p>
+            <p className="adminModalSubtitle">
+              <FiUser size={16} style={{ marginRight: "6px" }} />
+              Nombre completo: <strong>{nombreCompleto || "—"}</strong>
+            </p>
+            <p className="adminModalSubtitle">
+              <FiMail size={16} style={{ marginRight: "6px" }} />
+              Correo: <strong>{correo || "—"}</strong>
+            </p>
+            <p className="adminModalSubtitle">
+              <FiShield size={16} style={{ marginRight: "6px" }} />
+              Rol: <strong>{nombreRol || "Sin rol"}</strong>
+            </p>
+          </div>
+
           {permisos.length === 0 ? (
             <div className="adminEmptyState">
               <FiKey size={48} className="emptyStateIcon" />

@@ -13,7 +13,7 @@ class UsuarioController extends Controller
     public function store(Request $request)
 {
     $request->validate([
-        'nombre' => 'required|string|max:50',
+        'nombre' => 'required|string|max:100',
         'email' => 'required|email|unique:usuarios,email',
         'password' => 'required|string|min:6',
         'idRol' => 'required|exists:roles,idRol'
@@ -58,7 +58,7 @@ class UsuarioController extends Controller
 
         $validator = Validator::make($request->all(), [
             'idRol' => 'sometimes|exists:roles,idRol',
-            'nombreUsuario' => 'sometimes|string|max:50|unique:usuarios,nombreUsuario,'.$usuario->idUsuario.',idUsuario',
+            'nombreUsuario' => 'sometimes|string|max:60|unique:usuarios,nombreUsuario,'.$usuario->idUsuario.',idUsuario',
             'nombre' => 'sometimes|string|max:100',
             'email' => 'sometimes|email|unique:usuarios,email,'.$usuario->idUsuario.',idUsuario',
             'password' => 'sometimes|string|min:8',

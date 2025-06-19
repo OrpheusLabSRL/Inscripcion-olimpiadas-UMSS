@@ -13,7 +13,8 @@ import {
   FaToggleOff,
 } from "react-icons/fa";
 import { CiCircleInfo } from "react-icons/ci";
-import PermisosModal from "../administrationModal/ViewPermitsModal";
+import PermisosModal from "../administrationModal/ViewUserModal";
+import EditUserModal from "../administrationModal/EditUserModal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import "../../Styles/Tables.css";
@@ -25,6 +26,8 @@ const UsersTable = ({ refresh }) => {
   const [loading, setLoading] = useState(true);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+  const [modalEditarAbierto, setModalEditarAbierto] = useState(false);
+  const [usuarioParaEditar, setUsuarioParaEditar] = useState(null);
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -48,9 +51,22 @@ const UsersTable = ({ refresh }) => {
     fetchUsuarios();
   }, [refresh]);
 
+  const actualizarUsuarioEnLista = (usuarioActualizado) => {
+    setUsuarios((prev) =>
+      prev.map((u) =>
+        u.idUsuario === usuarioActualizado.idUsuario ? usuarioActualizado : u
+      )
+    );
+  };
+
   const verPermisos = (usuario) => {
     setUsuarioSeleccionado(usuario);
     setModalAbierto(true);
+  };
+
+  const editarUsuario = (usuario) => {
+    setUsuarioParaEditar(usuario);
+    setModalEditarAbierto(true);
   };
 
   const toggleEstado = async (usuario) => {
@@ -150,7 +166,6 @@ const UsersTable = ({ refresh }) => {
         <table className="adminTable">
           <thead>
             <tr className="tableUtilHeader">
-              <th>Usuario</th>
               <th>Nombre</th>
               <th>Email</th>
               <th>Rol</th>
@@ -169,8 +184,7 @@ const UsersTable = ({ refresh }) => {
             ) : usuarios.length > 0 ? (
               usuarios.map((usuario) => (
                 <tr key={usuario.idUsuario} className="adminTableRow">
-                  <td className="tableUtilTextLeft">{usuario.nombreUsuario}</td>
-                  <td>{usuario.nombre}</td>
+                  <td className="tableUtilTextLeft">{usuario.nombre}</td>
                   <td>{usuario.email}</td>
                   <td>{usuario.rol?.nombreRol || "Sin rol"}</td>
                   <td className="tableUtilTextCenter">
@@ -205,7 +219,7 @@ const UsersTable = ({ refresh }) => {
                       <button
                         className="actionButton editButton"
                         title="Editar usuario"
-                        disabled
+                        onClick={() => editarUsuario(usuario)}
                       >
                         <FaEdit />
                       </button>
@@ -237,6 +251,15 @@ const UsersTable = ({ refresh }) => {
         permisos={usuarioSeleccionado?.rol?.permisos || []}
         nombreRol={usuarioSeleccionado?.rol?.nombreRol || "Sin rol"}
         nombreUsuario={usuarioSeleccionado?.nombreUsuario || ""}
+        nombreCompleto={usuarioSeleccionado?.nombre || ""}
+        correo={usuarioSeleccionado?.email || ""}
+      />
+
+      <EditUserModal
+        isOpen={modalEditarAbierto}
+        onClose={() => setModalEditarAbierto(false)}
+        onUsuarioActualizado={actualizarUsuarioEnLista}
+        usuario={usuarioParaEditar}
       />
     </div>
   );

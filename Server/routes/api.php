@@ -69,6 +69,7 @@ Route::post('/usuarios', [UsuarioController::class, 'store']);
 Route::get('/permisos', [PermisoController::class, 'index']);
 Route::get('/viewUsuarios', [UsuarioController::class, 'index']);
 Route::get('/getRolesPermisos', [RolPermisoController::class, 'index']);
+Route::put('/usuarios/{id}', [UsuarioController::class, 'update']);
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);

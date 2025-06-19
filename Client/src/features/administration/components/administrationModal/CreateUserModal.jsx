@@ -8,8 +8,8 @@ import withReactContent from "sweetalert2-react-content";
 import {
   getRoles,
   getPermisos,
-  setRol,
   setUser,
+  getUsuarios, // Importamos la función getUsuarios
 } from "../../../../api/Administration.api";
 
 const MySwal = withReactContent(Swal);
@@ -23,28 +23,35 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
   });
   const [roles, setRoles] = useState([]);
   const [permisos, setPermisos] = useState([]);
+  const [usuariosExistentes, setUsuariosExistentes] = useState([]);
   const [usarRolExistente, setUsarRolExistente] = useState(true);
   const [rolSeleccionado, setRolSeleccionado] = useState("");
   const [permisosSeleccionados, setPermisosSeleccionados] = useState([]);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [touched, setTouched] = useState({});
 
   useEffect(() => {
-    const fetchRolesPermisos = async () => {
+    const fetchData = async () => {
       try {
-        const [rolesData, permisosData] = await Promise.all([
+        const [rolesData, permisosData, usuariosData] = await Promise.all([
           getRoles(),
           getPermisos(),
+          getUsuarios(),
         ]);
         setRoles(rolesData || []);
         setPermisos(permisosData || []);
+        setUsuariosExistentes(usuariosData.data || []);
       } catch (error) {
-        console.error("Error al obtener roles y permisos:", error);
+        console.error("Error al obtener datos:", error);
+        setRoles([]);
+        setPermisos([]);
+        setUsuariosExistentes([]);
       }
     };
 
     if (isOpen) {
-      fetchRolesPermisos();
+      fetchData();
       setFormData({
         nombre: "",
         email: "",
@@ -55,8 +62,77 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
       setRolSeleccionado("");
       setPermisosSeleccionados([]);
       setErrors({});
+      setTouched({});
     }
   }, [isOpen]);
+
+  const handleBlur = (field) => {
+    setTouched({ ...touched, [field]: true });
+    validateField(field, formData[field]);
+  };
+
+  const validateField = (field, value) => {
+    const newErrors = { ...errors };
+
+    switch (field) {
+      case "nombre":
+        if (!value.trim()) {
+          newErrors.nombre = "El nombre es obligatorio";
+        } else if (value.trim().split(/\s+/).length < 2) {
+          newErrors.nombre = "Debe ingresar nombre y apellido";
+        } else if (value.length > 50) {
+          newErrors.nombre = "No debe exceder los 50 caracteres";
+        } else {
+          delete newErrors.nombre;
+        }
+        break;
+
+      case "email":
+        if (!value.trim()) {
+          newErrors.email = "El email es obligatorio";
+        } else if (!/\S+@\S+\.\S+/.test(value)) {
+          newErrors.email = "El email no es válido";
+        } else if (
+          usuariosExistentes.some(
+            (user) => user.email.toLowerCase() === value.toLowerCase()
+          )
+        ) {
+          newErrors.email = "Este correo ya está registrado";
+        } else {
+          delete newErrors.email;
+        }
+        break;
+
+      case "password":
+        if (!value) {
+          newErrors.password = "La contraseña es obligatoria";
+        } else if (value.length < 6) {
+          newErrors.password = "Debe tener al menos 6 caracteres";
+        } else if (!/[A-Z]/.test(value)) {
+          newErrors.password = "Debe contener al menos una mayúscula";
+        } else if (!/\d/.test(value)) {
+          newErrors.password = "Debe contener al menos un número";
+        } else {
+          delete newErrors.password;
+        }
+        break;
+
+      case "nuevoRolNombre":
+        if (!usarRolExistente && !value.trim()) {
+          newErrors.nuevoRolNombre = "El nombre del rol es obligatorio";
+        } else if (!usarRolExistente && value.length > 50) {
+          newErrors.nuevoRolNombre = "No debe exceder los 50 caracteres";
+        } else {
+          delete newErrors.nuevoRolNombre;
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    setErrors(newErrors);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,8 +140,9 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
       ...prev,
       [name]: value,
     }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: null }));
+
+    if (touched[name]) {
+      validateField(name, value);
     }
   };
 
@@ -80,6 +157,8 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
     // Validación de nombre
     if (!formData.nombre.trim()) {
       newErrors.nombre = "El nombre es obligatorio";
+    } else if (formData.nombre.trim().split(/\s+/).length < 2) {
+      newErrors.nombre = "Debe ingresar nombre y apellido";
     } else if (formData.nombre.length > 50) {
       newErrors.nombre = "No debe exceder los 50 caracteres";
     }
@@ -143,11 +222,20 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
     setRolSeleccionado("");
     setPermisosSeleccionados([]);
     setErrors({});
+    setTouched({});
     onClose();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Marcar todos los campos como tocados al enviar
+    setTouched({
+      nombre: true,
+      email: true,
+      password: true,
+      nuevoRolNombre: true,
+    });
 
     if (!validateForm()) {
       await MySwal.fire({
@@ -249,10 +337,11 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
               type="text"
               value={formData.nombre}
               onChange={handleChange}
+              onBlur={() => handleBlur("nombre")}
               className={`adminFormInput ${
                 errors.nombre ? "adminInputError" : ""
               }`}
-              placeholder="Nombre completo"
+              placeholder="Nombre completo (nombre y apellido)"
               maxLength="50"
               disabled={isSubmitting}
             />
@@ -273,6 +362,7 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
               type="email"
               value={formData.email}
               onChange={handleChange}
+              onBlur={() => handleBlur("email")}
               className={`adminFormInput ${
                 errors.email ? "adminInputError" : ""
               }`}
@@ -296,6 +386,7 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
               type="password"
               value={formData.password}
               onChange={handleChange}
+              onBlur={() => handleBlur("password")}
               className={`adminFormInput ${
                 errors.password ? "adminInputError" : ""
               }`}
@@ -310,7 +401,6 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
           </div>
 
           {/* Rol existente */}
-
           <div className="adminFormGroup">
             <label className="adminFormLabel">
               Seleccionar Rol <span className="adminRequiredField">*</span>
@@ -320,7 +410,18 @@ const CreateUserModal = ({ isOpen, onClose, onSuccess }) => {
                 errors.rolSeleccionado ? "adminInputError" : ""
               }`}
               value={rolSeleccionado}
-              onChange={(e) => setRolSeleccionado(e.target.value)}
+              onChange={(e) => {
+                setRolSeleccionado(e.target.value);
+                setErrors((prev) => ({ ...prev, rolSeleccionado: null }));
+              }}
+              onBlur={() => {
+                if (!rolSeleccionado) {
+                  setErrors((prev) => ({
+                    ...prev,
+                    rolSeleccionado: "Debe seleccionar un rol",
+                  }));
+                }
+              }}
               disabled={isSubmitting}
             >
               <option value="">-- Selecciona un rol --</option>
