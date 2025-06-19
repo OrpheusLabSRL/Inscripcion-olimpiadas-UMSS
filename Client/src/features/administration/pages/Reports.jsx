@@ -123,10 +123,6 @@ const Reports = () => {
 
   return (
     <div className="reports-container">
-      <BackButton
-        onClick={() => navigate("/admin/home")}
-        className="btn-back"
-      ></BackButton>
       <div className="reports__header">
         <div className="reports__title">
           <h1>Reportes del Sistema</h1>

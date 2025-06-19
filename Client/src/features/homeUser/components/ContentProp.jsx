@@ -65,37 +65,38 @@ const ContentProp = () => {
                 <strong>Desde</strong>{" "}
                 {olympiad.fechaInicioOlimpiada
                   ? new Date(olympiad.fechaInicioOlimpiada).toLocaleDateString(
-                      "es-ES",
-                      {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      }
-                    )
+                    "es-ES",
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    }
+                  )
                   : "fecha no disponible."}{" "}
                 <strong>hasta</strong>{" "}
                 {olympiad.fechaFinOlimpiada
                   ? new Date(olympiad.fechaFinOlimpiada).toLocaleDateString(
-                      "es-ES",
-                      {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      }
-                    )
+                    "es-ES",
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    }
+                  )
                   : "fecha no disponible."}
               </p>
               {isPendent(olympiad) ? (
-                <PrimaryButton
-                  value="Proximamente"
-                  className="olympCaptionButton"
-                />
+                <button className="olympCaptionButton" disabled>
+                  Próximamente
+                </button>
               ) : (
-                <PrimaryButton
-                  value="Más información sobre la olimpiada"
+                <button
+                  className="olympCaptionButton"
                   onClick={() => handleView(olympiad.idOlimpiada)}
-                  icon={<CiSearch />}
-                />
+                >
+                  <CiSearch style={{ marginRight: "0.5rem" }} />
+                  Más información
+                </button>
               )}
             </div>
           </div>
@@ -169,8 +170,7 @@ const ContentProp = () => {
               <div className="olympStepContent">
                 <h3>
                   <i
-                    className={`bi ${
-                      [
+                    className={`bi ${[
                         "bi-trophy",
                         "bi-ui-checks-grid",
                         "bi-person-badge",
@@ -182,7 +182,7 @@ const ContentProp = () => {
                         "bi-upload",
                         "bi-patch-check-fill",
                       ][i]
-                    } me-2`}
+                      } me-2`}
                   ></i>
                   {
                     [
