@@ -173,6 +173,7 @@ class ExcelController extends Controller
         try {
             $responsibleData = $request->input('responsible');
             $olimpistasData = $request->input('olimpistas');
+            $idOlimpiada = $request->input('idOlimpiada');
 
             if (empty($responsibleData['Ci'])) {
                 throw new \Exception('Carnet de identidad del responsable es requerido');
@@ -211,38 +212,46 @@ class ExcelController extends Controller
                     })
                     ->whereHas('categoria', function($q) use ($data) {
                         $q->where('nombreCategoria', $data[10]);
-                    })->where('idOlimpiada', $request['idOlimpiada'])
+                    })
+                    ->where('idOlimpiada', $idOlimpiada)
                     ->first();
 
                 if (!$combination) {
-                    throw new \Exception("El área '{$data[9]} o la categoría '{$data[10]}' no están disponibles'");
+                    throw new \Exception("El área '{$data[9]}' o la categoría '{$data[10]}' no están disponibles");
                 }
 
-                $existing = Inscripcion::where('idOlimpista', function($query) use ($data) {
-                        $query->select('idPersona')
-                            ->from('personas')
-                            ->where('carnetIdentidad', $data[0]);
+                // Buscar inscripciones existentes para esta combinación
+                $existing = Inscripcion::with(['olimpista.persona', 'olimpiadaAreaCategoria.area', 'olimpiadaAreaCategoria.categoria'])
+                    ->whereHas('olimpista.persona', function($query) use ($data) {
+                        $query->where('carnetIdentidad', $data[0]);
                     })
                     ->where('idOlimpAreaCategoria', $combination->idOlimpAreaCategoria)
-                    ->first();
+                    ->get();
 
-                if ($existing) {
-                    $persona = Persona::where('carnetIdentidad', $data[0])->first();
-                    $duplicates[] = [
-                        'ci' => $data[0],
-                        'nombre' => $persona ? $persona->nombre . ' ' . $persona->apellido : 'Desconocido',
-                        'area' => $data[9],
-                        'categoria' => $data[10]
-                    ];
+                if ($existing->isNotEmpty()) {
+                    foreach ($existing as $inscripcion) {
+                        $duplicates[] = [
+                            'ci' => $data[0],
+                            'nombre_completo' => $inscripcion->olimpista->persona->nombre . ' ' . $inscripcion->olimpista->persona->apellido,
+                            'area' => $inscripcion->olimpiadaAreaCategoria->area->nombreArea,
+                            'categoria' => $inscripcion->olimpiadaAreaCategoria->categoria->nombreCategoria
+                        ];
+                    }
                 }
             }
 
             if (!empty($duplicates)) {
+                // Construir mensaje detallado con todos los olimpistas duplicados
+                $errorMessage = "Se encontraron olimpistas ya inscritos en las mismas áreas y categorías:\n";
+                foreach ($duplicates as $dup) {
+                    $errorMessage .= "- {$dup['nombre_completo']} (CI: {$dup['ci']}) en área {$dup['area']} y categoría {$dup['categoria']}\n";
+                }
+
                 return response()->json([
                     'success' => false,
                     'has_duplicates' => true,
                     'duplicates' => $duplicates,
-                    'message' => 'Se encontraron olimpistas ya inscritos en las mismas áreas y categorías'
+                    'message' => $errorMessage
                 ]);
             }
 
@@ -253,7 +262,8 @@ class ExcelController extends Controller
                     })
                     ->whereHas('categoria', function($q) use ($data) {
                         $q->where('nombreCategoria', $data[10]);
-                    })->where('idOlimpiada', $request['idOlimpiada'])
+                    })
+                    ->where('idOlimpiada', $idOlimpiada)
                     ->first();
 
                 // Registrar persona olimpista
