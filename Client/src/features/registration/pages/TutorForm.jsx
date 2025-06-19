@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-// CSS
 import "../Styles/TutorForm.css";
-
-// Componentes
+import image from "../../../assets/images/continueInscription.png";
 import HeaderProp from "../../homeUser/components/HeaderProp";
 import { checkExistingTutor } from "../../../api/TutorForm.api";
 
@@ -164,60 +161,70 @@ export const TutorForm = () => {
   return (
     <div>
       <HeaderProp />
-      <div className="tutor-form-container">
-        {submitError && <div className="error-message">{submitError}</div>}
-        {submitSuccess && <div className="success-message">{submitSuccess}</div>}
+      <div className="continueInscriptionWrapper">
+        <div className="continueInscriptionImageSide">
+          <img src={image} alt="Ilustración educativa" />
+        </div>
 
-        <form onSubmit={handleContinue} className="form-section">
-          <div className="form-group">
-            <label htmlFor="continue-email">
-              Correo Electrónico <span className="required">*</span>
-            </label>
-            <input
-              type="email"
-              id="continue-email"
-              name="email"
-              placeholder="Ingrese su correo electrónico"
-              value={formData.email}
-              onChange={handleInputChange}
-              onBlur={handleBlur}
-              className={getInputClass("email")}
-            />
-            {touched.email && errors.email && (
-              <span className="error-message">{errors.email}</span>
-            )}
-          </div>
+        <div className="continueInscriptionFormSide">
+          <form onSubmit={handleContinue} noValidate>
+            <h2 className="continueInscriptionTitle">Continuar Inscripción</h2>
 
-          <div className="form-group">
-            <label htmlFor="continue-carnet">
-              Carnet de identidad <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="continue-carnet"
-              name="carnet"
-              placeholder="Ingrese su carnet"
-              value={formData.carnet}
-              onChange={handleInputChange}
-              onBlur={handleBlur}
-              className={getInputClass("carnet")}
-            />
-            {touched.carnet && errors.carnet && (
-              <span className="error-message">{errors.carnet}</span>
-            )}
-          </div>
+            {submitError && <div className="continueInscriptionErrorMessage">{submitError}</div>}
+            {submitSuccess && <div className="continueInscriptionSuccessMessage">{submitSuccess}</div>}
 
-          <div className="form-buttons">
+            <div className="continueInscriptionFormGroup">
+              <label htmlFor="continue-email">
+                <i className="bi bi-envelope"></i> Correo Electrónico <span className="continueInscriptionRequired">*</span>
+              </label>
+              <input
+                type="email"
+                id="continue-email"
+                name="email"
+                placeholder="Ingrese su correo electrónico"
+                value={formData.email}
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                className={errors.email ? "continueInscriptionInputInvalid" : ""}
+                aria-required="true"
+              />
+              {touched.email && errors.email && (
+                <div className="continueInscriptionErrorMessage">{errors.email}</div>
+              )}
+            </div>
+
+            <div className="continueInscriptionFormGroup">
+              <label htmlFor="continue-carnet">
+                <i className="bi bi-person-vcard"></i> Carnet de Identidad <span className="continueInscriptionRequired">*</span>
+              </label>
+              <input
+                type="text"
+                id="continue-carnet"
+                name="carnet"
+                placeholder="Ingrese su carnet"
+                value={formData.carnet}
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                className={errors.carnet ? "continueInscriptionInputInvalid" : ""}
+                aria-required="true"
+              />
+              {touched.carnet && errors.carnet && (
+                <div className="continueInscriptionErrorMessage">{errors.carnet}</div>
+              )}
+            </div>
+
             <button
               type="submit"
-              className="submit-button"
+              className="continueInscriptionSubmitButton"
               disabled={isSubmitting}
             >
+              <i className="bi bi-check-circle"></i>
               {isSubmitting ? "Verificando..." : "Continuar"}
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
+
   );
 };
