@@ -39,6 +39,6 @@ class ContactoMail extends Mailable
                         'correo' => $this->datos['correo'],
                         'numero' => $this->datos['numero'],
                         'descripcion' => $this->datos['descripcion']
-                    ]);
+        ]);
     }
 } 

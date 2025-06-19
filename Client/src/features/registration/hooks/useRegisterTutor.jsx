@@ -13,7 +13,7 @@ export const useRegisterTutor = () => {
   const [totalSteps, setTotalStep] = useState(4);
   const [isReadOnly, setIsReadOnly] = useState({});
   const [tipoTutor, setTipoTutor] = useState([
-    { value: "Padre/Madre", label: "Papá/Mamá" },
+    { value: "Padre/Madre", label: "Padre/Madre" },
     { value: "Tutor Legal", label: "Tutor Legal" },
     { value: "Profesor", label: "Profesor" },
     { value: "Estudiante", label: "Estudiante" },
@@ -56,7 +56,6 @@ export const useRegisterTutor = () => {
       confirmButtonText: "Sí, aceptar",
       cancelButtonText: "Cancelar",
     });
-    console.log(sessionStorage.getItem("OlympicData"));
 
     if (confirmacion.isConfirmed) {
       const dataToSend = {
@@ -79,7 +78,7 @@ export const useRegisterTutor = () => {
           : {
               nombre: sessionStorage.getItem("NombreResponsible"),
               apellido: sessionStorage.getItem("ApellidoResponsible"),
-              tipo_tutor: "ResponsableIns",
+              tipo_tutor: null,
               correo_electronico: sessionStorage.getItem("EmailResponsible"),
               telefono: sessionStorage.getItem("NumeroResponsible"),
               carnet_identidad: sessionStorage.getItem("CiResponsible"),
@@ -161,8 +160,10 @@ export const useRegisterTutor = () => {
     setValue("Email", "");
     setValue("Ci", "");
     setTipoTutor([
-      { value: "Padre/Madre", label: "Papá/Mamá" },
+      { value: "Padre/Madre", label: "Padre/Madre" },
       { value: "Tutor Legal", label: "Tutor Legal" },
+      { value: "Profesor", label: "Profesor" },
+      { value: "Estudiante", label: "Estudiante" },
     ]);
     setIsReadOnly({});
   };

@@ -16,6 +16,7 @@ import {
 export const useCatalog = (watchedFields) => {
   const [catalogo, setCatalogo] = useState([]);
   const [areaInteres, setAreaInteres] = useState([]);
+  const [areaInscrita, setAreaInscrita] = useState([]);
   const [categoriasInteres, setCategoriasInteres] = useState(() => {
     const stored = sessionStorage.getItem("CategoriasFiltradas");
     return stored ? JSON.parse(stored) : null;
@@ -57,9 +58,14 @@ export const useCatalog = (watchedFields) => {
       );
 
       if (areas.data.success != false) {
-        areasFiltradas = areasFiltradas.filter(
-          (area) => area.value !== areas.data?.data[0]
-        );
+        setAreaInscrita(areas?.data?.data[0]);
+        areasFiltradas = areasFiltradas.filter((area) => {
+          if (
+            areas.data.data[0].area.nombreArea.toUpperCase() === "INFORMÁTICA"
+          )
+            return area;
+          return area.value !== areas.data?.data[0].area.idArea;
+        });
       }
 
       setAreaInteres(areasFiltradas);
@@ -68,11 +74,17 @@ export const useCatalog = (watchedFields) => {
   }, [catalogo]);
 
   const onChooseArea = (e, setValue) => {
-    const categoriasFiltradas = filtrarCategoriasPorCursoYArea(
+    let categoriasFiltradas = filtrarCategoriasPorCursoYArea(
       sessionStorage.getItem("CursoOlympian"),
       e.target.value,
       catalogo
     );
+
+    if (areaInscrita.length != 0) {
+      categoriasFiltradas = categoriasFiltradas.filter(
+        (categoria) => categoria.value !== areaInscrita.categoria.idCategoria
+      );
+    }
 
     if (e.target.name == "AreaPrincipal") {
       sessionStorage.setItem(

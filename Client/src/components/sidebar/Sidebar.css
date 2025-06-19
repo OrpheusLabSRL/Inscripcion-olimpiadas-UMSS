@@ -1,9 +1,9 @@
 :root {
-  --azul-oscuro: #1e293b;
-  --azul-claro: #3b82f6;
+  --darkBlue: #1e293b;
+--lightBlue  : #3b82f6;
   --azul-hover: #2563eb;
-  --blanco: #ffffff;
-  --gris-claro: #f8fafc;
+  --white: #ffffff;
+  --lightGray: #f8fafc;
   --gris-medio: #64748b;
   --texto-azul: #1e293b;
   --sombra-suave: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
@@ -23,8 +23,8 @@
   left: 0;
   width: 70px;
   height: 100%;
-  background: linear-gradient(180deg, var(--azul-oscuro) 0%, #0f172a 100%);
-  color: var(--blanco);
+  background: linear-gradient(180deg, var(--darkBlue) 0%, #0f172a 100%);
+  color: var(--white);
   padding: 0;
   transition: var(--transicion);
   box-shadow: var(--sombra-intensa);
@@ -72,7 +72,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--blanco), var(--azul-claro));
+  background: linear-gradient(135deg, var(--white), var(--lightBlue));
   padding: 2px;
   box-shadow: var(--sombra-suave);
   transition: var(--transicion);
@@ -87,7 +87,7 @@
   margin-left: 12px;
   font-size: 20px;
   font-weight: 700;
-  color: var(--blanco);
+  color: var(--white);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   opacity: 0;
   width: 0;
@@ -189,7 +189,7 @@
 
 .sidebar ul li a:hover {
   background: rgba(255, 255, 255, 0.1);
-  color: var(--blanco);
+  color: var(--white);
   box-shadow: var(--sombra-suave);
 }
 
@@ -206,7 +206,7 @@
 }
 
 .sidebar ul li a:hover .sidebar-icons {
-  color: var(--azul-claro);
+  color: var(--lightBlue);
   transform: scale(1.1);
 }
 
@@ -214,10 +214,10 @@
 .active-link {
   background: linear-gradient(
     135deg,
-    var(--azul-claro),
+    var(--lightBlue),
     var(--azul-hover)
   ) !important;
-  color: var(--blanco) !important;
+  color: var(--white) !important;
   font-weight: 600 !important;
   box-shadow: var(--sombra-media) !important;
 }
@@ -227,7 +227,7 @@
 }
 
 .active-link .sidebar-icons {
-  color: var(--blanco) !important;
+  color: var(--white) !important;
 }
 
 /* ===== Contenedor del toggle en escritorio ===== */
@@ -249,7 +249,7 @@
   width: 100%;
   padding: 12px;
   background: rgba(255, 255, 255, 0.1);
-  color: var(--blanco);
+  color: var(--white);
   border: none;
   border-radius: var(--bordeado);
   cursor: pointer;
@@ -304,7 +304,7 @@
 
 .btn-logout:hover {
   background: #ef4444;
-  color: var(--blanco);
+  color: var(--white);
   box-shadow: var(--sombra-media);
   transform: translateY(-2px);
 }
@@ -432,7 +432,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--azul-oscuro), var(--azul-claro));
+    background: linear-gradient(135deg, var(--darkBlue), var(--lightBlue));
     box-shadow: var(--sombra-intensa);
     border: 3px solid rgba(255, 255, 255, 0.2);
   }
@@ -459,7 +459,7 @@
     right: -2px;
     bottom: -2px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--azul-claro), var(--azul-hover));
+    background: linear-gradient(135deg, var(--lightBlue), var(--azul-hover));
     z-index: -1;
     animation: pulse 2s infinite;
     opacity: 0.7;
@@ -506,7 +506,7 @@
 .sidebar ul li a:focus,
 .toggle-btn:focus,
 .btn-logout:focus {
-  outline: 2px solid var(--azul-claro);
+  outline: 2px solid var(--lightBlue);
   outline-offset: 2px;
 }
 
@@ -528,7 +528,7 @@
 /* ===== Tema oscuro mejorado ===== */
 @media (prefers-color-scheme: dark) {
   :root {
-    --gris-claro: #0f172a;
+    --lightGray: #0f172a;
   }
 }
 
