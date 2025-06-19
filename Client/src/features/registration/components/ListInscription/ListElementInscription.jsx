@@ -1,29 +1,27 @@
-//react
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { finishRegistering } from "../../../../api/inscription.api";
+import { generatePdfBoleta } from "./pdfgenerator";
 
 //components
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
 import { NextPage } from "../../../../components/Buttons/NextPage";
 
-//api
-import { finishRegistering } from "../../../../api/inscription.api";
-
 export const ListElementInscription = ({ inscription, index }) => {
   const [registering, setRegistering] = useState(true);
   const [tutorId, setTutorId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const storedTutorId = sessionStorage.getItem("tutorInscripcionId");
-
     if (!storedTutorId) {
       console.error("ID del tutor no encontrado en sessionStorage.");
       return;
     }
     setTutorId(storedTutorId);
     setRegistering(inscription.olimpistas[0].inscripciones[0].registrandose);
-  }, []);
+  }, [inscription]);
 
   const finishRegister = async () => {
     const confirmacion = await Swal.fire({
@@ -37,46 +35,51 @@ export const ListElementInscription = ({ inscription, index }) => {
 
     if (confirmacion.isConfirmed) {
       try {
-        await finishRegistering(
-          sessionStorage.getItem("tutorInscripcionId"),
-          inscription.codigoInscripcion
-        );
+        await finishRegistering(tutorId, inscription.codigoInscripcion);
         setRegistering(false);
+        Swal.fire({
+          title: "¡Registro finalizado!",
+          text: "Ahora puede generar la boleta de pago.",
+          icon: "success"
+        });
       } catch (error) {
         console.error("Error al finalizar el registro:", error);
+        Swal.fire({
+          title: "Error",
+          text: "Ocurrió un error al finalizar el registro.",
+          icon: "error"
+        });
       }
     }
   };
 
   const generarBoleta = async () => {
     if (!tutorId) {
-      alert("No se encontró el ID del tutor.");
+      Swal.fire({
+        title: "Error",
+        text: "No se encontró el ID del tutor.",
+        icon: "error"
+      });
       return;
     }
 
+    setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8000/boletas/generar/${tutorId}/${inscription.codigoInscripcion}`,
-        {
-          responseType: "blob",
-        }
+        `http://localhost:8000/api/boletas/generar/${tutorId}/${inscription.codigoInscripcion}`
       );
-
-      const file = new Blob([response.data], { type: "application/pdf" });
-      const fileURL = URL.createObjectURL(file);
-      const link = document.createElement("a");
-      link.href = fileURL;
-      link.download = `boleta_pago_${tutorId}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      
+      await generatePdfBoleta(response.data);
+      
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        alert("No hay inscripciones pendientes para generar una boleta.");
-      } else {
-        alert("Ocurrió un error al generar la boleta. Intenta más tarde.");
-      }
       console.error("Error al generar la boleta:", error);
+      Swal.fire({
+        title: 'Error',
+        text: error.response?.data?.message || 'Ocurrió un error al generar la boleta. Intente nuevamente.',
+        icon: 'error'
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,13 +96,12 @@ export const ListElementInscription = ({ inscription, index }) => {
             onClick={finishRegister}
           />
         ) : (
-          <>
-            <NextPage
-              onClick={generarBoleta}
-              value="Generar Orden de Pago"
-              className="btn-generate-payment"
-            />
-          </>
+          <NextPage
+            onClick={generarBoleta}
+            value={loading ? "Generando..." : "Generar Orden de Pago"}
+            className="btn-generate-payment"
+            disabled={loading}
+          />
         )}
       </td>
     </tr>
