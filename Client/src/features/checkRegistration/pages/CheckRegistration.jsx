@@ -14,6 +14,7 @@ const CheckRegistration = () => {
     handleSubmit,
   } = useCheckRegistrationForm();
 
+  
   return (
     <div>
       <HeaderProp />
