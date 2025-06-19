@@ -26,6 +26,7 @@ export const useRegisterTutor = () => {
     formState: { errors },
     watch,
     setValue,
+    clearErrors,
   } = useForm({
     defaultValues: {
       Nombre: sessionStorage.getItem("NombreLegal") || "",
@@ -166,6 +167,7 @@ export const useRegisterTutor = () => {
       { value: "Estudiante", label: "Estudiante" },
     ]);
     setIsReadOnly({});
+    clearErrors();
   };
 
   const cancelInscription = async () => {
@@ -204,5 +206,6 @@ export const useRegisterTutor = () => {
     setValue,
     setIsReadOnly,
     setTipoTutor,
+    clearErrors,
   };
 };

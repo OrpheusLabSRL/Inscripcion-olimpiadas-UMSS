@@ -35,6 +35,7 @@ export const RegisterTutor = () => {
     setValue,
     setIsReadOnly,
     setTipoTutor,
+    clearErrors,
   } = useRegisterTutor();
 
   useSessionStorageTutor(
@@ -55,7 +56,8 @@ export const RegisterTutor = () => {
     setValue,
     setIsReadOnly,
     setTipoTutor,
-    tipoTutor
+    tipoTutor,
+    clearErrors
   );
 
   const titleOlimpian = useMemo(() => {
