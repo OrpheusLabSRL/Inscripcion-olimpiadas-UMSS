@@ -68,9 +68,9 @@ export const ListElementInscription = ({ inscription, index }) => {
       const response = await axios.get(
         `http://localhost:8000/api/boletas/generar/${tutorId}/${inscription.codigoInscripcion}`
       );
-      
+
       await generatePdfBoleta(response.data);
-      
+
     } catch (error) {
       console.error("Error al generar la boleta:", error);
       Swal.fire({
@@ -91,16 +91,26 @@ export const ListElementInscription = ({ inscription, index }) => {
       <td>
         {registering ? (
           <PrimaryButton
-            value="Terminar inscripción"
-            className="btn-generate-payment"
+            className="btn-add-student"
             onClick={finishRegister}
+            value={
+              <>
+                <i className="bi bi-check-circle-fill" style={{ marginRight: "8px" }}></i>
+                Terminar inscripción
+              </>
+            }
           />
         ) : (
           <NextPage
             onClick={generarBoleta}
-            value={loading ? "Generando..." : "Generar Orden de Pago"}
             className="btn-generate-payment"
             disabled={loading}
+            value={
+              <>
+                <i className="bi bi-file-earmark-text" style={{ marginRight: "8px" }}></i>
+                {loading ? "Generando..." : "Generar Orden de Pago"}
+              </>
+            }
           />
         )}
       </td>
