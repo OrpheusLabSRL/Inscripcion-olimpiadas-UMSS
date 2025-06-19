@@ -42,27 +42,40 @@ const OlympiansReportTable = () => {
 
   const reportRef = useRef(null);
 
-  useEffect(() => {
-    const fetchOlympians = async () => {
-      try {
-        const response = await getAllOlimpistas();
-        if (response && response.data) {
-          setOlympians(response.data);
-          setError(null);
-        } else {
+    useEffect(() => {
+      const fetchOlympians = async () => {
+        try {
+          const response = await getAllOlimpistas();
+          console.log("API response for olimpistas:", response);
+          if (response && response.success && response.data && response.data.length) {
+            const mappedData = response.data.map(item => ({
+              idCard: item.carnetDeIdentidad,
+              firstName: item.nombre,
+              lastName: item.apellido,
+              birthDate: item.fechaNacimiento,
+              department: item.departamento,
+              grade: item.curso,
+              school: item.colegio,
+              areaName: item.nombreArea,
+              categoryName: item.nombreCategoria,
+            }));
+            console.log("Mapped olympians data:", mappedData);
+            setOlympians(mappedData);
+            setError(null);
+          } else {
+            setOlympians([]);
+            setError("No se encontraron olimpistas.");
+          }
+        } catch (err) {
+          setError("Error al obtener los olimpistas.");
           setOlympians([]);
-          setError("No se encontraron olimpistas.");
+        } finally {
+          setLoading(false);
         }
-      } catch (err) {
-        setError("Error al obtener los olimpistas.");
-        setOlympians([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
-    fetchOlympians();
-  }, []);
+      fetchOlympians();
+    }, []);
 
   if (loading) return <p style={{ color: "#000000" }}>Cargando reporte de olimpistas...</p>;
   if (error) return <p style={{ color: "#000000" }}>{error}</p>;
