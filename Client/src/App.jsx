@@ -78,6 +78,11 @@ function App() {
     "/consultar-inscripcion/resultado-tutor",
     "/olimpiada/:id",
     "/cajero/:token/boleta/:id",
+    "/register",
+    "/register/responsible",
+    "/register/olympian",
+    "/register/olympian-area",
+    "/register/tutor-legal",
   ];
 
   const hideSidebar =
