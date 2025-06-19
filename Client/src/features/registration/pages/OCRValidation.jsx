@@ -166,12 +166,14 @@ export const OCRValidation = () => {
             </div>
           )}
 
-            <PrimaryButton
-              type="submit"
-              value={processing ? "Procesando..." : "Procesar Imagen"}
-              disabled={processing || !uploadEnabled || !file || file === undefined}
-              className="primary-button-custom"
-            />
+            {processing && (
+              <PrimaryButton
+                type="submit"
+                value="Procesando..."
+                disabled={true}
+                className="primary-button-custom"
+              />
+            )}
         </form>
         
         {controlBoleta && (
@@ -196,7 +198,7 @@ export const OCRValidation = () => {
               ? boletaPaid
                 ? "La boleta ya fue pagada."
                 : "La boleta se verifico con exito y esta lista para que confirme el pago."
-              : "La boleta que usted trata de verificar no existe."}
+              : "La boleta que usted trata de verificar no existe o la imagen no es clara para su procesamiento. Por favor, intente con una foto más nítida y asegúrese de que el comprobante sea válido."}
           </div>
         )}
 
