@@ -28,11 +28,11 @@
   font-weight: 600;
   font-size: 28px;
   position: relative;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .olympiad-detail-content h2::after {
-  content: '';
+  content: "";
   width: 100px;
   height: 3px;
   background-color: var(--azul-claro, #007bff);
@@ -45,7 +45,8 @@
 .olympiad-hero {
   width: 100%;
   height: 400px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url("https://www.shutterstock.com/image-photo/glowing-light-bulb-wearing-graduation-600nw-2555244033.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)),
+    url("https://www.shutterstock.com/image-photo/glowing-light-bulb-wearing-graduation-600nw-2555244033.jpg");
   background-size: cover;
   background-position: center;
   display: flex;
@@ -55,6 +56,7 @@
   text-align: center;
   position: relative;
   margin-bottom: 40px;
+  flex-direction: column;
 }
 
 .olympiad-hero-overlay {
@@ -83,7 +85,6 @@
   padding: 2.5rem;
 }
 
-
 .area-card-horizontal {
   display: flex;
   flex-direction: row;
@@ -95,7 +96,6 @@
   transition: transform 0.2s ease;
   height: 100%;
 }
-
 
 .area-card-horizontal:hover {
   transform: translateY(-5px);
@@ -138,7 +138,7 @@
   padding: 10px 15px;
   border-radius: 8px;
 }
-.categorias-desplegable ul{
+.categorias-desplegable ul {
   list-style: none;
 }
 .categorias-desplegable ul ul {
@@ -159,7 +159,7 @@
   border: 1px solid #ccc;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   margin: 5% auto !important;
-  width: 90% !important;      
+  width: 90% !important;
 }
 
 .container-content-modal {
@@ -172,6 +172,7 @@
   display: flex;
   justify-content: center;
   margin: 2rem 0;
+  width: 100%;
 }
 
 .inscriptionButton {
@@ -194,7 +195,7 @@
 .inscriptionButton:hover {
   background-color: var(--blanco);
   color: var(--azul-claro);
-  box-shadow: 0 4px 12px rgba(7, 91, 129, 0.4); 
+  box-shadow: 0 4px 12px rgba(7, 91, 129, 0.4);
 }
 
 @media (max-width: 768px) {
