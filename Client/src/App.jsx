@@ -32,7 +32,7 @@ import RegisterExcel from "./features/registration/pages/RegisterExcel";
 import { RegisterChoose } from "./features/registration/pages/RegisterChoose";
 import { OCRValidation } from "./features/registration/pages/OCRValidation";
 import { GenerateOrder } from "./features/registration/pages/GenerateOrder";
-import OlimpiadaDetallada from "./features/detallesOlimpiada/pages/olympicDetail";
+import OlympicDetail from "./features/olympicDetail/pages/olympicDetail";
 import { Ticket } from "./features/Cashier/pages/Ticket";
 
 import { useEffect } from "react";
@@ -102,7 +102,7 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<MainHome />} />
-            <Route path="/olimpiada/:id" element={<OlimpiadaDetallada />} />
+            <Route path="/olimpiada/:id" element={<OlympicDetail />} />
             <Route path="/register" element={<RegisterChoose />} />
             <Route path="/register/olympian" element={<RegisterOlympian />} />
             <Route path="/register/tutor-legal" element={<RegisterTutor />} />

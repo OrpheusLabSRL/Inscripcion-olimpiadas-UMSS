@@ -9,7 +9,7 @@ import HeaderProp from "../../homeUser/components/HeaderProp";
 import Footer from "../../homeUser/components/Footer";
 import { GenericModal } from "../../../components/modals/GenericModal"; // Ajusta el path si es diferente
 
-const OlimpiadaDetallada = () => {
+const OlympicDetail = () => {
   const { id } = useParams();
   const [olympiad, setOlympiad] = useState(null);
   const [areasCategorias, setAreasCategorias] = useState([]);
@@ -148,4 +148,4 @@ const OlimpiadaDetallada = () => {
   );
 };
 
-export default OlimpiadaDetallada;
+export default OlympicDetail;
