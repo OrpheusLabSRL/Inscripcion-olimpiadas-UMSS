@@ -41,6 +41,14 @@
   background-color: var(--lightGray);
 }
 
+.continueInscriptionFormSide form {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .continueInscriptionTitle {
   color: #333;
   text-align: center;
