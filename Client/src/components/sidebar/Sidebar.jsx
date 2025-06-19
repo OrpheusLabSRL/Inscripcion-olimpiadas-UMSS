@@ -14,7 +14,7 @@ import Logo from "../../assets/images/ohsansi.png";
 //css
 import "./Sidebar.css";
 
-export default function Sidebar({ isOpen, setIsOpen, admin }) {
+export default function Sidebar({ isOpen, setIsOpen, admin, userPermissions }) {
   const [usuario, setUsuario] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
@@ -23,19 +23,17 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
   const [isMobile, setIsMobile] = useState(false);
   const navigation = useNavigate();
 
-  // Detectar si es móvil
+  // Detectar si es móvil (se mantiene igual)
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-
     checkMobile();
     window.addEventListener("resize", checkMobile);
-
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Cerrar sidebar al hacer clic en un enlace en móvil
+  // Cerrar sidebar al hacer clic en un enlace en móvil (se mantiene igual)
   useEffect(() => {
     if (isMobile && isOpen) {
       const handleResize = () => {
@@ -43,7 +41,6 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
           setIsOpen(false);
         }
       };
-
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
     }
@@ -65,21 +62,17 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
     }
   };
 
-  const permisos = usuario?.rol?.permisos?.map((p) => p.nombrePermiso) || [];
-  const tienePermiso = (permiso) => permisos.includes(permiso);
-
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  // Prevenir scroll del body cuando el sidebar está abierto en móvil
+  // Prevenir scroll del body cuando el sidebar está abierto en móvil (se mantiene igual)
   useEffect(() => {
     if (isMobile && isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
     }
-
     return () => {
       document.body.style.overflow = "unset";
     };
@@ -87,7 +80,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
 
   return (
     <>
-      {/* Overlay que se muestra solo en móvil */}
+      {/* Overlay que se muestra solo en móvil (se mantiene igual) */}
       {isOpen && isMobile && (
         <div
           className="sidebar-overlay"
@@ -109,7 +102,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
         role="navigation"
         aria-label="Menú principal"
       >
-        {/* Header del sidebar */}
+        {/* Header del sidebar (se mantiene igual) */}
         <div className="sidebar-header">
           <img
             src={Logo}
@@ -136,47 +129,55 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
                     <span>Inicio</span>
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to="/admin/olimpiadas"
-                    onClick={handleLinkClick}
-                    className="nav-link"
-                    aria-label="Ver olimpiadas"
-                  >
-                    <GiAchievement
-                      className="sidebar-icons"
-                      aria-hidden="true"
-                    />
-                    <span>Olimpiadas</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/admin/panelOlympiad"
-                    onClick={handleLinkClick}
-                    className="nav-link"
-                    aria-label="Gestionar olimpiadas"
-                  >
-                    <FaRegEdit className="sidebar-icons" aria-hidden="true" />
-                    <span>Gestionar</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/admin/reports"
-                    onClick={handleLinkClick}
-                    className="nav-link"
-                    aria-label="Ver reportes"
-                  >
-                    <HiOutlineClipboardDocument
-                      className="sidebar-icons"
-                      aria-hidden="true"
-                    />
-                    <span>Reportes</span>
-                  </Link>
-                </li>
+
+                {userPermissions?.includes("crear_olimpiadas") && (
+                  <li>
+                    <Link
+                      to="/admin/olimpiadas"
+                      onClick={handleLinkClick}
+                      className="nav-link"
+                      aria-label="Ver olimpiadas"
+                    >
+                      <GiAchievement
+                        className="sidebar-icons"
+                        aria-hidden="true"
+                      />
+                      <span>Olimpiadas</span>
+                    </Link>
+                  </li>
+                )}
+                {userPermissions?.includes("gestionar_olimpiadas") && (
+                  <li>
+                    <Link
+                      to="/admin/panelOlympiad"
+                      onClick={handleLinkClick}
+                      className="nav-link"
+                      aria-label="Gestionar olimpiadas"
+                    >
+                      <FaRegEdit className="sidebar-icons" aria-hidden="true" />
+                      <span>Gestionar</span>
+                    </Link>
+                  </li>
+                )}
+                {userPermissions?.includes("ver_reportes") && (
+                  <li>
+                    <Link
+                      to="/admin/reports"
+                      onClick={handleLinkClick}
+                      className="nav-link"
+                      aria-label="Ver reportes"
+                    >
+                      <HiOutlineClipboardDocument
+                        className="sidebar-icons"
+                        aria-hidden="true"
+                      />
+                      <span>Reportes</span>
+                    </Link>
+                  </li>
+                )}
               </>
             ) : (
+              /* Menú para usuarios normales (se mantiene igual) */
               <>
                 <li>
                   <NavLink
@@ -252,7 +253,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
           </ul>
         </nav>
 
-        {/* Botón toggle - ahora dentro del sidebar en escritorio */}
+        {/* Botón toggle - ahora dentro del sidebar en escritorio (se mantiene igual) */}
         {!isMobile && (
           <div className="toggle-container">
             <button
@@ -268,7 +269,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
           </div>
         )}
 
-        {/* Botón cerrar sesión */}
+        {/* Botón cerrar sesión (se mantiene igual) */}
         <div className="btn-logout">
           <button
             onClick={cerrarSesion}
@@ -282,7 +283,7 @@ export default function Sidebar({ isOpen, setIsOpen, admin }) {
         </div>
       </aside>
 
-      {/* Botón toggle para móvil (fuera del sidebar) */}
+      {/* Botón toggle para móvil (fuera del sidebar) (se mantiene igual) */}
       {isMobile && (
         <button
           className="toggle-btn"

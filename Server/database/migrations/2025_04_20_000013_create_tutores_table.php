@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('tutores', function (Blueprint $table) {
             $table->unsignedBigInteger('idPersona')->primary();
-            $table->string('tipoTutor', 20);
+            $table->string('tipoTutor', 20)->nullable();
             $table->string('telefono', 8);
             $table->timestamps();
 

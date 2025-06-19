@@ -169,6 +169,9 @@ export const TutorForm = () => {
         <div className="continueInscriptionFormSide">
           <form onSubmit={handleContinue} noValidate>
             <h2 className="continueInscriptionTitle">Continuar Inscripción</h2>
+            <p className="continueInscriptionInstruction">
+              Esta sección está destinada al responsable de inscripción. Si ya iniciaste el proceso, puedes continuar registrando a más estudiantes utilizando el mismo correo y carnet de identidad.
+            </p>
 
             {submitError && <div className="continueInscriptionErrorMessage">{submitError}</div>}
             {submitSuccess && <div className="continueInscriptionSuccessMessage">{submitSuccess}</div>}

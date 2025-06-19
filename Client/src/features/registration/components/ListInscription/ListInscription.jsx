@@ -22,8 +22,8 @@ export const ListInscription = ({
     setRegistering(dataOlympians[0].inscripciones[0].registrandose);
     setNameOlimpian(
       dataOlympians[0].inscripciones[0].nombreOlimpiada +
-        " versión " +
-        dataOlympians[0].inscripciones[0].versionOlimpiada
+      " versión " +
+      dataOlympians[0].inscripciones[0].versionOlimpiada
     );
   }, []);
 
@@ -85,9 +85,8 @@ export const ListInscription = ({
 
         <NextPage
           value="+ Agregar Estudiante"
-          className={`btn-add-student ${
-            registering ? "" : "btn-add-student-disabled"
-          }`}
+          className={`btn-add-student ${registering ? "" : "btn-add-student-disabled"
+            }`}
           to="/register/olympian"
           state={{ from: location.pathname }}
           disabled={!registering}
@@ -104,9 +103,14 @@ export const ListInscription = ({
       <div className="btn-generar-boleta">
         {registering ? (
           <PrimaryButton
-            value="Terminar inscripción"
             className="btn-add-student"
             onClick={finishRegister}
+            value={
+              <>
+                <i className="bi bi-check-circle-fill" style={{ marginRight: "8px" }}></i>
+                Terminar inscripción
+              </>
+            }
           />
         ) : (
           <>

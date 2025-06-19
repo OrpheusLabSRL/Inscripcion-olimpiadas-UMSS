@@ -39,20 +39,29 @@ export const useAutoFillTutor = (
         }));
       }
 
-      if (personData.data.data.tipoTutor) {
-        setTipoTutor([
-          ...tipoTutor,
-          { value: "Profesor", label: "Profesor" },
-          { value: "Estudiante", label: "Estudiante" },
-        ]);
-
-        setValue("Tipo_Tutor", personData.data.data.tipoTutor);
-        setValue("Numero_Celular", personData.data.data.telefono);
-        setIsReadOnly((prev) => ({
-          ...prev,
-          Tipo_Tutor: true,
-          Numero_Celular: true,
-        }));
+      if (personData.data.data.telefono) {
+        if (personData.data.data.tipoTutor !== "ResponsableIns") {
+          setValue("Numero_Celular", personData.data.data.telefono);
+          if (personData.data.data.tipoTutor) {
+            setValue("Tipo_Tutor", personData.data.data.tipoTutor);
+            setIsReadOnly((prev) => ({
+              ...prev,
+              Tipo_Tutor: true,
+              Numero_Celular: true,
+            }));
+          } else {
+            setIsReadOnly((prev) => ({
+              ...prev,
+              Numero_Celular: true,
+            }));
+          }
+        } else {
+          setValue("Numero_Celular", personData.data.data.telefono);
+          setIsReadOnly((prev) => ({
+            ...prev,
+            Numero_Celular: true,
+          }));
+        }
       }
     } catch (error) {
       const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
@@ -91,11 +100,6 @@ export const useAutoFillTutor = (
         }));
       }
       if (ciLegal == ciProfesorPrincipal) {
-        setTipoTutor([
-          ...tipoTutor,
-          { value: "Profesor", label: "Profesor" },
-          { value: "Estudiante", label: "Estudiante" },
-        ]);
         setValue("Nombre", sessionStorage.getItem("NombrePrincipal"));
         setValue("Apellido", sessionStorage.getItem("ApellidoPrincipal"));
         setValue("Email", sessionStorage.getItem("EmailResponsible"));
@@ -114,11 +118,6 @@ export const useAutoFillTutor = (
         return;
       }
       if (ciLegal == ciProfesorSecundario) {
-        setTipoTutor([
-          ...tipoTutor,
-          { value: "Profesor", label: "Profesor" },
-          { value: "Estudiante", label: "Estudiante" },
-        ]);
         setValue("Nombre", sessionStorage.getItem("NombreSecundaria"));
         setValue("Apellido", sessionStorage.getItem("ApellidoSecundaria"));
         setValue("Email", sessionStorage.getItem("EmailSecundaria"));
