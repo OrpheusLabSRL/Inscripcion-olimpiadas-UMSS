@@ -21,7 +21,7 @@ class UsuarioController extends Controller
 
     $usuario = Usuario::create([
         'nombre' => $request->nombre,
-        'nombreUsuario' => $request->nombre,
+        'nombreUsuario' => $request->usuario,
         'email' => $request->email,
         'password' => bcrypt($request->password),
         'idRol' => $request->idRol,

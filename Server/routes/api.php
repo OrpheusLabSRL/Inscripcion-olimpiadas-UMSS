@@ -21,6 +21,7 @@ use App\Http\Controllers\BoletaPagoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\RolPermisoController;
 
 
 // Ruta protegida para obtener el usuario autenticado
@@ -67,6 +68,7 @@ Route::post('/roles', [RolController::class, 'store']);
 Route::post('/usuarios', [UsuarioController::class, 'store']);
 Route::get('/permisos', [PermisoController::class, 'index']);
 Route::get('/viewUsuarios', [UsuarioController::class, 'index']);
+Route::get('/getRolesPermisos', [RolPermisoController::class, 'index']);
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);

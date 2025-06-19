@@ -12,6 +12,7 @@ import {
   FaToggleOn,
   FaToggleOff,
 } from "react-icons/fa";
+import { CiCircleInfo } from "react-icons/ci";
 import PermisosModal from "../administrationModal/ViewPermitsModal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -199,7 +200,7 @@ const UsersTable = ({ refresh }) => {
                         onClick={() => verPermisos(usuario)}
                         title="Ver permisos"
                       >
-                        <FaEye />
+                        <CiCircleInfo />
                       </button>
                       <button
                         className="actionButton editButton"

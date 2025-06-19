@@ -248,6 +248,11 @@ export const setUser = async (data) => {
   return response.data;
 };
 
+export const getRolesPermisos = async () => {
+  const response = await inscriptionApi.get("/getRolesPermisos");
+  return response.data;
+};
+
 export const getUsuarios = () => inscriptionApi.get("/usuarios");
 export const getRolesUser = () => inscriptionApi.get("/usuarios/roles");
 export const createUsuario = (data) => inscriptionApi.post("/usuarios", data);
