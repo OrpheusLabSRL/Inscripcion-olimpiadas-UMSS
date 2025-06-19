@@ -177,7 +177,6 @@ export default function Sidebar({ isOpen, setIsOpen, admin, userPermissions }) {
                 )}
               </>
             ) : (
-              /* Menú para usuarios normales (se mantiene igual) */
               <>
                 <li>
                   <NavLink

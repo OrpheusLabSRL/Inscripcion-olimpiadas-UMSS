@@ -124,7 +124,7 @@
   white-space: nowrap;
 }
 
-.navigationList li:not(:last-child):hover {
+.navigationList li:hover {
   background: rgba(255, 255, 255, 0.1);
   color: white;
   transform: translateY(-2px);
@@ -142,7 +142,7 @@
 }
 
 /* Botón especial para el último elemento */
-.navigationList li:last-child {
+.navigationList > li:last-child {
   background: linear-gradient(
     135deg,
     var(--lightBlue) 0%,
@@ -155,7 +155,7 @@
   margin-left: 8px;
 }
 
-.navigationList li:last-child:hover {
+.navigationList > li:last-child:hover {
   background: linear-gradient(
     135deg,
     var(--accentBlue) 0%,
@@ -284,7 +284,7 @@
     font-size: 16px;
   }
 
-  .navigationList li:last-child {
+  .navigationList > li:last-child {
     background: linear-gradient(
       135deg,
       var(--lightBlue) 0%,
