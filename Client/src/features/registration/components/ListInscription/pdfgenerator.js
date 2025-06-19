@@ -1,3 +1,4 @@
+// pdfgenerator.js
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 // Función para convertir números a palabras
@@ -52,7 +53,94 @@ const drawTextWithLineBreaks = (page, text, x, y, maxWidth, size, font, color = 
   return lines.length;
 };
 
-// Función para dibujar la tabla de estudiantes con paginación
+// Función para dibujar la tabla resumida (para más de 20 estudiantes)
+const drawSummaryTable = (page, boletaData, startY, columnWidths, smallFontSize, font, fontBold) => {
+  const { width } = page.getSize();
+  const tableStartX = (width - columnWidths.reduce((a, b) => a + b, 0)) / 2;
+  const headerHeight = 20;
+  const rowHeight = 20;
+  const rowPadding = 5;
+  
+  // Dibujar encabezado
+  page.drawRectangle({
+    x: tableStartX,
+    y: startY - headerHeight,
+    width: columnWidths.reduce((a, b) => a + b, 0),
+    height: headerHeight,
+    color: rgb(0.2, 0.4, 0.8),
+  });
+
+  // Texto del encabezado
+  let offsetX = tableStartX;
+  ["Cantidad", "Detalle", "P. Unitario", "Total"].forEach((header, i) => {
+    page.drawText(header, {
+      x: offsetX + rowPadding,
+      y: startY - headerHeight + rowPadding + smallFontSize/2 -2,
+      size: smallFontSize,
+      font: fontBold,
+      color: rgb(1, 1, 1),
+      maxWidth: columnWidths[i] - rowPadding * 2,
+      lineHeight: smallFontSize,
+    });
+    offsetX += columnWidths[i];
+  });
+  
+  // Dibujar fila de datos
+  const costo = parseFloat(boletaData.area.costo_unitario) || 0;
+  const total = costo * boletaData.total.cantidad_estudiantes;
+  
+  // Fondo de fila
+  page.drawRectangle({
+    x: tableStartX,
+    y: startY - headerHeight - rowHeight,
+    width: columnWidths.reduce((a, b) => a + b, 0),
+    height: rowHeight,
+    color: rgb(0.97, 0.97, 0.97),
+    borderColor: rgb(0.7, 0.7, 0.7),
+    borderWidth: 0.4,
+  });
+  
+  // Contenido de la fila
+  // Cantidad
+  page.drawText(boletaData.total.cantidad_estudiantes.toString(), {
+    x: tableStartX + rowPadding,
+    y: startY - headerHeight - rowHeight + rowPadding + smallFontSize/2 -2,
+    size: smallFontSize,
+    font,
+    color: rgb(0, 0, 0),
+  });
+  
+  // Detalle
+  page.drawText("Inscripción a Olimpíadas", {
+    x: tableStartX + columnWidths[0] + rowPadding,
+    y: startY - headerHeight - rowHeight + rowPadding + smallFontSize/2 -2,
+    size: smallFontSize,
+    font,
+    color: rgb(0, 0, 0),
+  });
+  
+  // P. Unitario
+  page.drawText(`Bs ${costo.toFixed(2)}`, {
+    x: tableStartX + columnWidths[0] + columnWidths[1] + rowPadding,
+    y: startY - headerHeight - rowHeight + rowPadding + smallFontSize/2 -2,
+    size: smallFontSize,
+    font,
+    color: rgb(0, 0, 0),
+  });
+  
+  // Total
+  page.drawText(`Bs ${total.toFixed(2)}`, {
+    x: tableStartX + columnWidths[0] + columnWidths[1] + columnWidths[2] + rowPadding,
+    y: startY - headerHeight - rowHeight + rowPadding + smallFontSize/2 -2,
+    size: smallFontSize,
+    font,
+    color: rgb(0, 0, 0),
+  });
+  
+  return startY - headerHeight - rowHeight - 10;
+};
+
+// Función para dibujar la tabla de estudiantes con paginación (para 20 o menos estudiantes)
 const drawStudentTable = (pdfDoc, boletaData, startY, columnWidths, smallFontSize, font, fontBold) => {
   const pages = [pdfDoc.getPages()[0]];
   const margin = 50;
@@ -291,21 +379,37 @@ export const generatePdfBoleta = async (boletaData) => {
   drawCenteredText('DETALLE DE INSCRIPCIONES', normalFontSize, 0);
 
   // Configuración de la tabla
-  const columnWidths = [100, 200, 120, 80]; // Ajustado para mejor distribución
+  let finalY;
   
-  // Dibujar tabla y obtener páginas y posición final
-  const { pages, finalY } = drawStudentTable(
-    pdfDoc,
-    boletaData,
-    currentY - 30,
-    columnWidths,
-    smallFontSize,
-    font,
-    fontBold
-  );
+  if (boletaData.total.cantidad_estudiantes > 20) {
+    // Usar tabla resumida
+    const summaryColumnWidths = [80, 250, 100, 80];
+    finalY = drawSummaryTable(
+      page,
+      boletaData,
+      currentY - 30,
+      summaryColumnWidths,
+      smallFontSize,
+      font,
+      fontBold
+    );
+  } else {
+    // Usar tabla detallada
+    const studentColumnWidths = [100, 200, 120, 80];
+    const result = drawStudentTable(
+      pdfDoc,
+      boletaData,
+      currentY - 30,
+      studentColumnWidths,
+      smallFontSize,
+      font,
+      fontBold
+    );
+    finalY = result.finalY;
+  }
 
   // Sección de totales (en la última página)
-  const lastPage = pages[pages.length - 1];
+  const lastPage = pdfDoc.getPages()[pdfDoc.getPageCount() - 1];
   const totalsStartY = Math.min(finalY, lastPage.getSize().height - margin) - 40;
   
   lastPage.drawText(`Total Estudiantes: ${boletaData.total.cantidad_estudiantes}`, {
