@@ -165,8 +165,8 @@ const OlympiadsReportTable = () => {
         </div>
       </div>
 
-      <div className="olympiads-report__table-container">
-        <table className="olympiads-report__table">
+      <div className="report__table-container">
+        <table className="report__table">
           <thead>
             <tr>
               {visibleColumns.olympiadName && <th>Nombre Olimpiada</th>}

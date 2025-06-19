@@ -154,8 +154,8 @@ const TutorsReportTable = () => {
           ))}
         </div>
       </div>
-      <div className="olympiads-report__table-container">
-        <table className="olympiads-report__table">
+      <div className="report__table-container">
+        <table className="report__table">
           <thead>
             <tr>
               {visibleColumns.idCard && <th>Carnet Identidad</th>}
