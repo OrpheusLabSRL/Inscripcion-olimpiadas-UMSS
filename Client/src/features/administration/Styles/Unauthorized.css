@@ -36,13 +36,13 @@
 
 .lock-overlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 70%;
+  left: 70%;
   transform: translate(-50%, -50%);
 }
 
 .lock-icon {
-  color: #ffffff;
+  color: #000;
   animation: bounce 2s infinite;
 }
 
