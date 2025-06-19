@@ -34,6 +34,7 @@ export const RegisterResponsible = () => {
     cleanFields,
     cancelInscription,
     onSubmit,
+    clearErrors,
   } = useRegisterResponsible();
 
   useSessionStorageTutor(
@@ -52,7 +53,8 @@ export const RegisterResponsible = () => {
     watchedFields.carnetIdentidad,
     setValue,
     setIsReadOnly,
-    setIsTutorResponsible
+    setIsTutorResponsible,
+    clearErrors
   );
 
   const titleOlimpian = useMemo(() => {

@@ -9,7 +9,8 @@ export const useAutoFillTutor = (
   setValue,
   setIsReadOnly,
   setTipoTutor,
-  tipoTutor
+  tipoTutor,
+  clearErrors
 ) => {
   useEffect(() => {
     if (carnetIdentidad.length >= 7) {
@@ -37,6 +38,7 @@ export const useAutoFillTutor = (
           Apellido: true,
           Email: true,
         }));
+        clearErrors(["Nombre", "Apellido", "Email"]);
       }
 
       if (personData.data.data.telefono) {
@@ -49,11 +51,13 @@ export const useAutoFillTutor = (
               Tipo_Tutor: true,
               Numero_Celular: true,
             }));
+            clearErrors(["Tipo_Tutor", "Numero_Celular"]);
           } else {
             setIsReadOnly((prev) => ({
               ...prev,
               Numero_Celular: true,
             }));
+            clearErrors(["Numero_Celular"]);
           }
         } else {
           setValue("Numero_Celular", personData.data.data.telefono);
@@ -61,6 +65,7 @@ export const useAutoFillTutor = (
             ...prev,
             Numero_Celular: true,
           }));
+          clearErrors(["Numero_Celular"]);
         }
       }
     } catch (error) {
@@ -85,6 +90,8 @@ export const useAutoFillTutor = (
           Email: true,
           Numero_Celular: true,
         }));
+        clearErrors(["Ci", "Nombre", "Apellido", "Email", "Numero_Celular"]);
+
         return;
       }
       if (ciLegal == ciOlympian) {
@@ -98,6 +105,7 @@ export const useAutoFillTutor = (
           Apellido: true,
           Email: true,
         }));
+        clearErrors(["Ci", "Nombre", "Apellido", "Email"]);
       }
       if (ciLegal == ciProfesorPrincipal) {
         setValue("Nombre", sessionStorage.getItem("NombrePrincipal"));
@@ -115,6 +123,15 @@ export const useAutoFillTutor = (
           Numero_Celular: true,
           Tipo_Tutor: true,
         }));
+        clearErrors([
+          "Ci",
+          "Nombre",
+          "Apellido",
+          "Email",
+          "Numero_Celular",
+          "Tipo_Tutor",
+        ]);
+
         return;
       }
       if (ciLegal == ciProfesorSecundario) {
@@ -133,6 +150,14 @@ export const useAutoFillTutor = (
           Numero_Celular: true,
           Tipo_Tutor: true,
         }));
+        clearErrors([
+          "Ci",
+          "Nombre",
+          "Apellido",
+          "Email",
+          "Numero_Celular",
+          "Tipo_Tutor",
+        ]);
         return;
       }
     }

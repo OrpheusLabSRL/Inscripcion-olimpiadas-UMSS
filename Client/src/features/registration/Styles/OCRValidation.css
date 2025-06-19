@@ -1,10 +1,4 @@
-:root {
-  --darkBlue: #213448;
-  --lightBlue: #547792;
-  --white: #ffffff;
-  --lightGray: #f5f5f5;
-  --texto-azul: #213448;
-}
+
 .ocrvalidation-container {
   max-width: 85%;
   padding: 20px;

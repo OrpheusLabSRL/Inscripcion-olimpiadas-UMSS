@@ -38,6 +38,7 @@ export const RegisterOlympian = () => {
     cleanFlieds,
     cancelInscription,
     onSubmit,
+    clearErrors,
   } = useRegisterOlympian();
 
   useSessionStorageOlympian(watchedFields, location);
@@ -56,7 +57,8 @@ export const RegisterOlympian = () => {
     setValue,
     setIsReadOnly,
     setColegiosFiltradas,
-    setMunicipiosFiltradas
+    setMunicipiosFiltradas,
+    clearErrors
   );
 
   const titleOlimpian = useMemo(() => {

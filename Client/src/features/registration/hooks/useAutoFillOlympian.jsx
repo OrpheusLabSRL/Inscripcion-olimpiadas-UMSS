@@ -15,7 +15,8 @@ export const useAutoFillOlympian = (
   setValue,
   setIsReadOnly,
   setColegiosFiltradas,
-  setMunicipiosFiltradas
+  setMunicipiosFiltradas,
+  clearErrors
 ) => {
   const autofill = useCallback(async () => {
     try {
@@ -39,6 +40,7 @@ export const useAutoFillOlympian = (
           Apellido: true,
           Email: true,
         }));
+        clearErrors(["CarnetIdentidad", "Nombre", "Apellido", "Email"]);
       }
 
       if (personData.data.data.fechaNacimiento) {
@@ -62,6 +64,14 @@ export const useAutoFillOlympian = (
           Colegio: true,
           Curso: true,
         }));
+        clearErrors([
+          "CarnetIdentidad",
+          "FechaNacimiento",
+          "Departamento",
+          "Municipio",
+          "Curso",
+          "Colegio",
+        ]);
       }
     } catch (error) {
       const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
@@ -79,6 +89,7 @@ export const useAutoFillOlympian = (
           Apellido: true,
           Email: true,
         }));
+        clearErrors(["CarnetIdentidad", "Nombre", "Apellido", "Email"]);
       }
     }
   }, [setIsReadOnly, setValue, setColegiosFiltradas, setMunicipiosFiltradas]);

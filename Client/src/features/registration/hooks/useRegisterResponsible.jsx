@@ -20,6 +20,7 @@ export const useRegisterResponsible = () => {
     formState: { errors },
     watch,
     setValue,
+    clearErrors,
   } = useForm({
     defaultValues: {
       Nombre: sessionStorage.getItem("NombreResponsible") || "",
@@ -47,6 +48,7 @@ export const useRegisterResponsible = () => {
     setValue("Ci", "");
     setIsTutorResponsible(false);
     setIsReadOnly({});
+    clearErrors();
   };
 
   const limpiarCamposLocalStorage = () => {
@@ -145,5 +147,6 @@ export const useRegisterResponsible = () => {
     cleanFields,
     cancelInscription,
     onSubmit,
+    clearErrors,
   };
 };

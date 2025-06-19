@@ -71,7 +71,6 @@ export const useRegisterOlympianArea = () => {
         return;
       }
 
-      console.log("Hola antes del res");
       const resEnable = await getOlimpistaEnable(
         sessionStorage.getItem("CarnetIdentidadOlympian"),
         JSON.parse(sessionStorage.getItem("OlympicData")).idOlimpiada
