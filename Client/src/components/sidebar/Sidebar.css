@@ -1,8 +1,8 @@
 :root {
-  --azul-oscuro: #213448;
-  --azul-claro: #547792;
-  --blanco: #ffffff;
-  --gris-claro: #f5f5f5;
+  --darkBlue: #213448;
+  --lightBlue: #547792;
+  --white: #ffffff;
+  --lightGray: #f5f5f5;
   --texto-azul: #213448;
 }
 
@@ -10,8 +10,8 @@
   position: fixed;
   top: 0;
   height: 100vh;
-  background: var(--azul-oscuro);
-  color: var(--blanco);
+  background: var(--darkBlue);
+  color: var(--white);
   padding: 25px 5px; 
   transition: all 0.4s ease; 
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
@@ -24,7 +24,7 @@
 
   &.sidebar ul li a {
     width: auto;
-    color: var(--blanco);
+    color: var(--white);
   }
 }
 
@@ -162,7 +162,7 @@
   align-items: center;
   gap: 8px;
   color: #b91c1c;
-  background-color: var(--blanco);
+  background-color: var(--white);
   font-weight: 600;
   font-size: 1rem;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -170,7 +170,7 @@
 
 .btn-logout:hover {
   background-color: #dc2626;
-  color: var(--blanco);
+  color: var(--white);
 }
 
 @media (max-width: 768px) {
@@ -197,7 +197,7 @@
   display: flex;
   align-items: center;
   height: 100%;
-  color: var(--blanco);
+  color: var(--white);
 }
 
 /* ===== Iconos Sidebar ===== */

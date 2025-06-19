@@ -1,8 +1,8 @@
 :root {
-  --azul-oscuro: #213448;
-  --azul-claro: #547792;
+  --darkBlue: #213448;
+  --lightBlue: #547792;
   --blanco: #ffffff;
-  --gris-claro: #f5f5f5;
+  --lightGray: #f5f5f5;
   --texto-azul: #213448;
 }
 
@@ -65,21 +65,30 @@
 }
 
 .olympCaptionButton {
-  background-color: var(--azul-claro);
-  color: var(--blanco);
+background-color: var(--lightBlue);
+  color: var(--white);
+  padding: 6px 16px;
   border: none;
-  padding: 10px 20px;
-  font-weight: bold;
-  font-size: 1rem;
   border-radius: 20px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
+  height: 40px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
 }
 
 .olympCaptionButton:hover {
-  background-color: var(--blanco);
-  color: var(--azul-claro);
+    background-color: var(--white);
+  color: var(--lightBlue);
+  box-shadow: 0 4px 12px rgba(7, 91, 129, 0.4);
 }
+
 
 .olympCarouselControls {
   position: absolute;
@@ -107,7 +116,7 @@
 /* Información de olimpiadas */
 .olympInfoSection {
   padding: 2rem 4rem;
-  background-color: var(--gris-claro);
+  background-color: var(--lightGray);
   color: var(--texto-azul);
   font-family: 'Poppins', sans-serif;
 }
@@ -124,7 +133,7 @@
   content: '';
   width: 100px;
   height: 3px;
-  background-color: var(--azul-claro);
+  background-color: var(--lightBlue);
   display: block;
   margin: 8px auto 0;
   border-radius: 2px;
@@ -181,7 +190,7 @@
 
 /* Pasos de inscripción */
 .olympRegisterSteps {
-  background-color: var(--gris-claro);
+  background-color: var(--lightGray);
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -200,7 +209,7 @@
   content: '';
   width: 100px;
   height: 3px;
-  background-color: var(--azul-claro);
+  background-color: var(--lightBlue);
   display: block;
   margin: 8px auto 0;
   border-radius: 2px;

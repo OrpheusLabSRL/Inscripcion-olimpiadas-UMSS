@@ -30,14 +30,14 @@ function HeaderProp() {
           ☰
         </button>
 
-        <nav className={`headerNav ${menuOpen ? "open" : ""}`}>
-          <ul>
+        <nav className={`navigationMenu ${menuOpen ? "menuOpen" : ""}`}>
+          <ul className="navigationList">
             <li onClick={() => { navigate("/"); closeMenu(); }}>
               <i className="bi bi-house"></i> Inicio
             </li>
 
             <li
-              className="inscripciones-dropdown"
+              className="dropdownMenu"
               onClick={() => setDropdownVisible(!dropdownVisible)}
             >
               <span>
@@ -45,7 +45,7 @@ function HeaderProp() {
               </span>
 
               {dropdownVisible && (
-                <ul className="inscripciones-submenu">
+                <ul className="dropdownSubmenu">
                   <li onClick={() => { navigate("/consultar-inscripcion"); closeMenu(); }}>
                     <i className="bi bi-clipboard-check"></i> Estado de Inscripción
                   </li>
