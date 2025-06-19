@@ -2,8 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&family=Alata&display=swap");
 
 :root {
-
- --darkBlue: #213448;
+  --darkBlue: #213448;
   --lightBlue: #547792;
   --white: #ffffff;
   --lightGray: #f5f5f5;

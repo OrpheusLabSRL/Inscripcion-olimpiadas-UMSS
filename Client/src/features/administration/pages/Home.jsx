@@ -153,9 +153,16 @@ export default function Home() {
                   <FaArrowLeft />
                 </button>
               )}
-              <p className="adminBigText">
-                {currentOlimpiada?.nombreOlimpiada}
-              </p>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+              >
+                <p className="adminBigText">
+                  {currentOlimpiada?.nombreOlimpiada}
+                </p>
+                <p className="adminSectionTitle">
+                  {"Versión: " + currentOlimpiada?.version}
+                </p>
+              </div>
               {activeOlimpiadas.length > 1 && (
                 <button onClick={handleNext} aria-label="Siguiente">
                   <FaArrowRight />

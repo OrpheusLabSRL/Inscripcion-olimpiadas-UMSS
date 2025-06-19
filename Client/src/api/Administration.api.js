@@ -21,7 +21,9 @@ export const getOlimpiadas = async () => {
 };
 
 export const getOlimpiadasWithAreasCategorias = async () => {
-  const response = await inscriptionApi.get("/viewOlimpiadasWithAreasCategorias");
+  const response = await inscriptionApi.get(
+    "/viewOlimpiadasWithAreasCategorias"
+  );
   return response.data;
 };
 
@@ -50,6 +52,13 @@ export const updateOlimpiadaEstado = async (idOlimpiada, nuevoEstado) => {
   return await inscriptionApi.put(`/editarOlimpiadas/${idOlimpiada}/estado`, {
     estadoOlimpiada: nuevoEstado,
   });
+};
+
+export const updateOlimpiada = async (idOlimpiada, datosActualizados) => {
+  return await inscriptionApi.put(
+    `/editarOlimpiadas/${idOlimpiada}`,
+    datosActualizados
+  );
 };
 
 /* =======================
@@ -239,13 +248,23 @@ export const setUser = async (data) => {
   return response.data;
 };
 
+export const getRolesPermisos = async () => {
+  const response = await inscriptionApi.get("/getRolesPermisos");
+  return response.data;
+};
+
 export const getUsuarios = () => inscriptionApi.get("/usuarios");
+
 export const getRolesUser = () => inscriptionApi.get("/usuarios/roles");
+
 export const createUsuario = (data) => inscriptionApi.post("/usuarios", data);
+
 export const updateUsuario = (id, data) =>
   inscriptionApi.put(`/usuarios/${id}`, data);
+
 export const updateUsuarioEstado = (id, estado) =>
   inscriptionApi.put(`/usuarios/${id}/estado`, { estadoUsuario: estado });
+
 export const deleteUsuario = (id) => inscriptionApi.delete(`/usuarios/${id}`);
 
 export const verificarUsoAreasMasivo = async (ids) => {
