@@ -175,19 +175,26 @@
 }
 
 .inscriptionButton {
-  background-color: #0ea5e9;
-  color: white;
-  padding: 1rem 2rem;
-  font-size: 1rem;
+  background-color: var(--azulClaro);
+  color: var(--blanco);
+  padding: 10px;
   border: none;
-  border-radius: 12px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 30%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
 }
 
 .inscriptionButton:hover {
-  background-color: #0284c7;
-  transform: scale(1.03);
+  background-color: var(--blanco);
+  color: var(--azul-claro);
+  box-shadow: 0 4px 12px rgba(7, 91, 129, 0.4); 
 }
 
 @media (max-width: 768px) {

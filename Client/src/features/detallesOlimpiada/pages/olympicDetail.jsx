@@ -82,12 +82,14 @@ const OlimpiadaDetallada = () => {
             </p>
           </div>
         </div>
+
         <div className="inscriptionButtonContainer">
           <button className="inscriptionButton" onClick={handleInscriptionClick}>
             <i className="bi bi-pencil-square me-2"></i>
             Inscribirse a esta olimpiada
           </button>
         </div>
+        
         <h2>Áreas</h2>
         {areasCategorias.length === 0 ? (
           <p>No hay áreas o categorías asociadas a esta olimpiada.</p>
