@@ -65,31 +65,41 @@ const OlympicDetail = () => {
         <div className="olympiad-hero">
           <div className="olympiad-hero-overlay">
             <h2>{olympiad.nombreOlimpiada}</h2>
-            <p><strong>Versión:</strong> {olympiad.version}</p>
+            <p>
+              <strong>Versión:</strong> {olympiad.version}
+            </p>
             <p>
               <strong>Desde</strong>{" "}
-              {new Date(olympiad.fechaInicioOlimpiada).toLocaleDateString("es-ES", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}{" "}
+              {new Date(olympiad.fechaInicioOlimpiada).toLocaleDateString(
+                "es-ES",
+                {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                }
+              )}{" "}
               <strong>hasta</strong>{" "}
-              {new Date(olympiad.fechaFinOlimpiada).toLocaleDateString("es-ES", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
+              {new Date(olympiad.fechaFinOlimpiada).toLocaleDateString(
+                "es-ES",
+                {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                }
+              )}
             </p>
+          </div>
+          <div className="inscriptionButtonContainer">
+            <button
+              className="inscriptionButton"
+              onClick={handleInscriptionClick}
+            >
+              <i className="bi bi-pencil-square me-2"></i>
+              Inscribirse a esta olimpiada
+            </button>
           </div>
         </div>
 
-        <div className="inscriptionButtonContainer">
-          <button className="inscriptionButton" onClick={handleInscriptionClick}>
-            <i className="bi bi-pencil-square me-2"></i>
-            Inscribirse a esta olimpiada
-          </button>
-        </div>
-        
         <h2>Áreas</h2>
         {areasCategorias.length === 0 ? (
           <p>No hay áreas o categorías asociadas a esta olimpiada.</p>

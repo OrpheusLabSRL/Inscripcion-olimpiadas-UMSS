@@ -200,17 +200,22 @@ public function getOlimpistasByTutor($idTutorResponsable)
                 ]);
             }
     
-            $areas = $olimpista->inscripciones
-                ->map(function ($inscripcion) {
-                    return optional($inscripcion->OlimpiadaAreaCategoria->area)->idArea;
-                })
-                ->filter()
-                ->unique()
-                ->values();
+            $areaCategorias = $olimpista->inscripciones
+            ->map(function ($inscripcion) {
+                $pivot = $inscripcion->OlimpiadaAreaCategoria;
+
+                return [
+                    'area' => $pivot->area,
+                    'categoria' => $pivot->categoria,
+                ];
+            })
+            ->filter()
+            ->unique()
+            ->values();
     
             return response()->json([
                 'success' => true,
-                'data' => $areas
+                'data' => $areaCategorias
             ]);
         } catch (\Exception $e) {
             \Log::error('Error en getAreaOlimpista: ' . $e->getMessage() . "\n" . $e->getTraceAsString());

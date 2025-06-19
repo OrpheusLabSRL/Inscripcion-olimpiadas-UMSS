@@ -41,7 +41,6 @@ class InscripcionService
         DB::beginTransaction();
 
         try {
-            // 1. Procesar el olimpista
             $personaOlimpista = $this->personaRepository->actualizarOCrear(
                 ['carnetIdentidad' => $data['olimpista']['carnet_identidad']],
                 [
@@ -233,30 +232,34 @@ class InscripcionService
      * Procesar datos de tutor
      */
     private function procesarTutor(array $data): Tutor
-    {
-        Log::info('Data ', [$data]);
-
-        if (isset($data['id_persona'])) {
-            return $this->tutorRepository->buscarPorId($data['id_persona']);
-        }
-
-        $persona = $this->personaRepository->actualizarOCrear(
-            ['carnetIdentidad' => $data['carnet_identidad']],
-            [
-                'nombre' => $data['nombre'],
-                'apellido' => $data['apellido'],
-                'correoElectronico' => $data['correo_electronico'] ?? null
-            ]
-        );
-
-        return $this->tutorRepository->actualizarOCrear(
-            ['idPersona' => $persona->idPersona],
-            [
-                'tipoTutor' => $data['tipo_tutor'],
-                'telefono' => $data['telefono']
-            ]
-        );
+{
+    if (isset($data['id_persona'])) {
+        return $this->tutorRepository->buscarPorId($data['id_persona']);
     }
+
+    $persona = $this->personaRepository->actualizarOCrear(
+        ['carnetIdentidad' => $data['carnet_identidad']],
+        [
+            'nombre' => $data['nombre'],
+            'apellido' => $data['apellido'],
+            'correoElectronico' => $data['correo_electronico'] ?? null
+        ]
+    );
+
+    $tutorData = [
+        'telefono' => $data['telefono'],
+    ];
+
+    if (!empty($data['tipo_tutor'])) {
+        $tutorData['tipoTutor'] = $data['tipo_tutor'];
+    }
+
+    return $this->tutorRepository->actualizarOCrear(
+        ['idPersona' => $persona->idPersona],
+        $tutorData
+    );
+}
+
 
     /**
      * Generar código de inscripción
