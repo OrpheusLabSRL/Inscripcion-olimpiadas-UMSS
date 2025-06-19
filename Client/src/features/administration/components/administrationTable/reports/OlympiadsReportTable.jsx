@@ -62,11 +62,11 @@ const OlympiadsReportTable = () => {
 
   if (loading)
     return (
-      <div className="olympiads-report__status">
+      <div className="report__status">
         Cargando reporte de olimpiadas...
       </div>
     );
-  if (error) return <div className="olympiads-report__status">{error}</div>;
+  if (error) return <div className="report__status">{error}</div>;
 
   // Filter rows based on rowFilter and selected filterColumn (case insensitive substring match)
   const filteredOlympiads = olympiads.filter((item) => {

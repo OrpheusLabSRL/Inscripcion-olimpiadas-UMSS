@@ -468,7 +468,7 @@
 }
 
 /* Status messages */
-.olympiads-report__status {
+.report__status {
   padding: 2rem;
   text-align: center;
   color: #475569;

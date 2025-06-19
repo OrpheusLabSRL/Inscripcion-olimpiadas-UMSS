@@ -66,8 +66,13 @@ const TutorsReportTable = () => {
     fetchTutors();
   }, []);
 
-  if (loading) return <p>Cargando reporte de tutores...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) 
+    return (
+    <div className="report__status">
+      Cargando reporte de tutores...
+    </div>
+    );
+  if (error) return <div className="report__status">{error}</div>;
 
   // Filter rows based on rowFilter and selected filterColumn (case insensitive substring match)
   const filteredTutors = tutors.filter((tutor) => {

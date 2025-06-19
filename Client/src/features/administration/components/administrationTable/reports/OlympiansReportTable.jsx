@@ -77,8 +77,13 @@ const OlympiansReportTable = () => {
       fetchOlympians();
     }, []);
 
-  if (loading) return <p style={{ color: "#000000" }}>Cargando reporte de olimpistas...</p>;
-  if (error) return <p style={{ color: "#000000" }}>{error}</p>;
+  if (loading)
+    return (
+    <div className="report__status">
+     Cargando reporte de olimpistas...
+     </div>
+     );
+  if (error) return <div className="report__status">{error}</div>;
 
   // Filter rows based on rowFilter and selected filterColumn (case insensitive substring match)
   const filteredOlympians = olympians.filter((olympian) => {
