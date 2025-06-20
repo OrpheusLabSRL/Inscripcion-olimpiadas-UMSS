@@ -131,6 +131,8 @@ const ContentProp = () => {
 
     const startDate = new Date(olympiad.fechaInicioOlimpiada);
     const endDate = new Date(olympiad.fechaFinOlimpiada);
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
 
     return today < startDate || today > endDate;
   }, []);

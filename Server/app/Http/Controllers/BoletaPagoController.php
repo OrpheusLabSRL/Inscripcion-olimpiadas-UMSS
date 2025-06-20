@@ -229,4 +229,16 @@ class BoletaPagoController extends Controller
             return response()->json(['message' => 'Error interno al reimprimir la boleta.'], 500);
         }
     }
+
+    public function getBoletaData($codigoBoleta)
+    {
+        try {
+            $boletaData = $this->reimprimirBoletaService->getBoletaData($codigoBoleta);
+            Log::info('Datos de la boleta recuperados:', ['boleta' => $boletaData]);
+            return response()->json($boletaData);
+        } catch (\Exception $e) {
+            Log::error('Error en getBoletaData:', ['mensaje' => $e->getMessage()]);
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
 }

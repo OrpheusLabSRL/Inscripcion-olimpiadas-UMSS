@@ -91,6 +91,7 @@ public function getOlimpistasByTutor($idTutorResponsable)
                         'nombreOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->nombreOlimpiada ?? null,
                         'versionOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->version ?? null,
                         'idOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->idOlimpiada ?? null,
+                        'formaInscripcion' => $inscripcion->formaInscripcion ?? null,
 
                         'tutor_legal' => [
                             'nombre' => $inscripcion->tutorLegal->persona->nombre ?? null,
