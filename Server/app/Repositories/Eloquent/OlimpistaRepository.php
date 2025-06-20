@@ -31,6 +31,30 @@ class OlimpistaRepository implements OlimpistaRepositoryInterface
             ->get();
     }
 
+    public function getOlympiadRegistrationsReport(){
+    return \DB::table('olimpiadas')
+        ->join('olimpiadas_areas_categorias', 'olimpiadas.idOlimpiada', '=', 'olimpiadas_areas_categorias.idOlimpiada')
+        ->join('inscripciones', 'olimpiadas_areas_categorias.idOlimpAreaCategoria', '=', 'inscripciones.idOlimpAreaCategoria')
+        ->join('olimpistas', 'inscripciones.idOlimpista', '=', 'olimpistas.idPersona')
+        ->join('personas', 'olimpistas.idPersona', '=', 'personas.idPersona')
+        ->select(
+            'olimpiadas.nombreOlimpiada as nombre_olimpiada',
+            'olimpiadas.version as edicion_olimpiada',
+            'personas.carnetIdentidad as carnet_identidad_olimpista',
+            'personas.nombre as nombre_olimpista',
+            'personas.apellido as apellido_olimpista',
+            \DB::raw('(SELECT COUNT(DISTINCT insc.idOlimpista) FROM inscripciones insc JOIN olimpiadas_areas_categorias oac ON insc.idOlimpAreaCategoria = oac.idOlimpAreaCategoria WHERE oac.idOlimpiada = olimpiadas.idOlimpiada) as total_olimpistas')
+        )
+        ->groupBy(
+            'olimpiadas.nombreOlimpiada',
+            'olimpiadas.version',
+            'personas.carnetIdentidad',
+            'personas.nombre',
+            'personas.apellido'
+        )
+        ->get();
+    }
+
     public function actualizarOCrear(array $criterios, array $datos): Olimpista
     {
         return Olimpista::updateOrCreate($criterios, $datos);

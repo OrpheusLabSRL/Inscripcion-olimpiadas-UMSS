@@ -22,6 +22,8 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RolPermisoController;
+use App\Http\Controllers\InscripcionTutorController;
+use App\Http\Controllers\ReporteController;
 
 
 // Ruta protegida para obtener el usuario autenticado
@@ -40,6 +42,7 @@ Route::get('/olimpistas', [OlimpistaController::class, 'getAllOlimpistas']);
 Route::get('/olimpista/{carnet_identidad}/habilitado/{idOlimpiada}', [InscripcionController::class, 'enableForIncription']);
 Route::get('/olimpista/{id}/tutores', [TutorController::class, 'getTutoresByOlimpista']);
 Route::get('/tutores/all', [TutorController::class, 'getAllTutors']);
+Route::get('/olympiad-registrations-report', [OlimpistaController::class, 'getOlympiadRegistrationsReport']);
 
 
 // Tutores
@@ -95,6 +98,7 @@ Route::post('/consultar-inscripcion-olimpista', [InscripcionController::class, '
 Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class, 'consultar']); 
 Route::post('/verificar-uso-areas', [InscripcionController::class, 'verificarUsoAreasMasivo']);
 Route::post('/verificar-uso-categorias', [InscripcionController::class, 'verificarUsoCategoriasMasivo']);
+Route::post('/inscriptions', [InscripcionController::class, 'destroy']);
 
 // Categoría - Grado
 Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
@@ -134,3 +138,11 @@ Route::prefix('usuarios')->group(function () {
     Route::put('/{id}', [UsuarioController::class, 'update']); // Actualizar usuario
     Route::delete('/{id}', [UsuarioController::class, 'destroy']); // Eliminar usuario
 });
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::get('/boletas/tutor/{tutorId}', [BoletaPagoController::class, 'getBoletasPorTutor']);
+Route::get('/boletas/data/{codigoBoleta}', [BoletaPagoController::class, 'getBoletaData']);
+
+
+Route::post('/inscripcion/tutor', [InscripcionTutorController::class, 'inscribirTutor']);
+Route::get('/inscripciones/tutor/{id}', [InscripcionTutorController::class, 'getInscripcionesPorTutor']);

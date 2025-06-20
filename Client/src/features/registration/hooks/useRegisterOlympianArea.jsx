@@ -76,7 +76,6 @@ export const useRegisterOlympianArea = () => {
         JSON.parse(sessionStorage.getItem("OlympicData")).idOlimpiada
       );
 
-      console.log("res", resEnable);
       if (
         resEnable?.data?.data?.inscripciones_actuales == 1 &&
         data.AreaPrincipal &&
@@ -123,7 +122,9 @@ export const useRegisterOlympianArea = () => {
     });
 
     if (confirmacion.isConfirmed) {
+      const dataOlimpian = JSON.parse(sessionStorage.getItem("OlympicData"));
       limpiarCamposLocalStorage();
+      sessionStorage.setItem("OlympicData", JSON.stringify(dataOlimpian));
       navigation(
         sessionStorage.getItem("tutorInscripcionId")
           ? "/register/listRegistered"

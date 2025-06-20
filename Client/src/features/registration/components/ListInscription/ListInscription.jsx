@@ -7,25 +7,29 @@ import Swal from "sweetalert2";
 import { NextPage } from "../../../../components/Buttons/NextPage";
 import { PrimaryButton } from "../../../../components/Buttons/PrimaryButton";
 import { ListElement } from "../ListElement/ListElement";
-import { data } from "react-router-dom";
 
 //api
 export const ListInscription = ({
   dataOlympians,
   codigoInscripcion,
   index,
+  getStudents,
 }) => {
   const [registering, setRegistering] = useState(true);
+  const [registrationForm, setRegistrationForm] = useState("");
   const [nameOlimpian, setNameOlimpian] = useState("");
 
   useEffect(() => {
     setRegistering(dataOlympians[0].inscripciones[0].registrandose);
     setNameOlimpian(
       dataOlympians[0].inscripciones[0].nombreOlimpiada +
-      " versión " +
-      dataOlympians[0].inscripciones[0].versionOlimpiada
+        " versión " +
+        dataOlympians[0].inscripciones[0].versionOlimpiada
     );
+    setRegistrationForm(dataOlympians[0].inscripciones[0].formaInscripcion);
   }, []);
+
+  console.log("Los datos de la olimpiada son", dataOlympians);
 
   const onClickAddStudent = () => {
     const studentOlympiad = {
@@ -83,20 +87,28 @@ export const ListInscription = ({
       <div className="list-header">
         <h1>{"Inscripción " + (index + 1)}</h1>
 
-        <NextPage
-          value="+ Agregar Estudiante"
-          className={`btn-add-student ${registering ? "" : "btn-add-student-disabled"
+        {registrationForm === "Manual" && (
+          <NextPage
+            value="+ Agregar Estudiante"
+            className={`btn-add-student ${
+              registering ? "" : "btn-add-student-disabled"
             }`}
-          to="/register/olympian"
-          state={{ from: location.pathname }}
-          disabled={!registering}
-          onClick={onClickAddStudent}
-        />
+            to="/register/olympian"
+            state={{ from: location.pathname }}
+            disabled={!registering}
+            onClick={onClickAddStudent}
+          />
+        )}
       </div>
       {nameOlimpian}
       <div className="container-list">
         {dataOlympians.map((estudiante) => (
-          <ListElement data={estudiante} key={estudiante.id_olimpista} />
+          <ListElement
+            data={estudiante}
+            key={estudiante.id_olimpista}
+            getStudents={getStudents}
+            registering={registering}
+          />
         ))}
       </div>
 
@@ -107,7 +119,10 @@ export const ListInscription = ({
             onClick={finishRegister}
             value={
               <>
-                <i className="bi bi-check-circle-fill" style={{ marginRight: "8px" }}></i>
+                <i
+                  className="bi bi-check-circle-fill"
+                  style={{ marginRight: "8px" }}
+                ></i>
                 Terminar inscripción
               </>
             }

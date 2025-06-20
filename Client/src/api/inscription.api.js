@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-const baseURL = "http://127.0.0.1:8000/api";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const inscriptionApi = axios.create({
   baseURL,
@@ -39,6 +39,9 @@ export const getPersonData = (data) =>
 
 export const setNewInscription = (data) =>
   inscriptionApi.post("/newInscription", data);
+
+export const deleteInscriptions = (data) =>
+  inscriptionApi.post("/inscriptions", data);
 
 export const finishRegistering = (id, codigoInscripcion) =>
   inscriptionApi.put(`/tutor/${id}/${codigoInscripcion}/inscripciones/update`);

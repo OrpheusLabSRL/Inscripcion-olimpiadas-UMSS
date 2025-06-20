@@ -25,5 +25,10 @@ class BoletaPago extends Model
     {
         return $this->hasMany(Inscripcion::class, 'codigoBoleta', 'codigoBoleta');
     }
+
+    public function tutor()
+    {
+        return $this->belongsTo(Tutor::class, 'idTutor', 'idPersona');
+    }
 }
 

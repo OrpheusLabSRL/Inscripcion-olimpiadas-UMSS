@@ -43,4 +43,28 @@ class ReimprimirBoletaService
             throw $e;
         }
     }
+
+    public function getBoletaData($codigoBoleta)
+    {
+        try {
+            $boleta = BoletaPago::with(['inscripciones' => function ($query) {
+                $query->with(['olimpista.persona', 'olimpiadaAreaCategoria.area', 'olimpiadaAreaCategoria.categoria', 'olimpiadaAreaCategoria.olimpiada']);
+            }])->where('codigoBoleta', $codigoBoleta)->first();
+
+            if (!$boleta) {
+                throw new \Exception('Boleta no encontrada.');
+            }
+            
+            // Cargar explícitamente la relación del tutor y su persona
+            $boleta->load('tutor');
+            if ($boleta->tutor) {
+                $boleta->tutor->load('persona');
+            }
+
+            return $boleta;
+        } catch (\Exception $e) {
+            Log::error('Error al obtener los datos de la boleta: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 }

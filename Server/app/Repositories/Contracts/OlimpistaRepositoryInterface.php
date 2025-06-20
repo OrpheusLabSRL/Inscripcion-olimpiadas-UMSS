@@ -12,4 +12,5 @@ interface OlimpistaRepositoryInterface
     public function buscarPorPersona(int $idPersona): ?Olimpista;
     public function crear(array $datos): Olimpista;
     public function actualizar(int $id, array $datos): bool;
+    public function getOlympiadRegistrationsReport();
 }

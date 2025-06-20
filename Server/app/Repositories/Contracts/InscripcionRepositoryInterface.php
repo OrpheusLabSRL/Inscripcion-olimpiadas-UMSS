@@ -3,6 +3,7 @@
 namespace App\Repositories\Contracts;
 
 use Illuminate\Support\Collection;
+use App\Models\Inscripcion;
 
 interface InscripcionRepositoryInterface
 {
@@ -65,4 +66,11 @@ interface InscripcionRepositoryInterface
      * Verificar uso de categorías en forma masiva
      */
     public function verificarUsoCategoriasMasivo(array $ids): array;
+
+    public function buscarPorId(int $idInscripcion): ?Inscripcion;
+
+    /**
+     * Eliminar inscripción por ID
+     */
+    public function eliminar(int $idInscripcion): bool;
 }

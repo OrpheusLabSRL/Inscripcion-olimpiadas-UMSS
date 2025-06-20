@@ -91,6 +91,7 @@ public function getOlimpistasByTutor($idTutorResponsable)
                         'nombreOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->nombreOlimpiada ?? null,
                         'versionOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->version ?? null,
                         'idOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->idOlimpiada ?? null,
+                        'formaInscripcion' => $inscripcion->formaInscripcion ?? null,
 
                         'tutor_legal' => [
                             'nombre' => $inscripcion->tutorLegal->persona->nombre ?? null,
@@ -227,5 +228,20 @@ public function getOlimpistasByTutor($idTutorResponsable)
         }
     }
     
+    public function getOlympiadRegistrationsReport(){
+        try {
+            $data = $this->service->getOlympiadRegistrationsReport();
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener el reporte de inscripciones por olimpiada',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
 }
