@@ -90,6 +90,33 @@ body,
   text-align: center;
 }
 
+/* Agrega esto a tu archivo Tables.css */
+.passwordButton {
+  color: #6c757d;
+  background-color: rgba(108, 117, 125, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.passwordButton:hover {
+  background-color: rgba(108, 117, 125, 0.2);
+  transform: scale(1.1);
+}
+
+.passwordButton:disabled,
+.passwordButton.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* ===== BOTONES DE ACCIÓN ESTANDARIZADOS ===== */
 .actionButtons {
   display: flex;
