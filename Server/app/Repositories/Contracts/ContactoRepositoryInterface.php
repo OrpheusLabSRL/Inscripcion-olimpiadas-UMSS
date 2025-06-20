@@ -10,4 +10,4 @@ interface ContactoRepositoryInterface
      * @return bool
      */
     public function enviarMensaje(array $datos): bool;
-} 
+}
