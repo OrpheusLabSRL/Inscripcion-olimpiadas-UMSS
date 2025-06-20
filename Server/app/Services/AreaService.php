@@ -42,16 +42,18 @@ class AreaService
         return $this->repository->changeStatus($id, $status);
     }
 
-    public function getProgramaCompleto()
+    public function getProgramaCompleto($id)
     {
         $areas = $this->repository->getActiveWithRelations([
-            'categorias' => function ($query) {
-                $query->where('estadoCategoria', true)
-                    ->with(['grados' => function ($q) {
-                        $q->where('estadoGrado', true);
-                    }]);
-            }
-        ]);
+        'categorias' => function ($query) use ($id) {
+            $query->where('estadoCategoria', true)
+                ->where('olimpiadas_areas_categorias.idOlimpiada', $id)
+                ->where('olimpiadas_areas_categorias.estado', true)
+                ->with(['grados' => function ($q) {
+                    $q->where('estadoGrado', true);
+                }]);
+        }
+        ], $id);
 
         $programa = [];
 

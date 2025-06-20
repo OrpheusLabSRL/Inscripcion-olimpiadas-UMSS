@@ -49,7 +49,7 @@ class PersonaController extends Controller
 
     if (!$inscripcionOlimpista && !$tutorEnInscripcion) {
         return response()->json([
-            'success' => true,
+            'success' => false,
             'message' => 'La persona no participa en esta olimpiada',
             'data' => []
         ]);
