@@ -181,7 +181,9 @@ export const useRegisterTutor = () => {
     });
 
     if (confirmacion.isConfirmed) {
+      const dataOlimpian = JSON.parse(sessionStorage.getItem("OlympicData"));
       limpiarCamposLocalStorage();
+      sessionStorage.setItem("OlympicData", JSON.stringify(dataOlimpian));
       navigation(
         sessionStorage.getItem("tutorInscripcionId")
           ? "/register/listRegistered"

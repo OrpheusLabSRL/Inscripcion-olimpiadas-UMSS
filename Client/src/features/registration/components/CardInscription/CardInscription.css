@@ -21,6 +21,7 @@
   font-size: var(--pM-size);
   line-height: 1.5;
   font-weight: 300;
+  margin: 15px;
 }
 
 .advantages {
