@@ -17,4 +17,10 @@ class OlimpistaService
     {
         return $this->repository->getAllWithDetails();
     }
+
+    public function getOlympiadRegistrationsReport()
+    {
+        return $this->repository->getOlympiadRegistrationsReport();
+    }
+
 }

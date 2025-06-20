@@ -227,5 +227,20 @@ public function getOlimpistasByTutor($idTutorResponsable)
         }
     }
     
+    public function getOlympiadRegistrationsReport(){
+        try {
+            $data = $this->service->getOlympiadRegistrationsReport();
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener el reporte de inscripciones por olimpiada',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
 }
