@@ -59,6 +59,29 @@ class InscripcionController extends Controller
         }
     }
 
+    public function destroy(Request $request): JsonResponse
+    {
+        try {
+            Log::info('Iniciando proceso de eliminación de inscripciones', ['data' => $request->all()]);
+            
+            $this->inscripcionService->eliminarInscripciones($request->all());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Inscripciones eliminadas exitosamente'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error al eliminar inscripciones', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar inscripciones: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * Verificar si un olimpista puede inscribirse
      */

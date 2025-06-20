@@ -13,6 +13,7 @@ export const ListInscription = ({
   dataOlympians,
   codigoInscripcion,
   index,
+  getStudents,
 }) => {
   const [registering, setRegistering] = useState(true);
   const [registrationForm, setRegistrationForm] = useState("");
@@ -102,7 +103,12 @@ export const ListInscription = ({
       {nameOlimpian}
       <div className="container-list">
         {dataOlympians.map((estudiante) => (
-          <ListElement data={estudiante} key={estudiante.id_olimpista} />
+          <ListElement
+            data={estudiante}
+            key={estudiante.id_olimpista}
+            getStudents={getStudents}
+            registering={registering}
+          />
         ))}
       </div>
 

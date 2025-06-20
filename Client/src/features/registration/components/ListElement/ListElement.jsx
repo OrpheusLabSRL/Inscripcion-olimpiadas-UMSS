@@ -6,11 +6,15 @@ import { MdDelete } from "react-icons/md";
 import { useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
+import Swal from "sweetalert2";
+
+//Api
+import { deleteInscriptions } from "../../../../api/inscription.api";
 
 //component
 import { GenericModal } from "../../../../components/modals/GenericModal";
 
-export const ListElement = ({ data }) => {
+export const ListElement = ({ data, getStudents, registering }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = (e) => {
@@ -20,6 +24,45 @@ export const ListElement = ({ data }) => {
 
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+
+  const handleDelete = async () => {
+    const idInscripciones = {
+      id_inscripcion_1: data?.inscripciones[0]?.id_inscripcion,
+      id_inscripcion_2: data?.inscripciones[1]?.id_inscripcion,
+    };
+
+    try {
+      const confirmacion = await Swal.fire({
+        title: "¿Estás seguro que quieres eliminar las inscripciones?",
+        text: "Esta acción no se puede deshacer.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      });
+
+      if (confirmacion.isConfirmed) {
+        const res = await deleteInscriptions(idInscripciones);
+
+        await Swal.fire({
+          title: "¡Eliminado!",
+          text: "Las inscripciones han sido eliminadas exitosamente.",
+          icon: "success",
+        });
+
+        getStudents();
+        console.log(res);
+      }
+    } catch (error) {
+      console.error(error);
+
+      await Swal.fire({
+        title: "Error",
+        text: "Ocurrió un error al eliminar las inscripciones.",
+        icon: "error",
+      });
+    }
   };
 
   return (
@@ -50,7 +93,7 @@ export const ListElement = ({ data }) => {
               <td>{data.departamento}</td>
               <td>{data.municipio}</td>
               <td>
-                <div>
+                <div style={{ display: "flex", justifyContent: "center" }}>
                   <FaInfoCircle
                     style={{
                       fontSize: "25px",
@@ -59,6 +102,24 @@ export const ListElement = ({ data }) => {
                     }}
                     onClick={openModal}
                   />
+                  {registering ? (
+                    <MdDelete
+                      style={{
+                        fontSize: "25px",
+                        color: "red",
+                        cursor: "pointer",
+                      }}
+                      onClick={handleDelete}
+                    />
+                  ) : (
+                    <MdDelete
+                      style={{
+                        fontSize: "25px",
+                        color: "#0000004d",
+                        cursor: "not-allowed",
+                      }}
+                    />
+                  )}
                 </div>
               </td>
             </tr>

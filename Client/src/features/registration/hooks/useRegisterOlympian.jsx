@@ -12,7 +12,6 @@ export const useRegisterOlympian = () => {
   const [currentStep, setCurrentStep] = useState(2);
   const [totalSteps, setTotalStep] = useState(4);
   const [isReadOnly, setIsReadOnly] = useState({});
-
   const navigation = useNavigate();
   const location = useLocation();
   const previousPath = sessionStorage.getItem("prevPage");
@@ -101,7 +100,6 @@ export const useRegisterOlympian = () => {
 
       if (!response.data.success) {
         if (response.data.message === "Olimpista no encontrado") {
-          // Olimpista no encontrado - continuar al registro
           navigation("/register/olympian-area", data);
           return;
         }

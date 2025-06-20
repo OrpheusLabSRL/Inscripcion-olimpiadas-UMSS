@@ -15,16 +15,17 @@ export const ListRegistered = () => {
   const [dataInscriptions, setDataInscriptions] = useState([]);
   const location = useLocation();
 
-  useEffect(() => {
+  const getStudents = async () => {
     const storedTutorId = sessionStorage.getItem("tutorInscripcionId");
-    const getStudents = async () => {
-      try {
-        const res = await getDataOlympian(storedTutorId);
-        setDataInscriptions(res.data.data);
-      } catch (error) {
-        console.error("Error en la petición:", error);
-      }
-    };
+    try {
+      const res = await getDataOlympian(storedTutorId);
+      setDataInscriptions(res.data.data);
+    } catch (error) {
+      console.error("Error en la petición:", error);
+    }
+  };
+
+  useEffect(() => {
     sessionStorage.setItem("pantallaActualRegistro", location.pathname);
     getStudents();
   }, []);
@@ -39,6 +40,7 @@ export const ListRegistered = () => {
             dataOlympians={inscription.olimpistas}
             codigoInscripcion={inscription.codigoInscripcion}
             index={index}
+            getStudents={getStudents}
           />
         );
       })}
