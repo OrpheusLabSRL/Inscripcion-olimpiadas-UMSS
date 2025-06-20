@@ -98,6 +98,7 @@ Route::post('/consultar-inscripcion-olimpista', [InscripcionController::class, '
 Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class, 'consultar']); 
 Route::post('/verificar-uso-areas', [InscripcionController::class, 'verificarUsoAreasMasivo']);
 Route::post('/verificar-uso-categorias', [InscripcionController::class, 'verificarUsoCategoriasMasivo']);
+Route::post('/inscriptions', [InscripcionController::class, 'destroy']);
 
 // Categoría - Grado
 Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);

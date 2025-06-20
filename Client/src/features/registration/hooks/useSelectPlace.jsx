@@ -34,6 +34,10 @@ export const useSelectPlace = () => {
     const label = selectedOption.text;
     setValue("Municipio", e.target.value);
     const colegios = colegioPorMunicipio[label] || [];
+    colegios.push({
+      label: "No se encuentra en lista",
+      value: "No se encuentra en lista",
+    });
     setColegiosFiltradas(colegios);
     sessionStorage.setItem("colegiosFiltradas", JSON.stringify(colegios));
   };

@@ -40,6 +40,9 @@ export const getPersonData = (data) =>
 export const setNewInscription = (data) =>
   inscriptionApi.post("/newInscription", data);
 
+export const deleteInscriptions = (data) =>
+  inscriptionApi.post("/inscriptions", data);
+
 export const finishRegistering = (id, codigoInscripcion) =>
   inscriptionApi.put(`/tutor/${id}/${codigoInscripcion}/inscripciones/update`);
 

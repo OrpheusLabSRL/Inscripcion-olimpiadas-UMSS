@@ -250,4 +250,20 @@ class InscripcionRepository implements InscripcionRepositoryInterface
 
         return $resultados;
     }
+
+    public function buscarPorId(int $idInscripcion): ?Inscripcion
+    {
+        return Inscripcion::find($idInscripcion);
+    }
+
+    public function eliminar(int $idInscripcion): bool
+    {
+        $inscripcion = $this->buscarPorId($idInscripcion);
+        
+        if (!$inscripcion) {
+            return false;
+        }
+        
+        return $inscripcion->delete();
+    }
 }

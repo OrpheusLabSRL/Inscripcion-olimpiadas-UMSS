@@ -112,6 +112,49 @@ class InscripcionService
         }
     }
 
+    public function eliminarInscripciones(array $data): void
+    {
+        DB::beginTransaction();
+
+        try {
+            $inscripcionesAEliminar = [];
+
+            // Agregar inscripción 1 si existe
+            if (isset($data['id_inscripcion_1']) && !is_null($data['id_inscripcion_1'])) {
+                $inscripcionesAEliminar[] = $data['id_inscripcion_1'];
+            }
+
+            // Agregar inscripción 2 si existe
+            if (isset($data['id_inscripcion_2']) && !is_null($data['id_inscripcion_2'])) {
+                $inscripcionesAEliminar[] = $data['id_inscripcion_2'];
+            }
+
+            // Verificar que hay al menos una inscripción para eliminar
+            if (empty($inscripcionesAEliminar)) {
+                throw new \Exception('No se proporcionaron inscripciones válidas para eliminar');
+            }
+
+            // Eliminar las inscripciones
+            foreach ($inscripcionesAEliminar as $idInscripcion) {
+                $inscripcion = $this->inscripcionRepository->buscarPorId($idInscripcion);
+                
+                if (!$inscripcion) {
+                    throw new \Exception("Inscripción con ID {$idInscripcion} no encontrada");
+                }
+
+                $this->inscripcionRepository->eliminar($idInscripcion);
+            }
+
+            DB::commit();
+            
+            Log::info('Inscripciones eliminadas exitosamente', ['ids' => $inscripcionesAEliminar]);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
     /**
      * Verificar elegibilidad del olimpista
      */
