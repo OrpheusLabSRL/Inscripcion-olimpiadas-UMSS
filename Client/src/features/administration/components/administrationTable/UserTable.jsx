@@ -11,10 +11,12 @@ import {
   FaSpinner,
   FaToggleOn,
   FaToggleOff,
+  FaKey,
 } from "react-icons/fa";
 import { CiCircleInfo } from "react-icons/ci";
 import PermisosModal from "../administrationModal/ViewUserModal";
 import EditUserModal from "../administrationModal/EditUserModal";
+import ChangePasswordModal from "../administrationModal/ChangePasswordModal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import "../../Styles/Tables.css";
@@ -28,6 +30,9 @@ const UsersTable = ({ refresh }) => {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [modalEditarAbierto, setModalEditarAbierto] = useState(false);
   const [usuarioParaEditar, setUsuarioParaEditar] = useState(null);
+  const [modalPasswordAbierto, setModalPasswordAbierto] = useState(false);
+  const [usuarioParaCambiarPassword, setUsuarioParaCambiarPassword] =
+    useState(null);
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -67,6 +72,11 @@ const UsersTable = ({ refresh }) => {
   const editarUsuario = (usuario) => {
     setUsuarioParaEditar(usuario);
     setModalEditarAbierto(true);
+  };
+
+  const cambiarPassword = (usuario) => {
+    setUsuarioParaCambiarPassword(usuario);
+    setModalPasswordAbierto(true);
   };
 
   const toggleEstado = async (usuario) => {
@@ -169,7 +179,7 @@ const UsersTable = ({ refresh }) => {
               <th>Nombre</th>
               <th>Email</th>
               <th>Rol</th>
-              <th className="tableUtilTextCenter">Estado</th>
+              {/*<th className="tableUtilTextCenter">Estado</th>*/}
               <th className="tableUtilTextCenter">Acciones</th>
             </tr>
           </thead>
@@ -187,7 +197,7 @@ const UsersTable = ({ refresh }) => {
                   <td className="tableUtilTextLeft">{usuario.nombre}</td>
                   <td>{usuario.email}</td>
                   <td>{usuario.rol?.nombreRol || "Sin rol"}</td>
-                  <td className="tableUtilTextCenter">
+                  {/*<td className="tableUtilTextCenter">
                     <button
                       className={`tableUtilStatusToggle ${
                         usuario.estadoUsuario === 1 ? "active" : "inactive"
@@ -206,7 +216,7 @@ const UsersTable = ({ refresh }) => {
                         {usuario.estadoUsuario === 1 ? "Activo" : "Inactivo"}
                       </span>
                     </button>
-                  </td>
+                  </td>*/}
                   <td className="tableActions">
                     <div className="actionButtons">
                       <button
@@ -222,6 +232,13 @@ const UsersTable = ({ refresh }) => {
                         onClick={() => editarUsuario(usuario)}
                       >
                         <FaEdit />
+                      </button>
+                      <button
+                        className="actionButton passwordButton"
+                        onClick={() => cambiarPassword(usuario)}
+                        title="Cambiar contraseña"
+                      >
+                        <FaKey />
                       </button>
                       <button
                         className="actionButton deleteButton"
@@ -260,6 +277,12 @@ const UsersTable = ({ refresh }) => {
         onClose={() => setModalEditarAbierto(false)}
         onUsuarioActualizado={actualizarUsuarioEnLista}
         usuario={usuarioParaEditar}
+      />
+
+      <ChangePasswordModal
+        isOpen={modalPasswordAbierto}
+        onClose={() => setModalPasswordAbierto(false)}
+        usuario={usuarioParaCambiarPassword}
       />
     </div>
   );
