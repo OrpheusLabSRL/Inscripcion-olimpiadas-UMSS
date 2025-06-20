@@ -22,6 +22,8 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RolPermisoController;
+use App\Http\Controllers\InscripcionTutorController;
+use App\Http\Controllers\ReporteController;
 
 
 // Ruta protegida para obtener el usuario autenticado
@@ -134,3 +136,11 @@ Route::prefix('usuarios')->group(function () {
     Route::put('/{id}', [UsuarioController::class, 'update']); // Actualizar usuario
     Route::delete('/{id}', [UsuarioController::class, 'destroy']); // Eliminar usuario
 });
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::get('/boletas/tutor/{tutorId}', [BoletaPagoController::class, 'getBoletasPorTutor']);
+Route::get('/boletas/data/{codigoBoleta}', [BoletaPagoController::class, 'getBoletaData']);
+
+
+Route::post('/inscripcion/tutor', [InscripcionTutorController::class, 'inscribirTutor']);
+Route::get('/inscripciones/tutor/{id}', [InscripcionTutorController::class, 'getInscripcionesPorTutor']);
