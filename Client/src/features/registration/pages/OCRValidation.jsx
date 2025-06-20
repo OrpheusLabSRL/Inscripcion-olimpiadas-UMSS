@@ -158,10 +158,7 @@ export const OCRValidation = () => {
             </div>
           </div>
           {file && (
-            <div
-              className="selected-file"
-              title={file.name}
-            >
+            <div className="status-message success" title={file.name}>
               Archivo seleccionado: {file.name}
             </div>
           )}
@@ -176,15 +173,24 @@ export const OCRValidation = () => {
             )}
         </form>
         
-        {controlBoleta && (
+        {/* Botones centrados y modernos */}
+        <div className="boleta-btns-group">
+          {controlBoleta && (
+            <button
+              onClick={() => handleConfirmarPago(controlBoleta)}
+              disabled={!boletaExists || boletaPaid}
+              className={`boleta-center-btn${(!boletaExists || boletaPaid) ? ' disabled' : ''}`}
+            >
+              Confirmar Pago
+            </button>
+          )}
           <button
-            onClick={() => handleConfirmarPago(controlBoleta)}
-            disabled={!boletaExists || boletaPaid}
-            className={`confirmar-pago-button ${(!boletaExists || boletaPaid) ? "disabled" : ""}`}
+            className="boleta-center-btn"
+            onClick={handleBack}
           >
-            Confirmar Pago
+            Volver
           </button>
-        )}
+        </div>
 
         {uploadEnabled === false && (
           <div className="status-message error">
@@ -207,13 +213,6 @@ export const OCRValidation = () => {
           Aclaracion: OF {codigoBoleta}
         </div>
       )}
-        <button
-          className="back-button back-button-custom"
-          onClick={handleBack}
-        >
-          Volver
-        </button>
-
     </div>
   </div>
 ); 
