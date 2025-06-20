@@ -75,27 +75,45 @@ const OlympiadsReportTable = () => {
       // Convert boolean to string for filtering
       value = value ? "Activo" : "Finalizado";
     }
-    if (value && typeof value === "string") {
-      return value.toLowerCase().includes(rowFilter.toLowerCase());
+    if (value !== undefined && value !== null) {
+      return value.toString().toLowerCase().includes(rowFilter.toLowerCase());
     }
     return false;
   });
 
-  // Determine if Area or Category columns are visible
-  const areaCategoryVisible = visibleColumns.area || visibleColumns.category;
+  // Determine if Area and Category columns are visible
+  const areaVisible = visibleColumns.area;
+  const categoryVisible = visibleColumns.category;
 
-  // Group olympiads by unique fields if Area and Category columns are hidden
-  const groupedOlympiads = !areaCategoryVisible
-    ? Object.values(
-        filteredOlympiads.reduce((acc, item) => {
-          const key = `${item.olympiadName}-${item.version}-${item.status}-${item.startDate}-${item.endDate}`;
-          if (!acc[key]) {
-            acc[key] = { ...item };
-          }
-          return acc;
-        }, {})
-      )
-    : filteredOlympiads;
+  // Group olympiads based on visibility of area and category columns
+  let groupedOlympiads;
+
+  if (areaVisible && categoryVisible) {
+    // Both visible: no grouping, show all rows
+    groupedOlympiads = filteredOlympiads;
+  } else if (areaVisible && !categoryVisible) {
+    // Area visible, category hidden: group by olympiad fields + area
+    groupedOlympiads = Object.values(
+      filteredOlympiads.reduce((acc, item) => {
+        const key = `${item.olympiadName}-${item.version}-${item.status}-${item.startDate}-${item.endDate}-${item.area}`;
+        if (!acc[key]) {
+          acc[key] = { ...item };
+        }
+        return acc;
+      }, {})
+    );
+  } else {
+    // Area hidden (regardless of category): group by olympiad fields only
+    groupedOlympiads = Object.values(
+      filteredOlympiads.reduce((acc, item) => {
+        const key = `${item.olympiadName}-${item.version}-${item.status}-${item.startDate}-${item.endDate}`;
+        if (!acc[key]) {
+          acc[key] = { ...item };
+        }
+        return acc;
+      }, {})
+    );
+  }
 
   // Toggle column visibility handler
   const toggleColumn = (column) => {
