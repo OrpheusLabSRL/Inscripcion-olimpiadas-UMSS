@@ -57,11 +57,12 @@ export const useCatalog = (watchedFields) => {
         sessionStorage.getItem("CarnetIdentidadOlympian")
       );
 
-      if (areas.data.success != false) {
+      if (areas?.data?.success != false && areas?.data?.data?.length != 0) {
         setAreaInscrita(areas?.data?.data[0]);
         areasFiltradas = areasFiltradas.filter((area) => {
           if (
-            areas.data.data[0].area.nombreArea.toUpperCase() === "INFORMÁTICA"
+            areas?.data?.data[0]?.area?.nombreArea.toUpperCase() ===
+            "INFORMÁTICA"
           )
             return area;
           return area.value !== areas.data?.data[0].area.idArea;
