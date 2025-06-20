@@ -19,6 +19,9 @@ export const RegisterChoose = () => {
   const titleOlimpian = () => {
     const dataOlimpian = JSON.parse(sessionStorage.getItem("OlympicData"));
     console.log(dataOlimpian);
+    if (!dataOlimpian) {
+      return "Información de la Olimpiada no disponible";
+    }
     return dataOlimpian.nombreOlimpiada + " versión " + dataOlimpian.version;
   };
 
