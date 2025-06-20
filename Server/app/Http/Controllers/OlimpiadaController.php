@@ -28,20 +28,41 @@ class OlimpiadaController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nombreOlimpiada' => 'required|string|max:100',
-            'version' => 'required|integer|min:1',
-            'fechaInicioOlimpiada' => 'required|date',
-            'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
-        ]);
+        try {
+            // Validación de los datos de entrada
+            $validated = $request->validate([
+                'nombreOlimpiada' => 'required|string|max:100',
+                'version' => 'required|integer|min:1',
+                'fechaInicioOlimpiada' => 'required|date',
+                'fechaFinOlimpiada' => 'required|date|after:fechaInicioOlimpiada',
+            ]);
 
-        $olimpiada = $this->service->createOlimpiada($validated);
+            // Intentar crear la olimpiada
+            $olimpiada = $this->service->createOlimpiada($validated);
 
-        return response()->json([
-            'message' => 'Olimpiada creada exitosamente',
-            'data' => $olimpiada
-        ], 201);
+            return response()->json([
+                'message' => 'Olimpiada creada exitosamente',
+                'data' => $olimpiada
+            ], 201);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Errores de validación
+            return response()->json([
+                'message' => 'Errores de validación',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Exception $e) {
+            // Error inesperado
+            \Log::error('Error al crear la olimpiada: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'Ocurrió un error al crear la olimpiada.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     public function update(Request $request, $id)
     {
