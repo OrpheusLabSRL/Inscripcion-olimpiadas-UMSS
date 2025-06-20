@@ -40,6 +40,7 @@ Route::get('/olimpistas', [OlimpistaController::class, 'getAllOlimpistas']);
 Route::get('/olimpista/{carnet_identidad}/habilitado/{idOlimpiada}', [InscripcionController::class, 'enableForIncription']);
 Route::get('/olimpista/{id}/tutores', [TutorController::class, 'getTutoresByOlimpista']);
 Route::get('/tutores/all', [TutorController::class, 'getAllTutors']);
+Route::get('/olympiad-registrations-report', [OlimpistaController::class, 'getOlympiadRegistrationsReport']);
 
 
 // Tutores
