@@ -33,9 +33,9 @@ class AreaController extends Controller
         return response()->json(['message' => 'Área registrada correctamente']);
     }
 
-    public function getProgramaCompleto()
+    public function getProgramaCompleto($id)
     {
-        $programa = $this->service->getProgramaCompleto();
+        $programa = $this->service->getProgramaCompleto($id);
         return response()->json($programa);
     }
 

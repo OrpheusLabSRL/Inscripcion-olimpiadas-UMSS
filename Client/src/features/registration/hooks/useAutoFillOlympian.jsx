@@ -24,12 +24,16 @@ export const useAutoFillOlympian = (
         sessionStorage.getItem("OlympicData")
       ).idOlimpiada;
 
+      console.log("Antes del person data");
+
       const personData = await getPersonData({
         carnet_identidad: sessionStorage.getItem("CarnetIdentidadOlympian"),
         id_olimpiada: idOlimpiada,
       });
 
-      if (personData.data.data.nombre) {
+      console.log("Despues del person data", personData);
+
+      if (personData?.data?.data?.nombre) {
         setValue("Nombre", personData.data.data.nombre);
         setValue("Apellido", personData.data.data.apellido);
         setValue("Email", personData.data.data.correoElectronico);
@@ -43,7 +47,7 @@ export const useAutoFillOlympian = (
         clearErrors(["CarnetIdentidad", "Nombre", "Apellido", "Email"]);
       }
 
-      if (personData.data.data.fechaNacimiento) {
+      if (personData?.data?.data?.fechaNacimiento) {
         setValue("FechaNacimiento", personData.data.data.fechaNacimiento);
         setValue("Departamento", personData.data.data.departamento);
         const municipio =
@@ -77,6 +81,8 @@ export const useAutoFillOlympian = (
       const ciResponsible = sessionStorage.getItem("CiResponsible") || "";
       const ciOlympian =
         sessionStorage.getItem("CarnetIdentidadOlympian") || "";
+
+      console.log("Ci olimpiada", ciOlympian);
 
       if (ciResponsible == ciOlympian) {
         setValue("Nombre", sessionStorage.getItem("NombreResponsible"));
