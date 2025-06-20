@@ -23,8 +23,8 @@ class AreaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nombreArea' => 'required|string',
-            'descripcionArea' => 'nullable|string',
+            'nombreArea' => 'nullable|string|max:50',
+            'descripcionArea' => 'nullable|string|max:200',
             'estadoArea' => 'sometimes|boolean',
         ]);
 
@@ -39,17 +39,39 @@ class AreaController extends Controller
         return response()->json($programa);
     }
 
+   
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'nombreArea' => 'required|string',
-            'descripcionArea' => 'nullable|string',
-        ]);
+        try {
+            // Validar los datos recibidos
+            $validated = $request->validate([
+                'nombreArea' => 'required|string|max:255',
+                'descripcionArea' => 'nullable|string',
+            ]);
 
-        $this->service->updateArea($id, $validated);
+     
+            $this->service->updateArea($id, $validated);
 
-        return response()->json(['message' => 'Área actualizada correctamente']);
+            return response()->json([
+                'message' => 'Área actualizada correctamente'
+            ], 200);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Errores de validación',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Exception $e) {
+            \Log::error('Error al actualizar el área: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'Ocurrió un error al actualizar el área.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     public function actualizarEstado(Request $request, $id)
     {

@@ -51,8 +51,6 @@ const OlympiadsTable = () => {
 
   const handleEdit = (olympiad) => {
     setEditingOlympiad(olympiad);
-    // Aquí deberías abrir tu modal de edición
-    // Por ejemplo: setIsEditModalOpen(true);
   };
 
   const handleDelete = async (olympiad) => {
@@ -227,9 +225,15 @@ const OlympiadsTable = () => {
                 <td>{item.nombreOlimpiada}</td>
                 <td>{item.version}</td>
                 <td>
-                  {new Date(item.fechaInicioOlimpiada).toLocaleDateString()}
+                  {new Date(
+                    item.fechaInicioOlimpiada + "T00:00:00"
+                  ).toLocaleDateString()}
                 </td>
-                <td>{new Date(item.fechaFinOlimpiada).toLocaleDateString()}</td>
+                <td>
+                  {new Date(
+                    item.fechaFinOlimpiada + "T00:00:00"
+                  ).toLocaleDateString()}
+                </td>
                 <td className="tableUtilTextCenter">
                   <button
                     className={`tableUtilStatusToggle ${getEstadoClass(item)}`}

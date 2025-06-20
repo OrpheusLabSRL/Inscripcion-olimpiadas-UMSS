@@ -218,9 +218,18 @@ const AreasTable = () => {
                     <button
                       className={`tableUtilStatusToggle ${
                         area.estadoArea ? "active" : "inactive"
-                      }`}
-                      onClick={() => toggleEstado(area.idArea, area.estadoArea)}
-                      title={area.estadoArea ? "Desactivar" : "Activar"}
+                      } ${estaEnUso ? "disabled" : ""}`}
+                      onClick={() =>
+                        !estaEnUso && toggleEstado(area.idArea, area.estadoArea)
+                      }
+                      disabled={estaEnUso}
+                      title={
+                        estaEnUso
+                          ? "No se puede cambiar el estado de un área en uso"
+                          : area.estadoArea
+                          ? "Desactivar"
+                          : "Activar"
+                      }
                     >
                       {area.estadoArea ? (
                         <FaToggleOn className="toggleIcon active" />

@@ -168,7 +168,7 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
         estadoOlimpiada: 0,
         idUsuario: 1,
       };
-
+      console.log("Payload a enviar:", payload);
       await createOlympiad(payload);
 
       await MySwal.fire({

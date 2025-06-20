@@ -280,11 +280,13 @@ const CategoriesTable = () => {
                         <button
                           className={`tableUtilStatusToggle ${
                             data.estadoCategoriaGrado ? "active" : "inactive"
-                          } ${updating ? "disabled" : ""}`}
+                          } ${updating || estaEnUso ? "disabled" : ""}`}
                           onClick={() =>
-                            !updating && handleChangeStatus(nombreCategoria)
+                            !updating &&
+                            !estaEnUso &&
+                            handleChangeStatus(nombreCategoria)
                           }
-                          disabled={updating}
+                          disabled={updating || estaEnUso}
                           title={
                             data.estadoCategoriaGrado ? "Desactivar" : "Activar"
                           }
