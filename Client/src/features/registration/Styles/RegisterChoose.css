@@ -1,0 +1,303 @@
+:root {
+  --shadow-light: rgba(0, 0, 0, 0.08);
+  --shadow-medium: rgba(0, 0, 0, 0.12);
+  --shadow-strong: rgba(0, 0, 0, 0.16);
+  --border-radius: 12px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.container-form {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--lightGray) 0%, #e8f4f8 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.title-information {
+  text-align: center;
+  max-width: 800px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  margin: 0 !important;
+}
+
+.title-information h2 {
+  color: var(--darkBlue);
+  font-size: 2.25rem;
+  font-weight: 700;
+  position: relative;
+  letter-spacing: -0.025em;
+}
+
+.title-information h2::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--lightBlue));
+  border-radius: 2px;
+}
+
+.title-information p {
+  color: var(--darkBlue);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  margin-top: 1.5rem;
+  opacity: 0.85;
+}
+
+.title-information strong {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.container-cards-choose {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.container-cards-choose > * {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: 0 8px 32px var(--shadow-light);
+  border: 1px solid rgba(84, 119, 146, 0.08);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.container-cards-choose > *::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--lightBlue));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: var(--transition);
+}
+
+.container-cards-choose > *:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px var(--shadow-medium);
+  border-color: rgba(84, 119, 146, 0.2);
+}
+
+.container-cards-choose > *:hover::before {
+  transform: scaleX(1);
+}
+
+.container-cards-choose .card-inscription-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.container-cards-choose .card-inscription-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--primary-color), var(--lightBlue));
+  color: var(--white);
+  font-size: 1.75rem;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+}
+
+.container-cards-choose .card-inscription-title h3 {
+  color: var(--darkBlue);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.container-cards-choose .card-inscription-description {
+  color: var(--darkBlue);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  opacity: 0.85;
+}
+
+.container-cards-choose .card-inscription-advantages {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.container-cards-choose .card-inscription-advantages li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  color: var(--darkBlue);
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+.container-cards-choose .card-inscription-advantages li::before {
+  content: "✓";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.container-cards-choose .card-inscription-button {
+  background: linear-gradient(135deg, var(--primary-color), var(--lightBlue));
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.container-cards-choose .card-inscription-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.container-cards-choose .card-inscription-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+}
+
+.container-cards-choose .card-inscription-button:hover::before {
+  left: 100%;
+}
+
+.container-cards-choose .card-inscription-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container-form {
+    padding: 1.5rem 1rem;
+  }
+
+  .container-cards-choose {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .title-information {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .title-information h2 {
+    font-size: 1.875rem;
+  }
+
+  .title-information p {
+    font-size: 1rem;
+  }
+
+  .container-cards-choose > * {
+    padding: 1.5rem;
+  }
+
+  .container-cards-choose .card-inscription-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .container-cards-choose .card-inscription-title h3 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-form {
+    padding: 1rem 0.75rem;
+  }
+
+  .title-information {
+    padding: 1.25rem;
+  }
+
+  .title-information h2 {
+    font-size: 1.625rem;
+  }
+
+  .container-cards-choose > * {
+    padding: 1.25rem;
+  }
+
+  .container-cards-choose .card-inscription-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.5rem;
+  }
+}
+
+/* Animaciones adicionales */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container-cards-choose > * {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.container-cards-choose > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+/* Estados de enfoque para accesibilidad */
+.container-cards-choose .card-inscription-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--white), 0 0 0 4px var(--primary-color);
+}

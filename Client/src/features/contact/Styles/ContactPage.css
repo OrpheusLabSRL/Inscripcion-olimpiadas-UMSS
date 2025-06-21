@@ -1,0 +1,312 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+:root {
+  --darkBlue: #213448;
+  --lightBlue: #547792;
+  --lightGray: #f5f5f5;
+  --white: #ffffff;
+
+  --baseText: #000000;
+  --secondaryText: #64748b;
+  --lightText: #94a3b8;
+
+  --borderRadius: 10px;
+
+  --shadowSm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadowMd: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  --h1Size: 2rem;
+  --h4Size: 1.25rem;
+  --h5Size: 1rem;
+  --h6Size: 0.875rem;
+  --errorSize: 0.875rem;
+
+  --buttonHeight: 12px;
+  --buttonWidth: 24px;
+  --inputPadding: 12px 16px;
+}
+
+.contactContainer {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  background-color: var(--lightGray);
+}
+
+.contactSidebar {
+  flex: 1;
+  min-width: 300px;
+  background-color: var(--darkBlue);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.contactInfo {
+  max-width: 300px;
+  width: 100%;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.infoItem:last-child {
+  margin-bottom: 0;
+}
+
+.infoContent h3 {
+  font-size: 25px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.infoContent p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Contact Form */
+.contactContainer .contactFormWrapper {
+  flex: 2;
+  padding: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 12px;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+  max-width: none;
+}
+
+.contactFormWrapper h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 28px;
+  position: relative;
+  padding-bottom: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.contactFormWrapper h2::after {
+  content: '';
+  width: 100px;
+  height: 3px;
+  background-color: var(--lightBlue, #007bff);
+  /* Usa tu variable si tienes */
+  display: block;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.formGroup {
+  margin-bottom: 25px;
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.formGroup label {
+  margin-bottom: 8px;
+  font-weight: 400px;
+  font-size: var(--h5Size);
+  color: var(--baseText);
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+}
+
+.requiredField {
+  color: #dc2626;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  transition: border-color 0.3s ease;
+  background-color: white;
+  margin: 0;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -2px -2px 5px rgba(255, 255, 255, 0.6);
+  box-sizing: border-box;
+}
+
+.formGroup input {
+  height: 48px;
+}
+
+.formGroup select {
+  height: 48px;
+  min-height: unset;
+  background-color: white;
+  padding: 12px 16px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8.825L1.175 4 2.238 2.938 6 6.7l3.763-3.762L10.825 4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 12px;
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 150px;
+  width: 100%;
+}
+
+.formGroup input::placeholder,
+.formGroup select::placeholder {
+  color: var(--lightText);
+  opacity: 1;
+  font-size: var(--h5Size);
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #0EA5E9;
+}
+
+.validInput {
+  border-color: #10b981 !important;
+}
+
+.invalidInput {
+  border-color: #ef4444 !important;
+}
+
+.errorMessage {
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 4px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.successMessage {
+  background-color: #e8f5e9;
+  border-left: 4px solid #4caf50;
+  padding: 12px;
+  margin: 16px 0;
+  border-radius: 4px;
+  color: #2e7d32;
+}
+
+.formButtons {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+  width: 100%;
+}
+
+.submitButton {
+  background-color: var(--lightBlue);
+  color: var(--white);
+  padding: 6px 16px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  height: 40px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+}
+
+.submitButton:hover {
+  background-color: var(--white);
+  color: var(--lightBlue);
+  box-shadow: 0 4px 12px rgba(7, 91, 129, 0.4);
+}
+
+#description {
+  font-family: "Inter", sans-serif;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+  .contactContainer {
+    flex-direction: column;
+  }
+
+  .contactSidebar {
+    order: 2;
+    flex: 0 0 100%;
+    margin: 0px;
+    padding: 5%;
+  }
+
+  .contactContainer .contactFormWrapper {
+    order: 1;
+    padding: 5%;
+  }
+
+  .submitButton {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.formGroup select {
+  width: 100%;
+  padding: 16px 40px 16px 20px;
+  border: 1px solid var(--white);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s;
+  box-sizing: border-box;
+  background-color: #f5f7fa;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8.825L1.175 4 2.238 2.938 6 6.7l3.763-3.762L10.825 4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: auto;
+  min-height: 48px;
+  line-height: 1.2;
+}
+
+.formGroup select option {
+  padding: 16px;
+  font-size: 16px;
+  white-space: normal;
+}
+
+.formGroup select:hover {
+  border-color: #547792;
+}
+
+.formGroup select:focus {
+  outline: none;
+  border-color: #547792;
+  box-shadow: 0 0 0 2px rgba(84, 119, 146, 0.1);
+}

@@ -9,7 +9,9 @@ use App\Repositories\Contracts\{
     OlimpiadaRepositoryInterface,
     OlimpiadaAreaCategoriaRepositoryInterface,
     GradoRepositoryInterface,
-    CategoriaGradoRepositoryInterface
+    CategoriaGradoRepositoryInterface,
+    ContactoRepositoryInterface,
+    InscripcionTutorRepositoryInterface
 };
 use App\Repositories\Eloquent\{
     AreaRepository,
@@ -17,7 +19,9 @@ use App\Repositories\Eloquent\{
     OlimpiadaRepository,
     OlimpiadaAreaCategoriaRepository,
     GradoRepository,
-    CategoriaGradoRepository
+    CategoriaGradoRepository,
+    ContactoRepository,
+    InscripcionTutorRepository
 };
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -52,6 +56,18 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             CategoriaGradoRepositoryInterface::class,
             CategoriaGradoRepository::class
+        );
+
+        // Contacto
+        $this->app->bind(
+            ContactoRepositoryInterface::class,
+            ContactoRepository::class
+        );
+
+        // Inscripcion Tutor
+        $this->app->bind(
+            InscripcionTutorRepositoryInterface::class,
+            InscripcionTutorRepository::class
         );
     }
 

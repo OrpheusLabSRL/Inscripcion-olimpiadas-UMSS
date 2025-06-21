@@ -1,0 +1,180 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+
+.continueInscriptionWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  background-color: var(--white);
+  font-family: "Poppins", sans-serif;
+}
+
+.continueInscriptionImageSide {
+  flex: 1;
+  min-width: 300px;
+  background-color: var(--darkBlue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.continueInscriptionImageSide img {
+  max-width: 100%;
+  height: auto;
+}
+
+.continueInscriptionFormSide {
+  flex: 2;
+  min-width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  background-color: var(--lightGray);
+}
+
+.continueInscriptionFormSide form {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.continueInscriptionTitle {
+  color: #333;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 28px;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+.continueInscriptionInstruction {
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: #444;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.5;
+  text-align: center;
+}
+.continueInscriptionTitle::after {
+  content: "";
+  width: 100px;
+  height: 3px;
+  background-color: var(--lightBlue);
+  display: block;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.continueInscriptionFormGroup {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+
+.continueInscriptionFormGroup input {
+  width: 100%;
+  height: 30px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  transition: border-color 0.3s ease;
+  background-color: white;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+              inset -2px -2px 5px rgba(255, 255, 255, 0.6);
+              
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #0ea5e9;
+}
+
+.continueInscriptionInputInvalid {
+  border: 1px solid #ef4444;
+}
+
+.continueInscriptionRequired {
+  color: #ef4444;
+  margin-left: 4px;
+}
+
+.continueInscriptionErrorMessage {
+  color: #ef4444;
+  margin-top: 0.5rem;
+  font-size: 13px;
+  font-family: "Poppins", sans-serif;
+}
+
+.continueInscriptionSuccessMessage {
+  color: #10b981;
+  margin-bottom: 1rem;
+  font-size: 14px;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.continueInscriptionSubmitButton {
+  background-color: var(--lightBlue);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 90%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.continueInscriptionSubmitButton:hover {
+  background-color: var(--white);
+  color: var(--lightBlue);
+  box-shadow: 0 4px 12px rgba(7, 91, 129, 0.4);
+}
+
+@media (max-width: 768px) {
+  .continueInscriptionWrapper {
+    flex-direction: column;
+  }
+
+  .continueInscriptionImageSide {
+    width: 100%;
+    height: 100px;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .continueInscriptionImageSide img {
+    width: 100%;
+    height: 45vh;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .continueInscriptionFormSide {
+    width: 100%;
+    padding: 1.5rem 1rem;
+  }
+
+  .continueInscriptionTitle {
+    font-size: 20px;
+  }
+
+  .continueInscriptionSubmitButton {
+    font-size: 13px;
+    height: 38px;
+  }
+}

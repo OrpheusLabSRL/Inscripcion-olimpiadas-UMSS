@@ -5,10 +5,17 @@ import {
   deleteCategoriaGrado,
   verificarUsoCategoriasMasivo,
 } from "../../../../api/Administration.api";
-import { FaSpinner, FaInfoCircle, FaEdit, FaTrash } from "react-icons/fa";
+import {
+  FaSpinner,
+  FaInfoCircle,
+  FaTrash,
+  FaToggleOn,
+  FaToggleOff,
+} from "react-icons/fa";
+import { FiEdit2 } from "react-icons/fi";
 import "../../Styles/Tables.css";
 import Swal from "sweetalert2";
-import EditCategoriaModal from "../administrationModal/EditCategoriaModal";
+import EditCategoriaModal from "../administrationModal/EditCategoryModal";
 
 const CategoriesTable = () => {
   const [categoriasAgrupadas, setCategoriasAgrupadas] = useState({});
@@ -92,7 +99,6 @@ const CategoriesTable = () => {
       const categoria = categoriasAgrupadas[nombreCategoria];
       const nuevoEstado = !categoria.estadoCategoriaGrado;
 
-      // Mostrar advertencia solo cuando se va a desactivar
       if (nuevoEstado === false) {
         const result = await Swal.fire({
           title: "¿Estás seguro?",
@@ -228,9 +234,9 @@ const CategoriesTable = () => {
         <thead>
           <tr>
             <th>Categoría</th>
-            <th className="tableUtilTextCenter">Grados Incluidos</th>
-            <th className="tableUtilTextCenter">Estado</th>
-            <th className="tableUtilTextCenter">Acciones</th>
+            <th>Grados Incluidos</th>
+            <th>Estado</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -271,61 +277,69 @@ const CategoriesTable = () => {
                         )}
                       </td>
                       <td className="tableUtilTextCenter">
-                        <span
-                          className={`tableUtilStatusBadge ${
-                            data.estadoCategoriaGrado
-                              ? "tableUtilBadgeSuccess"
-                              : "tableUtilBadgeDanger"
-                          } ${updating ? "tableUtilDisabled" : ""}`}
+                        <button
+                          className={`tableUtilStatusToggle ${
+                            data.estadoCategoriaGrado ? "active" : "inactive"
+                          } ${updating || estaEnUso ? "disabled" : ""}`}
                           onClick={() =>
-                            !updating && handleChangeStatus(nombreCategoria)
+                            !updating &&
+                            !estaEnUso &&
+                            handleChangeStatus(nombreCategoria)
                           }
-                          style={{
-                            cursor: updating ? "not-allowed" : "pointer",
-                          }}
+                          disabled={updating || estaEnUso}
+                          title={
+                            data.estadoCategoriaGrado ? "Desactivar" : "Activar"
+                          }
                         >
                           {updating ? (
                             <FaSpinner className="tableUtilSpinner" />
                           ) : data.estadoCategoriaGrado ? (
-                            "Activo"
+                            <FaToggleOn className="toggleIcon active" />
                           ) : (
-                            "Inactivo"
+                            <FaToggleOff className="toggleIcon inactive" />
                           )}
-                        </span>
+                          <span>
+                            {data.estadoCategoriaGrado ? "Activo" : "Inactivo"}
+                          </span>
+                        </button>
                       </td>
                       <td className="tableActions">
-                        <FaEdit
-                          className="actionIcon editIcon"
-                          title={
-                            estaEnUso
-                              ? "No se puede editar (en uso)"
-                              : "Editar categoría"
-                          }
-                          onClick={() => !estaEnUso && handleEdit(data)}
-                          style={
-                            updating || estaEnUso
-                              ? { opacity: 0.5, pointerEvents: "none" }
-                              : null
-                          }
-                        />
-                        <FaTrash
-                          className="actionIcon deleteIcon"
-                          title={
-                            estaEnUso
-                              ? "No se puede eliminar (en uso)"
-                              : "Eliminar categoría"
-                          }
-                          onClick={() =>
-                            !updating &&
-                            !estaEnUso &&
-                            handleDelete(nombreCategoria)
-                          }
-                          style={
-                            updating || estaEnUso
-                              ? { opacity: 0.5, pointerEvents: "none" }
-                              : null
-                          }
-                        />
+                        <div className="actionButtons">
+                          <button
+                            className={`actionButton editButton ${
+                              updating || estaEnUso ? "disabled" : ""
+                            }`}
+                            onClick={() =>
+                              !updating && !estaEnUso && handleEdit(data)
+                            }
+                            disabled={updating || estaEnUso}
+                            title={
+                              estaEnUso
+                                ? "No se puede editar (en uso)"
+                                : "Editar categoría"
+                            }
+                          >
+                            <FiEdit2 />
+                          </button>
+                          <button
+                            className={`actionButton deleteButton ${
+                              updating || estaEnUso ? "disabled" : ""
+                            }`}
+                            onClick={() =>
+                              !updating &&
+                              !estaEnUso &&
+                              handleDelete(nombreCategoria)
+                            }
+                            disabled={updating || estaEnUso}
+                            title={
+                              estaEnUso
+                                ? "No se puede eliminar (en uso)"
+                                : "Eliminar categoría"
+                            }
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                     {expandedCategory === nombreCategoria && (

@@ -1,0 +1,394 @@
+.page-no-sidebar {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.content-area.no-content-style {
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+/* General */
+.olympiad-detail-content h2 {
+  color: var(--texto-azul);
+  text-align: center;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  font-size: 2.2rem;
+  position: relative;
+  font-family: "Poppins", sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.olympiad-detail-content h2::after {
+  content: "";
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--lightBlue), var(--accent-blue));
+  display: block;
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
+
+/* Hero Section */
+.olympiad-hero {
+  width: 100%;
+  min-height: 500px;
+  background: linear-gradient(
+    135deg,
+    var(--darkBlue) 0%,
+    var(--lightBlue) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  position: relative;
+  margin-bottom: 60px;
+  flex-direction: column;
+  padding: 40px 20px;
+}
+
+.olympiad-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+    repeat;
+  opacity: 0.3;
+}
+
+.olympiad-hero-overlay {
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  max-width: 900px;
+  box-shadow: var(--soft-shadow);
+  color: var(--texto-azul);
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.olympiad-hero h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--darkBlue), var(--lightBlue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.olympiad-hero p {
+  margin: 8px 0;
+  font-size: 1.2rem;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+/* Botón de inscripción */
+.inscriptionButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin: 2.5rem 0;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.inscriptionButton {
+  background: linear-gradient(135deg, var(--lightBlue), var(--accent-blue));
+  color: var(--white);
+  padding: 16px 32px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 280px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--card-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.inscriptionButton::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.6s;
+}
+
+.inscriptionButton:hover::before {
+  left: 100%;
+}
+
+.inscriptionButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--hover-shadow);
+  background: linear-gradient(135deg, var(--accent-blue), var(--darkBlue));
+}
+
+/* Tarjetas mejoradas */
+.tarjetas-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 30px;
+  padding: 0 3rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.area-card-horizontal {
+  display: flex;
+  flex-direction: row;
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: auto;
+  min-height: 200px;
+  border: 1px solid rgba(84, 119, 146, 0.1);
+  position: relative;
+}
+
+.area-card-horizontal::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--lightBlue), var(--accent-blue));
+  transition: width 0.3s ease;
+}
+
+.area-card-horizontal:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--hover-shadow);
+}
+
+.area-card-horizontal:hover::after {
+  width: 6px;
+}
+
+.area-card-icon {
+  width: 160px;
+  min-width: 160px;
+  background: linear-gradient(135deg, var(--lightBlue), var(--accent-blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 4rem;
+  position: relative;
+}
+
+.area-card-content {
+  padding: 30px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.area-card-content h4 {
+  margin: 0 0 15px 0;
+  color: var(--texto-azul);
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.area-card-content p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  flex-grow: 1;
+}
+
+.toggle-button {
+  align-self: flex-start;
+  background: linear-gradient(135deg, var(--lightBlue), var(--accent-blue));
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(84, 119, 146, 0.3);
+}
+
+.toggle-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(84, 119, 146, 0.4);
+  background: linear-gradient(135deg, var(--accent-blue), var(--darkBlue));
+}
+
+/* Modal mejorado */
+.container-modal {
+  position: relative;
+  background: white;
+  padding: 30px;
+  max-width: 700px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  margin: 3% auto !important;
+  width: 90% !important;
+}
+
+.container-content-modal {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px;
+}
+
+.container-content-modal h3 {
+  color: var(--texto-azul);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  border-bottom: 3px solid var(--lightBlue);
+  padding-bottom: 10px;
+}
+
+.container-content-modal h4 {
+  color: var(--texto-azul);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 25px 0 15px 0;
+}
+
+.container-content-modal ul {
+  list-style: none;
+  padding: 0;
+}
+
+.container-content-modal > ul > li {
+  background: var(--lightGray);
+  margin-bottom: 15px;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid var(--lightBlue);
+}
+
+.container-content-modal > ul > li > strong {
+  color: var(--texto-azul);
+  font-size: 1.1rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.container-content-modal ul ul {
+  margin-top: 15px;
+  padding-left: 0;
+}
+
+.container-content-modal ul ul li {
+  background: white;
+  margin: 8px 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-blue);
+  font-weight: 500;
+  color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .olympiad-hero h1 {
+    font-size: 2.2rem;
+  }
+
+  .olympiad-hero-overlay {
+    padding: 25px;
+    margin: 0 15px;
+  }
+
+  .tarjetas-container {
+    grid-template-columns: 1fr;
+    padding: 0 1.5rem 2rem;
+    gap: 20px;
+  }
+
+  .area-card-horizontal {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .area-card-icon {
+    width: 100%;
+    min-width: auto;
+    height: 120px;
+    font-size: 3rem;
+  }
+
+  .container-modal {
+    width: 95% !important;
+    padding: 20px;
+    margin: 5% auto !important;
+  }
+
+  .inscriptionButton {
+    min-width: 250px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .olympiad-hero {
+    min-height: 400px;
+  }
+
+  .olympiad-hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .tarjetas-container {
+    padding: 0 1rem 1.5rem;
+  }
+
+  .container-modal {
+    width: 98% !important;
+    border-radius: 15px;
+    max-height: 90vh;
+  }
+
+  .inscriptionButton {
+    min-width: 200px;
+    padding: 14px 24px;
+  }
+}

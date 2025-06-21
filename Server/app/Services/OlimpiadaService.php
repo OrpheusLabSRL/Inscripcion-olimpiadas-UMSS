@@ -18,7 +18,7 @@ class OlimpiadaService
         return $this->repository->getAll();
     }
 
-    public function getAllOlimpiadasConAreasCategorias()
+    public function getAllOlimpiadasWithAreasCategorias()
     {
         return $this->repository->getAllWithAreasCategorias();
     }

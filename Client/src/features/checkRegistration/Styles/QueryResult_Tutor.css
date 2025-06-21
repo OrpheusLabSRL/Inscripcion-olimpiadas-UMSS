@@ -1,0 +1,335 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+:root {
+    --darkBlue: #213448;
+    --lightBlue: #547792;
+    --white: #ffffff;
+    --lightGray: #f5f5f5;
+    --texto-azul: #213448;
+}
+
+.resultado-container {
+    padding: 2rem;
+    min-height: 100vh;
+    background-color: var(--lightBlue);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.resultado-content {
+    max-width: 70%;
+    margin: 0 auto;
+    background-color: var(--lightGray);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.resultado-content h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 28px;
+  position: relative;
+  padding-bottom: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Línea decorativa debajo del título */
+.resultado-content  h2::after {
+  content: '';
+  width: 100px;
+  height: 3px;
+  background-color: var(--lightBlue, #007bff); /* Usa tu variable si tienes */
+  display: block;
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.tutor-info {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.tutor-info h3 {
+    color: #000000;
+    margin-bottom: 1rem;
+    font-size: 18px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    text-align: center;
+}
+
+.tutor-info p {
+    color: #000000;
+    margin: 0.75rem 0;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+/* Estilos para inscripciones manuales */
+.olimpistas-table {
+    margin-top: 2rem;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.olimpistas-table h3 {
+    color: #000000;
+    margin-bottom: 1rem;
+    font-size: 18px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.olimpistas-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    table-layout: auto;
+    white-space: nowrap;
+}
+
+.olimpistas-table th,
+.olimpistas-table td {
+    color: #000000;
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.olimpistas-table th {
+    background-color: white;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.olimpistas-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Estilos para inscripciones Excel */
+.inscripcion-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.inscripcion-card h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.forma-inscripcion {
+    color: #666;
+    margin-bottom: 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.excel-resumen {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.excel-resumen p {
+    margin: 10px 0;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.excel-resumen .estado-pendiente,
+.excel-resumen .estado-realizado {
+    font-weight: 500;
+}
+
+.excel-resumen .estado-pendiente {
+    color: #ef4444;
+}
+
+.excel-resumen .estado-realizado {
+    color: #10b981;
+}
+
+.ver-detalles-btn {
+    background-color: #0EA5E9;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.ver-detalles-btn:hover {
+    background-color: #0284c7;
+}
+
+/* Estilos del modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.modal-table th,
+.modal-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.modal-table th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+    color: #333;
+}
+
+.modal-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.estado-pendiente {
+    color: #ff0000 !important; /* Rojo */
+    font-weight: bold;
+}
+
+.estado-realizado {
+    color: #00aa00 !important; /* Verde */
+    font-weight: bold;
+}
+
+.estadoPendiente {
+    color: #ff0000 !important; /* Rojo */
+    font-weight: bold;
+}
+
+.estadoRealizado {
+    color: #00aa00 !important; /* Verde */
+    font-weight: bold;
+}
+
+/* Estilos para los estados en la tabla modal */
+.modal-table .estado-pendiente {
+    color: #ff0000 !important; /* Rojo */
+    font-weight: bold;
+}
+
+.modal-table .estado-realizado {
+    color: #00aa00 !important; /* Verde */
+    font-weight: bold;
+}
+
+/* Estilos para los estados en el resumen de Excel */
+.excel-resumen .estado-pendiente {
+    color: #ff0000 !important; /* Rojo */
+    font-weight: bold;
+}
+
+.excel-resumen .estado-realizado {
+    color: #00aa00 !important; /* Verde */
+    font-weight: bold;
+}
+
+.btn-consulta {
+    background-color: #0EA5E9;
+    color: white;
+    padding: 6px 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    height: 40px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+}
+
+.btn-consulta:hover {
+    background-color: #0284c7;
+}
+
+.boton-volver-container {
+    margin-top: 20px;
+    text-align: center;
+} 

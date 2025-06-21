@@ -8,6 +8,7 @@ import TutorsReportTable from "../components/administrationTable/reports/TutorsR
 import OlympiadsReportTable from "../components/administrationTable/reports/OlympiadsReportTable";
 import { useNavigate } from "react-router-dom";
 import "../Styles/Reports.css";
+import OlympiadRegistrationsReport from "../components/administrationTable/reports/OlympiadRegistrationsReport.jsx";
 
 const Reports = () => {
   const [selectedReport, setSelectedReport] = useState("");
@@ -93,6 +94,8 @@ const Reports = () => {
         return "Tutores";
       case "olympiads":
         return "Olimpiadas";
+      case "olympiadRegistrations":
+        return "Reporte Avanzado Olimpiadas";
       default:
         return "";
     }
@@ -106,6 +109,8 @@ const Reports = () => {
         return <TutorsReportTable />;
       case "olympiads":
         return <OlympiadsReportTable />;
+      case "olympiadRegistrations":
+        return <OlympiadRegistrationsReport />;
       default:
         return (
           <div className="reports__empty-state">
@@ -123,10 +128,6 @@ const Reports = () => {
 
   return (
     <div className="reports-container">
-      <BackButton
-        onClick={() => navigate("/admin/home")}
-        className="btn-back"
-      ></BackButton>
       <div className="reports__header">
         <div className="reports__title">
           <h1>Reportes del Sistema</h1>
@@ -146,6 +147,7 @@ const Reports = () => {
               <option value="olympians">Olimpistas</option>
               <option value="tutors">Tutores</option>
               <option value="olympiads">Olimpiadas</option>
+              <option value="olympiadRegistrations">Inscritos en Olimpiadas</option>
             </select>
           </div>
 

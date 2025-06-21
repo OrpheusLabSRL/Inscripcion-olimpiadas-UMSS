@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/ModalGeneral.css";
+import "../../Styles/ModalGeneral.css";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-
 import {
   createOlympiad,
   getOlimpiadas,
@@ -47,17 +46,71 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
     onClose();
   };
 
+  const validarFechas = (inicio, fin) => {
+    const hoy = new Date().toISOString().split("T")[0];
+    const nuevosErrores = { ...errors };
+
+    if (inicio && inicio < hoy) {
+      nuevosErrores.fechaInicioOlimpiada =
+        "La fecha de inicio no puede ser pasada";
+    } else {
+      delete nuevosErrores.fechaInicioOlimpiada;
+    }
+
+    if (fin && fin < hoy) {
+      nuevosErrores.fechaFinOlimpiada = "La fecha de fin no puede ser pasada";
+    } else {
+      delete nuevosErrores.fechaFinOlimpiada;
+    }
+
+    if (inicio && fin) {
+      if (fin < inicio) {
+        nuevosErrores.fechaFinOlimpiada =
+          "La fecha de fin no puede ser anterior a la de inicio";
+      } else if (fin === inicio) {
+        nuevosErrores.fechaFinOlimpiada =
+          "La fecha de inicio y fin no pueden ser el mismo día";
+      } else {
+        delete nuevosErrores.fechaFinOlimpiada;
+      }
+    }
+
+    setErrors(nuevosErrores);
+  };
+
+  const validarNombreYVersion = (nombre, version) => {
+    const nuevosErrores = { ...errors };
+    const existe = olympiads.some(
+      (o) =>
+        o.nombreOlimpiada.trim().toLowerCase() ===
+          nombre.trim().toLowerCase() &&
+        parseInt(o.version) === parseInt(version)
+    );
+
+    if (nombre && version && existe) {
+      nuevosErrores.nombreOlimpiada =
+        "Ya existe una olimpiada con este nombre y versión";
+      nuevosErrores.version =
+        "Ya existe una olimpiada con este nombre y versión";
+    } else {
+      delete nuevosErrores.nombreOlimpiada;
+      delete nuevosErrores.version;
+    }
+
+    setErrors(nuevosErrores);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const newForm = { ...formData, [name]: value };
+    setFormData(newForm);
 
-    setErrors((prev) => ({
-      ...prev,
-      [name]: "",
-    }));
+    if (name === "nombreOlimpiada" || name === "version") {
+      validarNombreYVersion(
+        name === "nombreOlimpiada" ? value : formData.nombreOlimpiada,
+        name === "version" ? value : formData.version
+      );
+    }
 
     if (name === "fechaInicioOlimpiada" || name === "fechaFinOlimpiada") {
       validarFechas(
@@ -65,41 +118,6 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
         name === "fechaFinOlimpiada" ? value : formData.fechaFinOlimpiada
       );
     }
-  };
-
-  const validarFechas = (fechaInicio, fechaFin) => {
-    const hoy = new Date().toISOString().split("T")[0];
-    const nuevosErrores = { ...errors };
-
-    if (fechaInicio && fechaInicio < hoy) {
-      nuevosErrores.fechaInicioOlimpiada =
-        "La fecha de inicio no puede ser pasada";
-    } else {
-      delete nuevosErrores.fechaInicioOlimpiada;
-    }
-
-    if (fechaFin && fechaFin < hoy) {
-      nuevosErrores.fechaFinOlimpiada = "La fecha de fin no puede ser pasada";
-    } else {
-      delete nuevosErrores.fechaFinOlimpiada;
-    }
-
-    if (fechaInicio && fechaFin && fechaFin < fechaInicio) {
-      nuevosErrores.fechaFinOlimpiada =
-        "La fecha de fin no puede ser anterior a la de inicio";
-    }
-
-    if (fechaInicio && fechaFin) {
-      if (fechaFin < fechaInicio) {
-        nuevosErrores.fechaFinOlimpiada =
-          "La fecha de fin no puede ser anterior a la de inicio";
-      } else if (fechaFin === fechaInicio) {
-        nuevosErrores.fechaFinOlimpiada =
-          "La fecha de inicio y fin no pueden ser el mismo día";
-      }
-    }
-
-    setErrors(nuevosErrores);
   };
 
   const validarFormulario = () => {
@@ -118,23 +136,8 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
       nuevosErrores.fechaFinOlimpiada = "Este campo es requerido";
     }
 
-    validarFechas(formData.fechaInicioOlimpiada, formData.fechaFinOlimpiada);
+    setErrors((prev) => ({ ...prev, ...nuevosErrores }));
 
-    const existe = olympiads.some(
-      (o) =>
-        o.nombreOlimpiada.trim().toLowerCase() ===
-          formData.nombreOlimpiada.trim().toLowerCase() &&
-        parseInt(o.version) === parseInt(formData.version)
-    );
-
-    if (existe) {
-      nuevosErrores.nombreOlimpiada =
-        "Ya existe una olimpiada con este nombre y versión";
-      nuevosErrores.version =
-        "Ya existe una olimpiada con este nombre y versión";
-    }
-
-    setErrors(nuevosErrores);
     return Object.keys(nuevosErrores).length === 0;
   };
 
@@ -165,7 +168,7 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
         estadoOlimpiada: 0,
         idUsuario: 1,
       };
-
+      console.log("Payload a enviar:", payload);
       await createOlympiad(payload);
 
       await MySwal.fire({
@@ -185,7 +188,7 @@ const RegisterOlympiadsModal = ({ isOpen, onClose, onSave }) => {
       window.location.reload();
     } catch (error) {
       console.error("Error al crear la olimpiada:", error);
-      if (error.response && error.response.data && error.response.data.errors) {
+      if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
       } else {
         await MySwal.fire({

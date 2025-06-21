@@ -1,285 +1,205 @@
-.accessDeniedContainer {
-  min-height: 100vh;
+/* Estilos base */
+.access-denied-container {
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: #ffffff;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-.accessDeniedContent {
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 24px;
-  padding: 60px 40px;
-  max-width: 600px;
+.access-denied-card {
+  max-width: 500px;
   width: 100%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem;
   text-align: center;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 40px rgba(0, 0, 0, 0.04);
-  position: relative;
-  z-index: 10;
-  animation: slideInUp 0.6s ease-out;
 }
 
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Animación del icono */
+.access-denied-icon-container {
+  margin-bottom: 1.5rem;
 }
 
-.accessDeniedIconWrapper {
+.shield-animation {
   position: relative;
-  margin-bottom: 40px;
   display: inline-block;
-}
-
-.accessDeniedShieldBg {
-  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-  border-radius: 50%;
-  padding: 30px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
   animation: pulse 2s infinite;
 }
 
+.shield-icon {
+  color: #dc3545;
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 70%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
+
+.lock-icon {
+  color: #000;
+  animation: bounce 2s infinite;
+}
+
 @keyframes pulse {
-  0%,
-  100% {
+  0% {
     transform: scale(1);
   }
   50% {
     transform: scale(1.05);
   }
-}
-
-.accessDeniedShieldIcon {
-  color: white;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.accessDeniedLockOverlay {
-  position: absolute;
-  bottom: -5px;
-  right: -5px;
-  background: linear-gradient(135deg, #feca57, #ff9ff3);
-  border-radius: 50%;
-  padding: 12px;
-  box-shadow: 0 4px 20px rgba(254, 202, 87, 0.4);
-  animation: bounce 1s infinite alternate;
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes bounce {
-  from {
-    transform: translateY(0px);
+  0%,
+  100% {
+    transform: translate(-50%, -50%);
   }
-  to {
-    transform: translateY(-8px);
+  50% {
+    transform: translate(-50%, -60%);
   }
 }
 
-.accessDeniedLockIcon {
-  color: white;
+/* Texto */
+.access-denied-content {
+  margin-bottom: 1.5rem;
 }
 
-.accessDeniedTextSection {
-  margin-bottom: 35px;
-}
-
-.accessDeniedTitle {
-  font-size: 48px;
+.access-denied-title {
+  font-size: 1.75rem;
+  color: #343a40;
+  margin-bottom: 0.75rem;
   font-weight: 700;
-  color: #2c3e50;
-  margin: 0 0 20px 0;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.accessDeniedSubtitle {
-  font-size: 20px;
-  color: #e74c3c;
-  margin: 0 0 20px 0;
-  font-weight: 600;
+.access-denied-subtitle {
+  font-size: 1.125rem;
+  color: #495057;
+  margin-bottom: 1rem;
+  font-weight: 500;
 }
 
-.accessDeniedDescription {
-  font-size: 16px;
-  color: #7f8c8d;
+.access-denied-description {
+  font-size: 0.9375rem;
+  color: #6c757d;
   line-height: 1.6;
-  margin: 0;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 1.5rem;
 }
 
-.accessDeniedErrorCode {
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-  border: 2px solid #dee2e6;
-  border-radius: 12px;
-  padding: 20px;
-  margin: 30px 0;
+/* Código de error */
+.error-code {
   display: inline-flex;
   align-items: center;
-  gap: 15px;
+  background: #f1f3f5;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  margin-bottom: 1.5rem;
 }
 
-.accessDeniedCodeLabel {
-  font-size: 14px;
-  color: #6c757d;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.error-code-label {
+  font-size: 0.875rem;
+  color: #495057;
+  margin-right: 0.5rem;
 }
 
-.accessDeniedCodeNumber {
-  font-size: 32px;
-  font-weight: 800;
+.error-code-value {
+  font-size: 1rem;
+  font-weight: 700;
   color: #dc3545;
-  font-family: "Courier New", monospace;
 }
 
-.accessDeniedActions {
+/* Botones */
+.action-buttons {
   display: flex;
-  gap: 20px;
+  gap: 1rem;
   justify-content: center;
-  margin: 40px 0 30px 0;
-  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
 }
 
-.accessDeniedBtn {
-  padding: 14px 28px;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
+.primary-button,
+.secondary-button {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  min-width: 150px;
   justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
 }
 
-.accessDeniedBtnPrimary {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+.primary-button {
+  background-color: #2563eb;
   color: white;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
 
-.accessDeniedBtnPrimary:hover {
+.primary-button:hover {
+  background-color: #1d4ed8;
   transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
 }
 
-.accessDeniedBtnSecondary {
-  background: white;
-  color: #6c757d;
-  border: 2px solid #dee2e6;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+.secondary-button {
+  background-color: #f1f3f5;
+  color: #495057;
 }
 
-.accessDeniedBtnSecondary:hover {
-  background: #f8f9fa;
-  border-color: #adb5bd;
+.secondary-button:hover {
+  background-color: #e9ecef;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
-.accessDeniedBtn:active {
-  transform: translateY(0);
+.button-icon {
+  margin-right: 0.5rem;
 }
 
-.accessDeniedHelp {
-  border-top: 1px solid #e9ecef;
-  padding-top: 25px;
-  margin-top: 25px;
+/* Soporte */
+.support-section {
+  margin-top: 1rem;
 }
 
-.accessDeniedHelpText {
-  font-size: 14px;
-  color: #6c757d;
-  margin: 0;
+.support-link {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 4px;
 }
 
-.accessDeniedHelpLink {
-  color: #667eea;
-  text-decoration: none;
-  font-weight: 600;
-  margin-left: 5px;
-  transition: color 0.3s ease;
-}
-
-.accessDeniedHelpLink:hover {
-  color: #764ba2;
+.support-link:hover {
+  color: #1d4ed8;
   text-decoration: underline;
 }
 
-@media (max-width: 768px) {
-  .accessDeniedContainer {
-    padding: 15px;
-  }
-
-  .accessDeniedContent {
-    padding: 40px 25px;
-  }
-
-  .accessDeniedTitle {
-    font-size: 36px;
-  }
-
-  .accessDeniedSubtitle {
-    font-size: 18px;
-  }
-
-  .accessDeniedDescription {
-    font-size: 14px;
-  }
-
-  .accessDeniedActions {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .accessDeniedBtn {
-    width: 100%;
-    max-width: 280px;
-  }
+.support-icon {
+  margin-right: 0.5rem;
 }
 
-@media (max-width: 480px) {
-  .accessDeniedShieldBg {
-    padding: 20px;
+/* Responsive */
+@media (max-width: 576px) {
+  .access-denied-card {
+    padding: 1.5rem;
   }
 
-  .accessDeniedShieldIcon {
-    width: 60px;
-    height: 60px;
+  .action-buttons {
+    flex-direction: column;
   }
 
-  .accessDeniedLockIcon {
-    width: 24px;
-    height: 24px;
-  }
-
-  .accessDeniedTitle {
-    font-size: 28px;
-  }
-
-  .accessDeniedCodeNumber {
-    font-size: 24px;
+  .primary-button,
+  .secondary-button {
+    width: 100%;
   }
 }

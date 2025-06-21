@@ -9,9 +9,11 @@ import {
   FaSpinner,
   FaChevronDown,
   FaChevronUp,
-  FaEdit,
   FaTrash,
+  FaToggleOn,
+  FaToggleOff,
 } from "react-icons/fa";
+import { FiEdit2 } from "react-icons/fi";
 import EditAreaModal from "../administrationModal/EditAreaModal";
 import "../../Styles/Tables.css";
 import Swal from "sweetalert2";
@@ -67,7 +69,6 @@ const AreasTable = () => {
 
   const toggleEstado = async (id, currentEstado) => {
     try {
-      // Mostrar advertencia solo cuando se va a desactivar
       if (currentEstado) {
         const result = await Swal.fire({
           title: "¿Estás seguro?",
@@ -214,45 +215,61 @@ const AreasTable = () => {
                     )}
                   </td>
                   <td className="tableUtilTextCenter">
-                    <span
-                      className={`tableUtilStatusBadge ${
-                        area.estadoArea
-                          ? "tableUtilBadgeSuccess"
-                          : "tableUtilBadgeDanger"
-                      }`}
-                      onClick={() => toggleEstado(area.idArea, area.estadoArea)}
-                      style={{ cursor: "pointer" }}
+                    <button
+                      className={`tableUtilStatusToggle ${
+                        area.estadoArea ? "active" : "inactive"
+                      } ${estaEnUso ? "disabled" : ""}`}
+                      onClick={() =>
+                        !estaEnUso && toggleEstado(area.idArea, area.estadoArea)
+                      }
+                      disabled={estaEnUso}
+                      title={
+                        estaEnUso
+                          ? "No se puede cambiar el estado de un área en uso"
+                          : area.estadoArea
+                          ? "Desactivar"
+                          : "Activar"
+                      }
                     >
-                      {area.estadoArea ? "Activo" : "Inactivo"}
-                    </span>
+                      {area.estadoArea ? (
+                        <FaToggleOn className="toggleIcon active" />
+                      ) : (
+                        <FaToggleOff className="toggleIcon inactive" />
+                      )}
+                      <span>{area.estadoArea ? "Activo" : "Inactivo"}</span>
+                    </button>
                   </td>
                   <td className="tableActions">
-                    <FaEdit
-                      className="actionIcon editIcon"
-                      title={
-                        estaEnUso
-                          ? "No se puede editar un área en uso"
-                          : "Editar área"
-                      }
-                      onClick={() => !estaEnUso && handleEdit(area)}
-                      style={{
-                        cursor: estaEnUso ? "not-allowed" : "pointer",
-                        opacity: estaEnUso ? 0.5 : 1,
-                      }}
-                    />
-                    <FaTrash
-                      className="actionIcon deleteIcon"
-                      title={
-                        estaEnUso
-                          ? "No se puede eliminar un área en uso"
-                          : "Eliminar área"
-                      }
-                      onClick={() => !estaEnUso && handleDelete(area.idArea)}
-                      style={{
-                        cursor: estaEnUso ? "not-allowed" : "pointer",
-                        opacity: estaEnUso ? 0.5 : 1,
-                      }}
-                    />
+                    <div className="actionButtons">
+                      <button
+                        className={`actionButton editButton ${
+                          estaEnUso ? "disabled" : ""
+                        }`}
+                        onClick={() => !estaEnUso && handleEdit(area)}
+                        disabled={estaEnUso}
+                        title={
+                          estaEnUso
+                            ? "No se puede editar un área en uso"
+                            : "Editar área"
+                        }
+                      >
+                        <FiEdit2 />
+                      </button>
+                      <button
+                        className={`actionButton deleteButton ${
+                          estaEnUso ? "disabled" : ""
+                        }`}
+                        onClick={() => !estaEnUso && handleDelete(area.idArea)}
+                        disabled={estaEnUso}
+                        title={
+                          estaEnUso
+                            ? "No se puede eliminar un área en uso"
+                            : "Eliminar área"
+                        }
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               );

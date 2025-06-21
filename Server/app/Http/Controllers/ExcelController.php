@@ -7,166 +7,165 @@ use App\Models\Tutor;
 use App\Models\Olimpista;
 use App\Models\Inscripcion;
 use App\Models\OlimpiadaAreaCategoria;
-use App\Models\Area;
-use App\Models\Category;
+use App\Models\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ExcelController extends Controller
 {
-public function validateExcelData(Request $request)
-{
-    try {
-        $olimpistasData = $request->input('olimpistas');
-        $errors = [];
+    public function validateExcelData(Request $request)
+    {
+        try {
+            $olimpistasData = $request->input('olimpistas');
+            $errors = [];
 
-        // Obtener todas las áreas y categorías válidas
-        $areasValidas = DB::table('areas')->pluck('nombreArea')->toArray();
-        $categoriasValidas = DB::table('categorias')->pluck('nombreCategoria')->toArray();
+            // Obtener todas las áreas y categorías válidas
+            $areasValidas = DB::table('areas')->pluck('nombreArea')->toArray();
+            $categoriasValidas = DB::table('categorias')->pluck('nombreCategoria')->toArray();
 
-        // Función para encontrar sugerencias similares
-        $findSuggestions = function($input, $options) {
-            if (empty($input)) {  // Corregido: paréntesis de cierre añadido
-                return [];
-            }
-            
-            $inputLower = mb_strtolower($input);
-            $suggestions = [];
-            
-            foreach ($options as $option) {
-                $optionLower = mb_strtolower($option);
-                
-                // Coincidencia exacta sin importar mayúsculas
-                if ($inputLower === $optionLower) {
-                    return [$option]; // Devolver la coincidencia exacta
+            // Función para encontrar sugerencias similares
+            $findSuggestions = function($input, $options) {
+                if (empty($input)) {
+                    return [];
                 }
                 
-                // Coincidencia parcial (contiene el input o viceversa)
-                if (str_contains($optionLower, $inputLower) || str_contains($inputLower, $optionLower)) {
-                    $suggestions[] = $option;
-                    continue;
-                }
+                $inputLower = mb_strtolower($input);
+                $suggestions = [];
                 
-                // Similaridad de texto (para errores de escritura)
-                similar_text($inputLower, $optionLower, $percent);
-                if ($percent > 70) {
-                    $suggestions[] = $option;
-                }
-            }
-            
-            return array_slice(array_unique($suggestions), 0, 3); // Limitar a 3 sugerencias
-        };
-
-        foreach ($olimpistasData as $rowIndex => $row) {
-            $rowNumber = $rowIndex + 2;
-            $hasAreaError = false;
-            $hasCategoryError = false;
-
-            // Validar área (columna 9)
-            if (empty($row[9])) {
-                $errors[] = "Fila $rowNumber: AREA es requerida";
-                $hasAreaError = true;
-            } else {
-                // Verificar que el área exista (comparación case insensitive)
-                $areaEncontrada = false;
-                $areaInput = trim($row[9]);
-                
-                foreach ($areasValidas as $areaValida) {
-                    if (strcasecmp($areaInput, $areaValida) === 0) {
-                        $areaEncontrada = true;
-                        $row[9] = $areaValida; // Normalizar
-                        break;
+                foreach ($options as $option) {
+                    $optionLower = mb_strtolower($option);
+                    
+                    // Coincidencia exacta sin importar mayúsculas
+                    if ($inputLower === $optionLower) {
+                        return [$option]; // Devolver la coincidencia exacta
+                    }
+                    
+                    // Coincidencia parcial (contiene el input o viceversa)
+                    if (str_contains($optionLower, $inputLower) || str_contains($inputLower, $optionLower)) {
+                        $suggestions[] = $option;
+                        continue;
+                    }
+                    
+                    // Similaridad de texto (para errores de escritura)
+                    similar_text($inputLower, $optionLower, $percent);
+                    if ($percent > 70) {
+                        $suggestions[] = $option;
                     }
                 }
                 
-                if (!$areaEncontrada) {
-                    $suggestions = $findSuggestions($areaInput, $areasValidas);
-                    $errorMsg = "Fila $rowNumber: El área '$areaInput' no existe en el sistema";
-                    
-                    if (!empty($suggestions)) {
-                        $errorMsg .= ". ¿Quizás quisiste decir: '" . implode("', '", $suggestions) . "'?";
-                    }
-                    
-                    $errors[] = $errorMsg;
+                return array_slice(array_unique($suggestions), 0, 3); // Limitar a 3 sugerencias
+            };
+
+            foreach ($olimpistasData as $rowIndex => $row) {
+                $rowNumber = $rowIndex + 2;
+                $hasAreaError = false;
+                $hasCategoryError = false;
+
+                // Validar área (columna 9)
+                if (empty($row[9])) {
+                    $errors[] = "Fila $rowNumber: AREA es requerida";
                     $hasAreaError = true;
+                } else {
+                    // Verificar que el área exista (comparación case insensitive)
+                    $areaEncontrada = false;
+                    $areaInput = trim($row[9]);
+                    
+                    foreach ($areasValidas as $areaValida) {
+                        if (strcasecmp($areaInput, $areaValida) === 0) {
+                            $areaEncontrada = true;
+                            $row[9] = $areaValida; // Normalizar
+                            break;
+                        }
+                    }
+                    
+                    if (!$areaEncontrada) {
+                        $suggestions = $findSuggestions($areaInput, $areasValidas);
+                        $errorMsg = "Fila $rowNumber: El área '$areaInput' no existe en el sistema";
+                        
+                        if (!empty($suggestions)) {
+                            $errorMsg .= ". ¿Quizás quisiste decir: '" . implode("', '", $suggestions) . "'?";
+                        }
+                        
+                        $errors[] = $errorMsg;
+                        $hasAreaError = true;
+                    }
                 }
-            }
 
-            // Validar categoría (columna 10)
-            if (empty($row[10])) {
-                $errors[] = "Fila $rowNumber: CATEGORIA es requerida";
-                $hasCategoryError = true;
-            } else {
-                // Verificar que la categoría exista (comparación case insensitive)
-                $categoriaEncontrada = false;
-                $categoriaInput = trim($row[10]);
-                
-                foreach ($categoriasValidas as $categoriaValida) {
-                    if (strcasecmp($categoriaInput, $categoriaValida) === 0) {
-                        $categoriaEncontrada = true;
-                        $row[10] = $categoriaValida; // Normalizar
-                        break;
-                    }
-                }
-                
-                if (!$categoriaEncontrada) {
-                    $suggestions = $findSuggestions($categoriaInput, $categoriasValidas);
-                    $errorMsg = "Fila $rowNumber: La categoría '$categoriaInput' no existe en el sistema";
-                    
-                    if (!empty($suggestions)) {
-                        $errorMsg .= ". ¿Quizás quisiste decir: '" . implode("', '", $suggestions) . "'?";
-                    }
-                    
-                    $errors[] = $errorMsg;
+                // Validar categoría (columna 10)
+                if (empty($row[10])) {
+                    $errors[] = "Fila $rowNumber: CATEGORIA es requerida";
                     $hasCategoryError = true;
-                }
-            }
-
-            // Solo verificar combinación si ambas son válidas
-            if (!$hasAreaError && !$hasCategoryError) {
-                $combinationExists = DB::table('olimpiadas_areas_categorias')
-                    ->join('areas', 'olimpiadas_areas_categorias.idArea', '=', 'areas.idArea')
-                    ->join('categorias', 'olimpiadas_areas_categorias.idCategoria', '=', 'categorias.idCategoria')
-                    ->where('areas.nombreArea', $row[9])
-                    ->where('categorias.nombreCategoria', $row[10])
-                    ->exists();
-
-                if (!$combinationExists) {
-                    $errorMsg = "Fila $rowNumber: La categoría '{$row[10]}' no está disponible para el área '{$row[9]}'";
+                } else {
+                    // Verificar que la categoría exista (comparación case insensitive)
+                    $categoriaEncontrada = false;
+                    $categoriaInput = trim($row[10]);
                     
-                    // Sugerir categorías disponibles para el área
-                    $availableCategoriesForArea = DB::table('olimpiadas_areas_categorias')
-                        ->join('categorias', 'olimpiadas_areas_categorias.idCategoria', '=', 'categorias.idCategoria')
-                        ->join('areas', 'olimpiadas_areas_categorias.idArea', '=', 'areas.idArea')
-                        ->where('areas.nombreArea', $row[9])
-                        ->pluck('categorias.nombreCategoria')
-                        ->toArray();
-                    
-                    if (!empty($availableCategoriesForArea)) {
-                        $errorMsg .= ". Categorías disponibles: " . implode(", ", $availableCategoriesForArea);
+                    foreach ($categoriasValidas as $categoriaValida) {
+                        if (strcasecmp($categoriaInput, $categoriaValida) === 0) {
+                            $categoriaEncontrada = true;
+                            $row[10] = $categoriaValida; // Normalizar
+                            break;
+                        }
                     }
                     
-                    $errors[] = $errorMsg;
+                    if (!$categoriaEncontrada) {
+                        $suggestions = $findSuggestions($categoriaInput, $categoriasValidas);
+                        $errorMsg = "Fila $rowNumber: La categoría '$categoriaInput' no existe en el sistema";
+                        
+                        if (!empty($suggestions)) {
+                            $errorMsg .= ". ¿Quizás quisiste decir: '" . implode("', '", $suggestions) . "'?";
+                        }
+                        
+                        $errors[] = $errorMsg;
+                        $hasCategoryError = true;
+                    }
+                }
+
+                // Solo verificar combinación si ambas son válidas
+                if (!$hasAreaError && !$hasCategoryError) {
+                    $combinationExists = DB::table('olimpiadas_areas_categorias')
+                        ->join('areas', 'olimpiadas_areas_categorias.idArea', '=', 'areas.idArea')
+                        ->join('categorias', 'olimpiadas_areas_categorias.idCategoria', '=', 'categorias.idCategoria')
+                        ->where('areas.nombreArea', $row[9])
+                        ->where('categorias.nombreCategoria', $row[10])
+                        ->exists();
+
+                    if (!$combinationExists) {
+                        $errorMsg = "Fila $rowNumber: La categoría '{$row[10]}' no está disponible para el área '{$row[9]}'";
+                        
+                        // Sugerir categorías disponibles para el área
+                        $availableCategoriesForArea = DB::table('olimpiadas_areas_categorias')
+                            ->join('categorias', 'olimpiadas_areas_categorias.idCategoria', '=', 'categorias.idCategoria')
+                            ->join('areas', 'olimpiadas_areas_categorias.idArea', '=', 'areas.idArea')
+                            ->where('areas.nombreArea', $row[9])
+                            ->pluck('categorias.nombreCategoria')
+                            ->toArray();
+                        
+                        if (!empty($availableCategoriesForArea)) {
+                            $errorMsg .= ". Categorías disponibles: " . implode(", ", $availableCategoriesForArea);
+                        }
+                        
+                        $errors[] = $errorMsg;
+                    }
                 }
             }
+
+            return response()->json([
+                'success' => empty($errors),
+                'errors' => $errors,
+                'availableAreas' => $areasValidas,
+                'availableCategories' => $categoriasValidas
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error en validateExcelData: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al validar datos'
+            ], 500);
         }
-
-        return response()->json([
-            'success' => empty($errors),
-            'errors' => $errors,
-            'availableAreas' => $areasValidas,
-            'availableCategories' => $categoriasValidas
-        ]);
-
-    } catch (\Exception $e) {
-        Log::error('Error en validateExcelData: ' . $e->getMessage());
-        return response()->json([
-            'success' => false,
-            'message' => 'Error al validar datos'
-        ], 500);
     }
-}
 
     public function registerFromExcel(Request $request)
     {
@@ -174,6 +173,7 @@ public function validateExcelData(Request $request)
         try {
             $responsibleData = $request->input('responsible');
             $olimpistasData = $request->input('olimpistas');
+            $idOlimpiada = $request->input('idOlimpiada');
 
             if (empty($responsibleData['Ci'])) {
                 throw new \Exception('Carnet de identidad del responsable es requerido');
@@ -212,38 +212,46 @@ public function validateExcelData(Request $request)
                     })
                     ->whereHas('categoria', function($q) use ($data) {
                         $q->where('nombreCategoria', $data[10]);
-                    })->where('idOlimpiada', $request['idOlimpiada'])
+                    })
+                    ->where('idOlimpiada', $idOlimpiada)
                     ->first();
 
                 if (!$combination) {
-                    throw new \Exception("El área '{$data[9]} o la categoría '{$data[10]}' no están disponibles'");
+                    throw new \Exception("El área '{$data[9]}' o la categoría '{$data[10]}' no están disponibles");
                 }
 
-                $existing = Inscripcion::where('idOlimpista', function($query) use ($data) {
-                        $query->select('idPersona')
-                            ->from('personas')
-                            ->where('carnetIdentidad', $data[0]);
+                // Buscar inscripciones existentes para esta combinación
+                $existing = Inscripcion::with(['olimpista.persona', 'olimpiadaAreaCategoria.area', 'olimpiadaAreaCategoria.categoria'])
+                    ->whereHas('olimpista.persona', function($query) use ($data) {
+                        $query->where('carnetIdentidad', $data[0]);
                     })
                     ->where('idOlimpAreaCategoria', $combination->idOlimpAreaCategoria)
-                    ->first();
+                    ->get();
 
-                if ($existing) {
-                    $persona = Persona::where('carnetIdentidad', $data[0])->first();
-                    $duplicates[] = [
-                        'ci' => $data[0],
-                        'nombre' => $persona ? $persona->nombre . ' ' . $persona->apellido : 'Desconocido',
-                        'area' => $data[9],
-                        'categoria' => $data[10]
-                    ];
+                if ($existing->isNotEmpty()) {
+                    foreach ($existing as $inscripcion) {
+                        $duplicates[] = [
+                            'ci' => $data[0],
+                            'nombre_completo' => $inscripcion->olimpista->persona->nombre . ' ' . $inscripcion->olimpista->persona->apellido,
+                            'area' => $inscripcion->olimpiadaAreaCategoria->area->nombreArea,
+                            'categoria' => $inscripcion->olimpiadaAreaCategoria->categoria->nombreCategoria
+                        ];
+                    }
                 }
             }
 
             if (!empty($duplicates)) {
+                // Construir mensaje detallado con todos los olimpistas duplicados
+                $errorMessage = "Se encontraron olimpistas ya inscritos en las mismas áreas y categorías:\n";
+                foreach ($duplicates as $dup) {
+                    $errorMessage .= "- {$dup['nombre_completo']} (CI: {$dup['ci']}) en área {$dup['area']} y categoría {$dup['categoria']}\n";
+                }
+
                 return response()->json([
                     'success' => false,
                     'has_duplicates' => true,
                     'duplicates' => $duplicates,
-                    'message' => 'Se encontraron olimpistas ya inscritos en las mismas áreas y categorías'
+                    'message' => $errorMessage
                 ]);
             }
 
@@ -254,7 +262,8 @@ public function validateExcelData(Request $request)
                     })
                     ->whereHas('categoria', function($q) use ($data) {
                         $q->where('nombreCategoria', $data[10]);
-                    })->where('idOlimpiada', $request['idOlimpiada'])
+                    })
+                    ->where('idOlimpiada', $idOlimpiada)
                     ->first();
 
                 // Registrar persona olimpista

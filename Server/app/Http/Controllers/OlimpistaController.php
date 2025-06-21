@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Services\OlimpistaService;
 use App\Models\Inscripcion;
 use App\Models\Persona;
 use Illuminate\Http\Request;
@@ -91,6 +91,7 @@ public function getOlimpistasByTutor($idTutorResponsable)
                         'nombreOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->nombreOlimpiada ?? null,
                         'versionOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->version ?? null,
                         'idOlimpiada' => $inscripcion->olimpiadaAreaCategoria->olimpiada->idOlimpiada ?? null,
+                        'formaInscripcion' => $inscripcion->formaInscripcion ?? null,
 
                         'tutor_legal' => [
                             'nombre' => $inscripcion->tutorLegal->persona->nombre ?? null,
@@ -150,34 +151,17 @@ public function getOlimpistasByTutor($idTutorResponsable)
     }
 }
 
+    protected $service;
+
+    public function __construct(OlimpistaService $service)
+    {
+        $this->service = $service;
+    }
+
     public function getAllOlimpistas()
     {
         try {
-            // Join with personas, inscripciones, olimpiadas_areas_categorias, areas, categorias, aulas, grados
-            $olimpistas = \DB::table('olimpistas')
-                ->leftJoin('personas', 'olimpistas.idPersona', '=', 'personas.idPersona')
-                ->leftJoin('inscripciones', 'olimpistas.idPersona', '=', 'inscripciones.idOlimpista')
-                ->leftJoin('olimpiadas_areas_categorias', 'inscripciones.idOlimpAreaCategoria', '=', 'olimpiadas_areas_categorias.idOlimpAreaCategoria')
-                ->leftJoin('areas', 'olimpiadas_areas_categorias.idArea', '=', 'areas.idArea')
-                ->leftJoin('categorias', 'olimpiadas_areas_categorias.idCategoria', '=', 'categorias.idCategoria')
-                // Removed join with aulas due to missing column inscripciones.idAula
-                // ->leftJoin('aulas', 'inscripciones.idAula', '=', 'aulas.id')
-                // Removed join with grados as per instruction
-                ->select(
-                    'personas.carnetIdentidad as carnetDeIdentidad',
-                    'personas.nombre',
-                    'personas.apellido',
-                    'olimpistas.fechaNacimiento',
-                    'olimpistas.departamento',
-                    'olimpistas.curso',
-                    'olimpistas.colegio',
-                    'areas.nombreArea',
-                    'categorias.nombreCategoria as nombreCategoria',
-                    //'grados.nombreGrado as grado', // removed
-                    //'aulas.nombreAula' // removed due to missing join
-                )
-                ->distinct()
-                ->get();
+            $olimpistas = $this->service->getAllOlimpistasWithDetails();
 
             return response()->json([
                 'success' => true,
@@ -217,17 +201,22 @@ public function getOlimpistasByTutor($idTutorResponsable)
                 ]);
             }
     
-            $areas = $olimpista->inscripciones
-                ->map(function ($inscripcion) {
-                    return optional($inscripcion->OlimpiadaAreaCategoria->area)->idArea;
-                })
-                ->filter()
-                ->unique()
-                ->values();
+            $areaCategorias = $olimpista->inscripciones
+            ->map(function ($inscripcion) {
+                $pivot = $inscripcion->OlimpiadaAreaCategoria;
+
+                return [
+                    'area' => $pivot->area,
+                    'categoria' => $pivot->categoria,
+                ];
+            })
+            ->filter()
+            ->unique()
+            ->values();
     
             return response()->json([
                 'success' => true,
-                'data' => $areas
+                'data' => $areaCategorias
             ]);
         } catch (\Exception $e) {
             \Log::error('Error en getAreaOlimpista: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
@@ -239,5 +228,20 @@ public function getOlimpistasByTutor($idTutorResponsable)
         }
     }
     
+    public function getOlympiadRegistrationsReport(){
+        try {
+            $data = $this->service->getOlympiadRegistrationsReport();
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener el reporte de inscripciones por olimpiada',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
 }

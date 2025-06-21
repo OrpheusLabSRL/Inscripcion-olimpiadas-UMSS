@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { FiEdit2, FiPlus, FiLayers } from "react-icons/fi";
 import { FaTrash } from "react-icons/fa";
-import RegisterCategoriaModal from "../administrationModal/RegisterCategoriaModal";
-import RegisterNewCategoriaModal from "../administrationModal/RegisterNewCategoriaModal";
-import RegisterAreaModal from "../administrationModal/RegisterAreaModal";
+import Swal from "sweetalert2";
+import RegisterCategoriaModal from "../administrationModal/EditAreaPanelModal";
+import RegisterNewCategoriaModal from "../administrationModal/RegisterNewCategoryModal";
+import RegisterAreaModal from "../administrationModal/AssingAreaPanelModal";
 import RegisterNewAreaModal from "../administrationModal/RegisterNewAreaModal";
-
+import { deleteAreaCategoriaByOlimpiadaAndArea } from "../../../../api/Administration.api";
 import "../../Styles/Tables.css";
 
 export default function PanelOlympiadsTable({
@@ -22,6 +23,7 @@ export default function PanelOlympiadsTable({
   const [isNewAreaModalOpen, setIsNewAreaModalOpen] = useState(false);
   const [selectedAreaId, setSelectedAreaId] = useState(null);
   const [activeTab, setActiveTab] = useState("asignadas");
+  const [processing, setProcessing] = useState(false);
 
   const handleOpenAreaModal = () => {
     setModalKey((prev) => prev + 1);
@@ -36,7 +38,7 @@ export default function PanelOlympiadsTable({
 
   const handleOpenNewCategoriaModal = () => {
     setModalKey((prev) => prev + 1);
-    setSelectedAreaId(null); // No hay área seleccionada al registrar nueva categoría
+    setSelectedAreaId(null);
     setIsNewCategoriaModalOpen(true);
   };
 
@@ -45,11 +47,58 @@ export default function PanelOlympiadsTable({
     if (onRefresh) onRefresh();
   };
 
+  const handleDeleteAreaCategoria = async (idOlimpiada, idArea, nombreArea) => {
+    const result = await Swal.fire({
+      title: `¿Eliminar área "${nombreArea}"?`,
+      text: "Esta acción eliminará todas las categorías asociadas y no se puede deshacer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        setProcessing(true);
+        await deleteAreaCategoriaByOlimpiadaAndArea(idOlimpiada, idArea);
+
+        await Swal.fire({
+          title: "¡Eliminado!",
+          text: `El área "${nombreArea}" y sus categorías han sido eliminadas`,
+          icon: "success",
+          confirmButtonText: "Aceptar",
+        });
+
+        if (onRefresh) onRefresh();
+      } catch (error) {
+        console.error("Error al eliminar el área y sus categorías:", error);
+
+        await Swal.fire({
+          title: "Error",
+          text: "No se pudo eliminar el área. Por favor, inténtalo nuevamente.",
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
+      } finally {
+        setProcessing(false);
+      }
+    }
+  };
+
   const fechaInicio = new Date(fechaInicioOlimpiada);
   const hasStarted = !isNaN(fechaInicio.getTime()) && fechaInicio <= new Date();
 
   return (
     <div className="panelOlympiadContainer">
+      {processing && (
+        <div className="processing-overlay">
+          <div className="spinner"></div>
+          <span>Procesando...</span>
+        </div>
+      )}
+
       <div className="panelOlympiadHeader">
         <div className="tooltipWrapper">
           <button
@@ -57,7 +106,7 @@ export default function PanelOlympiadsTable({
               hasStarted ? "disabledBtn" : ""
             }`}
             onClick={handleOpenAreaModal}
-            disabled={hasStarted}
+            disabled={hasStarted || processing}
             aria-describedby="tooltip-assign"
           >
             <FiLayers className="buttonIcon" />
@@ -78,6 +127,7 @@ export default function PanelOlympiadsTable({
               activeTab === "asignadas" ? "active" : ""
             }`}
             onClick={() => setActiveTab("asignadas")}
+            disabled={processing}
           >
             Asignadas
           </button>
@@ -86,6 +136,7 @@ export default function PanelOlympiadsTable({
               activeTab === "nueva" ? "active" : ""
             }`}
             onClick={() => setActiveTab("nueva")}
+            disabled={processing}
           >
             Nueva Área
           </button>
@@ -94,6 +145,7 @@ export default function PanelOlympiadsTable({
               activeTab === "nuevaCategoria" ? "active" : ""
             }`}
             onClick={() => setActiveTab("nuevaCategoria")}
+            disabled={processing}
           >
             Nueva Categoría
           </button>
@@ -149,6 +201,7 @@ export default function PanelOlympiadsTable({
                                 onClick={() =>
                                   handleOpenEditCategoriaModal(area.idArea)
                                 }
+                                disabled={processing}
                               >
                                 <FiPlus className="buttonIcon" />
                                 Agregar Categoría
@@ -166,7 +219,7 @@ export default function PanelOlympiadsTable({
                       </td>
                       <td>
                         <span
-                          className={`panelOlympiadStatus ${
+                          className={`tableUtilStatusToggle ${
                             hasCategories ? "active" : "inactive"
                           }`}
                         >
@@ -174,32 +227,39 @@ export default function PanelOlympiadsTable({
                         </span>
                       </td>
                       <td className="panelOlympiadActionsCol">
-                        <div className="tooltipWrapper">
+                        <div className="actionButtons">
                           <button
                             onClick={() =>
                               handleOpenEditCategoriaModal(area.idArea)
                             }
-                            className={`panelOlympiadEditBtn ${
-                              !hasCategories || hasStarted ? "disabledBtn" : ""
+                            className={`actionButton editButton ${
+                              !hasCategories || hasStarted ? "disabled" : ""
                             }`}
-                            disabled={!hasCategories || hasStarted}
-                            aria-describedby={`tooltip-edit-${area.idArea}`}
+                            disabled={
+                              !hasCategories || hasStarted || processing
+                            }
+                            title="Editar categoría"
                           >
                             <FiEdit2 />
                           </button>
-                          {(!hasCategories || hasStarted) && (
-                            <div
-                              id={`tooltip-edit-${area.idArea}`}
-                              role="tooltip"
-                              className="tooltipText"
-                            >
-                              {!hasCategories
-                                ? "No se puede editar: No hay categorías asignadas"
-                                : "No se puede editar: La olimpiada ya comenzó"}
-                              <div className="tooltipArrow"></div>
-                            </div>
-                          )}
-                          <FaTrash className="actionIcon deleteIcon" />
+                          <button
+                            className={`actionButton deleteButton ${
+                              !hasCategories || hasStarted ? "disabled" : ""
+                            }`}
+                            disabled={
+                              !hasCategories || hasStarted || processing
+                            }
+                            title="Eliminar categoría"
+                            onClick={() =>
+                              handleDeleteAreaCategoria(
+                                selectedVersion,
+                                area.idArea,
+                                area.nombreArea
+                              )
+                            }
+                          >
+                            <FaTrash />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -234,7 +294,7 @@ export default function PanelOlympiadsTable({
                   hasStarted ? "disabledBtn" : ""
                 }`}
                 onClick={() => setIsNewAreaModalOpen(true)}
-                disabled={hasStarted}
+                disabled={hasStarted || processing}
                 aria-describedby="tooltip-register"
               >
                 <FiPlus className="buttonIcon" />
@@ -258,6 +318,13 @@ export default function PanelOlympiadsTable({
 
       {activeTab === "nuevaCategoria" && (
         <div className="panelOlympiadNewArea">
+          <RegisterNewCategoriaModal
+            key={`new-cat-${modalKey}`}
+            isOpen={isNewCategoriaModalOpen}
+            onClose={() => setIsNewCategoriaModalOpen(false)}
+            selectedVersion={parseInt(selectedVersion)}
+            onSuccess={onRefresh}
+          />
           <div className="panelOlympiadInfoCard">
             <h4>Registrar nueva categoría</h4>
             <p>
@@ -270,7 +337,7 @@ export default function PanelOlympiadsTable({
                   hasStarted ? "disabledBtn" : ""
                 }`}
                 onClick={handleOpenNewCategoriaModal}
-                disabled={hasStarted}
+                disabled={hasStarted || processing}
                 aria-describedby="tooltip-register-cat"
               >
                 <FiPlus className="buttonIcon" />
@@ -297,14 +364,6 @@ export default function PanelOlympiadsTable({
         key={`area-${modalKey}`}
         isOpen={isAreaModalOpen}
         onClose={() => setIsAreaModalOpen(false)}
-        selectedVersion={parseInt(selectedVersion)}
-        onSuccess={onRefresh}
-      />
-
-      <RegisterNewCategoriaModal
-        key={`new-cat-${modalKey}`}
-        isOpen={isNewCategoriaModalOpen}
-        onClose={() => setIsNewCategoriaModalOpen(false)}
         selectedVersion={parseInt(selectedVersion)}
         onSuccess={onRefresh}
       />

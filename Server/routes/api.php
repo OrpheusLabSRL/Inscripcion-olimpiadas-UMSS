@@ -21,6 +21,9 @@ use App\Http\Controllers\BoletaPagoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\RolPermisoController;
+use App\Http\Controllers\InscripcionTutorController;
+use App\Http\Controllers\ReporteController;
 
 
 // Ruta protegida para obtener el usuario autenticado
@@ -39,6 +42,7 @@ Route::get('/olimpistas', [OlimpistaController::class, 'getAllOlimpistas']);
 Route::get('/olimpista/{carnet_identidad}/habilitado/{idOlimpiada}', [InscripcionController::class, 'enableForIncription']);
 Route::get('/olimpista/{id}/tutores', [TutorController::class, 'getTutoresByOlimpista']);
 Route::get('/tutores/all', [TutorController::class, 'getAllTutors']);
+Route::get('/olympiad-registrations-report', [OlimpistaController::class, 'getOlympiadRegistrationsReport']);
 
 
 // Tutores
@@ -54,10 +58,12 @@ Route::post('/enviar-contacto', [ContactoController::class, 'enviarContacto']);
 
 // Olimpiadas
 Route::get('/viewOlimpiadas', [OlimpiadaController::class, 'mostrarOlimpiada']);
+Route::get('/viewOlimpiadasWithAreasCategorias', [OlimpiadaController::class, 'mostrarOlimpiadasWithAreasCategorias']);
 Route::post('/registrarOlimpiadas', [OlimpiadaController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
-
+Route::delete('/deleteOlimpiada/{id}', [OlimpiadaController::class, 'destroy']);
 Route::put('/editarOlimpiadas/{id}/estado', [OlimpiadaController::class, 'cambiarEstado']);
+Route::put('/editarOlimpiadas/{id}', [OlimpiadaController::class, 'update']);
 
 //Roles y Permisos
 Route::get('/roles', [RolController::class, 'index']);
@@ -65,6 +71,8 @@ Route::post('/roles', [RolController::class, 'store']);
 Route::post('/usuarios', [UsuarioController::class, 'store']);
 Route::get('/permisos', [PermisoController::class, 'index']);
 Route::get('/viewUsuarios', [UsuarioController::class, 'index']);
+Route::get('/getRolesPermisos', [RolPermisoController::class, 'index']);
+Route::put('/usuarios/{id}', [UsuarioController::class, 'update']);
 
 // Áreas
 Route::get('/viewAreas', [AreaController::class, 'index']);
@@ -90,6 +98,7 @@ Route::post('/consultar-inscripcion-olimpista', [InscripcionController::class, '
 Route::post('/consultar-inscripcion-tutor', [InscripcionController_Tutor::class, 'consultar']); 
 Route::post('/verificar-uso-areas', [InscripcionController::class, 'verificarUsoAreasMasivo']);
 Route::post('/verificar-uso-categorias', [InscripcionController::class, 'verificarUsoCategoriasMasivo']);
+Route::post('/inscriptions', [InscripcionController::class, 'destroy']);
 
 // Categoría - Grado
 Route::get('/viewCategoriaGrado', [CategoriaGradoController::class, 'index']);
@@ -129,3 +138,11 @@ Route::prefix('usuarios')->group(function () {
     Route::put('/{id}', [UsuarioController::class, 'update']); // Actualizar usuario
     Route::delete('/{id}', [UsuarioController::class, 'destroy']); // Eliminar usuario
 });
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::get('/boletas/tutor/{tutorId}', [BoletaPagoController::class, 'getBoletasPorTutor']);
+Route::get('/boletas/data/{codigoBoleta}', [BoletaPagoController::class, 'getBoletaData']);
+
+
+Route::post('/inscripcion/tutor', [InscripcionTutorController::class, 'inscribirTutor']);
+Route::get('/inscripciones/tutor/{id}', [InscripcionTutorController::class, 'getInscripcionesPorTutor']);

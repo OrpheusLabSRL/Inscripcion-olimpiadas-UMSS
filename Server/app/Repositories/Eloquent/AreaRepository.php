@@ -42,12 +42,19 @@ class AreaRepository implements AreaRepositoryInterface
         return $area->delete();
     }
 
-    public function getActiveWithRelations($relations)
-    {
-        return $this->model->where('estadoArea', true)
-            ->with($relations)
-            ->get();
+    public function getActiveWithRelations($relations, $idOlimpiada = null)
+{
+    $query = $this->model->where('estadoArea', true);
+    if ($idOlimpiada) {
+        $query->whereHas('categorias', function ($q) use ($idOlimpiada) {
+            $q->where('estadoCategoria', true)
+                ->where('olimpiadas_areas_categorias.idOlimpiada', $idOlimpiada)
+                ->where('olimpiadas_areas_categorias.estado', true);
+        });
     }
+    
+    return $query->with($relations)->get();
+}
 
     public function changeStatus($id, $status)
     {

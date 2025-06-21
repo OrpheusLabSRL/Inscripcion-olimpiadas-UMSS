@@ -13,11 +13,6 @@ use Swift_TransportException;
 
 class MailController extends Controller
 {
-    /**
-     * Envía un correo de contacto
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function enviarCorreoContacto(Request $request)
     {
         try {

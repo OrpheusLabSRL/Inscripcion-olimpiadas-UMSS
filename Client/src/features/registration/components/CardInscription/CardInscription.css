@@ -1,0 +1,54 @@
+.card-choose {
+  background-color: #fff;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 370px;
+  padding: 30px;
+  border-radius: 10px;
+  transition: all 0.1s linear;
+  box-shadow: 1px 1px 4px #0000006e;
+}
+
+.card-choose:hover {
+  scale: 1.03;
+}
+
+.card-choose > p {
+  text-align: center;
+  font-size: var(--pM-size);
+  line-height: 1.5;
+  font-weight: 300;
+  margin: 15px;
+}
+
+.advantages {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  list-style-type: none;
+  text-align: center;
+  font-size: var(--pM-size);
+  line-height: 2.5;
+  font-weight: 300;
+}
+
+.btn-card-inscription {
+  width: 350px;
+  padding: 10px;
+}
+
+@media (max-width: 600px) {
+  .card-choose {
+    max-width: 65%;
+  }
+
+  .btn-card-inscription {
+    width: 100%;
+    padding: 10px;
+  }
+}

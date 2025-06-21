@@ -9,39 +9,51 @@ const TutorsReportTable = () => {
 
   // Column visibility state
   const [visibleColumns, setVisibleColumns] = useState({
-    carnetIdentidad: true,
-    nombre: true,
-    apellido: true,
-    correoElectronico: true,
-    tipoTutor: true,
-    telefono: true,
-    carnetOlimpista: true,
-    nombreOlimpista: true,
-    apellidoOlimpista: true,
+    idCard: true,
+    firstName: true,
+    lastName: true,
+    email: true,
+    tutorType: true,
+    phone: true,
+    olympianIdCard: true,
+    olympianFirstName: true,
+    olympianLastName: true,
   });
 
   // Dropdown options for columns
   const columnOptions = [
-    { label: "Carnet Identidad", value: "carnetIdentidad" },
-    { label: "Nombre", value: "nombre" },
-    { label: "Apellido", value: "apellido" },
-    { label: "Correo Electrónico", value: "correoElectronico" },
-    { label: "Tipo de Tutor", value: "tipoTutor" },
-    { label: "Teléfono", value: "telefono" },
-    { label: "Carnet Olimpista", value: "carnetOlimpista" },
-    { label: "Nombre Olimpista", value: "nombreOlimpista" },
-    { label: "Apellido Olimpista", value: "apellidoOlimpista" },
+    { label: "Carnet Identidad", value: "idCard" },
+    { label: "Nombre", value: "firstName" },
+    { label: "Apellido", value: "lastName" },
+    { label: "Correo Electrónico", value: "email" },
+    { label: "Tipo de Tutor", value: "tutorType" },
+    { label: "Teléfono", value: "phone" },
+    { label: "Carnet Olimpista", value: "olympianIdCard" },
+    { label: "Nombre Olimpista", value: "olympianFirstName" },
+    { label: "Apellido Olimpista", value: "olympianLastName" },
   ];
 
   // Row filter state and selected filter column
   const [rowFilter, setRowFilter] = useState("");
-  const [filterColumn, setFilterColumn] = useState("nombre");
+  const [filterColumn, setFilterColumn] = useState("firstName");
 
   useEffect(() => {
     const fetchTutors = async () => {
       try {
         const response = await getAllTutors();
-        setTutors(response.data);
+        // Map backend keys to frontend keys
+        const mappedData = response.data.map(item => ({
+          idCard: item.carnetIdentidad,
+          firstName: item.nombre,
+          lastName: item.apellido,
+          email: item.correoElectronico,
+          tutorType: item.tipoTutor,
+          phone: item.telefono,
+          olympianIdCard: item.carnetOlimpista,
+          olympianFirstName: item.nombreOlimpista,
+          olympianLastName: item.apellidoOlimpista,
+        }));
+        setTutors(mappedData);
         setError(null);
       } catch (err) {
         setError("Error al obtener los tutores.");
@@ -54,8 +66,13 @@ const TutorsReportTable = () => {
     fetchTutors();
   }, []);
 
-  if (loading) return <p style={{ color: "#000000" }}>Cargando reporte de tutores...</p>;
-  if (error) return <p style={{ color: "#000000" }}>{error}</p>;
+  if (loading) 
+    return (
+    <div className="report__status">
+      Cargando reporte de tutores...
+    </div>
+    );
+  if (error) return <div className="report__status">{error}</div>;
 
   // Filter rows based on rowFilter and selected filterColumn (case insensitive substring match)
   const filteredTutors = tutors.filter((tutor) => {
@@ -68,15 +85,15 @@ const TutorsReportTable = () => {
 
   // Determine if any olympian columns are visible
   const olympianColumnsVisible =
-    visibleColumns.carnetOlimpista ||
-    visibleColumns.nombreOlimpista ||
-    visibleColumns.apellidoOlimpista;
+    visibleColumns.olympianIdCard ||
+    visibleColumns.olympianFirstName ||
+    visibleColumns.olympianLastName;
 
   // Group tutors by unique tutor fields if olympian columns are hidden
   const groupedTutors = !olympianColumnsVisible
     ? Object.values(
         filteredTutors.reduce((acc, tutor) => {
-          const key = `${tutor.carnetIdentidad}-${tutor.nombre}-${tutor.apellido}-${tutor.correoElectronico}-${tutor.tipoTutor}-${tutor.telefono}`;
+          const key = `${tutor.idCard}-${tutor.firstName}-${tutor.lastName}-${tutor.email}-${tutor.tutorType}-${tutor.phone}`;
           if (!acc[key]) {
             acc[key] = { ...tutor };
           }
@@ -94,39 +111,28 @@ const TutorsReportTable = () => {
   };
 
   return (
-    <div style={{ color: "#000000" }}>
-      <div
-        className="filter-controls"
-        style={{ marginBottom: "1rem" }}
-      >
-        <div
-          className="filter-controls-wrapper"
-          style={{
-            marginBottom: "0.5rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-          }}
-        >
-          <label style={{ color: "#000000" }}>
+    <div className="tutors-report">
+      <div className="filter-controls">
+        <div className="filter-controls-wrapper">
+          <label className="filter-label">
             Filtrar por columna:
             <select
               value={filterColumn}
               onChange={(e) => setFilterColumn(e.target.value)}
-              style={{ marginLeft: "0.5rem", color: "#000000" }}
+              className="filter-select"
             >
               {columnOptions.map((col) => (
                 <option
                   key={col.value}
                   value={col.value}
-                  style={{ color: "#000000" }}
+                  className="filter-option"
                 >
                   {col.label}
                 </option>
               ))}
             </select>
           </label>
-          <label style={{ color: "#000000" }}>
+          <label className="filter-label">
             Valor filtro:
             <input
               type="text"
@@ -135,60 +141,51 @@ const TutorsReportTable = () => {
               placeholder={`Buscar en ${
                 columnOptions.find((c) => c.value === filterColumn)?.label || ""
               }...`}
-              style={{ marginLeft: "0.5rem", color: "#000000" }}
+              className="filter-input"
             />
           </label>
         </div>
         <div>
-          <span style={{ color: "#000000" }}>Columnas a mostrar:</span>
+          <span className="filter-label">Columnas a mostrar:</span>
           {columnOptions.map((col) => (
-            <label
-              key={col.value}
-              style={{
-                marginLeft: "1rem",
-                color: "#000000",
-                display: "inline-flex",
-                alignItems: "center",
-              }}
-            >
+            <label key={col.value} className="columns-to-show">
               <input
                 type="checkbox"
                 checked={visibleColumns[col.value]}
                 onChange={() => toggleColumn(col.value)}
-                style={{ marginRight: "0.25rem" }}
               />
               {col.label}
             </label>
           ))}
         </div>
       </div>
-      <div className="olympiads-report__table-container">
-        <table className="olympiads-report__table">
+      <div className="report__table-container">
+        <table className="report__table">
           <thead>
             <tr>
-              {visibleColumns.carnetIdentidad && <th>Carnet Identidad</th>}
-              {visibleColumns.nombre && <th>Nombre</th>}
-              {visibleColumns.apellido && <th>Apellido</th>}
-              {visibleColumns.correoElectronico && <th>Correo Electrónico</th>}
-              {visibleColumns.tipoTutor && <th>Tipo de Tutor</th>}
-              {visibleColumns.telefono && <th>Teléfono</th>}
-              {visibleColumns.carnetOlimpista && <th>Carnet Olimpista</th>}
-              {visibleColumns.nombreOlimpista && <th>Nombre Olimpista</th>}
-              {visibleColumns.apellidoOlimpista && <th>Apellido Olimpista</th>}
+              {visibleColumns.idCard && <th>Carnet Identidad</th>}
+              {visibleColumns.firstName && <th>Nombre</th>}
+              {visibleColumns.lastName && <th>Apellido</th>}
+              {visibleColumns.email && <th>Correo Electrónico</th>}
+              {visibleColumns.tutorType && <th>Tipo de Tutor</th>}
+              {visibleColumns.phone && <th>Teléfono</th>}
+              {visibleColumns.olympianIdCard && <th>Carnet Olimpista</th>}
+              {visibleColumns.olympianFirstName && <th>Nombre Olimpista</th>}
+              {visibleColumns.olympianLastName && <th>Apellido Olimpista</th>}
             </tr>
           </thead>
           <tbody>
             {groupedTutors.map((tutor, index) => (
               <tr key={index}>
-                {visibleColumns.carnetIdentidad && <td>{tutor.carnetIdentidad}</td>}
-                {visibleColumns.nombre && <td>{tutor.nombre}</td>}
-                {visibleColumns.apellido && <td>{tutor.apellido}</td>}
-                {visibleColumns.correoElectronico && <td>{tutor.correoElectronico}</td>}
-                {visibleColumns.tipoTutor && <td>{tutor.tipoTutor}</td>}
-                {visibleColumns.telefono && <td>{tutor.telefono}</td>}
-                {visibleColumns.carnetOlimpista && <td>{tutor.carnetOlimpista}</td>}
-                {visibleColumns.nombreOlimpista && <td>{tutor.nombreOlimpista}</td>}
-                {visibleColumns.apellidoOlimpista && <td>{tutor.apellidoOlimpista}</td>}
+                {visibleColumns.idCard && <td>{tutor.idCard}</td>}
+                {visibleColumns.firstName && <td>{tutor.firstName}</td>}
+                {visibleColumns.lastName && <td>{tutor.lastName}</td>}
+                {visibleColumns.email && <td>{tutor.email}</td>}
+                {visibleColumns.tutorType && <td>{tutor.tutorType}</td>}
+                {visibleColumns.phone && <td>{tutor.phone}</td>}
+                {visibleColumns.olympianIdCard && <td>{tutor.olympianIdCard}</td>}
+                {visibleColumns.olympianFirstName && <td>{tutor.olympianFirstName}</td>}
+                {visibleColumns.olympianLastName && <td>{tutor.olympianLastName}</td>}
               </tr>
             ))}
           </tbody>
