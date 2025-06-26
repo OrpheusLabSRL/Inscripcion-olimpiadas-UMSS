@@ -46,6 +46,7 @@ class OlimpistaRepository implements OlimpistaRepositoryInterface
             \DB::raw('(SELECT COUNT(DISTINCT insc.idOlimpista) FROM inscripciones insc JOIN olimpiadas_areas_categorias oac ON insc.idOlimpAreaCategoria = oac.idOlimpAreaCategoria WHERE oac.idOlimpiada = olimpiadas.idOlimpiada) as total_olimpistas')
         )
         ->groupBy(
+            'olimpiadas.idOlimpiada',
             'olimpiadas.nombreOlimpiada',
             'olimpiadas.version',
             'personas.carnetIdentidad',
